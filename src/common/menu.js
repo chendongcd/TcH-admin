@@ -42,8 +42,8 @@ export const menuData = [
   },
   {
     id: '31',
-    bpid: '2',
-    mpid: '2',
+    bpid: '3',
+    mpid: '3',
     name: '工程项目信息卡',
     route: '/project/infoCard',
   },

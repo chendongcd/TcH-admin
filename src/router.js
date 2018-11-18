@@ -65,12 +65,6 @@ import appModel from './models/app'
   }
 }*/
 function RouterConfig({history, app}) {
-
-  const IndexPage = dynamic({
-    app,
-    models: [appModel],
-    component:()=> import('./routes/Index'),
-  })
   const Login = dynamic({
     app,
     models: [appModel],
@@ -95,6 +89,11 @@ function RouterConfig({history, app}) {
     app,
     models: [appModel],
     component:()=> import('./routes/system/user/index'),
+  })
+  const Pro_InfoCard = dynamic({
+    app,
+    models: [appModel],
+    component:()=> import('./routes/project/infoCard/index'),
   })
 
   // const Project = dynamic({
@@ -124,7 +123,7 @@ function RouterConfig({history, app}) {
             <Route path="/system/project"  component={Sys_Project}/>
             <Route path="/system/permission"  component={Sys_Permission}/>
             <Route path="/system/user"  component={Sys_User}/>
-            <Route path="/project"  component={Login}/>
+            <Route path="/project/infoCard"  component={Pro_InfoCard}/>
             <Route path="/meteringUp"  component={Login}/>
             <Route path="/sub"  component={Login}/>
             <Route path="/meteringDown"  component={Login}/>
