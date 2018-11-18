@@ -6,7 +6,7 @@ const {apiPrefix} = config
 export async function signIn(params) {
   console.log('请求服务了',`${apiPrefix}/user/login`)
   return request( {
-    method: 'post',
+    method: 'POST',
     data: params,
     url:`${apiPrefix}/user/login`
   });

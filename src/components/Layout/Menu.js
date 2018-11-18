@@ -13,6 +13,7 @@ const Menus = ({
 }) => {
   // 生成树状
   const menuTree = arrayToTree(menu.filter(_ => _.mpid !== '-1'), 'id', 'mpid')
+
   const levelMap = {}
 
   // 递归生成菜单
@@ -29,7 +30,7 @@ const Menus = ({
               {item.icon && <Icon type={item.icon} />}
               {(!siderFoldN || !menuTree.includes(item)) && item.name}
             </span>}
-          >
+            >
             {getMenus(item.children, siderFoldN)}
           </SubMenu>
         )
@@ -89,6 +90,7 @@ const Menus = ({
   let defaultSelectedKeys
   for (let item of menu) {
     if (item.route && pathToRegexp(item.route).exec(location.pathname)) {
+
       if (!navOpenKeys.length && item.mpid && !openKeysFlag) changeOpenKeys([String(item.mpid)])
       currentMenu = item
       break

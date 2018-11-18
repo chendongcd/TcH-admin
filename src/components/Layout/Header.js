@@ -37,7 +37,7 @@ const Header = ({
         </div>}
       <div className={styles.rightWarpper}>
         <div className={styles.button}>
-          <Icon type="mail" />
+          <Icon style={{top:5}} type="setting" />
         </div>
         <Menu mode="horizontal" onClick={handleClickMenu}>
           <SubMenu
@@ -50,7 +50,7 @@ const Header = ({
             </span>}
           >
             <Menu.Item key="logout">
-              Sign out
+             退出
             </Menu.Item>
           </SubMenu>
         </Menu>

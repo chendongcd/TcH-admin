@@ -5,19 +5,21 @@ import {menuData} from '../common/menu'
 const delay = timeout => new Promise(resolve => setTimeout(resolve, timeout));
 const {prefix} = config
 export default {
-
   namespace: 'app',
 
   state: {
-    user: {},
+    user: {id: 0,
+      username: 'admin',
+      password: 'admin',
+      permissions: 'admin'},
     locationPathname: '',
     locationQuery: {},
-    loading: true,
+    loading: false,
     darkTheme: window.localStorage.getItem(`${prefix}darkTheme`) === 'true',
     siderFold: window.localStorage.getItem(`${prefix}siderFold`) === 'true',
     navOpenKeys: JSON.parse(window.localStorage.getItem(`${prefix}navOpenKeys`)) || [],
     isNavbar: document.body.clientWidth < 769,
-    menu: [],
+    menu: menuData,
     hasPermission:true,
     location:{}
   },
@@ -25,9 +27,10 @@ export default {
   subscriptions: {
     setupHistory({dispatch, history}) {
       history.listen((location) => {
+        console.log(location)
         dispatch({
           type: 'updateState',
-          payload: {
+            payload: {
             locationPathname: location.pathname,
             locationQuery: location.query,
             location
@@ -91,6 +94,8 @@ export default {
     },
 
     switchTheme (state) {
+      console.log(state)
+      console.log(`${prefix}darkTheme`, !state.darkTheme)
       window.localStorage.setItem(`${prefix}darkTheme`, !state.darkTheme)
       return {
         ...state,

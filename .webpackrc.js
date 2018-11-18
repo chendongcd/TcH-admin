@@ -2,6 +2,7 @@ import {resolve} from 'path';
 
 export default {
   theme: "./theme.config.js",
+  publicPath: "/",
   extraBabelPlugins: [
     ["import", {
       "libraryName": "antd",

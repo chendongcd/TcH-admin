@@ -23,7 +23,7 @@ class IndexPage extends Component{
 
     let {app,history} = this.props
     if(!app.user.name){
-      history.push('/login')
+      //history.push('/login')
     }
   }
 
@@ -86,7 +86,7 @@ class IndexPage extends Component{
           </Sider>}
           <Layout style={{ height: '100vh', overflow: 'scroll' }} id="mainContainer">
             <BackTop target={() => document.getElementById('mainContainer')} />
-            <Header {...headerProps} />
+            <Header className={classnames({ [styles.dark]: darkTheme, [styles.light]: !darkTheme })} {...headerProps} />
             <Content>
               {hasPermission ? children : <Error />}
             </Content>
@@ -94,7 +94,9 @@ class IndexPage extends Component{
               {config.footerText}
             </Footer>
           </Layout>
-        </Layout>:<div>
+        </Layout>
+          :
+          <div>
           {children}
         </div>}
       </div>

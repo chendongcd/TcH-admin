@@ -28,8 +28,8 @@ const Bread = ({ menu, location }) => {
   if (!current) {
     pathArray.push(menu[0] || {
       id: 1,
-      icon: 'laptop',
-      name: 'Dashboard',
+      icon: 'home',
+      name: 'home',
     })
     pathArray.push({
       id: 404,
@@ -37,7 +37,6 @@ const Bread = ({ menu, location }) => {
     })
   } else {
     getPathArray(current)
-
     let keys = []
     let values = pathToRegexp(current.route, keys).exec(location.pathname.replace('#', ''))
     if (keys.length) {
@@ -49,17 +48,14 @@ const Bread = ({ menu, location }) => {
       })
     }
   }
-
   // 递归查找父级
   const breads = pathArray.map((item, key) => {
     const content = (
-      <span>{item.icon
-        ? <Icon type={item.icon} style={{ marginRight: 4 }} />
-        : ''}{item.name}</span>
+      <span>{item.name}</span>
     )
     return (
       <Breadcrumb.Item key={key}>
-        {((pathArray.length - 1) !== key)
+        {(!item.bpid)
           ? <Link to={pathToRegexp.compile(item.route || '')(paramMap) || '#'}>
             {content}
           </Link>
