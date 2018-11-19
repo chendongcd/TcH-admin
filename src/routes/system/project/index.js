@@ -49,15 +49,28 @@ const CreateForm = Form.create()(props => {
   return (
     <Modal
       destroyOnClose
-      title="新建规则"
+      title="新增项目"
       visible={modalVisible}
       onOk={okHandle}
       onCancel={() => handleModalVisible()}
     >
-      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="描述">
-        {form.getFieldDecorator('desc', {
-          rules: [{ required: true, message: '请输入至少五个字符的规则描述！', min: 5 }],
+      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="项目名称">
+        {form.getFieldDecorator('name', {
+          rules: [{ required: true,message: '项目名不能为空', }],
         })(<Input placeholder="请输入" />)}
+      </FormItem>
+      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="工程类别">
+        {form.getFieldDecorator('desc', {
+          rules: [{ required: true, message: '请选择工程类别', min: 5 }],
+        })(<Select placeholder="请选择" style={{ width: '100%' }}>
+          <Option value="0">市政工程</Option>
+          <Option value="1">房建工程</Option>
+          <Option value="2">铁路工程</Option>
+          <Option value="3">公路工程</Option>
+          <Option value="4">水利工程</Option>
+          <Option value="5">国防工程</Option>
+          <Option value="6">其他工程</Option>
+        </Select>)}
       </FormItem>
     </Modal>
   );

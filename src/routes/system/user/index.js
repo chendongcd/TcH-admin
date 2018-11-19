@@ -49,15 +49,36 @@ const CreateForm = Form.create()(props => {
   return (
     <Modal
       destroyOnClose
-      title="新建规则"
+      title="新建用户"
       visible={modalVisible}
       onOk={okHandle}
       onCancel={() => handleModalVisible()}
     >
-      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="描述">
+      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="账号名称">
         {form.getFieldDecorator('desc', {
-          rules: [{ required: true, message: '请输入至少五个字符的规则描述！', min: 5 }],
+          rules: [{ required: true, message: '请输入账号名称' }],
         })(<Input placeholder="请输入" />)}
+      </FormItem>
+      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="账号密码">
+        {form.getFieldDecorator('name', {
+          rules: [{ required: true, message: '请输入账号密码' }],
+        })(<Input placeholder="请输入" />)}
+      </FormItem>
+      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="账号类型">
+        {form.getFieldDecorator('desc', {
+          rules: [{ required: true, message: '请选择账号类型' }],
+        })( <Select placeholder="请选择" style={{ width: '100%' }}>
+          <Option value="0">公司</Option>
+          <Option value="1">项目部</Option>
+        </Select>)}
+      </FormItem>
+      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="角色权限">
+        {form.getFieldDecorator('desc', {
+          rules: [{ required: true, message: '请选择角色权限' }],
+        })( <Select placeholder="请选择" style={{ width: '100%' }}>
+          <Option value="0">开发者</Option>
+          <Option value="1">管理员</Option>
+        </Select>)}
       </FormItem>
     </Modal>
   );
