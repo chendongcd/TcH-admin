@@ -13,7 +13,7 @@ const Menus = ({
 }) => {
   // 生成树状
   const menuTree = arrayToTree(menu.filter(_ => _.mpid !== '-1'), 'id', 'mpid')
-
+  console.log(menuTree)
   const levelMap = {}
 
   // 递归生成菜单

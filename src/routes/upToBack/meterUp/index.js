@@ -665,7 +665,7 @@ class UpdateForm extends PureComponent {
 }
 
 @Form.create()
-class InfoCard extends Component {
+class MeterUp extends Component {
 
   constructor(props) {
     super(props)
@@ -1024,7 +1024,7 @@ class InfoCard extends Component {
     };
     return (
       <Page loading={false}>
-        <PageHeaderWrapper title="工程项目信息卡">
+        <PageHeaderWrapper title="对上计量台账">
           <Card bordered={false}>
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
@@ -1066,6 +1066,6 @@ class InfoCard extends Component {
   }
 }
 
-InfoCard.propTypes = {}
+MeterUp.propTypes = {}
 
-export default connect(({app, rule}) => ({app, rule}))(InfoCard)
+export default connect(({app, rule}) => ({app, rule}))(MeterUp)

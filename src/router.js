@@ -95,6 +95,11 @@ function RouterConfig({history, app}) {
     models: [appModel],
     component:()=> import('./routes/project/infoCard/index'),
   })
+  const Up_MeterUp = dynamic({
+    app,
+    models: [appModel],
+    component:()=> import('./routes/upToBack/meterUp/index'),
+  })
 
   // const Project = dynamic({
   //   app,
@@ -124,7 +129,7 @@ function RouterConfig({history, app}) {
             <Route path="/system/permission"  component={Sys_Permission}/>
             <Route path="/system/user"  component={Sys_User}/>
             <Route path="/project/infoCard"  component={Pro_InfoCard}/>
-            <Route path="/meteringUp"  component={Login}/>
+            <Route path="/up/meterUp"  component={Up_MeterUp}/>
             <Route path="/sub"  component={Login}/>
             <Route path="/meteringDown"  component={Login}/>
             <Route path="/manager"  component={Login}/>
