@@ -572,7 +572,6 @@ class User extends Component {
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
-        <Menu.Item key="remove">删除</Menu.Item>
         <Menu.Item key="true">启用</Menu.Item>
         <Menu.Item key="false">启用</Menu.Item>
       </Menu>

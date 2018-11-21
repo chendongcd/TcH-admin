@@ -18,6 +18,7 @@ import {
   Drawer,
   Divider,
   Radio,
+  Collapse
 } from 'antd';
 import {arrayToTree} from 'utils'
 import {menuData} from '../../../common/menu'
@@ -92,6 +93,34 @@ class CreatDrawer extends Component {
 
   render() {
     const {onClose, drawVisible} = this.props
+    const DescriptionItem = ({ title, content }) => (
+      <div
+        style={{
+          fontSize: 14,
+          lineHeight: '22px',
+          marginBottom: 7,
+          color: 'rgba(0,0,0,0.65)',
+        }}
+      >
+        <p
+          style={{
+            marginRight: 8,
+            display: 'inline-block',
+            color: 'rgba(0,0,0,0.85)',
+          }}
+        >
+          {title}:
+        </p>
+        {content}
+      </div>
+    );
+    const pStyle = {
+      fontSize: 16,
+      color: 'rgba(0,0,0,0.85)',
+      lineHeight: '24px',
+      display: 'block',
+      marginBottom: 16,
+    };
     // 生成树状
     const menuTree = arrayToTree(menuData.filter(_ =>( _.mpid !== '-1'&&_.id!=='1')), 'id', 'mpid')
     return (
@@ -101,8 +130,39 @@ class CreatDrawer extends Component {
         placement="right"
         closable={false}
         onClose={onClose}
+        style={{paddingBottom:53+'px'}}
         visible={drawVisible}
       >
+        <Collapse bordered={false} >
+          <Collapse.Panel header="角色信息" key="1" style={{
+            background: '#f7f7f7',
+            borderRadius: 4,
+            marginBottom: 24,
+            border: 0,
+            overflow: 'hidden',
+          }}>
+            <Row>
+              <Col span={12}>
+                <DescriptionItem title="角色名称" content="Lily" />{' '}
+              </Col>
+            </Row>
+            <Row>
+              <Col span={12}>
+                <DescriptionItem title="最新修改时间" content="2018-9-19" />
+              </Col>
+              {' '}
+              <Col span={12}>
+                <DescriptionItem title="最新修改人" content="Melon" />
+              </Col>
+            </Row>
+            <Row>
+              <Col span={12}>
+                <DescriptionItem title="创建时间" content="2010-9-19" />
+              </Col>
+            </Row>
+          </Collapse.Panel>
+        </Collapse>
+        <Divider style={{marginTop:0,marginBottom:0}}/>
         <Tree
           checkable
           showIcon
@@ -110,6 +170,7 @@ class CreatDrawer extends Component {
           defaultSelectedKeys={['0-0-0', '0-0-1']}
           defaultCheckedKeys={['0-0-0', '0-0-1']}
           onCheck={this.onCheck}
+          style={{marginBottom:53+'px',overflow:'scroll'}}
         >
           {this.renderTree(menuTree)}
           {/*       <TreeNode icon={<Icon type="radius-setting"/>} title="系统管理" key="0-0">
@@ -145,6 +206,30 @@ class CreatDrawer extends Component {
             </TreeNode>
           </TreeNode>*/}
         </Tree>
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            width: '100%',
+            borderTop: '1px solid #e8e8e8',
+            padding: '10px 16px',
+            textAlign: 'right',
+            left: 0,
+            background: '#fff',
+            borderRadius: '0 0 4px 4px',
+          }}
+        >
+          <Button  style={{
+            marginRight: 8,
+          }} onClick={onClose} type="primary">
+            确认
+          </Button>
+          <Button
+            onClick={onClose}
+          >
+            取消
+          </Button>
+        </div>
       </Drawer>
     )
   }
@@ -195,8 +280,6 @@ class Permission extends Component {
           <a onClick={() => this.showDrawer()}>编辑</a>
           <Divider type="vertical"/>
           <a href="">查看</a>
-          <Divider type="vertical"/>
-          <a href="">删除</a>
         </Fragment>
       ),
     },
@@ -372,7 +455,6 @@ class Permission extends Component {
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
         <Menu.Item key="edit">权限设置</Menu.Item>
-        <Menu.Item key="remove">删除</Menu.Item>
       </Menu>
     );
     console.log(this.props)

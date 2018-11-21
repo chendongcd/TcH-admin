@@ -1010,7 +1010,6 @@ class MeterUp extends Component {
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
         <Menu.Item key="edit">编辑</Menu.Item>
         <Menu.Item key="export">导出</Menu.Item>
-        <Menu.Item key="remove">删除</Menu.Item>
       </Menu>
     );
 
