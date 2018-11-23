@@ -1,5 +1,5 @@
-import React,{Component,PureComponent,Fragment}from 'react'
-import { connect } from 'dva'
+import React, {Component, PureComponent, Fragment} from 'react'
+import {connect} from 'dva'
 import moment from 'moment';
 
 import {
@@ -21,14 +21,14 @@ import {
   Steps,
   Radio,
 } from 'antd';
-import { Page,PageHeader,PageHeaderWrapper,StandardTable } from 'components'
+import {Page, PageHeader, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-
+import {_setTimeOut} from "utils";
 
 const FormItem = Form.Item;
-const { Step } = Steps;
-const { TextArea } = Input;
-const { Option } = Select;
+const {Step} = Steps;
+const {TextArea} = Input;
+const {Option} = Select;
 const RadioGroup = Radio.Group;
 const getValue = obj =>
   Object.keys(obj)
@@ -38,7 +38,7 @@ const statusMap = ['default', 'processing', 'success', 'error'];
 const status = ['关闭', '运行中', '已上线', '异常'];
 
 const CreateForm = Form.create()(props => {
-  const { modalVisible, form, handleAdd, handleModalVisible } = props;
+  const {modalVisible, form, handleAdd, handleModalVisible} = props;
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -54,28 +54,28 @@ const CreateForm = Form.create()(props => {
       onOk={okHandle}
       onCancel={() => handleModalVisible()}
     >
-      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="账号名称">
+      <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="账号名称">
         {form.getFieldDecorator('desc', {
-          rules: [{ required: true, message: '请输入账号名称' }],
-        })(<Input placeholder="请输入" />)}
+          rules: [{required: true, message: '请输入账号名称'}],
+        })(<Input placeholder="请输入"/>)}
       </FormItem>
-      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="账号密码">
+      <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="账号密码">
         {form.getFieldDecorator('name', {
-          rules: [{ required: true, message: '请输入账号密码' }],
-        })(<Input placeholder="请输入" />)}
+          rules: [{required: true, message: '请输入账号密码'}],
+        })(<Input placeholder="请输入"/>)}
       </FormItem>
-      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="账号类型">
+      <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="账号类型">
         {form.getFieldDecorator('desc', {
-          rules: [{ required: true, message: '请选择账号类型' }],
-        })( <Select placeholder="请选择" style={{ width: '100%' }}>
+          rules: [{required: true, message: '请选择账号类型'}],
+        })(<Select placeholder="请选择" style={{width: '100%'}}>
           <Option value="0">公司</Option>
           <Option value="1">项目部</Option>
         </Select>)}
       </FormItem>
-      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="角色权限">
+      <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="角色权限">
         {form.getFieldDecorator('desc', {
-          rules: [{ required: true, message: '请选择角色权限' }],
-        })( <Select placeholder="请选择" style={{ width: '100%' }}>
+          rules: [{required: true, message: '请选择角色权限'}],
+        })(<Select placeholder="请选择" style={{width: '100%'}}>
           <Option value="0">开发者</Option>
           <Option value="1">管理员</Option>
         </Select>)}
@@ -104,17 +104,17 @@ class UpdateForm extends PureComponent {
     };
 
     this.formLayout = {
-      labelCol: { span: 7 },
-      wrapperCol: { span: 13 },
+      labelCol: {span: 7},
+      wrapperCol: {span: 13},
     };
   }
 
   handleNext = currentStep => {
-    const { form, handleUpdate } = this.props;
-    const { formVals: oldValue } = this.state;
+    const {form, handleUpdate} = this.props;
+    const {formVals: oldValue} = this.state;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      const formVals = { ...oldValue, ...fieldsValue };
+      const formVals = {...oldValue, ...fieldsValue};
       this.setState(
         {
           formVals,
@@ -131,28 +131,28 @@ class UpdateForm extends PureComponent {
   };
 
   backward = () => {
-    const { currentStep } = this.state;
+    const {currentStep} = this.state;
     this.setState({
       currentStep: currentStep - 1,
     });
   };
 
   forward = () => {
-    const { currentStep } = this.state;
+    const {currentStep} = this.state;
     this.setState({
       currentStep: currentStep + 1,
     });
   };
 
   renderContent = (currentStep, formVals) => {
-    const { form } = this.props;
+    const {form} = this.props;
     if (currentStep === 1) {
       return [
         <FormItem key="target" {...this.formLayout} label="监控对象">
           {form.getFieldDecorator('target', {
             initialValue: formVals.target,
           })(
-            <Select style={{ width: '100%' }}>
+            <Select style={{width: '100%'}}>
               <Option value="0">表一</Option>
               <Option value="1">表二</Option>
             </Select>
@@ -162,7 +162,7 @@ class UpdateForm extends PureComponent {
           {form.getFieldDecorator('template', {
             initialValue: formVals.template,
           })(
-            <Select style={{ width: '100%' }}>
+            <Select style={{width: '100%'}}>
               <Option value="0">规则模板一</Option>
               <Option value="1">规则模板二</Option>
             </Select>
@@ -184,10 +184,10 @@ class UpdateForm extends PureComponent {
       return [
         <FormItem key="time" {...this.formLayout} label="开始时间">
           {form.getFieldDecorator('time', {
-            rules: [{ required: true, message: '请选择开始时间！' }],
+            rules: [{required: true, message: '请选择开始时间！'}],
           })(
             <DatePicker
-              style={{ width: '100%' }}
+              style={{width: '100%'}}
               showTime
               format="YYYY-MM-DD HH:mm:ss"
               placeholder="选择开始时间"
@@ -198,7 +198,7 @@ class UpdateForm extends PureComponent {
           {form.getFieldDecorator('frequency', {
             initialValue: formVals.frequency,
           })(
-            <Select style={{ width: '100%' }}>
+            <Select style={{width: '100%'}}>
               <Option value="month">月</Option>
               <Option value="week">周</Option>
             </Select>
@@ -209,24 +209,24 @@ class UpdateForm extends PureComponent {
     return [
       <FormItem key="name" {...this.formLayout} label="规则名称">
         {form.getFieldDecorator('name', {
-          rules: [{ required: true, message: '请输入规则名称！' }],
+          rules: [{required: true, message: '请输入规则名称！'}],
           initialValue: formVals.name,
-        })(<Input placeholder="请输入" />)}
+        })(<Input placeholder="请输入"/>)}
       </FormItem>,
       <FormItem key="desc" {...this.formLayout} label="规则描述">
         {form.getFieldDecorator('desc', {
-          rules: [{ required: true, message: '请输入至少五个字符的规则描述！', min: 5 }],
+          rules: [{required: true, message: '请输入至少五个字符的规则描述！', min: 5}],
           initialValue: formVals.desc,
-        })(<TextArea rows={4} placeholder="请输入至少五个字符" />)}
+        })(<TextArea rows={4} placeholder="请输入至少五个字符"/>)}
       </FormItem>,
     ];
   };
 
   renderFooter = currentStep => {
-    const { handleUpdateModalVisible } = this.props;
+    const {handleUpdateModalVisible} = this.props;
     if (currentStep === 1) {
       return [
-        <Button key="back" style={{ float: 'left' }} onClick={this.backward}>
+        <Button key="back" style={{float: 'left'}} onClick={this.backward}>
           上一步
         </Button>,
         <Button key="cancel" onClick={() => handleUpdateModalVisible()}>
@@ -239,7 +239,7 @@ class UpdateForm extends PureComponent {
     }
     if (currentStep === 2) {
       return [
-        <Button key="back" style={{ float: 'left' }} onClick={this.backward}>
+        <Button key="back" style={{float: 'left'}} onClick={this.backward}>
           上一步
         </Button>,
         <Button key="cancel" onClick={() => handleUpdateModalVisible()}>
@@ -261,23 +261,23 @@ class UpdateForm extends PureComponent {
   };
 
   render() {
-    const { updateModalVisible, handleUpdateModalVisible } = this.props;
-    const { currentStep, formVals } = this.state;
+    const {updateModalVisible, handleUpdateModalVisible} = this.props;
+    const {currentStep, formVals} = this.state;
 
     return (
       <Modal
         width={640}
-        bodyStyle={{ padding: '32px 40px 48px' }}
+        bodyStyle={{padding: '32px 40px 48px'}}
         destroyOnClose
         title="规则配置"
         visible={updateModalVisible}
         footer={this.renderFooter(currentStep)}
         onCancel={() => handleUpdateModalVisible()}
       >
-        <Steps style={{ marginBottom: 28 }} size="small" current={currentStep}>
-          <Step title="基本信息" />
-          <Step title="配置规则属性" />
-          <Step title="设定调度周期" />
+        <Steps style={{marginBottom: 28}} size="small" current={currentStep}>
+          <Step title="基本信息"/>
+          <Step title="配置规则属性"/>
+          <Step title="设定调度周期"/>
         </Steps>
         {this.renderContent(currentStep, formVals)}
       </Modal>
@@ -291,7 +291,7 @@ class User extends Component {
 
   constructor(props) {
     super(props)
-    this.state={
+    this.state = {
       modalVisible: false,
       updateModalVisible: false,
       selectedRows: [],
@@ -343,7 +343,7 @@ class User extends Component {
         },
       ],
       render(val) {
-        return <Badge status={statusMap[val]} text={status[val]} />;
+        return <Badge status={statusMap[val]} text={status[val]}/>;
       },
     },
     {
@@ -371,7 +371,7 @@ class User extends Component {
       render: (val, record) => (
         <Fragment>
           <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
-          <Divider type="vertical" />
+          <Divider type="vertical"/>
           <a href="">查看</a>
         </Fragment>
       ),
@@ -379,18 +379,23 @@ class User extends Component {
   ];
 
   componentDidMount() {
-    const { dispatch } = this.props;
+    const {dispatch} = this.props;
+    _setTimeOut(() => this.setState({pageLoading: false}), 1000)
     dispatch({
       type: 'rule/fetch',
     });
   }
 
+  componentWillUnmount() {
+    clearTimeout(_setTimeOut)
+  }
+
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    const { dispatch } = this.props;
-    const { formValues } = this.state;
+    const {dispatch} = this.props;
+    const {formValues} = this.state;
 
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
-      const newObj = { ...obj };
+      const newObj = {...obj};
       newObj[key] = getValue(filtersArg[key]);
       return newObj;
     }, {});
@@ -412,7 +417,7 @@ class User extends Component {
   };
 
   handleFormReset = () => {
-    const { form, dispatch } = this.props;
+    const {form, dispatch} = this.props;
     form.resetFields();
     this.setState({
       formValues: {},
@@ -424,8 +429,8 @@ class User extends Component {
   };
 
   handleMenuClick = e => {
-    const { dispatch } = this.props;
-    const { selectedRows } = this.state;
+    const {dispatch} = this.props;
+    const {selectedRows} = this.state;
 
     if (!selectedRows) return;
     switch (e.key) {
@@ -456,7 +461,7 @@ class User extends Component {
   handleSearch = e => {
     e.preventDefault();
 
-    const { dispatch, form } = this.props;
+    const {dispatch, form} = this.props;
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -491,7 +496,7 @@ class User extends Component {
   };
 
   handleAdd = fields => {
-    const { dispatch } = this.props;
+    const {dispatch} = this.props;
     dispatch({
       type: 'rule/add',
       payload: {
@@ -504,7 +509,7 @@ class User extends Component {
   };
 
   handleUpdate = fields => {
-    const { dispatch } = this.props;
+    const {dispatch} = this.props;
     dispatch({
       type: 'rule/update',
       payload: {
@@ -520,25 +525,25 @@ class User extends Component {
 
   renderSimpleForm() {
     const {
-      form: { getFieldDecorator },
+      form: {getFieldDecorator},
     } = this.props;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
-        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+        <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={6} sm={24}>
             <FormItem label="用户编码">
-              {getFieldDecorator('code')(<Input placeholder="请输入" />)}
+              {getFieldDecorator('code')(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="用户名称">
-              {getFieldDecorator('code')(<Input placeholder="请输入" />)}
+              {getFieldDecorator('code')(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="用户状态">
               {getFieldDecorator('status')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
+                <Select placeholder="请选择" style={{width: '100%'}}>
                   <Option value="0">禁用</Option>
                   <Option value="1">启用</Option>
                 </Select>
@@ -550,7 +555,7 @@ class User extends Component {
               <Button type="primary" htmlType="submit">
                 查询
               </Button>
-              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
+              <Button style={{marginLeft: 8}} onClick={this.handleFormReset}>
                 重置
               </Button>
             </span>
@@ -561,17 +566,18 @@ class User extends Component {
   }
 
   renderForm() {
-    return  this.renderSimpleForm();
+    return this.renderSimpleForm();
   }
 
   render() {
     const {
-      rule: { data },
+      rule: {data},
       loading,
     } = this.props;
-    const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
+    const {selectedRows, modalVisible, updateModalVisible, stepFormValues, pageLoading} = this.state;
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
+        <Menu.Item key="remove">删除</Menu.Item>
         <Menu.Item key="true">启用</Menu.Item>
         <Menu.Item key="false">启用</Menu.Item>
       </Menu>
@@ -586,7 +592,7 @@ class User extends Component {
       handleUpdate: this.handleUpdate,
     };
     return (
-      <Page loading={false} className={styles.dashboard}>
+      <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="用户管理">
           <Card bordered={false}>
             <div className={styles.tableList}>
@@ -599,7 +605,7 @@ class User extends Component {
                   <span>
                   <Dropdown overlay={menu}>
                     <Button>
-                     批量操作 <Icon type="down" />
+                     批量操作 <Icon type="down"/>
                     </Button>
                   </Dropdown>
                 </span>
@@ -607,7 +613,7 @@ class User extends Component {
               </div>
               <StandardTable
                 selectedRows={selectedRows}
-                loading={loading}
+                loading={loading.effects['rule/fetch']}
                 data={data}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
@@ -615,7 +621,7 @@ class User extends Component {
               />
             </div>
           </Card>
-          <CreateForm {...parentMethods} modalVisible={modalVisible} />
+          <CreateForm {...parentMethods} modalVisible={modalVisible}/>
           {stepFormValues && Object.keys(stepFormValues).length ? (
             <UpdateForm
               {...updateMethods}
@@ -629,8 +635,6 @@ class User extends Component {
   }
 }
 
-User.propTypes = {
+User.propTypes = {}
 
-}
-
-export default connect(({app,rule}) => ({ app,rule }))(User)
+export default connect(({app, rule, loading}) => ({app, rule, loading}))(User)

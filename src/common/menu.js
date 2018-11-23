@@ -92,7 +92,7 @@ export const menuData = [
   {
     id: '61',
     bpid: '6',
-    mpid: '5',
+    mpid: '6',
     name: '所属队伍台账',
     route: '/down/account',
   },
@@ -146,14 +146,14 @@ export const menuData = [
     route: '/files',
   },
   {
-    id: '101',
+    id: '11',
     bpid: '10',
     mpid: '10',
     name: '文件阅览',
     route: '/files/read',
   },
   {
-    id: '101',
+    id: '12',
     bpid: '10',
     mpid: '10',
     name: '参考文献',

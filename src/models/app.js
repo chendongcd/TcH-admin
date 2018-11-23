@@ -2,16 +2,24 @@ import {routerRedux} from 'dva/router'
 import {signIn,signOut} from '../services/app'
 import config from 'config'
 import {menuData} from '../common/menu'
+import {setStorage,getStorage} from 'utils/localStorage'
 const delay = timeout => new Promise(resolve => setTimeout(resolve, timeout));
 const {prefix} = config
+
+function getMenu(user) {
+  if(user&&user.id==0){
+    return menuData
+  }else if(user){
+  return menuData.filter(a=>a.id!=2)
+  }
+  return []
+}
+
 export default {
   namespace: 'app',
 
   state: {
-    user: {id: 0,
-      username: 'admin',
-      password: 'admin',
-      permissions: 'admin'},
+    user: getStorage('userInfo')||{},
     locationPathname: '',
     locationQuery: {},
     loading: false,
@@ -19,7 +27,7 @@ export default {
     siderFold: window.localStorage.getItem(`${prefix}siderFold`) === 'true',
     navOpenKeys: JSON.parse(window.localStorage.getItem(`${prefix}navOpenKeys`)) || [],
     isNavbar: document.body.clientWidth < 769,
-    menu: menuData,
+    menu: getMenu(getStorage('userInfo')),
     hasPermission:true,
     location:{}
   },
@@ -27,6 +35,7 @@ export default {
   subscriptions: {
     setupHistory({dispatch, history}) {
       history.listen((location) => {
+        console.log(getStorage('userInfo'))
         console.log(location)
         dispatch({
           type: 'updateState',
@@ -52,12 +61,12 @@ export default {
       const res = yield call(signIn, payload)
       if (res.code == 200) {
         let menu = res.data.id==0?menuData:menuData.filter(a=>a.id!=2)
+        setStorage('userInfo',res.data)
         yield put({type: 'updateState', payload: {user: res.data, loading: true,menu:menu}})
         yield put(routerRedux.push('/home'))
         yield call(delay, 500)
         yield put({type: 'updateState', payload: {loading: false}})
       }
-      console.log(res)
       // yield put({ type: 'updateState',payload:payload })
     },
 
@@ -69,6 +78,7 @@ export default {
         yield put(routerRedux.push('/login'));
       }
     },
+
     * changeNavbar (action, { put, select }) {
       const { app } = yield (select(_ => _))
       const isNavbar = document.body.clientWidth < 769

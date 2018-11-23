@@ -7,9 +7,10 @@ class Home extends Component {
 
   constructor(props) {
     super(props)
-    this.state={
-    }
+    this.state = {}
+    let res = []
   }
+
 
   render() {
     return (

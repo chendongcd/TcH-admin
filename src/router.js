@@ -100,6 +100,16 @@ function RouterConfig({history, app}) {
     models: [appModel],
     component:()=> import('./routes/upToBack/meterUp/index'),
   })
+  const Sub_Qualification = dynamic({
+    app,
+    models:[appModel],
+    component:()=> import('./routes/sub/qualification/index')
+  })
+  const Sub_Resume = dynamic({
+    app,
+    models:[appModel],
+    component:()=> import('./routes/sub/resume/index')
+  })
 
   // const Project = dynamic({
   //   app,
@@ -130,7 +140,8 @@ function RouterConfig({history, app}) {
             <Route path="/system/user"  component={Sys_User}/>
             <Route path="/project/infoCard"  component={Pro_InfoCard}/>
             <Route path="/up/meterUp"  component={Up_MeterUp}/>
-            <Route path="/sub"  component={Login}/>
+            <Route path="/sub/qualification"  component={Sub_Qualification}/>
+            <Route path="/sub/resume"  component={Sub_Resume}/>
             <Route path="/meteringDown"  component={Login}/>
             <Route path="/manager"  component={Login}/>
             <Route path="/files"  component={Login}/>

@@ -1,14 +1,12 @@
 import Store from 'store';
-import request from '../utils/request';
-import config from'../utils/config'
+import {requestDev,request,config} from 'utils';
 // 用户登录
-const {apiPrefix} = config
+const {apiPrefix,apiDev} = config
 export async function signIn(params) {
   console.log('请求服务了',`${apiPrefix}/user/login`)
-  return request( {
+  return requestDev(`${apiPrefix}/user/login`,{
     method: 'POST',
-    data: params,
-    url:`${apiPrefix}/user/login`
+    body: params
   });
 }
 

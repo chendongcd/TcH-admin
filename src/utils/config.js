@@ -7,5 +7,6 @@ module.exports = {
   iconFontCSS: `${path}/iconfont.css`,
   iconFontJS: `${path}/iconfont.js`,
   apiPrefix: '/api/v1',
+  apiDev:'http://4c1ae242.ngrok.io/crcc',
   CORS: [],
 }

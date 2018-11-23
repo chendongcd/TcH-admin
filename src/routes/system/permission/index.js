@@ -20,7 +20,7 @@ import {
   Radio,
   Collapse
 } from 'antd';
-import {arrayToTree} from 'utils'
+import {arrayToTree, _setTimeOut} from 'utils'
 import {menuData} from '../../../common/menu'
 import {Page, PageHeader, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
@@ -76,8 +76,8 @@ class CreatDrawer extends Component {
     return trees.children ? trees.children.map((tree, index) => {
       const key = `${parentKey}-${index}`
       return (<TreeNode selectable={false} title={tree.name} key={key}>
-          {this.renderSubTree(tree, key)}
-        </TreeNode>)
+        {this.renderSubTree(tree, key)}
+      </TreeNode>)
     }) : null
   }
 
@@ -93,7 +93,7 @@ class CreatDrawer extends Component {
 
   render() {
     const {onClose, drawVisible} = this.props
-    const DescriptionItem = ({ title, content }) => (
+    const DescriptionItem = ({title, content}) => (
       <div
         style={{
           fontSize: 14,
@@ -122,7 +122,7 @@ class CreatDrawer extends Component {
       marginBottom: 16,
     };
     // 生成树状
-    const menuTree = arrayToTree(menuData.filter(_ =>( _.mpid !== '-1'&&_.id!=='1')), 'id', 'mpid')
+    const menuTree = arrayToTree(menuData.filter(_ => (_.mpid !== '-1' && _.id !== '1')), 'id', 'mpid')
     return (
       <Drawer
         width={440}
@@ -130,10 +130,10 @@ class CreatDrawer extends Component {
         placement="right"
         closable={false}
         onClose={onClose}
-        style={{paddingBottom:53+'px'}}
+        style={{paddingBottom: 53 + 'px'}}
         visible={drawVisible}
       >
-        <Collapse bordered={false} >
+        <Collapse bordered={false}>
           <Collapse.Panel header="角色信息" key="1" style={{
             background: '#f7f7f7',
             borderRadius: 4,
@@ -143,26 +143,26 @@ class CreatDrawer extends Component {
           }}>
             <Row>
               <Col span={12}>
-                <DescriptionItem title="角色名称" content="Lily" />{' '}
+                <DescriptionItem title="角色名称" content="Lily"/>{' '}
               </Col>
             </Row>
             <Row>
               <Col span={12}>
-                <DescriptionItem title="最新修改时间" content="2018-9-19" />
+                <DescriptionItem title="最新修改时间" content="2018-9-19"/>
               </Col>
               {' '}
               <Col span={12}>
-                <DescriptionItem title="最新修改人" content="Melon" />
+                <DescriptionItem title="最新修改人" content="Melon"/>
               </Col>
             </Row>
             <Row>
               <Col span={12}>
-                <DescriptionItem title="创建时间" content="2010-9-19" />
+                <DescriptionItem title="创建时间" content="2010-9-19"/>
               </Col>
             </Row>
           </Collapse.Panel>
         </Collapse>
-        <Divider style={{marginTop:0,marginBottom:0}}/>
+        <Divider style={{marginTop: 0, marginBottom: 0}}/>
         <Tree
           checkable
           showIcon
@@ -170,7 +170,7 @@ class CreatDrawer extends Component {
           defaultSelectedKeys={['0-0-0', '0-0-1']}
           defaultCheckedKeys={['0-0-0', '0-0-1']}
           onCheck={this.onCheck}
-          style={{marginBottom:53+'px',overflow:'scroll'}}
+          style={{marginBottom: 53 + 'px', overflow: 'scroll'}}
         >
           {this.renderTree(menuTree)}
           {/*       <TreeNode icon={<Icon type="radius-setting"/>} title="系统管理" key="0-0">
@@ -219,7 +219,7 @@ class CreatDrawer extends Component {
             borderRadius: '0 0 4px 4px',
           }}
         >
-          <Button  style={{
+          <Button style={{
             marginRight: 8,
           }} onClick={onClose} type="primary">
             确认
@@ -244,7 +244,8 @@ class Permission extends Component {
       modalVisible: false,
       selectedRows: [],
       formValues: {},
-      drawVisible: false
+      drawVisible: false,
+      pageLoading: true
     }
   }
 
@@ -287,9 +288,14 @@ class Permission extends Component {
 
   componentDidMount() {
     const {dispatch} = this.props;
+    _setTimeOut(() => this.setState({pageLoading: false}), 1000)
     dispatch({
       type: 'rule/fetch',
     });
+  }
+
+  componentWillUnmount() {
+    clearTimeout(_setTimeOut)
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
@@ -451,19 +457,18 @@ class Permission extends Component {
       rule: {data},
       loading,
     } = this.props;
-    const {selectedRows, modalVisible,} = this.state;
+    const {selectedRows, modalVisible, pageLoading} = this.state;
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
         <Menu.Item key="edit">权限设置</Menu.Item>
       </Menu>
     );
-    console.log(this.props)
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
     };
     return (
-      <Page loading={false}>
+      <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="权限管理">
           <Card bordered={false}>
             <div className={styles.tableList}>
@@ -484,7 +489,7 @@ class Permission extends Component {
               </div>
               <StandardTable
                 selectedRows={selectedRows}
-                loading={loading}
+                loading={loading.effects['rule/fetch']}
                 data={data}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
@@ -502,4 +507,4 @@ class Permission extends Component {
 
 Permission.propTypes = {}
 
-export default connect(({app, rule}) => ({app, rule}))(Permission)
+export default connect(({app, rule, loading}) => ({app, rule, loading}))(Permission)

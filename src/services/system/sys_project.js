@@ -1,14 +1,11 @@
-import request from 'utils/request';
-import config from'utils/config'
+import {request,config,requestDev} from 'utils';
 import { stringify } from 'qs';
 
 const {apiPrefix} = config
 export async function queryRule(params) {
-  return request( {
+  return requestDev(`${apiPrefix}/rule`,{
     method: 'GET',
-    data: stringify(params),
-    url:`${apiPrefix}/rule`
-  });
+    body: stringify(params)});
 }
 
 export async function removeRule(params) {

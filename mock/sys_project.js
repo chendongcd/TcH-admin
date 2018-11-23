@@ -8,7 +8,7 @@ const EnumRoleType = [
   'guest',
   'developer',
 ]
-for (let i = 0; i < 300; i += 1) {
+for (let i = 0; i < 100; i += 1) {
 
   tableListDataSource.push({
     code: (`CRCC23-3-年份-${i > 99 ? i : i > 9 ? `0${i}` : `00${i}`}`),
@@ -35,9 +35,11 @@ for (let i = 0; i < 300; i += 1) {
 }
 module.exports = {
   [`GET ${apiPrefix}/rule`](req, res) {
+    console.log(req)
     let dataSource = tableListDataSource;
     let params = req.body
-    let pageSize = 10;
+    console.log(params)
+    let pageSize = 5;
     if (params.pageSize) {
       pageSize = params.pageSize * 1;
     }

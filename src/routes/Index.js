@@ -22,8 +22,9 @@ class IndexPage extends Component{
   componentDidMount(){
 
     let {app,history} = this.props
-    if(!app.user.name){
-      //history.push('/login')
+    if(!app.user.username){
+      console.log(app.user)
+      history.push('/login')
     }
   }
 
@@ -112,4 +113,4 @@ IndexPage.propTypes = {
   loading: PropTypes.object,
 };
 
-export default withRouter(connect(({ app,location }) => ({ app,location }))(IndexPage))
+export default withRouter(connect(({ app,loading }) => ({ app,loading }))(IndexPage))

@@ -21,14 +21,14 @@ class Login extends Component {
         :{loading:false}})
   }
 
-  handleOk=(validateFieldsAndScroll)=> {
-    validateFieldsAndScroll((errors, values) => {
+  handleOk=async(validateFieldsAndScroll)=> {
+    validateFieldsAndScroll(async (errors, values) => {
       if (errors) {
         return
       }
-      console.log(values)
+      //{account:values.username,password:values.password}
       this.setState({loginLoading:true})
-      this.props.dispatch({ type: 'app/login', payload: values })
+      await this.props.dispatch({ type: 'app/login', payload: values })
       this.setState({loginLoading:false})
     })
   }

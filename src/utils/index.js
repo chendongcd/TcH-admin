@@ -4,7 +4,9 @@ import cloneDeep from 'lodash.clonedeep'
 export classnames from 'classnames'
 export config from './config'
 export request from './request'
+export requestDev from './requestDev'
 export { color } from './theme'
+export {setStorage,getStorage} from './localStorage'
 
 // 连字符转驼峰
 String.prototype.hyphenToHump = function () {
@@ -97,4 +99,8 @@ export function arrayToTree (array, id = 'id', pid = 'pid', children = 'children
     }
   })
   return result
+}
+
+export function _setTimeOut(func,time=1000){
+   setTimeout(() => func(),time)
 }
