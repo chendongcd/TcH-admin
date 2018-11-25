@@ -2,37 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f9cf8453-fce7-4f76-8b42-acb0ec5757a4" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/routes/sub/qualification/index.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/routes/sub/qualification/index.less" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/routes/sub/qualification/model.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/routes/sub/resume/index.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/routes/sub/resume/index.less" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/routes/sub/resume/model.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/utils/localStorage.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/utils/requestDev.js" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/mock/sys_project.js" afterPath="$PROJECT_DIR$/mock/sys_project.js" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" afterPath="$PROJECT_DIR$/package-lock.json" />
-      <change beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
-      <change beforePath="$PROJECT_DIR$/src/common/menu.js" afterPath="$PROJECT_DIR$/src/common/menu.js" />
-      <change beforePath="$PROJECT_DIR$/src/components/Layout/Menu.js" afterPath="$PROJECT_DIR$/src/components/Layout/Menu.js" />
-      <change beforePath="$PROJECT_DIR$/src/components/StandardTable/index.js" afterPath="$PROJECT_DIR$/src/components/StandardTable/index.js" />
-      <change beforePath="$PROJECT_DIR$/src/index.js" afterPath="$PROJECT_DIR$/src/index.js" />
-      <change beforePath="$PROJECT_DIR$/src/models/app.js" afterPath="$PROJECT_DIR$/src/models/app.js" />
-      <change beforePath="$PROJECT_DIR$/src/router.js" afterPath="$PROJECT_DIR$/src/router.js" />
-      <change beforePath="$PROJECT_DIR$/src/routes/Index.js" afterPath="$PROJECT_DIR$/src/routes/Index.js" />
-      <change beforePath="$PROJECT_DIR$/src/routes/home/index.js" afterPath="$PROJECT_DIR$/src/routes/home/index.js" />
-      <change beforePath="$PROJECT_DIR$/src/routes/login/index.js" afterPath="$PROJECT_DIR$/src/routes/login/index.js" />
-      <change beforePath="$PROJECT_DIR$/src/routes/project/infoCard/index.js" afterPath="$PROJECT_DIR$/src/routes/project/infoCard/index.js" />
-      <change beforePath="$PROJECT_DIR$/src/routes/system/permission/index.js" afterPath="$PROJECT_DIR$/src/routes/system/permission/index.js" />
-      <change beforePath="$PROJECT_DIR$/src/routes/system/project/index.js" afterPath="$PROJECT_DIR$/src/routes/system/project/index.js" />
-      <change beforePath="$PROJECT_DIR$/src/routes/system/user/index.js" afterPath="$PROJECT_DIR$/src/routes/system/user/index.js" />
-      <change beforePath="$PROJECT_DIR$/src/routes/upToBack/meterUp/index.js" afterPath="$PROJECT_DIR$/src/routes/upToBack/meterUp/index.js" />
-      <change beforePath="$PROJECT_DIR$/src/services/app.js" afterPath="$PROJECT_DIR$/src/services/app.js" />
-      <change beforePath="$PROJECT_DIR$/src/services/system/sys_project.js" afterPath="$PROJECT_DIR$/src/services/system/sys_project.js" />
-      <change beforePath="$PROJECT_DIR$/src/utils/config.js" afterPath="$PROJECT_DIR$/src/utils/config.js" />
-      <change beforePath="$PROJECT_DIR$/src/utils/index.js" afterPath="$PROJECT_DIR$/src/utils/index.js" />
-      <change beforePath="$PROJECT_DIR$/src/utils/request.js" afterPath="$PROJECT_DIR$/src/utils/request.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -940,23 +910,22 @@
       <workItem from="1542331477134" duration="43182000" />
       <workItem from="1542590811346" duration="41476000" />
       <workItem from="1542763169316" duration="15275000" />
-      <workItem from="1542849144179" duration="32967000" />
+      <workItem from="1542849144179" duration="33012000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="259077000" />
+    <option name="totallyTimeSpent" value="259122000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="268" y="55" width="1469" height="799" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32786885" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3252841" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3252841" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TypeScript" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.031767957" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
