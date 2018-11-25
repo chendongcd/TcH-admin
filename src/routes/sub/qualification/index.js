@@ -40,175 +40,6 @@ let uuid = 0;
 const CreateForm = Form.create()(props => {
   const {modalVisible, form, handleAdd, handleModalVisible,normFile} = props;
   const {getFieldDecorator, getFieldValue} = form
-  getFieldDecorator('managers', {initialValue: [{manaName: '', manaTime: '', manaPhone: ''}]});
-  getFieldDecorator('secretary', {initialValue: [{secreName: '', secreTime: '', secrePhone: ''}]});
-  getFieldDecorator('chiefEngineer', {initialValue: [{chiefName: '', chiefTime: '', chiefPhone: ''}]});
-  const managers = getFieldValue('managers');
-  const secretary = getFieldValue('secretary');
-  const chiefEngineer = getFieldValue('chiefEngineer');
-  const remove = (k, type, form) => {
-    // can use data-binding to get
-    const keys = form.getFieldValue(type);
-    // We need at least one passenger
-    if (keys.length === 1) {
-      return;
-    }
-    let object = {
-      managers: keys.filter(key => key !== k),
-    }
-    if (type == 'secretary') {
-      object = {
-        secretary: keys.filter(key => key !== k),
-      }
-    }
-    if (type == 'chiefEngineer') {
-      object = {
-        chiefEngineer: keys.filter(key => key !== k),
-      }
-    }
-    // can use data-binding to set
-    form.setFieldsValue(object);
-  }
-  const add = (type, form) => {
-    // can use data-binding to get
-    const keys = form.getFieldValue(type);
-    const nextKeys = keys.concat(uuid);
-    uuid++;
-    // can use data-binding to set
-    // important! notify form to detect changes
-    let object = {
-      managers: nextKeys,
-    }
-    if (type == 'secretary') {
-      object = {
-        secretary: nextKeys,
-      }
-    }
-    if (type == 'chiefEngineer') {
-      object = {
-        chiefEngineer: nextKeys,
-      }
-    }
-    form.setFieldsValue(object);
-  }
-  const formManager = managers.map((key, index) => {
-    let isLast = (managers.length == index + 1)
-    return (<Row key={`managers${index}`} gutter={8}>
-      <Col className={styles.colPeople} md={6} sm={24}>
-        <FormItem required={true} labelCol={{span: 5}} wrapperCol={{span: 15}} label="姓名">
-          <Input placeholder="请输入姓名"/>
-          {/*          {form.getFieldDecorator(`names[${key}]`, {
-            rules: [{required: true, message: '请输入姓名'}],
-          })(<Input placeholder="请输入姓名"/>)}*/}
-        </FormItem>
-      </Col>
-      <Col className={styles.colPeople} md={7} sm={24}>
-        <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
-          <DatePicker style={{width: '100%'}} placeholder="请选择任职时间"/>
-          {/*{form.getFieldDecorator('manaTime', {
-            rules: [{required: true, message: '请选择任职时间'}],
-          })( <DatePicker style={{width: '100%'}} placeholder="请选择任职时间"/>)}*/}
-        </FormItem>
-      </Col>
-      <Col className={styles.colPeople} md={7} sm={24}>
-        <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系电话">
-          <Input placeholder="请输入联系电话"/>
-          {/*{form.getFieldDecorator('manaPhone', {
-            rules: [{required: true, message: '请输入联系电话'}],
-          })(<Input placeholder="请输入联系电话"/>)}*/}
-        </FormItem>
-      </Col>
-      <Col className={styles.colPeople} md={4} sm={24}>
-        {isLast ?
-          <Button style={{marginTop: 4 + 'px'}} shape="circle" type="primary" onClick={() => add('managers', form)}>
-            <Icon type="plus"/>
-          </Button> : <Button style={{marginTop: 4 + 'px'}} shape="circle" type="danger"
-                              onClick={() => remove(key, 'managers', form)}>
-            <Icon type="minus"/>
-          </Button>}
-      </Col>
-    </Row>)
-  })
-  const formSecretary = secretary.map((key, index) => {
-    let isLast = (secretary.length == index + 1)
-    return (<Row key={`secretary${index}`} gutter={8}>
-      <Col className={styles.colPeople} md={6} sm={24}>
-        <FormItem required={true}
-                  labelCol={{span: 5}}
-                  wrapperCol={{span: 15}}
-                  label="姓名">
-          {/*          {form.getFieldDecorator('secreName', {
-            rules: [{required: true, message: '请输入姓名'}],
-          })(<Input placeholder="请输入姓名"/>)}*/}
-          <Input placeholder="请输入姓名"/>
-        </FormItem>
-      </Col>
-      <Col className={styles.colPeople} md={7} sm={24}>
-        <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
-          {/*          {form.getFieldDecorator('secreTime', {
-            rules: [{required: true, message: '请选择任职时间'}],
-          })( <DatePicker style={{width: '100%'}} placeholder="请选择任职时间"/>)}*/}
-          <DatePicker style={{width: '100%'}} placeholder="请选择任职时间"/>
-        </FormItem>
-      </Col>
-      <Col className={styles.colPeople} md={7} sm={24}>
-        <FormItem min={1} type={'number'} required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系电话">
-          {/* {form.getFieldDecorator('secrePhone', {
-            rules: [{required: true, message: '请输入联系电话'}],
-          })(<Input placeholder="请输入联系电话"/>)}*/}
-          <Input placeholder="请输入联系电话"/>
-        </FormItem>
-      </Col>
-      <Col className={styles.colPeople} md={4} sm={24}>
-        {isLast ?
-          <Button style={{marginTop: 4 + 'px'}} shape="circle" type="primary" onClick={() => add('secretary', form)}>
-            <Icon type="plus"/>
-          </Button> : <Button style={{marginTop: 4 + 'px'}} shape="circle" type="danger"
-                              onClick={() => remove(key, 'secretary', form)}>
-            <Icon type="minus"/>
-          </Button>}
-      </Col>
-    </Row>)
-  })
-  const formChiefEngineer = chiefEngineer.map((key, index) => {
-    let isLast = (chiefEngineer.length == index + 1)
-    return (<Row key={`chiefEngineer${index}`} gutter={8}>
-      <Col className={styles.colPeople} md={6} sm={24}>
-        <FormItem required={true} labelCol={{span: 5}} wrapperCol={{span: 15}} label="姓名">
-          {/*          {form.getFieldDecorator('chiefName', {
-            rules: [{required: true, message: '请输入姓名'}],
-          })(<Input placeholder="请输入姓名"/>)}*/}
-          <Input placeholder="请输入姓名"/>
-        </FormItem>
-      </Col>
-      <Col className={styles.colPeople} md={7} sm={24}>
-        <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
-          {/*          {form.getFieldDecorator('chiefTime', {
-            rules: [{required: true, message: '请选择任职时间'}],
-          })( <DatePicker style={{width: '100%'}} placeholder="请选择任职时间"/>)}*/}
-          <DatePicker style={{width: '100%'}} placeholder="请选择任职时间"/>
-        </FormItem>
-      </Col>
-      <Col className={styles.colPeople} md={7} sm={24}>
-        <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系电话">
-          {/*          {form.getFieldDecorator('chiefPhone', {
-            rules: [{required: true, message: '请输入联系电话'}],
-          })(<Input placeholder="请输入联系电话"/>)}*/}
-          <Input placeholder="请输入联系电话"/>
-        </FormItem>
-      </Col>
-      <Col className={styles.colPeople} md={4} sm={24}>
-        {isLast ?
-          <Button style={{marginTop: 4 + 'px'}} shape="circle" type="primary"
-                  onClick={() => add('chiefEngineer', form)}>
-            <Icon type="plus"/>
-          </Button> : <Button style={{marginTop: 4 + 'px'}} shape="circle" type="danger"
-                              onClick={() => remove(key, 'chiefEngineer', form)}>
-            <Icon type="minus"/>
-          </Button>}
-      </Col>
-    </Row>)
-  })
 
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
@@ -221,7 +52,7 @@ const CreateForm = Form.create()(props => {
   return (
     <Modal
       destroyOnClose
-      title="新增对上计量台账"
+      title="新增分包商资质信息卡"
       bodyStyle={{padding: 0 + 'px'}}
       visible={modalVisible}
       width={992}
@@ -231,151 +62,271 @@ const CreateForm = Form.create()(props => {
     >
       <div className={styles.modalContent}>
         <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="项目名称">
+          <Col  md={12} sm={24}>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="请输入分包商全称">
               {form.getFieldDecorator('proName', {
-                rules: [{required: true, message: '请选择项目'}],
+                rules: [{required: true, message: '请输入分包商全称'}],
+              })(<Input placeholder="请输入分包商全称"/>)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={8}>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="成立日期">
+              {form.getFieldDecorator('proName', {
+                rules: [{required: true, message: '请选择成立日期'}],
+              })(<DatePicker style={{width: '100%'}} placeholder="请选择日期"/>)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="纳税人类型">
+              {form.getFieldDecorator('proType', {
+                rules: [{required: true}],
+              })(<DatePicker style={{width: '100%'}} placeholder="请选择纳税人类型"/>)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="注册资本金">
+              {form.getFieldDecorator('proType', {
+                rules: [{required: true}],
+              })(<Input placeholder="请选择日期" addonAfter="万元"/>)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={8}>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="分包商类型">
+              {form.getFieldDecorator('proName', {
+                rules: [{required: true, message: '请选择分包商类型'}],
+              })( <Select placeholder="请选择分包商类型" style={{width: '100%'}}>
+                <Option value="0">关闭</Option>
+                <Option value="1">运行中</Option>
+              </Select>)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="电话">
+              {form.getFieldDecorator('proType', {
+                rules: [{required: true}],
+              })(<Input placeholder="请输入电话"/>)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="电子邮箱">
+              {form.getFieldDecorator('proType', {
+                rules: [{required: true}],
+              })(<Input placeholder="请输入电子邮箱"/>)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={0}>
+          <Col md={16} sm={24}>
+            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="注册地址">
+              {form.getFieldDecorator('proType', {
+                rules: [{required: true}],
+              })(<Input placeholder="请输入注册地址"/>)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="邮编">
+              {form.getFieldDecorator('proType', {
+                rules: [{required: true}],
+              })(<Input placeholder="请邮编"/>)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={8}>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="专业类型">
+              {form.getFieldDecorator('proName', {
+                rules: [{required: true, message: '请选择专业类型'}],
               })(<Select placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">项目1</Option>
-                <Option value="1">项目2</Option>
+                <Option value="0">劳务承包</Option>
+                <Option value="1">专业承包</Option>
               </Select>)}
             </FormItem>
           </Col>
         </Row>
-        <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="计量期数">
-              {form.getFieldDecorator('proName', {
-                rules: [{required: true, message: '请输入期数'}],
-              })(<Input placeholder="请输入期数"/>)}
-            </FormItem>
-          </Col>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="计量日期">
-              {form.getFieldDecorator('proType', {
-                rules: [{required: true}],
-              })(<DatePicker style={{width: '100%'}} placeholder="请选择量日期"/>)}
-            </FormItem>
-          </Col>
-        </Row>
       </div>
       <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>预付款金额</div>
+        <div className={styles.title}>法定代表人</div>
       </Row>
       <div className={styles.modalContent}>
       <Row gutter={8}>
         <Col md={8} sm={24}>
-          <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="预付款">
+          <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="姓名">
+            {form.getFieldDecorator('proActualDays', {
+              rules: [{required: true, message: '请输入姓名'}],
+            })(<Input style={{marginTop: 4}} placeholder="请输入姓名"/>)}
+          </FormItem>
+        </Col>
+        <Col md={8} sm={24}>
+          <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="职务">
             {form.getFieldDecorator('proActualDays', {
               rules: [{required: true, message: '请输入预付款'}],
-            })(<Input style={{marginTop: 4}} placeholder="请输入预付款" addonAfter="元"/>)}
+            })(<Input style={{marginTop: 4}} placeholder="请输入职务" />)}
+          </FormItem>
+        </Col>
+        <Col md={8} sm={24}>
+          <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="身份证号码">
+            {form.getFieldDecorator('proActualDays', {
+              rules: [{required: true, message: '请输入身份证号码'}],
+            })(<Input style={{marginTop: 4}} placeholder="请输入身份证" />)}
           </FormItem>
         </Col>
       </Row>
-      </div>
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>计价金额</div>
-      </Row>
-      <div className={styles.modalContent}>
         <Row gutter={8}>
           <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="含税金额">
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系方式">
               {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true, message: '请输入含税金额'}],
-              })(<Input style={{marginTop: 4}} placeholder="请输入含税金额" addonAfter="元"/>)}
+                rules: [{required: true, message: '请输入联系方式'}],
+              })(<Input style={{marginTop: 4}} placeholder="请输入联系方式"/>)}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="税率">
+          <Col md={16} sm={24}>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="家庭住址">
               {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true, message: '请输入税率'}],
-              })(<Input style={{marginTop: 4}} placeholder="请输入税率" />)}
+                rules: [{required: true, message: '请输入家庭住址'}],
+              })(<Input style={{marginTop: 4}} placeholder="请输入家庭住址" />)}
             </FormItem>
           </Col>
         </Row>
       </div>
       <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>实际应支付金额</div>
+        <div className={styles.title}>营业执照</div>
       </Row>
       <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="含税金额">
+        <Row gutter={4}>
+          <Col md={10} sm={24}>
+            <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="统一社会信用代码">
               {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true, message: '请输入含税金额'}],
-              })(<Input style={{marginTop: 4}} placeholder="请输入含税金额" addonAfter="元"/>)}
+                rules: [{required: true, message: '请输入统一社会信用代码'}],
+              })(<Input  placeholder="请输入统一社会信用代码"/>)}
+          </FormItem>
+          </Col>
+          <Col md={6} sm={24}>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="有效期限">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true, message: '请选择期限'}],
+              })(<DatePicker style={{width: '100%'}} placeholder="请选择日期"/>)}
             </FormItem>
           </Col>
-        </Row>
-      </div>
-
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>资金拨付情况</div>
-      </Row>
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
           <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="已支付金额">
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="发证机关">
               {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true, message: '请输入已支付金额'}],
-              })(<Input style={{marginTop: 4}} placeholder="请输入已支付金额" addonAfter="元"/>)}
+                rules: [{required: true, message: '请输入发证机关'}],
+              })(<Input style={{marginTop: 4}} placeholder="请输入发证机关" />)}
             </FormItem>
           </Col>
         </Row>
       </div>
 
       <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>其他计价</div>
+        <div className={styles.title}>资质证书</div>
       </Row>
       <div className={styles.modalContent}>
         <Row gutter={8}>
           <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="超计价金额">
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="证书编号">
               {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true, message: '请输入超计价金额'}],
-              })(<Input style={{marginTop: 4}} placeholder="请输入超计价金额" addonAfter="元"/>)}
+                rules: [{required: true, message: '请输入证书编号'}],
+              })(<Input  placeholder="请输入证书编号"/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="已完未计价金额">
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="有效期限">
               {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true, message: '请输入已完未计价金额'}],
-              })(<Input style={{marginTop: 4}} placeholder="请输入已完未计价金额" addonAfter="元"/>)}
+                rules: [{required: true, message: '请选择期限'}],
+              })(<DatePicker style={{width: '100%'}} placeholder="请选择日期"/>)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="发证机关">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true, message: '请输入发证机关'}],
+              })(<Input style={{marginTop: 4}} placeholder="请输入发证机关" />)}
             </FormItem>
           </Col>
         </Row>
       </div>
 
       <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>其他</div>
+        <div className={styles.title}>安全生产许可证</div>
       </Row>
       <div className={styles.modalContent}>
         <Row gutter={8}>
-          <Col md={24} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="备注">
-              {form.getFieldDecorator('proSummary', {
-                rules: [{required: true}],
-              })(<Input.TextArea width={'100%'} placeholder="请输入" rows={4}/>)}
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="编号">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true, message: '请输入编号'}],
+              })(<Input  placeholder="请输入编号"/>)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="有效期限">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true, message: '请选择期限'}],
+              })(<DatePicker style={{width: '100%'}} placeholder="请选择日期"/>)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="发证机关">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true, message: '请输入发证机关'}],
+              })(<Input style={{marginTop: 4}} placeholder="请输入发证机关" />)}
             </FormItem>
           </Col>
         </Row>
+      </div>
+
+      <Row align={'middle'} gutter={0} className={styles.titleView}>
+        <div className={styles.title}>开户银行许可证</div>
+      </Row>
+      <div className={styles.modalContent}>
         <Row gutter={8}>
-          <Col md={24} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="附件" >
-                {form.getFieldDecorator('dragger', {
-                  valuePropName: 'fileList',
-                  getValueFromEvent: normFile,
-                })(
-                  <Upload.Dragger name="files" action="/upload.do">
-                    <p className="ant-upload-drag-icon">
-                      <Icon type="inbox" />
-                    </p>
-                    <p className="ant-upload-text">点击或拖动附件进入</p>
-                  </Upload.Dragger>
-                )}
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="开户银行">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true, message: '请输入开户银行'}],
+              })(<Input  placeholder="请输入开户银行"/>)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="银行账号">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true, message: '请输入银行账号'}],
+              })(<Input  placeholder="请输入银行账号"/>)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="发证机关">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true, message: '请输入发证机关'}],
+              })(<Input style={{marginTop: 4}} placeholder="请输入发证机关" />)}
             </FormItem>
           </Col>
         </Row>
+      </div>
+
+      <Row align={'middle'} gutter={0} className={styles.titleView}>
+        <div className={styles.title}>附件</div>
+      </Row>
+      <div className={styles.modalContent}>
+        <Col md={24} sm={24}>
+          <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="附件" >
+            {form.getFieldDecorator('dragger', {
+              valuePropName: 'fileList',
+              getValueFromEvent: normFile,
+            })(
+              <Upload.Dragger name="files" action="/upload.do">
+                <p className="ant-upload-drag-icon">
+                  <Icon type="inbox" />
+                </p>
+                <p className="ant-upload-text">点击或拖动附件进入</p>
+              </Upload.Dragger>
+            )}
+          </FormItem>
+        </Col>
       </div>
 
     </Modal>
@@ -769,6 +720,13 @@ class Qualification extends Component {
     });
   };
 
+  toggleForm = () => {
+    const {expandForm} = this.state;
+    this.setState({
+      expandForm: !expandForm,
+    });
+  };
+
   handleMenuClick = e => {
     const {dispatch} = this.props;
     const {selectedRows} = this.state;
@@ -888,55 +846,60 @@ class Qualification extends Component {
           <Col md={6} sm={24}>
             <FormItem label="专业类别">
               {getFieldDecorator('name')(  <Select placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">劳务分包</Option>
-                <Option value="1">专业分包</Option>
-                <Option value="1">劳务派遣</Option>
+                <Option value="0">临建工程</Option>
+                <Option value="1">路基工程</Option>
+                <Option value="2">路面工程</Option>
+                <Option value="3">桥梁工程</Option>
+                <Option value="4">涵洞工程</Option>
+                <Option value="5">隧道工程</Option>
+                <Option value="6">附属工程</Option>
+                <Option value="7">装饰装修工程</Option>
+                <Option value="8">弱电工程</Option>
+                <Option value="9">强电工程</Option>
+                <Option value="10">给排水工程</Option>
+                <Option value="11">通风工程</Option>
               </Select>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
-            <FormItem label="总工">
-              {getFieldDecorator('name')(<Input placeholder="请输入"/>)}
+            <FormItem label="注册资金">
+              {getFieldDecorator('name')(  <Select placeholder="请选择" style={{width: '100%'}}>
+                <Option value="0">500万以下</Option>
+                <Option value="1">500万-1000万</Option>
+                <Option value="2">1000万-3000万</Option>
+                <Option value="3">3000万-5000万</Option>
+                <Option value="4">5000万-1亿</Option>
+                <Option value="5">1亿以上</Option>
+              </Select>)}
             </FormItem>
           </Col>
         </Row>
         {expandForm ? <Row gutter={{md: 4, lg: 12, xl: 24}}>
-          <Col md={5} sm={24}>
-            <FormItem label="计划开工日期">
-              {getFieldDecorator('date')(
-                <DatePicker style={{width: '100%'}} placeholder="请选择日期"/>
-              )}
+          <Col md={8} sm={24}>
+            <FormItem label="股份公司综合信誉评价">
+              {getFieldDecorator('name')(  <Select placeholder="请选择" style={{width: '100%'}}>
+                <Option value="0">优秀</Option>
+                <Option value="1">合格</Option>
+                <Option value="2">不合格</Option>
+              </Select>)}
             </FormItem>
           </Col>
-          <Col md={5} sm={24}>
-            <FormItem label="计划完工日期">
-              {getFieldDecorator('date')(
-                <DatePicker style={{width: '100%'}} placeholder="请选择日期"/>
-              )}
+          <Col md={8} sm={24}>
+            <FormItem label="集团公司综合信誉评价">
+              {getFieldDecorator('name')(  <Select placeholder="请选择" style={{width: '100%'}}>
+                <Option value="0">优秀</Option>
+                <Option value="1">合格</Option>
+                <Option value="2">不合格</Option>
+              </Select>)}
             </FormItem>
           </Col>
-          <Col md={5} sm={24}>
-            <FormItem label="实际开工日期">
-              {getFieldDecorator('date')(
-                <DatePicker style={{width: '100%'}} placeholder="请选择日期"/>
-              )}
-            </FormItem>
-          </Col>
-          <Col md={5} sm={24}>
-            <FormItem label="计划完工日期">
-              {getFieldDecorator('date')(
-                <DatePicker style={{width: '100%'}} placeholder="请选择日期"/>
-              )}
-            </FormItem>
-          </Col>
-          <Col md={4} sm={24}>
-            <FormItem label="工程状态">
-              {getFieldDecorator('status3')(
-                <Select placeholder="请选择" style={{width: '100%'}}>
-                  <Option value="0">关闭</Option>
-                  <Option value="1">运行中</Option>
-                </Select>
-              )}
+          <Col md={8} sm={24}>
+            <FormItem label="公司本级综合信誉评价">
+              {getFieldDecorator('name')(  <Select placeholder="请选择" style={{width: '100%'}}>
+                <Option value="0">优秀</Option>
+                <Option value="1">合格</Option>
+                <Option value="2">不合格</Option>
+              </Select>)}
             </FormItem>
           </Col>
         </Row> : null}
@@ -996,6 +959,15 @@ class Qualification extends Component {
               <div className={styles.tableListOperator}>
                 <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                   新增
+                </Button>
+                <Button icon="edit" type="primary" onClick={() => this.handleModalVisible(true)}>
+                  股份公司综合信誉评价
+                </Button>
+                <Button icon="edit" type="primary" onClick={() => this.handleModalVisible(true)}>
+                  集团公司综合信誉评价
+                </Button>
+                <Button icon="edit" type="primary" onClick={() => this.handleModalVisible(true)}>
+                  公司本级综合信誉评价
                 </Button>
                 {selectedRows.length > 0 && (
                   <span>
