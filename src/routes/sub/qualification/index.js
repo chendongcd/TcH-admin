@@ -82,7 +82,10 @@ const CreateForm = Form.create()(props => {
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="纳税人类型">
               {form.getFieldDecorator('proType3', {
                 rules: [{required: true}],
-              })(<DatePicker style={{width: '100%'}} placeholder="请选择纳税人类型"/>)}
+              })(<Select placeholder="请选择纳税人类型" style={{width: '100%'}}>
+                <Option value="0">一般纳税人</Option>
+                <Option value="1">小规模纳税人</Option>
+              </Select>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
@@ -117,9 +120,7 @@ const CreateForm = Form.create()(props => {
                 rules: [{required: true}],
               })(<Input placeholder="请输入电子邮箱"/>)}
             </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={0}>
+          </Col> <Row gutter={0}>
           <Col md={16} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="注册地址">
               {form.getFieldDecorator('proType5', {
@@ -131,10 +132,12 @@ const CreateForm = Form.create()(props => {
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="邮编">
               {form.getFieldDecorator('proType6', {
                 rules: [{required: true}],
-              })(<Input placeholder="请邮编"/>)}
+              })(<Input placeholder="请输入邮编"/>)}
             </FormItem>
           </Col>
         </Row>
+        </Row>
+
         <Row gutter={8}>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="专业类型">
@@ -198,10 +201,10 @@ const CreateForm = Form.create()(props => {
       <div className={styles.modalContent}>
         <Row gutter={4}>
           <Col md={10} sm={24}>
-            <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="统一社会信用代码">
+            <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="统一社会信誉代码">
               {form.getFieldDecorator('proActualDays8', {
-                rules: [{required: true, message: '请输入统一社会信用代码'}],
-              })(<Input placeholder="请输入统一社会信用代码"/>)}
+                rules: [{required: true, message: '请输入统一社会信誉代码'}],
+              })(<Input placeholder="请输入统一社会信誉代码"/>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
@@ -347,13 +350,13 @@ const CreateReview = Form.create()(props => {
   };
 
   const title = (type) => {
-    let name = '股份公司综合信用评价'
+    let name = '股份公司综合信誉评价'
     switch (type) {
       case 1:
-        name = '集团公司综合信用评价'
+        name = '集团公司综合信誉评价'
         break
       case 2:
-        name = '公司本级综合信用评价'
+        name = '公司本级综合信誉评价'
         break
     }
     return name
@@ -363,7 +366,7 @@ const CreateReview = Form.create()(props => {
     let content = (<div className={styles.modalContent}>
       <Row gutter={8}>
         <Col md={12} sm={24}>
-          <FormItem labelCol={{span: 11}} wrapperCol={{span: 12}} label="股份公司综合信用评价">
+          <FormItem labelCol={{span: 11}} wrapperCol={{span: 12}} label="股份公司综合信誉评价">
             {form.getFieldDecorator('proName100', {
               rules: [{required: true, message: '请选择'}],
             })(<Select placeholder="请选择" style={{width: '100%'}}>
@@ -402,7 +405,7 @@ const CreateReview = Form.create()(props => {
         content = (<div className={styles.modalContent}>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 11}} wrapperCol={{span: 12}} label="集团公司综合信用评价">
+              <FormItem labelCol={{span: 11}} wrapperCol={{span: 12}} label="集团公司综合信誉评价">
                 {form.getFieldDecorator('proName100', {
                   rules: [{required: true, message: '请选择'}],
                 })(<Select placeholder="请选择" style={{width: '100%'}}>
@@ -946,7 +949,7 @@ class Qualification extends Component {
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={6} sm={24}>
             <FormItem label="分包商全称">
-              {getFieldDecorator('name')(<Input/>)}
+              {getFieldDecorator('name')(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>

@@ -110,6 +110,16 @@ function RouterConfig({history, app}) {
     models:[appModel],
     component:()=> import('./routes/sub/resume/index')
   })
+  const Down_MeterDown = dynamic({
+    app,
+    models:[appModel],
+    component:()=> import('./routes/downToBack/meterDown/index')
+  })
+  const Down_TeamAccount = dynamic({
+    app,
+    models:[appModel],
+    component:()=> import('./routes/downToBack/teamAccount/index')
+  })
 
   // const Project = dynamic({
   //   app,
@@ -142,7 +152,8 @@ function RouterConfig({history, app}) {
             <Route path="/up/meterUp"  component={Up_MeterUp}/>
             <Route path="/sub/qualification"  component={Sub_Qualification}/>
             <Route path="/sub/resume"  component={Sub_Resume}/>
-            <Route path="/meteringDown"  component={Login}/>
+            <Route path="/down/inspect"  component={Down_MeterDown}/>
+            <Route path="/down/account"  component={Down_TeamAccount}/>
             <Route path="/manager"  component={Login}/>
             <Route path="/files"  component={Login}/>
           </Switch>

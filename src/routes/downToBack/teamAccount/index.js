@@ -38,7 +38,7 @@ const status = ['关闭', '运行中', '已上线', '异常'];
 let uuid = 0;
 
 const CreateForm = Form.create()(props => {
-  const {modalVisible, form, handleAdd, handleModalVisible,normFile} = props;
+  const {modalVisible, form, handleAdd, handleModalVisible, normFile} = props;
   const {getFieldDecorator, getFieldValue} = form
 
   const okHandle = () => {
@@ -52,7 +52,7 @@ const CreateForm = Form.create()(props => {
   return (
     <Modal
       destroyOnClose
-      title="新增分包履历"
+      title="新增台账"
       bodyStyle={{padding: 0 + 'px'}}
       visible={modalVisible}
       width={992}
@@ -63,118 +63,142 @@ const CreateForm = Form.create()(props => {
       <div className={styles.modalContent}>
         <Row gutter={8}>
           <Col md={12} sm={24}>
+            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="项目名称">
+              {form.getFieldDecorator('proName', {
+                rules: [{required: true, message: '请选择项目'}],
+              })(<Select placeholder="请选择" style={{width: '100%'}}>
+                <Option value="0">项目1</Option>
+                <Option value="1">项目2</Option>
+              </Select>)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={8}>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="合同类型">
+              {form.getFieldDecorator('proName', {
+                rules: [{required: true, message: '请选择合同'}],
+              })(<Select placeholder="请选择" style={{width: '100%'}}>
+                <Option value="0">主合同</Option>
+                <Option value="1">补充合同</Option>
+              </Select>)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={0}>
+          <Col md={12} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="分包商名称">
-              {form.getFieldDecorator('proName', {
-                rules: [{required: true, message: '请选择名称'}],
-              })(<Select placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">项目1</Option>
-                <Option value="1">项目2</Option>
-              </Select>)}
+              {form.getFieldDecorator('proType5', {
+                rules: [{required: true}],
+              })(<Input placeholder="请输入分包商名称"/>)}
+            </FormItem>
+          </Col>
+          <Col md={12} sm={24}>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="队伍名称">
+              {form.getFieldDecorator('proType6', {
+                rules: [{required: true}],
+              })(<Input placeholder="请输入队伍名称"/>)}
             </FormItem>
           </Col>
         </Row>
-        <Row gutter={8}>
+        <Row gutter={0}>
           <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="开始日期">
-              {form.getFieldDecorator('proName', {
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="合同签订日期">
+              {form.getFieldDecorator('proType5', {
                 rules: [{required: true}],
               })(<DatePicker style={{width: '100%'}} placeholder="请选择日期"/>)}
             </FormItem>
           </Col>
           <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="结束日期">
-              {form.getFieldDecorator('proType', {
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="预计合同金额">
+              {form.getFieldDecorator('proType6', {
                 rules: [{required: true}],
-              })(<DatePicker style={{width: '100%'}} placeholder="请选择日期"/>)}
+              })(<Input placeholder="请预计合同金额" addonAfter='元'/>)}
             </FormItem>
           </Col>
         </Row>
-        <Row gutter={8}>
+        <Row gutter={0}>
           <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 11}} wrapperCol={{span: 12}} label="该时间段所属项目部">
-              {form.getFieldDecorator('proName', {
+            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="施工范围">
+              {form.getFieldDecorator('proType5', {
                 rules: [{required: true}],
-              })(<Select placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">项目1</Option>
-                <Option value="1">项目2</Option>
-              </Select>)}
+              })(<Input placeholder="请输入施工范围"/>)}
             </FormItem>
           </Col>
           <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="项目部队伍名称">
-              {form.getFieldDecorator('proType', {
+            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="队伍状态">
+              {form.getFieldDecorator('proType6', {
                 rules: [{required: true}],
-              })(<Select placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">项目1</Option>
-                <Option value="1">项目2</Option>
-              </Select>)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="施工规模">
-              {form.getFieldDecorator('proName', {
-                rules: [{required: true, message: '请选择施工规模'}],
-              })(<Select placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">项目1</Option>
-                <Option value="1">项目2</Option>
+              })(<Select placeholder="请选择队伍状态" style={{width: '100%'}}>
+                <Option value="0">正在施工</Option>
+                <Option value="1">完工待结算</Option>
+                <Option value="2">已完结</Option>
               </Select>)}
             </FormItem>
           </Col>
         </Row>
       </div>
-    </Modal>
-  );
-});
-
-const CreateReview = Form.create()(props => {
-  const {modalVisible, form, handleAdd, handleReviewModal} = props;
-  const {getFieldDecorator, getFieldValue} = form
-
-  const okHandle = () => {
-    form.validateFields((err, fieldsValue) => {
-      console.log(fieldsValue)
-      if (err) return;
-      // form.resetFields();
-      handleAdd(fieldsValue);
-    });
-  };
-
-  return (
-    <Modal
-      destroyOnClose
-      title='项目部信誉评价'
-      bodyStyle={{padding: 0 + 'px'}}
-      visible={modalVisible}
-      width={992}
-      maskClosable={false}
-      onOk={okHandle}
-      onCancel={() => handleReviewModal()}
-    >
+      <Row align={'middle'} gutter={0} className={styles.titleView}>
+        <div className={styles.title}>覆约保证金</div>
+      </Row>
       <div className={styles.modalContent}>
         <Row gutter={8}>
           <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 11}} wrapperCol={{span: 12}} label="信誉评价">
-              {form.getFieldDecorator('proName100', {
-                rules: [{required: true, message: '请选择'}],
-              })(<Select placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">优秀</Option>
-                <Option value="1">合格</Option>
-                <Option value="2">不合格</Option>
-              </Select>)}
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="应缴金额">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true, message: '请输入应缴金额'}],
+              })(<Input style={{marginTop: 4}} placeholder="请输入应缴金额" addonAfter="万元"/>)}
+            </FormItem>
+          </Col>
+          <Col md={12} sm={24}>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="实缴金额">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true, message: '请输入实缴金额'}],
+              })(<Input style={{marginTop: 4}} placeholder="请输入实缴金额" addonAfter="万元"/>)}
             </FormItem>
           </Col>
         </Row>
+      </div>
+      <Row align={'middle'} gutter={0} className={styles.titleView}>
+        <div className={styles.title}>负责人</div>
+      </Row>
+      <div className={styles.modalContent}>
         <Row gutter={8}>
           <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="集团公司信誉评价">
-              {form.getFieldDecorator('proName100', {
-                rules: [{required: true, message: '请选择'}],
-              })(<Select placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">合格</Option>
-                <Option value="1">不合格</Option>
-              </Select>)}
+            <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="合同签订人">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true, message: '请输入合同签订人'}],
+              })(<Input placeholder="请输入合同签订人"/>)}
+            </FormItem>
+          </Col>
+          <Col md={12} sm={24}>
+            <FormItem labelCol={{span: 11}} wrapperCol={{span: 12}} label="合同签订人联系电话">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true, message: '请输入合同签订人联系电话'}],
+              })(<Input placeholder="请输入合同签订人联系电话"/>)}
+            </FormItem>
+          </Col>
+        </Row>
+      </div>
+
+      <Row align={'middle'} gutter={0} className={styles.titleView}>
+        <div className={styles.title}>其他</div>
+      </Row>
+      <div className={styles.modalContent}>
+        <Row gutter={8}>
+          <Col md={24} sm={24}>
+            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="附件">
+              {form.getFieldDecorator('dragger', {
+                valuePropName: 'fileList',
+                getValueFromEvent: normFile,
+              })(
+                <Upload.Dragger name="files" action="/upload.do">
+                  <p className="ant-upload-drag-icon">
+                    <Icon type="inbox"/>
+                  </p>
+                  <p className="ant-upload-text">点击或拖动附件进入</p>
+                </Upload.Dragger>
+              )}
             </FormItem>
           </Col>
         </Row>
@@ -188,9 +212,11 @@ const CreateReview = Form.create()(props => {
           </Col>
         </Row>
       </div>
+
     </Modal>
   );
 });
+
 @Form.create()
 class UpdateForm extends PureComponent {
   constructor(props) {
@@ -393,7 +419,7 @@ class UpdateForm extends PureComponent {
 }
 
 @Form.create()
-class Resume extends Component {
+class TeamAccount extends Component {
 
   constructor(props) {
     super(props)
@@ -403,96 +429,169 @@ class Resume extends Component {
       selectedRows: [],
       formValues: {},
       stepFormValues: {},
-      pageLoading:true,
-      reviewType: false
+      pageLoading: true
     }
   }
 
   columns = [
     {
-      title: '分包商备案编码',
-      dataIndex: 'code',
+      title: '劳务队伍统计（项目部填写）',
+      children: [
+        {
+          title: '项目名称',
+          key:0,
+          dataIndex: 'name',
+        },
+        {
+          title: '合同编码',
+          key:1,
+          dataIndex: 'code',
+        },
+        {
+          title: '分包商名称',
+          key:2,
+          render(val) {
+            return <span>阿里巴巴</span>;
+          },
+        },
+        {
+          title: '队伍名称',
+          key:3,
+          render(val) {
+            return <span>湖人队</span>;
+          },
+        },
+        {
+          title: '队伍状态',
+          key:4,
+          render(val) {
+            return <span>已完结</span>;
+          },
+        },
+        {
+          title: '预计合同金额',
+          key:5,
+          render(val) {
+            return <span>10万</span>;
+          },
+        },
+        {
+          title: '施工范围',
+          key:6,
+          render(val) {
+            return <span>从南到北</span>;
+          },
+        },
+        {
+          title: '覆约保证金',
+          key:7,
+          children: [
+            {
+              title: '应缴金额（万元）',
+              render(val) {
+                return <span>3</span>;
+              },
+            }, {
+              title: '应缴金额（万元）',
+              key: 'pay_per',
+              render(val) {
+                return <span>311</span>;
+              },
+            }]
+        },
+        {
+          title: '负责人',
+          key:8,
+          children: [{
+            title: '合同签订人',
+            key: 'paid',
+            render(val) {
+              return <span>李二狗</span>;
+            },
+          },
+            {
+              title: '联系方式',
+              render(val) {
+                return <span>3123123123</span>;
+              },
+            }]
+        },
+        {
+          title: '结算金额',
+          key:9,
+          render(val) {
+            return <span>10万</span>;
+          },
+        },
+        {
+          title: '附件（含同）',
+          key:10,
+          render(val) {
+            return <a href="#">下载附件</a>;
+          },
+        },
+        {
+          title: '备注',
+          render(val) {
+            return <span>nice</span>;
+          },
+        },
+      ]
     },
     {
-      title: '分包商全称',
-      dataIndex: 'name',
+      title: '备案情况（公司填写）',
+      children: [
+        {
+          title: '队伍选定',
+          children: [{
+            title:'日期',
+            render(val) {
+              return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
+            },
+          }]
+        },
+        {
+          title: '合同审批',
+          children: [{
+            title:'日期',
+            render(val) {
+              return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
+            },
+          },
+            {
+              title:'是否备案',
+              render(val) {
+                return <span>是</span>;
+              },
+            }]
+        },
+        {
+          title: '结算审批',
+          children: [{
+            title:'日期',
+            render(val) {
+              return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
+            },
+          }]
+        },
+        ]
     },
     {
-      title: '队伍名称',
+      title: '备注',
       render(val) {
-        return <span>四大队</span>;
-      },
-    },
-    {
-      title: '施工规模',
-      render(val) {
-        return <span>大</span>;
-      },
-    },
-    {
-      title: '开始日期',
-      render(val) {
-        return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
-      },
-    },
-    {
-      title: '结束日期',
-      render(val) {
-        return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
-      },
-    },
-    {
-      title: '该时间段所属项目部',
-      render(val) {
-        return <span>大</span>;
-      },
-    },
-    {
-      title: '合同签订人',
-      render(val) {
-        return <span>大</span>;
-      },
-    },
-    {
-      title: '合同签订人联系方式',
-      render(val) {
-        return <span>大</span>;
-      },
-    },
-    {
-      title: '合同金额',
-      render(val) {
-        return <span>10万</span>;
-      },
-    },
-    {
-      title: '结束金额',
-      render(val) {
-        return <span>10万</span>;
-      },
-    },
-    {
-      title: '项目部评价',
-      render(val) {
-        return <span>优秀</span>;
-      },
-    },
-    {
-      title: '文字评价',
-      render(val) {
-        return <span>很好很奈斯</span>;
+        return <span>100万啊实打实的</span>;
       },
     }
   ];
 
   componentDidMount() {
     const {dispatch} = this.props;
-    _setTimeOut(()=>this.setState({pageLoading:false}),1000)
+    _setTimeOut(() => this.setState({pageLoading: false}), 1000)
     // setTimeout(() => {
     //   this.setState({pageLoading:false})
     // },1000)
     dispatch({
-      type: 'rule/fetch',payload:{pageSize:5}
+      type: 'rule/fetch', payload: {pageSize: 5}
     });
   }
 
@@ -594,12 +693,6 @@ class Resume extends Component {
     });
   };
 
-  handleReviewModal = flag => {
-    this.setState({
-      reviewType: !!flag
-    })
-  }
-
   handleUpdateModalVisible = (flag, record) => {
     this.setState({
       updateModalVisible: !!flag,
@@ -641,28 +734,30 @@ class Resume extends Component {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
-          <Col md={8} sm={24}>
-            <FormItem label="分包商全称">
+          <Col md={6} sm={24}>
+            <FormItem label="项目名称">
               {getFieldDecorator('name')(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="项目部信誉评价">
-              {getFieldDecorator('date')(
-                <Select placeholder="请选择" style={{width: '100%'}}>
-                  <Option value="0">优秀</Option>
-                  <Option value="1">合格</Option>
-                  <Option value="1">不合格</Option>
-                </Select>
-              )}
+          <Col md={6} sm={24}>
+            <FormItem label="分包商名称">
+              {getFieldDecorator('name')(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="施工规模">
-              {getFieldDecorator('give')(<Select placeholder="请选择施工规模" style={{width: '100%'}}>
-                <Option value="0">优秀</Option>
-                <Option value="1">合格</Option>
-                <Option value="1">不合格</Option>
+          <Col md={6} sm={24}>
+            <FormItem label="队伍状态">
+              {getFieldDecorator('name')(<Select placeholder="请选择" style={{width: '100%'}}>
+                <Option value="0">正在施工</Option>
+                <Option value="1">完工待结算</Option>
+                <Option value="2">已结算</Option>
+              </Select>)}
+            </FormItem>
+          </Col>
+          <Col md={6} sm={24}>
+            <FormItem label="合同备案">
+              {getFieldDecorator('name')(<Select placeholder="请选择" style={{width: '100%'}}>
+                <Option value="0">是</Option>
+                <Option value="1">否</Option>
               </Select>)}
             </FormItem>
           </Col>
@@ -685,12 +780,20 @@ class Resume extends Component {
     return this.renderAdvancedForm()
   }
 
+  normFile = (e) => {
+    console.log('Upload event:', e);
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e && e.fileList;
+  }
+
   render() {
     const {
       rule: {data},
       loading,
     } = this.props;
-    const {selectedRows, modalVisible,pageLoading,reviewType} = this.state;
+    const {selectedRows, modalVisible, pageLoading} = this.state;
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
         <Menu.Item key="edit">编辑</Menu.Item>
@@ -701,20 +804,17 @@ class Resume extends Component {
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
-      handleReviewModal:this.handleReviewModal
+      normFile: this.normFile
     };
     return (
       <Page inner={true} loading={pageLoading}>
-        <PageHeaderWrapper title="分包商履历">
+        <PageHeaderWrapper title="所属劳务队伍台账">
           <Card bordered={false}>
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
               <div className={styles.tableListOperator}>
                 <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                   新增
-                </Button>
-                <Button icon="edit" type="primary" onClick={() => this.handleReviewModal(true)}>
-                  项目部评价
                 </Button>
                 {selectedRows.length > 0 && (
                   <span>
@@ -731,7 +831,7 @@ class Resume extends Component {
                 loading={loading.effects['rule/fetch']}
                 bordered
                 data={data}
-                scroll={{ x: '150%' }}
+                scroll={{x: '150%'}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
@@ -739,13 +839,12 @@ class Resume extends Component {
             </div>
           </Card>
           <CreateForm {...parentMethods} modalVisible={modalVisible}/>
-          <CreateReview {...parentMethods} modalVisible={reviewType}/>
         </PageHeaderWrapper>
       </Page>
     )
   }
 }
 
-Resume.propTypes = {}
+TeamAccount.propTypes = {}
 
-export default connect(({app, rule,loading}) => ({app, rule,loading}))(Resume)
+export default connect(({app, rule, loading}) => ({app, rule, loading}))(TeamAccount)
