@@ -120,6 +120,26 @@ function RouterConfig({history, app}) {
     models:[appModel],
     component:()=> import('./routes/downToBack/teamAccount/index')
   })
+  const Evaluate_Pro = dynamic({
+    app,
+    models:[appModel],
+    component:()=> import('./routes/evaluation/proEvaluate/index')
+  })
+  const People_Info = dynamic({
+    app,
+    models:[appModel],
+    component:()=> import('./routes/peopleManage/info/index')
+  })
+  const Document_fileRead = dynamic({
+    app,
+    models:[appModel],
+    component:()=> import('./routes/document/fileRead/index')
+  })
+  const Document_fileReference = dynamic({
+    app,
+    models:[appModel],
+    component:()=> import('./routes/document/fileReference/index')
+  })
 
   // const Project = dynamic({
   //   app,
@@ -154,8 +174,10 @@ function RouterConfig({history, app}) {
             <Route path="/sub/resume"  component={Sub_Resume}/>
             <Route path="/down/inspect"  component={Down_MeterDown}/>
             <Route path="/down/account"  component={Down_TeamAccount}/>
-            <Route path="/manager"  component={Login}/>
-            <Route path="/files"  component={Login}/>
+            <Route path="/people/info"  component={People_Info}/>
+            <Route path="/evaluation/evaluate"  component={Evaluate_Pro}/>
+            <Route path="/files/read"  component={Document_fileRead}/>
+            <Route path="/files/reference"  component={Document_fileReference}/>
           </Switch>
         </App>
       </Router>

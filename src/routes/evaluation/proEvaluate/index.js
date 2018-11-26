@@ -52,18 +52,18 @@ const CreateForm = Form.create()(props => {
   return (
     <Modal
       destroyOnClose
-      title="新增台账"
+      title="新增对下验工计价台账"
       bodyStyle={{padding: 0 + 'px'}}
       visible={modalVisible}
       width={992}
       maskClosable={false}
       onOk={okHandle}
-      onCancel={() => handleModalVisible()}
+      onCancel={() => handleModalVisible(false)}
     >
       <div className={styles.modalContent}>
         <Row gutter={8}>
           <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="项目名称">
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="项目名称">
               {form.getFieldDecorator('proName', {
                 rules: [{required: true, message: '请选择项目'}],
               })(<Select placeholder="请选择" style={{width: '100%'}}>
@@ -72,119 +72,140 @@ const CreateForm = Form.create()(props => {
               </Select>)}
             </FormItem>
           </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="合同类型">
-              {form.getFieldDecorator('proName', {
-                rules: [{required: true, message: '请选择合同'}],
-              })(<Select placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">主合同</Option>
-                <Option value="1">补充合同</Option>
-              </Select>)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={0}>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="分包商名称">
-              {form.getFieldDecorator('proType5', {
+              {form.getFieldDecorator('proName', {
                 rules: [{required: true}],
-              })(<Input placeholder="请输入分包商名称"/>)}
-            </FormItem>
-          </Col>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="队伍名称">
-              {form.getFieldDecorator('proType6', {
-                rules: [{required: true}],
-              })(<Input placeholder="请输入队伍名称"/>)}
+              })(<Input placehloder='请输入分包商名称'/>)}
             </FormItem>
           </Col>
         </Row>
-        <Row gutter={0}>
+        <Row gutter={8}>
           <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="合同签订日期">
-              {form.getFieldDecorator('proType5', {
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="队伍名称">
+              {form.getFieldDecorator('proName', {
+                rules: [{required: true}],
+              })(<Input placehloder='请输入队伍名称'/>)}
+            </FormItem>
+          </Col>
+          <Col md={12} sm={24}>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="分包商名称">
+              {form.getFieldDecorator('proName', {
+                rules: [{required: true}],
+              })(<Input placehloder='请输入分包商名称'/>)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={8}>
+          <Col md={12} sm={24}>
+            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="计价期数">
+              {form.getFieldDecorator('proName', {
+                rules: [{required: true, message: '请输入期数'}],
+              })(<Input placeholder="请输入期数"/>)}
+            </FormItem>
+          </Col>
+          <Col md={12} sm={24}>
+            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="计价日期">
+              {form.getFieldDecorator('proType', {
                 rules: [{required: true}],
               })(<DatePicker style={{width: '100%'}} placeholder="请选择日期"/>)}
             </FormItem>
           </Col>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="预计合同金额">
-              {form.getFieldDecorator('proType6', {
-                rules: [{required: true}],
-              })(<Input placeholder="请预计合同金额" addonAfter='元'/>)}
-            </FormItem>
-          </Col>
         </Row>
-        <Row gutter={0}>
+        <Row gutter={8}>
           <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="施工范围">
-              {form.getFieldDecorator('proType5', {
-                rules: [{required: true}],
-              })(<Input placeholder="请输入施工范围"/>)}
-            </FormItem>
-          </Col>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="队伍状态">
-              {form.getFieldDecorator('proType6', {
-                rules: [{required: true}],
-              })(<Select placeholder="请选择队伍状态" style={{width: '100%'}}>
-                <Option value="0">正在施工</Option>
-                <Option value="1">完工待结算</Option>
-                <Option value="2">已完结</Option>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="计价类型">
+              {form.getFieldDecorator('proName', {
+                rules: [{required: true, message: '请选择计价类型'}],
+              })(<Select placeholder="请选择" style={{width: '100%'}}>
+                <Option value="0">过程结算</Option>
+                <Option value="1">中期结算</Option>
+                <Option value="2">末次结算</Option>
               </Select>)}
             </FormItem>
           </Col>
-        </Row>
-      </div>
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>覆约保证金</div>
-      </Row>
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
           <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="应缴金额">
-              {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true, message: '请输入应缴金额'}],
-              })(<Input style={{marginTop: 4}} placeholder="请输入应缴金额" addonAfter="万元"/>)}
-            </FormItem>
-          </Col>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="实缴金额">
-              {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true, message: '请输入实缴金额'}],
-              })(<Input style={{marginTop: 4}} placeholder="请输入实缴金额" addonAfter="万元"/>)}
+            <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="计价负责人">
+              {form.getFieldDecorator('proName', {
+                rules: [{required: true}],
+              })(<Input placehloder='请输入计价负责人'/>)}
             </FormItem>
           </Col>
         </Row>
       </div>
       <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>负责人</div>
+        <div className={styles.title}>计价金额</div>
       </Row>
       <div className={styles.modalContent}>
         <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="合同签订人">
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="计价总金额">
               {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true, message: '请输入合同签订人'}],
-              })(<Input placeholder="请输入合同签订人"/>)}
+                rules: [{required: true, message: '请输入预付款'}],
+              })(<Input style={{marginTop: 4}} placeholder="请输入计价总金额" addonAfter="元"/>)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="扣款">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true, message: '请输入预付款'}],
+              })(<Input style={{marginTop: 4}} placeholder="请输入扣款金额" addonAfter="元"/>)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="扣除保质金">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true, message: '请输入预付款'}],
+              })(<Input style={{marginTop: 4}} placeholder="请输入扣除保质金" addonAfter="元"/>)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={8}>
+          <Col md={12} sm={24}>
+            <FormItem labelCol={{span: 11}} wrapperCol={{span: 12}} label="扣除覆约保质金">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true, message: '请输入预付款'}],
+              })(<Input style={{marginTop: 4}} placeholder="请输入扣除覆约保质金" addonAfter="元"/>)}
             </FormItem>
           </Col>
           <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 11}} wrapperCol={{span: 12}} label="合同签订人联系电话">
+            <FormItem labelCol={{span: 11}} wrapperCol={{span: 12}} label="计日工及补偿费用">
               {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true, message: '请输入合同签订人联系电话'}],
-              })(<Input placeholder="请输入合同签订人联系电话"/>)}
+                rules: [{required: true, message: '请输入预付款'}],
+              })(<Input style={{marginTop: 4}} placeholder="请输入计日工及补偿费用" addonAfter="元"/>)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={8}>
+          <Col md={12} sm={24}>
+            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="应支付金额">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true, message: '请输入应支付金额'}],
+              })(<Input style={{marginTop: 4}} placeholder="请输入应支付金额" addonAfter="元"/>)}
+            </FormItem>
+          </Col>
+          <Col md={12} sm={24}>
+            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="已完未计">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true, message: '请输入已完未计'}],
+              })(<Input style={{marginTop: 4}} placeholder="请输入已完未计" addonAfter="元"/>)}
             </FormItem>
           </Col>
         </Row>
       </div>
-
       <Row align={'middle'} gutter={0} className={styles.titleView}>
         <div className={styles.title}>其他</div>
       </Row>
       <div className={styles.modalContent}>
+        <Row gutter={8}>
+          <Col md={24} sm={24}>
+            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="备注">
+              {form.getFieldDecorator('proSummary', {
+                rules: [{required: true}],
+              })(<Input.TextArea width={'100%'} placeholder="请输入" rows={4}/>)}
+            </FormItem>
+          </Col>
+        </Row>
         <Row gutter={8}>
           <Col md={24} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="附件">
@@ -199,103 +220,6 @@ const CreateForm = Form.create()(props => {
                   <p className="ant-upload-text">点击或拖动附件进入</p>
                 </Upload.Dragger>
               )}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={24} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="备注">
-              {form.getFieldDecorator('proSummary', {
-                rules: [{required: true}],
-              })(<Input.TextArea width={'100%'} placeholder="请输入" rows={4}/>)}
-            </FormItem>
-          </Col>
-        </Row>
-      </div>
-
-    </Modal>
-  );
-});
-
-const CreateCompForm = Form.create()(props => {
-  const {modalVisible, form, handleAdd, handleComModalVisible} = props;
-
-  const okHandle = () => {
-    form.validateFields((err, fieldsValue) => {
-      console.log(fieldsValue)
-      if (err) return;
-      // form.resetFields();
-      handleAdd(fieldsValue);
-    });
-  };
-  return (
-    <Modal
-      destroyOnClose
-      title="公司编辑台账"
-      bodyStyle={{padding: 0 + 'px'}}
-      visible={modalVisible}
-      width={992}
-      maskClosable={false}
-      onOk={okHandle}
-      onCancel={() => handleComModalVisible()}
-    >
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>队伍选定</div>
-      </Row>
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="日期">
-              {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true, message: '请选择日期'}],
-              })(<DatePicker style={{width: '100%'}} placeholder="请选择日期"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-      </div>
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>合同审批</div>
-      </Row>
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="日期">
-              {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true, message: '请选择日期'}],
-              })(<DatePicker style={{width: '100%'}} placeholder="请选择日期"/>)}
-            </FormItem>
-          </Col>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="是否备案">
-              {form.getFieldDecorator('proName', {
-                rules: [{required: true}],
-              })(<Select placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">是</Option>
-                <Option value="1">否</Option>
-              </Select>)}
-            </FormItem>
-          </Col>
-        </Row>
-      </div>
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>结算审批</div>
-      </Row>
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="日期">
-              {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true, message: '请选择日期'}],
-              })(<DatePicker style={{width: '100%'}} placeholder="请选择日期"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={24} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="备注">
-              {form.getFieldDecorator('proSummary', {
-                rules: [{required: true}],
-              })(<Input.TextArea width={'100%'} placeholder="请输入" rows={4}/>)}
             </FormItem>
           </Col>
         </Row>
@@ -506,7 +430,7 @@ class UpdateForm extends PureComponent {
 }
 
 @Form.create()
-class TeamAccount extends Component {
+class ProEvaluate extends Component {
 
   constructor(props) {
     super(props)
@@ -516,169 +440,128 @@ class TeamAccount extends Component {
       selectedRows: [],
       formValues: {},
       stepFormValues: {},
-      pageLoading: true,
-      comModal:false
+      pageLoading: true
     }
   }
 
   columns = [
     {
-      title: '劳务队伍统计（项目部填写）',
-      key:'01',
-      children: [
-        {
-          title: '项目名称',
-          key:'001',
-          dataIndex: 'name',
-        },
-        {
-          title: '合同编码',
-          key:'002',
-          dataIndex: 'code',
-        },
-        {
-          title: '分包商名称',
-          key:'003',
-          render(val) {
-            return <span>阿里巴巴</span>;
-          },
-        },
-        {
-          title: '队伍名称',
-          key:'004',
-          render(val) {
-            return <span>湖人队</span>;
-          },
-        },
-        {
-          title: '队伍状态',
-          key:'005',
-          render(val) {
-            return <span>已完结</span>;
-          },
-        },
-        {
-          title: '预计合同金额',
-          key:'006',
-          render(val) {
-            return <span>10万</span>;
-          },
-        },
-        {
-          title: '施工范围',
-          key:'007',
-          render(val) {
-            return <span>从南到北</span>;
-          },
-        },
-        {
-          title: '覆约保证金',
-          key:'008',
-          children: [
-            {
-              title: '应缴金额（万元）',
-              render(val) {
-                return <span>3</span>;
-              },
-            }, {
-              title: '应缴金额（万元）',
-              key: 'pay_per',
-              render(val) {
-                return <span>311</span>;
-              },
-            }]
-        },
-        {
-          title: '负责人',
-          key:'009',
-          children: [{
-            title: '合同签订人',
-            key: 'paid',
-            render(val) {
-              return <span>李二狗</span>;
-            },
-          },
-            {
-              title: '联系方式',
-              render(val) {
-                return <span>3123123123</span>;
-              },
-            }]
-        },
-        {
-          title: '结算金额',
-          key:'0010',
-          render(val) {
-            return <span>10万</span>;
-          },
-        },
-        {
-          title: '附件（含同）',
-          key:'0011',
-          render(val) {
-            return <a href="#">下载附件</a>;
-          },
-        },
-        {
-          title: '备注',
-          key:'0012',
-          render(val) {
-            return <span>nice</span>;
-          },
-        },
-      ]
+      title: '序号',
+      dataIndex: 'code',
     },
     {
-      title: '备案情况（公司填写）',
-      key:'02',
+      title: '项目名称',
+      dataIndex: 'name',
+    },
+    {
+      title: '分包商名称',
+      render(val) {
+        return <span>123</span>;
+      },
+    },
+    {
+      title: '队伍名称',
+      render(val) {
+        return <span>123123</span>;
+      },
+    },
+    {
+      title: '合同金额',
+      render(val) {
+        return <span>123123</span>;
+      },
+    },
+    {
+      title: '计价期数',
+      render(val) {
+        return <span>123</span>;
+      },
+    },
+    {
+      title: '计价日期',
+      render(val) {
+        return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
+      },
+    },
+    {
+      title: '计价类型',
+      render(val) {
+        return <span>中期结算</span>;
+      },
+    },
+    {
+      title: '计价金额（含税）',
       children: [
         {
-          title: '队伍选定',
-          key:'020',
-          children: [{
-            title:'日期',
-            key:'0200',
-            render(val) {
-              return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
-            },
-          }]
+        title: '计价总金额',
+        key: 'plan_account',
+        render(val) {
+          return <span>15万</span>;
         },
+      },
         {
-          title: '合同审批',
-          key:'021',
-          children: [{
-            title:'日期',
-            key:'0210',
-            render(val) {
-              return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
-            },
+          title: '扣款',
+          key: 'tax',
+          render(val) {
+            return <span>3</span>;
           },
-            {
-              title:'是否备案',
-              key:'0211',
-              render(val) {
-                return <span>是</span>;
-              },
-            }]
+        }, {
+          title: '扣除质保金',
+          key: 'plan_account_noTax',
+          render(val) {
+            return <span>311</span>;
+          },
         },
         {
-          title: '结算审批',
-          key:'022',
-          children: [{
-            title:'日期',
-            key:'0220',
-            render(val) {
-              return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
-            },
-          }]
+          title: '扣除覆约保质金',
+          key: 'plan_account_noTaxa',
+          render(val) {
+            return <span>311</span>;
+          },
         },
-        ]
+        {
+          title: '计日工及补偿费用',
+          key: 'plan_account_noTaxx',
+          render(val) {
+            return <span>311</span>;
+          },
+        },
+        {
+          title: '应支付金额',
+          key: 'plan_account_noTaxs',
+          render(val) {
+            return <span>311</span>;
+          },
+        },{
+          title: '已完成未计',
+          key: 'plan_account_noTaxc',
+          render(val) {
+            return <span>311</span>;
+          },
+        }]
+    },
+    {
+      title: '对下计价率',
+      render(val) {
+        return <span>311</span>;
+      },
+    },
+    {
+      title: '计价负责人',
+      render(val) {
+        return <span>鱼得水</span>;
+      },
     },
     {
       title: '备注',
-      key:'03',
       render(val) {
         return <span>100万啊实打实的</span>;
+      },
+    },
+    {
+      title: '附件下载',
+      render(val) {
+        return <a href="#">下载</a>;
       },
     }
   ];
@@ -792,12 +675,6 @@ class TeamAccount extends Component {
     });
   };
 
-  handleComModalVisible = flag => {
-    this.setState({
-      comModal: !!flag,
-    });
-  };
-
   handleUpdateModalVisible = (flag, record) => {
     this.setState({
       updateModalVisible: !!flag,
@@ -841,42 +718,57 @@ class TeamAccount extends Component {
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={6} sm={24}>
             <FormItem label="项目名称">
-              {getFieldDecorator('name')(<Input placeholder="请输入"/>)}
+              {getFieldDecorator('name')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="分包商名称">
-              {getFieldDecorator('name')(<Input placeholder="请输入"/>)}
+              {getFieldDecorator('date')(
+                <Input placeholder="请输入" />
+              )}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
-            <FormItem label="队伍状态">
-              {getFieldDecorator('name')(<Select placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">正在施工</Option>
-                <Option value="1">完工待结算</Option>
-                <Option value="2">已结算</Option>
-              </Select>)}
+            <FormItem label="计价类型">
+              {getFieldDecorator('date')(
+                <Select placeholder="请选择" style={{width: '100%'}}>
+                  <Option value="0">过程结算</Option>
+                  <Option value="1">中期结算</Option>
+                  <Option value="2">末次结算</Option>
+                </Select>
+              )}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
-            <FormItem label="合同备案">
-              {getFieldDecorator('name')(<Select placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">是</Option>
-                <Option value="1">否</Option>
-              </Select>)}
+            <FormItem label="计价日期">
+              {getFieldDecorator('date')(
+                <DatePicker style={{width: '100%'}} placeholder="请选择日期"/>
+              )}
             </FormItem>
           </Col>
         </Row>
-        <div style={{overflow: 'hidden'}}>
-          <div style={{float: 'right', marginBottom: 24}}>
-            <Button type="primary" htmlType="submit">
-              查询
-            </Button>
-            <Button style={{marginLeft: 8}} onClick={this.handleFormReset}>
-              重置
-            </Button>
-          </div>
-        </div>
+        <Row gutter={{md: 8, lg: 24, xl: 48}}>
+          <Col style={{flexDirection: 'row', display: 'flex'}} md={12} sm={24}>
+            <FormItem label="对下计价率">
+              {getFieldDecorator('give')(<Input placeholder="请输入" addonAfter={'%'}/>)}
+            </FormItem>
+            <FormItem style={{marginLeft: 15 + 'px'}} label="至">
+              {getFieldDecorator('give')(<Input placeholder="请输入" addonAfter={'%'}/>)}
+            </FormItem>
+          </Col>
+          <Col md={12} sm={24}>
+            <div style={{overflow: 'hidden'}}>
+              <div style={{float: 'right', marginBottom: 24}}>
+                <Button type="primary" htmlType="submit">
+                  查询
+                </Button>
+                <Button style={{marginLeft: 8}} onClick={this.handleFormReset}>
+                  重置
+                </Button>
+              </div>
+            </div>
+          </Col>
+        </Row>
       </Form>
     );
   }
@@ -898,11 +790,10 @@ class TeamAccount extends Component {
       rule: {data},
       loading,
     } = this.props;
-    const {selectedRows, modalVisible, pageLoading,comModal} = this.state;
+    const {selectedRows, modalVisible, pageLoading} = this.state;
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
-        <Menu.Item key="edit">修改</Menu.Item>
-        <Menu.Item onClick={()=>this.handleComModalVisible(true)} key="comEdit">公司编辑</Menu.Item>
+        <Menu.Item key="edit">编辑</Menu.Item>
         <Menu.Item key="export">导出</Menu.Item>
       </Menu>
     );
@@ -910,12 +801,11 @@ class TeamAccount extends Component {
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
-      normFile: this.normFile,
-      handleComModalVisible:this.handleComModalVisible
+      normFile: this.normFile
     };
     return (
       <Page inner={true} loading={pageLoading}>
-        <PageHeaderWrapper title="所属劳务队伍台账">
+        <PageHeaderWrapper title="项目评估">
           <Card bordered={false}>
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
@@ -946,13 +836,12 @@ class TeamAccount extends Component {
             </div>
           </Card>
           <CreateForm {...parentMethods} modalVisible={modalVisible}/>
-          <CreateCompForm {...parentMethods} modalVisible={comModal}/>
         </PageHeaderWrapper>
       </Page>
     )
   }
 }
 
-TeamAccount.propTypes = {}
+ProEvaluate.propTypes = {}
 
-export default connect(({app, rule, loading}) => ({app, rule, loading}))(TeamAccount)
+export default connect(({app, rule, loading}) => ({app, rule, loading}))(ProEvaluate)

@@ -157,6 +157,6 @@ export const menuData = [
     bpid: '10',
     mpid: '10',
     name: '参考文献',
-    route: '/files/literature',
+    route: '/files/reference',
   },
 ]
