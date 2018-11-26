@@ -16,7 +16,7 @@ import {
   DatePicker,
   Modal,
   message,
-  Badge,
+  Upload,
   Divider,
   Steps,
   Radio,
@@ -38,7 +38,7 @@ const statusMap = ['default', 'processing', 'success', 'error'];
 const status = ['关闭', '运行中', '已上线', '异常'];
 
 const CreateForm = Form.create()(props => {
-  const {modalVisible, form, handleAdd, handleModalVisible} = props;
+  const {modalVisible, form, handleAdd, handleModalVisible,normFile} = props;
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -49,29 +49,48 @@ const CreateForm = Form.create()(props => {
   return (
     <Modal
       destroyOnClose
-      title="新增项目"
+      title="新增文档"
       visible={modalVisible}
       onOk={okHandle}
       onCancel={() => handleModalVisible()}
     >
-      <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="项目名称">
-        {form.getFieldDecorator('name', {
-          rules: [{required: true, message: '项目名不能为空',}],
-        })(<Input placeholder="请输入"/>)}
-      </FormItem>
-      <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="工程类别">
-        {form.getFieldDecorator('desc', {
-          rules: [{required: true, message: '请选择工程类别', min: 5}],
-        })(<Select placeholder="请选择" style={{width: '100%'}}>
-          <Option value="0">市政工程</Option>
-          <Option value="1">房建工程</Option>
-          <Option value="2">铁路工程</Option>
-          <Option value="3">公路工程</Option>
-          <Option value="4">水利工程</Option>
-          <Option value="5">国防工程</Option>
-          <Option value="6">其他工程</Option>
-        </Select>)}
-      </FormItem>
+      <div className={styles.modalContent}>
+        <Row gutter={8}>
+          <Col md={12} sm={24}>
+            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="文档名称">
+              {form.getFieldDecorator('name', {
+                rules: [{required: true, message: '项目名不能为空',}],
+              })(<Input placeholder="请输入"/>)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={8}>
+          <Col md={24} sm={24}>
+            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="附件">
+              {form.getFieldDecorator('dragger', {
+                valuePropName: 'fileList',
+                getValueFromEvent: normFile,
+              })(
+                <Upload.Dragger name="files" action="/upload.do">
+                  <p className="ant-upload-drag-icon">
+                    <Icon type="inbox"/>
+                  </p>
+                  <p className="ant-upload-text">点击或拖动附件进入</p>
+                </Upload.Dragger>
+              )}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={8}>
+          <Col md={24} sm={24}>
+            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="备注">
+              {form.getFieldDecorator('proSummary', {
+                rules: [{required: true}],
+              })(<Input.TextArea width={'100%'} placeholder="请输入" rows={4}/>)}
+            </FormItem>
+          </Col>
+        </Row>
+      </div>
     </Modal>
   );
 });
@@ -294,45 +313,12 @@ class FileReference extends Component {
 
   columns = [
     {
-      title: '项目编码',
+      title: '序号',
       dataIndex: 'code',
     },
     {
-      title: '项目名称',
+      title: '文件名称',
       dataIndex: 'name',
-    },
-    {
-      title: '工程类别',
-      dataIndex: 'desc',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      filters: [
-        {
-          text: status[0],
-          value: 0,
-        },
-        {
-          text: status[1],
-          value: 1,
-        },
-        {
-          text: status[2],
-          value: 2,
-        },
-        {
-          text: status[3],
-          value: 3,
-        },
-      ],
-      render(val) {
-        return <Badge status={statusMap[val]} text={status[val]}/>;
-      },
-    },
-    {
-      title: '创建人',
-      dataIndex: 'owner',
     },
     {
       title: '创建时间',
@@ -341,23 +327,9 @@ class FileReference extends Component {
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm')}</span>,
     },
     {
-      title: '最新修改人',
-      dataIndex: 'updateUser'
-    },
-    {
-      title: '最新修改时间',
-      dataIndex: 'updatedAt',
-      sorter: true,
-      render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm')}</span>,
-    },
-    {
-      title: '操作',
+      title: '下载附件',
       render: (val, record) => (
-        <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
-          <Divider type="vertical"/>
-          <a href="">{status[val.status]}</a>
-        </Fragment>
+        <a href="#">下载</a>
       ),
     },
   ];
@@ -514,34 +486,9 @@ class FileReference extends Component {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
-          <Col md={6} sm={24}>
-            <FormItem label="项目编码">
-              {getFieldDecorator('code')(<Input placeholder="请输入"/>)}
-            </FormItem>
-          </Col>
-          <Col md={6} sm={24}>
-            <FormItem label="项目名称">
-              {getFieldDecorator('code')(<Input placeholder="请输入"/>)}
-            </FormItem>
-          </Col>
-          <Col md={6} sm={24}>
-            <FormItem label="项目状态">
-              {getFieldDecorator('desc')(
-                <Select placeholder="请选择" style={{width: '100%'}}>
-                  <Option value="0">禁用</Option>
-                  <Option value="1">启用</Option>
-                </Select>
-              )}
-            </FormItem>
-          </Col>
-          <Col md={6} sm={24}>
-            <FormItem label="项目状态">
-              {getFieldDecorator('status')(
-                <Select placeholder="请选择" style={{width: '100%'}}>
-                  <Option value="0">禁用</Option>
-                  <Option value="1">启用</Option>
-                </Select>
-              )}
+          <Col md={8} sm={24}>
+            <FormItem label="文件名称">
+              {getFieldDecorator('code')(<Input />)}
             </FormItem>
           </Col>
         </Row>

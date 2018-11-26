@@ -52,7 +52,7 @@ const CreateForm = Form.create()(props => {
   return (
     <Modal
       destroyOnClose
-      title="新增对下验工计价台账"
+      title="新增项目评估"
       bodyStyle={{padding: 0 + 'px'}}
       visible={modalVisible}
       width={992}
@@ -62,7 +62,7 @@ const CreateForm = Form.create()(props => {
     >
       <div className={styles.modalContent}>
         <Row gutter={8}>
-          <Col md={12} sm={24}>
+          <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="项目名称">
               {form.getFieldDecorator('proName', {
                 rules: [{required: true, message: '请选择项目'}],
@@ -72,91 +72,62 @@ const CreateForm = Form.create()(props => {
               </Select>)}
             </FormItem>
           </Col>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="分包商名称">
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="工程类别">
               {form.getFieldDecorator('proName', {
                 rules: [{required: true}],
-              })(<Input placehloder='请输入分包商名称'/>)}
+              })(<Input placehloder='自动带出'/>)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="出生日期">
+              {form.getFieldDecorator('proName', {
+                rules: [{required: true}],
+              })(<DatePicker width={'100%'} placehloder='请选择出生日期'/>)}
             </FormItem>
           </Col>
         </Row>
         <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="队伍名称">
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="评估状态">
               {form.getFieldDecorator('proName', {
                 rules: [{required: true}],
-              })(<Input placehloder='请输入队伍名称'/>)}
-            </FormItem>
-          </Col>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="分包商名称">
-              {form.getFieldDecorator('proName', {
-                rules: [{required: true}],
-              })(<Input placehloder='请输入分包商名称'/>)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="计价期数">
-              {form.getFieldDecorator('proName', {
-                rules: [{required: true, message: '请输入期数'}],
-              })(<Input placeholder="请输入期数"/>)}
-            </FormItem>
-          </Col>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="计价日期">
-              {form.getFieldDecorator('proType', {
-                rules: [{required: true}],
-              })(<DatePicker style={{width: '100%'}} placeholder="请选择日期"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="计价类型">
-              {form.getFieldDecorator('proName', {
-                rules: [{required: true, message: '请选择计价类型'}],
               })(<Select placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">过程结算</Option>
-                <Option value="1">中期结算</Option>
-                <Option value="2">末次结算</Option>
+                <Option value="0">未评估</Option>
+                <Option value="1">初评</Option>
+                <Option value="2">复评(二次)</Option>
+                <Option value="3">复评(三次)</Option>
+                <Option value="4">复评(四次)</Option>
+                <Option value="5">定评</Option>
               </Select>)}
             </FormItem>
           </Col>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="计价负责人">
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="项目状态">
               {form.getFieldDecorator('proName', {
                 rules: [{required: true}],
-              })(<Input placehloder='请输入计价负责人'/>)}
+              })(<Input placehloder='自动带出'/>)}
             </FormItem>
           </Col>
         </Row>
       </div>
       <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>计价金额</div>
+        <div className={styles.title}>合同价</div>
       </Row>
       <div className={styles.modalContent}>
         <Row gutter={8}>
           <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="计价总金额">
+            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="中标">
               {form.getFieldDecorator('proActualDays', {
                 rules: [{required: true, message: '请输入预付款'}],
-              })(<Input style={{marginTop: 4}} placeholder="请输入计价总金额" addonAfter="元"/>)}
+              })(<Input style={{marginTop: 4}} placeholder="请输入中标金额" addonAfter="万元"/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="扣款">
+            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="有效收入">
               {form.getFieldDecorator('proActualDays', {
                 rules: [{required: true, message: '请输入预付款'}],
-              })(<Input style={{marginTop: 4}} placeholder="请输入扣款金额" addonAfter="元"/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="扣除保质金">
-              {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true, message: '请输入预付款'}],
-              })(<Input style={{marginTop: 4}} placeholder="请输入扣除保质金" addonAfter="元"/>)}
+              })(<Input style={{marginTop: 4}} placeholder="请输入有效金额" addonAfter="万元"/>)}
             </FormItem>
           </Col>
         </Row>
@@ -194,15 +165,253 @@ const CreateForm = Form.create()(props => {
         </Row>
       </div>
       <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>其他</div>
+        <div className={styles.title}>合同</div>
       </Row>
       <div className={styles.modalContent}>
         <Row gutter={8}>
-          <Col md={24} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="备注">
-              {form.getFieldDecorator('proSummary', {
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="是否签订">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true, message: '请输入预付款'}],
+              })(<Select placeholder="请选择" style={{width: '100%'}}>
+                <Option value="0">是</Option>
+                <Option value="1">否</Option>
+              </Select>)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="签订日期">
+              {form.getFieldDecorator('proActualDays', {
                 rules: [{required: true}],
-              })(<Input.TextArea width={'100%'} placeholder="请输入" rows={4}/>)}
+              })(<DatePicker placeholder='请选择日期'/>)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={8}>
+          <Col md={12} sm={24}>
+            <FormItem labelCol={{span: 11}} wrapperCol={{span: 12}} label="扣除覆约保质金">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true, message: '请输入预付款'}],
+              })(<Input style={{marginTop: 4}} placeholder="请输入扣除覆约保质金" addonAfter="元"/>)}
+            </FormItem>
+          </Col>
+          <Col md={12} sm={24}>
+            <FormItem labelCol={{span: 11}} wrapperCol={{span: 12}} label="计日工及补偿费用">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true, message: '请输入预付款'}],
+              })(<Input style={{marginTop: 4}} placeholder="请输入计日工及补偿费用" addonAfter="元"/>)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={8}>
+          <Col md={12} sm={24}>
+            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="应支付金额">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true, message: '请输入应支付金额'}],
+              })(<Input style={{marginTop: 4}} placeholder="请输入应支付金额" addonAfter="元"/>)}
+            </FormItem>
+          </Col>
+          <Col md={12} sm={24}>
+            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="已完未计">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true, message: '请输入已完未计'}],
+              })(<Input style={{marginTop: 4}} placeholder="请输入已完未计" addonAfter="元"/>)}
+            </FormItem>
+          </Col>
+        </Row>
+      </div>
+      <Row align={'middle'} gutter={0} className={styles.titleView}>
+        <div className={styles.title}>合同工期</div>
+      </Row>
+      <div className={styles.modalContent}>
+        <Row gutter={8}>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="合同开工日期">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true}],
+              })(<Input placeholder='自动带出'/>)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="合同竣工日期">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true}],
+              })(<Input placeholder='自动带出'/>)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="工期(月)">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true}],
+              })(<Input placeholder='自动计算'/>)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={8}>
+          <Col md={12} sm={24}>
+            <FormItem labelCol={{span: 11}} wrapperCol={{span: 12}} label="扣除覆约保质金">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true, message: '请输入预付款'}],
+              })(<Input style={{marginTop: 4}} placeholder="请输入扣除覆约保质金" addonAfter="元"/>)}
+            </FormItem>
+          </Col>
+          <Col md={12} sm={24}>
+            <FormItem labelCol={{span: 11}} wrapperCol={{span: 12}} label="计日工及补偿费用">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true, message: '请输入预付款'}],
+              })(<Input style={{marginTop: 4}} placeholder="请输入计日工及补偿费用" addonAfter="元"/>)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={8}>
+          <Col md={12} sm={24}>
+            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="应支付金额">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true, message: '请输入应支付金额'}],
+              })(<Input style={{marginTop: 4}} placeholder="请输入应支付金额" addonAfter="元"/>)}
+            </FormItem>
+          </Col>
+          <Col md={12} sm={24}>
+            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="已完未计">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true, message: '请输入已完未计'}],
+              })(<Input style={{marginTop: 4}} placeholder="请输入已完未计" addonAfter="元"/>)}
+            </FormItem>
+          </Col>
+        </Row>
+      </div>
+      <Row align={'middle'} gutter={0} className={styles.titleView}>
+        <div className={styles.title}>经管部评价</div>
+      </Row>
+      <div className={styles.modalContent}>
+        <Row gutter={8}>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="评估时间">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true}],
+              })(<DatePicker width={'100%'} placeholder='请选择'/>)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="评估效益点(%)">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true}],
+              })(<Input placeholder='请输入(小数点后两位)'/>)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="含分包差及经营费(%)">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true}],
+              })(<Input placeholder='请输入(小数点后两位)'/>)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={8}>
+          <Col md={12} sm={24}>
+            <FormItem labelCol={{span: 11}} wrapperCol={{span: 12}} label="评估编号">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true}],
+              })(<Input placeholder="请输入评估编号" />)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={8}>
+          <Col md={24} sm={24}>
+            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="附件">
+              {form.getFieldDecorator('dragger', {
+                valuePropName: 'fileList',
+                getValueFromEvent: normFile,
+              })(
+                <Upload.Dragger name="files" action="/upload.do">
+                  <p className="ant-upload-drag-icon">
+                    <Icon type="inbox"/>
+                  </p>
+                  <p className="ant-upload-text">点击或拖动附件进入</p>
+                </Upload.Dragger>
+              )}
+            </FormItem>
+          </Col>
+        </Row>
+      </div>
+      <Row align={'middle'} gutter={0} className={styles.titleView}>
+        <div className={styles.title}>会审情况</div>
+      </Row>
+      <div className={styles.modalContent}>
+        <Row gutter={8}>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="效益点">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true}],
+              })(<Input placeholder='请输入(小数点后两位)'/>)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="是否含分包差及经营费">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true}],
+              })(<Input placeholder='请输入(小数点后两位)'/>)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="上会时间">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true}],
+              })(<DatePicker placeholder='请选择时间)'/>)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={8}>
+          <Col md={24} sm={24}>
+            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="附件">
+              {form.getFieldDecorator('dragger', {
+                valuePropName: 'fileList',
+                getValueFromEvent: normFile,
+              })(
+                <Upload.Dragger name="files" action="/upload.do">
+                  <p className="ant-upload-drag-icon">
+                    <Icon type="inbox"/>
+                  </p>
+                  <p className="ant-upload-text">点击或拖动附件进入</p>
+                </Upload.Dragger>
+              )}
+            </FormItem>
+          </Col>
+        </Row>
+      </div>
+      <Row align={'middle'} gutter={0} className={styles.titleView}>
+        <div className={styles.title}>责任状签订</div>
+      </Row>
+      <div className={styles.modalContent}>
+        <Row gutter={8}>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="效益点">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true}],
+              })(<Input placeholder='请输入(小数点后两位)'/>)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="签订时间">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true}],
+              })(<DatePicker width={'100%'} placeholder='请选择'/>)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="项目经理">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true}],
+              })(<Input placeholder='请输入项目经理'/>)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={8}>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 11}} wrapperCol={{span: 12}} label="项目书记">
+              {form.getFieldDecorator('proActualDays', {
+                rules: [{required: true}],
+              })(<Input placeholder="项目书记" />)}
             </FormItem>
           </Col>
         </Row>
@@ -454,114 +663,171 @@ class ProEvaluate extends Component {
       dataIndex: 'name',
     },
     {
-      title: '分包商名称',
+      title: '工程类别',
       render(val) {
         return <span>123</span>;
       },
     },
     {
-      title: '队伍名称',
-      render(val) {
-        return <span>123123</span>;
-      },
-    },
-    {
-      title: '合同金额',
-      render(val) {
-        return <span>123123</span>;
-      },
-    },
-    {
-      title: '计价期数',
+      title: '项目状态',
       render(val) {
         return <span>123</span>;
       },
     },
     {
-      title: '计价日期',
-      render(val) {
-        return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
-      },
-    },
-    {
-      title: '计价类型',
-      render(val) {
-        return <span>中期结算</span>;
-      },
-    },
-    {
-      title: '计价金额（含税）',
-      children: [
-        {
-        title: '计价总金额',
-        key: 'plan_account',
+      title: '合同额',
+      children: [{
+        title: '中标',
+        key: 'contract',
         render(val) {
-          return <span>15万</span>;
+          return <span>123</span>;
         },
-      },
-        {
-          title: '扣款',
-          key: 'tax',
-          render(val) {
-            return <span>3</span>;
-          },
-        }, {
-          title: '扣除质保金',
-          key: 'plan_account_noTax',
-          render(val) {
-            return <span>311</span>;
-          },
+      }, {
+        title: '有效收入',
+        key: 'use_bill',
+        render(val) {
+          return <span>123</span>;
         },
-        {
-          title: '扣除覆约保质金',
-          key: 'plan_account_noTaxa',
-          render(val) {
-            return <span>311</span>;
-          },
-        },
-        {
-          title: '计日工及补偿费用',
-          key: 'plan_account_noTaxx',
-          render(val) {
-            return <span>311</span>;
-          },
-        },
-        {
-          title: '应支付金额',
-          key: 'plan_account_noTaxs',
-          render(val) {
-            return <span>311</span>;
-          },
-        },{
-          title: '已完成未计',
-          key: 'plan_account_noTaxc',
-          render(val) {
-            return <span>311</span>;
-          },
-        }]
+      },]
     },
     {
-      title: '对下计价率',
-      render(val) {
-        return <span>311</span>;
-      },
+      title: '合同',
+      children: [{
+        title: '是否签订',
+        key: 'sign_is',
+        render(val) {
+          return <span>123</span>;
+        },
+      }, {
+        title: '签订日期',
+        key: 'sign_date',
+        render(val) {
+          return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
+        },
+      },]
     },
     {
-      title: '计价负责人',
-      render(val) {
-        return <span>鱼得水</span>;
-      },
+      title: '合同工期',
+      children: [{
+        title: '合同开工时间',
+        key: 'start_date',
+        render(val) {
+          return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
+        },
+      }, {
+        title: '合同竣工时间',
+        key: 'end_date',
+        render(val) {
+          return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
+        },
+      },{
+        title: '工期(月)',
+        key: 'days',
+        render(val) {
+          return <span>1</span>;
+        },
+      }]
+    },
+    {
+      title: '经管部评估',
+      children: [{
+        title: '评估时间',
+        key: 'review_date',
+        render(val) {
+          return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
+        },
+      }, {
+        title: '评估效益点(%)',
+        key: 'review_point',
+        render(val) {
+          return <span>1</span>;
+        },
+      },{
+        title: '含分包差及经营费(%)',
+        key: 'split_bill',
+        render(val) {
+          return <span>1</span>;
+        },
+      },{
+        title: '评估编号',
+        key: 'review_code',
+        render(val) {
+          return <span>1123</span>;
+        },
+      },{
+        title: '附件',
+        key: 'files',
+        render(val) {
+          return <a href="#">下载</a>;
+        },
+      }]
+    },
+    {
+      title: '会审情况',
+      children: [{
+        title: '效益点',
+        key: 'benefit',
+        render(val) {
+          return <span>123</span>;
+        },
+      }, {
+        title: '是否含分包差及经营费',
+        key: 'is_wrapper',
+        render(val) {
+          return <span>是</span>;
+        },
+      },{
+        title: '上会时间',
+        key: 'meet_time',
+        render(val) {
+          return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
+        },
+      },{
+        title: '附件',
+        key: 'files_1',
+        render(val) {
+          return <a href="#">下载</a>;
+        },
+      }]
+    },
+    {
+      title: '责任状签订',
+      children: [{
+        title: '效益点',
+        key: 'benefit_1',
+        render(val) {
+          return <span>123</span>;
+        },
+      }, {
+        title: '签订时间',
+        key: 'sign_date1',
+        render(val) {
+          return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
+        },
+      },{
+        title: '项目经理',
+        key: 'pro_manager',
+        render(val) {
+          return <span>李蛋蛋</span>;
+        },
+      },{
+        title: '项目书记',
+        key: 'pro_secretary',
+        render(val) {
+          return <span>李蛋蛋</span>;
+        },
+      },{
+        title: '附件',
+        key: 'files_2',
+        render(val) {
+          return <a href="#">下载</a>;
+        },
+      }]
     },
     {
       title: '备注',
       render(val) {
         return <span>100万啊实打实的</span>;
-      },
-    },
-    {
-      title: '附件下载',
-      render(val) {
-        return <a href="#">下载</a>;
       },
     }
   ];
@@ -716,44 +982,48 @@ class ProEvaluate extends Component {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
-          <Col md={6} sm={24}>
+          <Col md={8} sm={24}>
             <FormItem label="项目名称">
-              {getFieldDecorator('name')(<Input placeholder="请输入" />)}
+              {getFieldDecorator('name')(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
-          <Col md={6} sm={24}>
-            <FormItem label="分包商名称">
-              {getFieldDecorator('date')(
-                <Input placeholder="请输入" />
-              )}
-            </FormItem>
-          </Col>
-          <Col md={6} sm={24}>
-            <FormItem label="计价类型">
+          <Col md={8} sm={24}>
+            <FormItem label="评估状态">
               {getFieldDecorator('date')(
                 <Select placeholder="请选择" style={{width: '100%'}}>
-                  <Option value="0">过程结算</Option>
-                  <Option value="1">中期结算</Option>
-                  <Option value="2">末次结算</Option>
+                  <Option value="0">未评估</Option>
+                  <Option value="1">初评</Option>
+                  <Option value="2">复评(二次)</Option>
+                  <Option value="3">复评(三次)</Option>
+                  <Option value="4">复评(四次)</Option>
+                  <Option value="5">定评</Option>
                 </Select>
               )}
             </FormItem>
           </Col>
-          <Col md={6} sm={24}>
-            <FormItem label="计价日期">
+          <Col md={8} sm={24}>
+            <FormItem label="项目状态">
               {getFieldDecorator('date')(
-                <DatePicker style={{width: '100%'}} placeholder="请选择日期"/>
+                <Input placeholder="自动带出"/>
               )}
             </FormItem>
           </Col>
         </Row>
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
-          <Col style={{flexDirection: 'row', display: 'flex'}} md={12} sm={24}>
-            <FormItem label="对下计价率">
-              {getFieldDecorator('give')(<Input placeholder="请输入" addonAfter={'%'}/>)}
+          <Col md={6} sm={24}>
+            <FormItem label="合同是否签订">
+              {getFieldDecorator('give')(<Select placeholder="请选择" style={{width: '100%'}}>
+                <Option value="0">是</Option>
+                <Option value="1">否</Option>
+              </Select>)}
             </FormItem>
-            <FormItem style={{marginLeft: 15 + 'px'}} label="至">
-              {getFieldDecorator('give')(<Input placeholder="请输入" addonAfter={'%'}/>)}
+          </Col>
+          <Col md={6} sm={24}>
+            <FormItem label="责任状是否签订">
+              {getFieldDecorator('give')(<Select placeholder="请选择" style={{width: '100%'}}>
+                <Option value="0">是</Option>
+                <Option value="1">否</Option>
+              </Select>)}
             </FormItem>
           </Col>
           <Col md={12} sm={24}>
