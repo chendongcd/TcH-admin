@@ -37,7 +37,7 @@ const statusMap = ['default', 'processing', 'success', 'error'];
 const status = ['关闭', '运行中', '已上线', '异常'];
 
 const CreateForm = Form.create()(props => {
-  const {modalVisible, form, handleAdd, handleModalVisible} = props;
+  const {modalVisible, form, handleAdd, handleModalVisible,handleUpdateModalVisible,updateModalVisible,selectedValues} = props;
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -48,14 +48,15 @@ const CreateForm = Form.create()(props => {
   return (
     <Modal
       destroyOnClose
-      title="新增角色"
+      title={updateModalVisible?"编辑角色":"新增角色"}
       visible={modalVisible}
       onOk={okHandle}
-      onCancel={() => handleModalVisible()}
+      onCancel={() => updateModalVisible?handleUpdateModalVisible():handleModalVisible()}
     >
       <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="角色名称">
         {form.getFieldDecorator('desc', {
           rules: [{required: true, message: '请输入角色名称'}],
+          initialValue:selectedValues.name?selectedValues.name:''
         })(<Input placeholder="请输入"/>)}
       </FormItem>
     </Modal>
@@ -69,7 +70,7 @@ class CreatDrawer extends Component {
   }
 
   onCheck = (checkedKeys, info) => {
-    console.log('onCheck', checkedKeys, info);
+    //console.log('onCheck', checkedKeys, info);
   }
 
   renderSubTree = (trees, parentKey) => {
@@ -242,10 +243,12 @@ class Permission extends Component {
     super(props)
     this.state = {
       modalVisible: false,
+      updateModalVisible: false,
       selectedRows: [],
       formValues: {},
       drawVisible: false,
-      pageLoading: true
+      pageLoading: true,
+      selectedValues:{}
     }
   }
 
@@ -278,9 +281,9 @@ class Permission extends Component {
       title: '操作',
       render: (val, record) => (
         <Fragment>
-          <a onClick={() => this.showDrawer()}>编辑</a>
+          <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
           <Divider type="vertical"/>
-          <a href="">查看</a>
+          <a onClick={() => this.showDrawer()}>权限设置</a>
         </Fragment>
       ),
     },
@@ -396,6 +399,14 @@ class Permission extends Component {
     });
   };
 
+  handleUpdateModalVisible = (flag, record) => {
+    this.setState({
+      updateModalVisible: !!flag,
+      modalVisible:!!flag,
+      selectedValues: record || {},
+    });
+  };
+
   handleAdd = fields => {
     const {dispatch} = this.props;
     dispatch({
@@ -457,7 +468,7 @@ class Permission extends Component {
       rule: {data},
       loading,
     } = this.props;
-    const {selectedRows, modalVisible, pageLoading} = this.state;
+    const {selectedRows, modalVisible, pageLoading,updateModalVisible,selectedValues} = this.state;
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
         <Menu.Item key="edit">权限设置</Menu.Item>
@@ -466,7 +477,13 @@ class Permission extends Component {
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
+      handleUpdateModalVisible:this.handleUpdateModalVisible
     };
+    const parentState = {
+      updateModalVisible:updateModalVisible,
+      modalVisible:modalVisible,
+      selectedValues:selectedValues
+    }
     return (
       <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="权限管理">
@@ -497,7 +514,7 @@ class Permission extends Component {
               />
             </div>
           </Card>
-          <CreateForm {...parentMethods} modalVisible={modalVisible}/>
+          <CreateForm {...parentMethods} {...parentState}/>
         </PageHeaderWrapper>
         <CreatDrawer onClose={this.onDrawClose} drawVisible={this.state.drawVisible}/>
       </Page>

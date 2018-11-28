@@ -1,4 +1,4 @@
-import React, {Component, PureComponent, Fragment} from 'react'
+import React, {Component, Fragment} from 'react'
 import {connect} from 'dva'
 import moment from 'moment';
 
@@ -13,23 +13,18 @@ import {
   Button,
   Dropdown,
   Menu,
-  DatePicker,
   Modal,
   message,
   Badge,
   Divider,
-  Steps,
   Radio,
 } from 'antd';
-import {Page, PageHeader, PageHeaderWrapper, StandardTable} from 'components'
+import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
 import {_setTimeOut} from "utils";
 
 const FormItem = Form.Item;
-const {Step} = Steps;
-const {TextArea} = Input;
 const {Option} = Select;
-const RadioGroup = Radio.Group;
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
@@ -38,7 +33,7 @@ const statusMap = ['default', 'processing', 'success', 'error'];
 const status = ['关闭', '运行中', '已上线', '异常'];
 
 const CreateForm = Form.create()(props => {
-  const {modalVisible, form, handleAdd, handleModalVisible} = props;
+  const {modalVisible, form, handleAdd, handleModalVisible,handleUpdateModalVisible,updateModalVisible,handleCheckDetail,selectedValues,checkDetail} = props;
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -49,25 +44,25 @@ const CreateForm = Form.create()(props => {
   return (
     <Modal
       destroyOnClose
-      title="新建用户"
+      title={checkDetail?'用户详情':updateModalVisible?"编辑用户":"新建用户"}
       visible={modalVisible}
       onOk={okHandle}
-      onCancel={() => handleModalVisible()}
+      onCancel={() => checkDetail?handleCheckDetail():updateModalVisible?handleUpdateModalVisible():handleModalVisible()}
     >
       <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="账号名称">
         {form.getFieldDecorator('desc', {
           rules: [{required: true, message: '请输入账号名称'}],
-        })(<Input placeholder="请输入"/>)}
+        })(<Input disabled={checkDetail} placeholder="请输入"/>)}
       </FormItem>
       <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="账号密码">
         {form.getFieldDecorator('name', {
           rules: [{required: true, message: '请输入账号密码'}],
-        })(<Input placeholder="请输入"/>)}
+        })(<Input disabled={checkDetail} placeholder="请输入"/>)}
       </FormItem>
       <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="账号类型">
         {form.getFieldDecorator('desc', {
           rules: [{required: true, message: '请选择账号类型'}],
-        })(<Select placeholder="请选择" style={{width: '100%'}}>
+        })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
           <Option value="0">公司</Option>
           <Option value="1">项目部</Option>
         </Select>)}
@@ -75,7 +70,7 @@ const CreateForm = Form.create()(props => {
       <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="角色权限">
         {form.getFieldDecorator('desc', {
           rules: [{required: true, message: '请选择角色权限'}],
-        })(<Select placeholder="请选择" style={{width: '100%'}}>
+        })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
           <Option value="0">开发者</Option>
           <Option value="1">管理员</Option>
         </Select>)}
@@ -85,208 +80,6 @@ const CreateForm = Form.create()(props => {
 });
 
 @Form.create()
-class UpdateForm extends PureComponent {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      formVals: {
-        name: props.values.name,
-        desc: props.values.desc,
-        key: props.values.key,
-        target: '0',
-        template: '0',
-        type: '1',
-        time: '',
-        frequency: 'month',
-      },
-      currentStep: 0,
-    };
-
-    this.formLayout = {
-      labelCol: {span: 7},
-      wrapperCol: {span: 13},
-    };
-  }
-
-  handleNext = currentStep => {
-    const {form, handleUpdate} = this.props;
-    const {formVals: oldValue} = this.state;
-    form.validateFields((err, fieldsValue) => {
-      if (err) return;
-      const formVals = {...oldValue, ...fieldsValue};
-      this.setState(
-        {
-          formVals,
-        },
-        () => {
-          if (currentStep < 2) {
-            this.forward();
-          } else {
-            handleUpdate(formVals);
-          }
-        }
-      );
-    });
-  };
-
-  backward = () => {
-    const {currentStep} = this.state;
-    this.setState({
-      currentStep: currentStep - 1,
-    });
-  };
-
-  forward = () => {
-    const {currentStep} = this.state;
-    this.setState({
-      currentStep: currentStep + 1,
-    });
-  };
-
-  renderContent = (currentStep, formVals) => {
-    const {form} = this.props;
-    if (currentStep === 1) {
-      return [
-        <FormItem key="target" {...this.formLayout} label="监控对象">
-          {form.getFieldDecorator('target', {
-            initialValue: formVals.target,
-          })(
-            <Select style={{width: '100%'}}>
-              <Option value="0">表一</Option>
-              <Option value="1">表二</Option>
-            </Select>
-          )}
-        </FormItem>,
-        <FormItem key="template" {...this.formLayout} label="规则模板">
-          {form.getFieldDecorator('template', {
-            initialValue: formVals.template,
-          })(
-            <Select style={{width: '100%'}}>
-              <Option value="0">规则模板一</Option>
-              <Option value="1">规则模板二</Option>
-            </Select>
-          )}
-        </FormItem>,
-        <FormItem key="type" {...this.formLayout} label="规则类型">
-          {form.getFieldDecorator('type', {
-            initialValue: formVals.type,
-          })(
-            <RadioGroup>
-              <Radio value="0">强</Radio>
-              <Radio value="1">弱</Radio>
-            </RadioGroup>
-          )}
-        </FormItem>,
-      ];
-    }
-    if (currentStep === 2) {
-      return [
-        <FormItem key="time" {...this.formLayout} label="开始时间">
-          {form.getFieldDecorator('time', {
-            rules: [{required: true, message: '请选择开始时间！'}],
-          })(
-            <DatePicker
-              style={{width: '100%'}}
-              showTime
-              format="YYYY-MM-DD HH:mm:ss"
-              placeholder="选择开始时间"
-            />
-          )}
-        </FormItem>,
-        <FormItem key="frequency" {...this.formLayout} label="调度周期">
-          {form.getFieldDecorator('frequency', {
-            initialValue: formVals.frequency,
-          })(
-            <Select style={{width: '100%'}}>
-              <Option value="month">月</Option>
-              <Option value="week">周</Option>
-            </Select>
-          )}
-        </FormItem>,
-      ];
-    }
-    return [
-      <FormItem key="name" {...this.formLayout} label="规则名称">
-        {form.getFieldDecorator('name', {
-          rules: [{required: true, message: '请输入规则名称！'}],
-          initialValue: formVals.name,
-        })(<Input placeholder="请输入"/>)}
-      </FormItem>,
-      <FormItem key="desc" {...this.formLayout} label="规则描述">
-        {form.getFieldDecorator('desc', {
-          rules: [{required: true, message: '请输入至少五个字符的规则描述！', min: 5}],
-          initialValue: formVals.desc,
-        })(<TextArea rows={4} placeholder="请输入至少五个字符"/>)}
-      </FormItem>,
-    ];
-  };
-
-  renderFooter = currentStep => {
-    const {handleUpdateModalVisible} = this.props;
-    if (currentStep === 1) {
-      return [
-        <Button key="back" style={{float: 'left'}} onClick={this.backward}>
-          上一步
-        </Button>,
-        <Button key="cancel" onClick={() => handleUpdateModalVisible()}>
-          取消
-        </Button>,
-        <Button key="forward" type="primary" onClick={() => this.handleNext(currentStep)}>
-          下一步
-        </Button>,
-      ];
-    }
-    if (currentStep === 2) {
-      return [
-        <Button key="back" style={{float: 'left'}} onClick={this.backward}>
-          上一步
-        </Button>,
-        <Button key="cancel" onClick={() => handleUpdateModalVisible()}>
-          取消
-        </Button>,
-        <Button key="submit" type="primary" onClick={() => this.handleNext(currentStep)}>
-          完成
-        </Button>,
-      ];
-    }
-    return [
-      <Button key="cancel" onClick={() => handleUpdateModalVisible()}>
-        取消
-      </Button>,
-      <Button key="forward" type="primary" onClick={() => this.handleNext(currentStep)}>
-        下一步
-      </Button>,
-    ];
-  };
-
-  render() {
-    const {updateModalVisible, handleUpdateModalVisible} = this.props;
-    const {currentStep, formVals} = this.state;
-
-    return (
-      <Modal
-        width={640}
-        bodyStyle={{padding: '32px 40px 48px'}}
-        destroyOnClose
-        title="规则配置"
-        visible={updateModalVisible}
-        footer={this.renderFooter(currentStep)}
-        onCancel={() => handleUpdateModalVisible()}
-      >
-        <Steps style={{marginBottom: 28}} size="small" current={currentStep}>
-          <Step title="基本信息"/>
-          <Step title="配置规则属性"/>
-          <Step title="设定调度周期"/>
-        </Steps>
-        {this.renderContent(currentStep, formVals)}
-      </Modal>
-    );
-  }
-}
-
-@Form.create()
-
 class User extends Component {
 
   constructor(props) {
@@ -296,7 +89,8 @@ class User extends Component {
       updateModalVisible: false,
       selectedRows: [],
       formValues: {},
-      stepFormValues: {},
+      selectedValues:{},
+      checkDetail:false
     }
   }
 
@@ -354,7 +148,7 @@ class User extends Component {
       title: '创建时间',
       dataIndex: 'createdAt',
       sorter: true,
-      render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm')}</span>,
+      render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
     },
     {
       title: '最新修改人',
@@ -364,7 +158,7 @@ class User extends Component {
       title: '最新修改时间',
       dataIndex: 'updatedAt',
       sorter: true,
-      render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm')}</span>,
+      render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
     },
     {
       title: '操作',
@@ -372,7 +166,9 @@ class User extends Component {
         <Fragment>
           <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
           <Divider type="vertical"/>
-          <a href="">查看</a>
+          <a onClick={()=>this.handleCheckDetail(true,record)}>查看</a>
+          <Divider type="vertical"/>
+          <a >禁用</a>
         </Fragment>
       ),
     },
@@ -491,7 +287,16 @@ class User extends Component {
   handleUpdateModalVisible = (flag, record) => {
     this.setState({
       updateModalVisible: !!flag,
-      stepFormValues: record || {},
+      modalVisible:!!flag,
+      selectedValues: record || {},
+    });
+  };
+
+  handleCheckDetail=(flag, record) => {
+    this.setState({
+      checkDetail: !!flag,
+      modalVisible:!!flag,
+      selectedValues: record || {},
     });
   };
 
@@ -574,23 +379,27 @@ class User extends Component {
       rule: {data},
       loading,
     } = this.props;
-    const {selectedRows, modalVisible, updateModalVisible, stepFormValues, pageLoading} = this.state;
+    const {selectedRows, modalVisible, updateModalVisible, pageLoading,selectedValues,checkDetail} = this.state;
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
         <Menu.Item key="remove">删除</Menu.Item>
         <Menu.Item key="true">启用</Menu.Item>
-        <Menu.Item key="false">启用</Menu.Item>
+        <Menu.Item key="false">禁用</Menu.Item>
       </Menu>
     );
 
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
+      handleUpdateModalVisible:this.handleUpdateModalVisible,
+      handleCheckDetail:this.handleCheckDetail
     };
-    const updateMethods = {
-      handleUpdateModalVisible: this.handleUpdateModalVisible,
-      handleUpdate: this.handleUpdate,
-    };
+    const parentState = {
+      updateModalVisible:updateModalVisible,
+      modalVisible:modalVisible,
+      selectedValues:selectedValues,
+      checkDetail:checkDetail
+    }
     return (
       <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="用户管理">
@@ -615,20 +424,14 @@ class User extends Component {
                 selectedRows={selectedRows}
                 loading={loading.effects['rule/fetch']}
                 data={data}
+                scroll={{ x: '110%' }}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
               />
             </div>
           </Card>
-          <CreateForm {...parentMethods} modalVisible={modalVisible}/>
-          {stepFormValues && Object.keys(stepFormValues).length ? (
-            <UpdateForm
-              {...updateMethods}
-              updateModalVisible={updateModalVisible}
-              values={stepFormValues}
-            />
-          ) : null}
+          <CreateForm {...parentMethods} {...parentState}/>
         </PageHeaderWrapper>
       </Page>
     )

@@ -1,4 +1,4 @@
-import React, {Component, PureComponent} from 'react'
+import React, {Component, PureComponent,Fragment} from 'react'
 import {connect} from 'dva'
 import moment from 'moment';
 
@@ -18,7 +18,8 @@ import {
   message,
   Upload,
   Steps,
-  Radio
+  Radio,
+  Divider
 } from 'antd';
 import {Page, PageHeader, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
@@ -38,8 +39,7 @@ const status = ['关闭', '运行中', '已上线', '异常'];
 let uuid = 0;
 
 const CreateForm = Form.create()(props => {
-  const {modalVisible, form, handleAdd, handleModalVisible,normFile} = props;
-  const {getFieldDecorator, getFieldValue} = form
+  const {modalVisible, form, handleAdd, handleModalVisible,normFile,handleUpdateModalVisible,updateModalVisible,handleCheckDetail,selectedValues,checkDetail} = props;
 
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
@@ -52,13 +52,13 @@ const CreateForm = Form.create()(props => {
   return (
     <Modal
       destroyOnClose
-      title="新增对上计量台账"
+      title={checkDetail?'对上计量台账':updateModalVisible?"编辑对上计量台账":"新增对上计量台账"}
       bodyStyle={{padding: 0 + 'px'}}
       visible={modalVisible}
       width={992}
       maskClosable={false}
       onOk={okHandle}
-      onCancel={() => handleModalVisible()}
+      onCancel={() => checkDetail?handleCheckDetail():updateModalVisible?handleUpdateModalVisible():handleModalVisible()}
     >
       <div className={styles.modalContent}>
         <Row gutter={8}>
@@ -66,7 +66,7 @@ const CreateForm = Form.create()(props => {
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="项目名称">
               {form.getFieldDecorator('proName', {
                 rules: [{required: true, message: '请选择项目'}],
-              })(<Select placeholder="请选择" style={{width: '100%'}}>
+              })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
                 <Option value="0">项目1</Option>
                 <Option value="1">项目2</Option>
               </Select>)}
@@ -78,14 +78,14 @@ const CreateForm = Form.create()(props => {
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="计量期数">
               {form.getFieldDecorator('proName', {
                 rules: [{required: true, message: '请输入期数'}],
-              })(<Input placeholder="请输入期数"/>)}
+              })(<Input disabled={checkDetail} placeholder="请输入期数"/>)}
             </FormItem>
           </Col>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="计量日期">
               {form.getFieldDecorator('proType', {
                 rules: [{required: true}],
-              })(<DatePicker style={{width: '100%'}} placeholder="请选择量日期"/>)}
+              })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择量日期"/>)}
             </FormItem>
           </Col>
         </Row>
@@ -99,7 +99,7 @@ const CreateForm = Form.create()(props => {
           <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="预付款">
             {form.getFieldDecorator('proActualDays', {
               rules: [{required: true, message: '请输入预付款'}],
-            })(<Input style={{marginTop: 4}} placeholder="请输入预付款" addonAfter="元"/>)}
+            })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入预付款" addonAfter="元"/>)}
           </FormItem>
         </Col>
       </Row>
@@ -113,14 +113,14 @@ const CreateForm = Form.create()(props => {
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="含税金额">
               {form.getFieldDecorator('proActualDays', {
                 rules: [{required: true, message: '请输入含税金额'}],
-              })(<Input style={{marginTop: 4}} placeholder="请输入含税金额" addonAfter="元"/>)}
+              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入含税金额" addonAfter="元"/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="税率">
               {form.getFieldDecorator('proActualDays', {
                 rules: [{required: true, message: '请输入税率'}],
-              })(<Input style={{marginTop: 4}} placeholder="请输入税率" />)}
+              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入税率" />)}
             </FormItem>
           </Col>
         </Row>
@@ -134,7 +134,7 @@ const CreateForm = Form.create()(props => {
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="含税金额">
               {form.getFieldDecorator('proActualDays', {
                 rules: [{required: true, message: '请输入含税金额'}],
-              })(<Input style={{marginTop: 4}} placeholder="请输入含税金额" addonAfter="元"/>)}
+              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入含税金额" addonAfter="元"/>)}
             </FormItem>
           </Col>
         </Row>
@@ -149,7 +149,7 @@ const CreateForm = Form.create()(props => {
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="已支付金额">
               {form.getFieldDecorator('proActualDays', {
                 rules: [{required: true, message: '请输入已支付金额'}],
-              })(<Input style={{marginTop: 4}} placeholder="请输入已支付金额" addonAfter="元"/>)}
+              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入已支付金额" addonAfter="元"/>)}
             </FormItem>
           </Col>
         </Row>
@@ -164,14 +164,14 @@ const CreateForm = Form.create()(props => {
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="超计价金额">
               {form.getFieldDecorator('proActualDays', {
                 rules: [{required: true, message: '请输入超计价金额'}],
-              })(<Input style={{marginTop: 4}} placeholder="请输入超计价金额" addonAfter="元"/>)}
+              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入超计价金额" addonAfter="元"/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="已完未计价金额">
+            <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="已完未计价金额">
               {form.getFieldDecorator('proActualDays', {
                 rules: [{required: true, message: '请输入已完未计价金额'}],
-              })(<Input style={{marginTop: 4}} placeholder="请输入已完未计价金额" addonAfter="元"/>)}
+              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入已完未计价金额" addonAfter="元"/>)}
             </FormItem>
           </Col>
         </Row>
@@ -186,7 +186,7 @@ const CreateForm = Form.create()(props => {
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="备注">
               {form.getFieldDecorator('proSummary', {
                 rules: [{required: true}],
-              })(<Input.TextArea width={'100%'} placeholder="请输入" rows={4}/>)}
+              })(<Input.TextArea disabled={checkDetail} width={'100%'} placeholder="请输入" rows={4}/>)}
             </FormItem>
           </Col>
         </Row>
@@ -424,8 +424,9 @@ class MeterUp extends Component {
       updateModalVisible: false,
       selectedRows: [],
       formValues: {},
-      stepFormValues: {},
-      pageLoading:true
+      pageLoading:true,
+      selectedValues:{},
+      checkDetail:false
     }
   }
 
@@ -535,7 +536,6 @@ class MeterUp extends Component {
           },
         }]
     },
-
     {
       title: '产值计价率',
       render(val) {
@@ -547,7 +547,17 @@ class MeterUp extends Component {
       render(val) {
         return <span>100万啊实打实的</span>;
       },
-    }
+    },
+    {
+      title: '操作',
+      render: (val, record) => (
+        <Fragment>
+          <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
+          <Divider type="vertical"/>
+          <a onClick={()=>this.handleCheckDetail(true,record)}>查看</a>
+        </Fragment>
+      ),
+    },
   ];
 
   componentDidMount() {
@@ -662,7 +672,16 @@ class MeterUp extends Component {
   handleUpdateModalVisible = (flag, record) => {
     this.setState({
       updateModalVisible: !!flag,
-      stepFormValues: record || {},
+      modalVisible:!!flag,
+      selectedValues: record || {},
+    });
+  };
+
+  handleCheckDetail=(flag, record) => {
+    this.setState({
+      checkDetail: !!flag,
+      modalVisible:!!flag,
+      selectedValues: record || {},
     });
   };
 
@@ -767,7 +786,7 @@ class MeterUp extends Component {
       rule: {data},
       loading,
     } = this.props;
-    const {selectedRows, modalVisible,pageLoading} = this.state;
+    const {selectedRows, modalVisible,updateModalVisible,pageLoading,selectedValues,checkDetail} = this.state;
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
         <Menu.Item key="edit">编辑</Menu.Item>
@@ -778,9 +797,16 @@ class MeterUp extends Component {
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
-      normFile:this.normFile
+      normFile:this.normFile,
+      handleUpdateModalVisible:this.handleUpdateModalVisible,
+      handleCheckDetail:this.handleCheckDetail
     };
-    console.log(data)
+    const parentState = {
+      updateModalVisible:updateModalVisible,
+      modalVisible:modalVisible,
+      selectedValues:selectedValues,
+      checkDetail:checkDetail
+    }
     return (
       <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="对上计量台账">
@@ -806,14 +832,14 @@ class MeterUp extends Component {
                 loading={loading.effects['rule/fetch']}
                 bordered
                 data={data}
-                scroll={{ x: '150%' }}
+                scroll={{ x: '200%' }}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
               />
             </div>
           </Card>
-          <CreateForm {...parentMethods} modalVisible={modalVisible}/>
+          <CreateForm {...parentMethods} {...parentState}/>
         </PageHeaderWrapper>
       </Page>
     )
