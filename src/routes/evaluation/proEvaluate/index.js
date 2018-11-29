@@ -18,7 +18,6 @@ import {
   message,
   Upload,
   Divider,
-  Radio
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
@@ -26,7 +25,6 @@ import {_setTimeOut} from 'utils'
 
 const FormItem = Form.Item;
 const {Option} = Select;
-const RadioGroup = Radio.Group;
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
@@ -34,7 +32,9 @@ const getValue = obj =>
 const statusMap = ['default', 'processing', 'success', 'error'];
 const status = ['关闭', '运行中', '已上线', '异常'];
 let uuid = 0;
-
+const info_css={
+  color:'#fa541c'
+}
 const CreateForm = Form.create()(props => {
   const {modalVisible, form, handleAdd, handleModalVisible, normFile,handleUpdateModalVisible,updateModalVisible,handleCheckDetail,selectedValues,checkDetail} = props;
 
@@ -231,6 +231,7 @@ const CreateForm = Form.create()(props => {
                   <p className="ant-upload-text">点击或拖动附件进入</p>
                 </Upload.Dragger>
               )}
+              <span style={info_css}>备注：请以一份压缩包格式文件上传</span>
             </FormItem>
           </Col>
         </Row>
@@ -276,6 +277,7 @@ const CreateForm = Form.create()(props => {
                   <p className="ant-upload-text">点击或拖动附件进入</p>
                 </Upload.Dragger>
               )}
+              <span style={info_css}>备注：请以一份压缩包格式文件上传</span>
             </FormItem>
           </Col>
         </Row>
@@ -330,6 +332,7 @@ const CreateForm = Form.create()(props => {
                   <p className="ant-upload-text">点击或拖动附件进入</p>
                 </Upload.Dragger>
               )}
+              <span style={info_css}>备注：请以一份PDF格式文件上传</span>
             </FormItem>
           </Col>
         </Row>

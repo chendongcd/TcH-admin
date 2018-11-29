@@ -31,7 +31,9 @@ const getValue = obj =>
     .join(',');
 const statusMap = ['default', 'processing', 'success', 'error'];
 const status = ['关闭', '运行中', '已上线', '异常'];
-
+const info_css={
+  color:'#fa541c'
+}
 const CreateForm = Form.create()(props => {
   const {modalVisible, form, handleAdd, handleModalVisible, normFile,handleUpdateModalVisible,updateModalVisible,handleCheckDetail,selectedValues,checkDetail} = props;
 
@@ -310,7 +312,7 @@ const CreateForm = Form.create()(props => {
       <div className={styles.modalContent}>
         <Row gutter={8}>
           <Col md={24} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="附件">
+            <FormItem style={{marginLeft:14+'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="附件">
               {form.getFieldDecorator('dragger', {
                 valuePropName: 'fileList',
                 getValueFromEvent: normFile,
@@ -322,6 +324,7 @@ const CreateForm = Form.create()(props => {
                   <p className="ant-upload-text">点击或拖动附件进入</p>
                 </Upload.Dragger>
               )}
+              <span style={info_css}>备注：包含营业执照、资质证书、安全生产许可证、开户银行许可证、法人身份证等相关资质资料(盖鲜章),请以一份PDF格式文件上传。</span>
             </FormItem>
           </Col>
         </Row>
