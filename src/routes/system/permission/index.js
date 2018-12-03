@@ -295,10 +295,10 @@ class Permission extends Component {
     //   type:'sys_per/fetch',
     //   payload:{page:1,pageSize:10,name:'公'}
     // })
-    dispatch({
-      type:'sys_per/fetchDetail',
-      payload:{roleId:1}
-    })
+    // dispatch({
+    //   type:'sys_per/fetchDetail',
+    //   payload:{roleId:1}
+    // })
     _setTimeOut(() => this.setState({pageLoading: false}), 1000)
     dispatch({
       type: 'rule/fetch',

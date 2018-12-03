@@ -3,7 +3,7 @@ module.exports = {
   name: 'TcH-Admin',
   prefix: 'TcH-Admin',
   footerText: 'TyC Design Admin  © 2018 melon',
-  logo:  `${path}/logo.svg`,
+  logo:  `/logo.svg`,
   iconFontCSS: `${path}/iconfont.css`,
   iconFontJS: `${path}/iconfont.js`,
   apiPrefix: '/api/v1',
