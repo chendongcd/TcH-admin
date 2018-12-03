@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f9cf8453-fce7-4f76-8b42-acb0ec5757a4" name="Default" comment="" />
+    <list default="true" id="f9cf8453-fce7-4f76-8b42-acb0ec5757a4" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -217,8 +219,8 @@
           <file leaf-file-name="router.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/router.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="41">
-                  <caret line="162" column="18" lean-forward="true" selection-start-line="162" selection-start-column="18" selection-end-line="162" selection-end-column="18" />
+                <state relative-caret-position="56">
+                  <caret line="163" column="38" lean-forward="true" selection-start-line="163" selection-start-column="38" selection-end-line="163" selection-end-column="38" />
                   <folding>
                     <element signature="e#0#26#0" expanded="true" />
                     <element signature="e#278#293#0" expanded="false" />
@@ -500,12 +502,12 @@
       <workItem from="1543195787446" duration="28455000" />
       <workItem from="1543372893173" duration="28295000" />
       <workItem from="1543479991393" duration="5168000" />
-      <workItem from="1543798281126" duration="10610000" />
+      <workItem from="1543798281126" duration="10761000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="337577000" />
+    <option name="totallyTimeSpent" value="337728000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="227" y="23" width="1439" height="821" extended-state="0" />
@@ -2602,8 +2604,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/router.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="41">
-          <caret line="162" column="18" lean-forward="true" selection-start-line="162" selection-start-column="18" selection-end-line="162" selection-end-column="18" />
+        <state relative-caret-position="56">
+          <caret line="163" column="38" lean-forward="true" selection-start-line="163" selection-start-column="38" selection-end-line="163" selection-end-column="38" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
             <element signature="e#278#293#0" expanded="false" />
