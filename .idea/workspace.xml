@@ -2,129 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f9cf8453-fce7-4f76-8b42-acb0ec5757a4" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.editorconfig" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.eslintrc" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" afterPath="" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/.roadhogrc.mock.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.webpackrc.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/mock/.gitkeep" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/mock/sys_project.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/mock/user.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/package.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/public/index.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/public/logo.svg" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/server.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/assets/logo.svg" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/assets/yay.jpg" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/common/menu.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/common/nav.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/Iconfont/Iconfont.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/Iconfont/iconfont.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/Iconfont/package.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/Layout/Bread.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/Layout/Header.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/Layout/Header.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/Layout/Layout.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/Layout/Menu.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/Layout/MenuContext.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/Layout/Sider.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/Layout/index.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/Loader/Loader.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/Loader/Loader.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/Loader/package.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/Page/Page.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/Page/Page.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/Page/package.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/PageHeader/breadcrumb.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/PageHeader/index.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/PageHeader/index.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/PageHeader/index.md" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/PageHeader/package.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/PageHeaderWrapper/GridContent.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/PageHeaderWrapper/GridContent.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/PageHeaderWrapper/index.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/PageHeaderWrapper/index.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/PageHeaderWrapper/package.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/StandardTable/index.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/StandardTable/index.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/StandardTable/package.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/_utils/pathTools.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/_utils/pathTools.test.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/components/index.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/index.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/index.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/models/app.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/models/rule.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/router.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/Index.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/Index.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/document/fileRead/index.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/document/fileRead/index.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/document/fileRead/model.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/document/fileReference/index.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/document/fileReference/index.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/document/fileReference/model.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/downToBack/meterDown/index.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/downToBack/meterDown/index.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/downToBack/meterDown/model.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/downToBack/teamAccount/index.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/downToBack/teamAccount/index.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/downToBack/teamAccount/model.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/error/404.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/error/404.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/evaluation/proEvaluate/index.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/evaluation/proEvaluate/index.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/evaluation/proEvaluate/model.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/home/index.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/home/index.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/home/model.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/home/services/dashboard.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/home/services/weather.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/login/index.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/login/index.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/peopleManage/info/index.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/peopleManage/info/index.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/peopleManage/info/model.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/project/infoCard/index.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/project/infoCard/index.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/project/infoCard/model.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/sub/qualification/index.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/sub/qualification/index.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/sub/qualification/model.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/sub/resume/index.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/sub/resume/index.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/sub/resume/model.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/system/permission/index.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/system/permission/index.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/system/permission/model.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/system/project/index.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/system/project/index.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/system/project/model.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/system/user/index.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/system/user/index.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/system/user/model.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/upToBack/meterUp/index.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/upToBack/meterUp/index.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/routes/upToBack/meterUp/model.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/services/app.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/services/system/sys_per.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/services/system/sys_project.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/services/system/sys_user.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/themes/default.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/themes/index.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/themes/mixin.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/themes/utils.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/themes/vars.less" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/utils/config.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/utils/index.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/utils/localStorage.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/utils/request.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/utils/requestDev.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/utils/theme.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/theme.config.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/dist/index.html" afterPath="$PROJECT_DIR$/dist/index.html" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -143,8 +22,18 @@
           <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/dist/index.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="45">
-                  <caret line="3" column="11" lean-forward="false" selection-start-line="3" selection-start-column="11" selection-end-line="3" selection-end-column="11" />
+                <state relative-caret-position="120">
+                  <caret line="8" column="6" lean-forward="true" selection-start-line="8" selection-start-column="6" selection-end-line="8" selection-end-column="6" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/dist/index.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="0">
+                  <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
                   <folding />
                 </state>
               </provider>
@@ -223,7 +112,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/components/index.js" />
         <option value="$PROJECT_DIR$/src/routes/system/project/index.less" />
         <option value="$PROJECT_DIR$/src/routes/system/project/model.js" />
         <option value="$PROJECT_DIR$/mock/system/sys_project.js" />
@@ -274,6 +162,7 @@
         <option value="$PROJECT_DIR$/server.js" />
         <option value="$PROJECT_DIR$/src/utils/config.js" />
         <option value="$PROJECT_DIR$/public/index.html" />
+        <option value="$PROJECT_DIR$/dist/index.html" />
       </list>
     </option>
   </component>
@@ -319,6 +208,11 @@
             <path>
               <item name="TcH-admin" type="b2602c69:ProjectViewProjectNode" />
               <item name="TcH-admin" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TcH-admin" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TcH-admin" type="462c0819:PsiDirectoryNode" />
+              <item name="dist" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -395,15 +289,16 @@
       <workItem from="1543195787446" duration="28455000" />
       <workItem from="1543372893173" duration="28295000" />
       <workItem from="1543479991393" duration="5168000" />
-      <workItem from="1543798281126" duration="10868000" />
+      <workItem from="1543798281126" duration="11175000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="337835000" />
+    <option name="totallyTimeSpent" value="338142000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="227" y="23" width="1439" height="821" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="TypeScript" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13046545" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -414,7 +309,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.46005508" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.46005508" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1049,14 +944,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dist/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.roadhogrc.mock.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
@@ -1129,10 +1016,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/dist/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/dist/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="11" lean-forward="false" selection-start-line="3" selection-start-column="11" selection-end-line="3" selection-end-column="11" />
+        <state relative-caret-position="120">
+          <caret line="8" column="6" lean-forward="true" selection-start-line="8" selection-start-column="6" selection-end-line="8" selection-end-column="6" />
           <folding />
         </state>
       </provider>
