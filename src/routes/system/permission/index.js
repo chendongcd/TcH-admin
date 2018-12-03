@@ -291,6 +291,14 @@ class Permission extends Component {
 
   componentDidMount() {
     const {dispatch} = this.props;
+    // dispatch({
+    //   type:'sys_per/fetch',
+    //   payload:{page:1,pageSize:10,name:'公'}
+    // })
+    dispatch({
+      type:'sys_per/fetchDetail',
+      payload:{roleId:1}
+    })
     _setTimeOut(() => this.setState({pageLoading: false}), 1000)
     dispatch({
       type: 'rule/fetch',
@@ -466,6 +474,7 @@ class Permission extends Component {
   render() {
     const {
       rule: {data},
+      sys_per,
       loading,
     } = this.props;
     const {selectedRows, modalVisible, pageLoading,updateModalVisible,selectedValues} = this.state;
@@ -524,4 +533,4 @@ class Permission extends Component {
 
 Permission.propTypes = {}
 
-export default connect(({app, rule, loading}) => ({app, rule, loading}))(Permission)
+export default connect(({app, rule,sys_per, loading}) => ({app, rule,sys_per, loading}))(Permission)

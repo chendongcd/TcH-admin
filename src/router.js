@@ -1,11 +1,10 @@
-import React,{Component} from 'react';
+import React from 'react';
 import {Router, Route, Switch,Redirect} from 'dva/router';
 import {LocaleProvider} from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import App from './routes/Index'
 import dynamic from 'dva/dynamic';
 import appModel from './models/app'
-
 // // 设置默认的加载组件
 // dynamic.setDefaultLoadingComponent(() => {
 //   return <Spin size="large" className={styles.globalSpin} />;
@@ -82,12 +81,12 @@ function RouterConfig({history, app}) {
   })
   const Sys_Permission = dynamic({
     app,
-    models: [appModel],
+    models: ()=> [import('./routes/system/permission/model')],
     component:()=> import('./routes/system/permission/index'),
   })
   const Sys_User = dynamic({
     app,
-    models: [appModel],
+    models:()=> [import('./routes/system/user/model')],
     component:()=> import('./routes/system/user/index'),
   })
   const Pro_InfoCard = dynamic({

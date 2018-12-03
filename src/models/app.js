@@ -7,11 +7,11 @@ const delay = timeout => new Promise(resolve => setTimeout(resolve, timeout));
 const {prefix} = config
 
 function getMenu(user) {
-  if(user&&user.id==0){
+  //if(user&&user.id==0){
     return menuData
-  }else if(user){
-  return menuData.filter(a=>a.id!=2)
-  }
+  // }else if(user){
+  // return menuData.filter(a=>a.id!=2)
+  // }
   return []
 }
 
@@ -60,9 +60,9 @@ export default {
     * login({payload}, {call, put}) {
       const res = yield call(signIn, payload)
       if (res.code == 200) {
-        let menu = res.data.id==0?menuData:menuData.filter(a=>a.id!=2)
-        setStorage('userInfo',res.data)
-        yield put({type: 'updateState', payload: {user: res.data, loading: true,menu:menu}})
+        let menu = menuData
+        setStorage('userInfo',res.entity)
+        yield put({type: 'updateState', payload: {user: res.entity, loading: true,menu:menu}})
         yield put(routerRedux.push('/home'))
         yield call(delay, 500)
         yield put({type: 'updateState', payload: {loading: false}})

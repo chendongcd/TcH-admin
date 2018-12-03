@@ -176,6 +176,10 @@ class User extends Component {
 
   componentDidMount() {
     const {dispatch} = this.props;
+    // dispatch({
+    //   type:'sys_user/fetch',
+    //   payload:{page:1,pageSize:10,status:1,code:'001',projectName:'A'}
+    // })
     _setTimeOut(() => this.setState({pageLoading: false}), 1000)
     dispatch({
       type: 'rule/fetch',
@@ -440,4 +444,4 @@ class User extends Component {
 
 User.propTypes = {}
 
-export default connect(({app, rule, loading}) => ({app, rule, loading}))(User)
+export default connect(({app, rule,sys_user, loading}) => ({app, rule,sys_user, loading}))(User)

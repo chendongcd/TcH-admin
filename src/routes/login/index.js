@@ -28,7 +28,8 @@ class Login extends Component {
       }
       //{account:values.username,password:values.password}
       this.setState({loginLoading:true})
-      await this.props.dispatch({ type: 'app/login', payload: values })
+      await this.props.dispatch({ type: 'app/login', payload: {account:values.username,password:values.password} })
+     // await this.props.dispatch({ type: 'app/login', payload: values })
       this.setState({loginLoading:false})
     })
   }

@@ -3,8 +3,8 @@ import {requestDev,request,config} from 'utils';
 // 用户登录
 const {apiPrefix,apiDev} = config
 export async function signIn(params) {
-  console.log('请求服务了',`${apiPrefix}/user/login`)
-  return requestDev(`${apiPrefix}/user/login`,{
+  console.log('请求服务了',`${apiDev}/user/login/v1.1`)
+  return request(`${apiDev}/user/login/v1.1`,{
     method: 'POST',
     body: params
   });

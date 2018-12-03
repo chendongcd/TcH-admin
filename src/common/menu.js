@@ -4,13 +4,15 @@ export const menuData = [
     icon: 'home',
     name: '首页',
     route: '/home',
+    permissions:'PERMISSIONS_HOME'
   },
   {
     id: '2',
     icon: 'radius-setting',
     name: '系统管理',
     bpid: '1',
-    route: '/system'
+    route: '/system',
+    permissions:'PERMISSIONS_SYSTEM'
   },
   {
     id: '21',
@@ -18,6 +20,7 @@ export const menuData = [
     mpid: '2',
     name: '项目管理',
     route: '/system/project',
+    permissions:'PERMISSIONS_SYSTEM_PROJECT'
   },
   {
     id: '22',
@@ -25,6 +28,7 @@ export const menuData = [
     mpid: '2',
     name: '权限管理',
     route: '/system/permission',
+    permissions:'PERMISSIONS_SYSTEM_PER'
   },
   {
     id: '23',
@@ -32,6 +36,7 @@ export const menuData = [
     mpid: '2',
     name: '用户管理',
     route: '/system/user',
+    permissions:'PERMISSIONS_SYSTEM_USER'
   },
   {
     id: '3',
@@ -160,3 +165,4 @@ export const menuData = [
     route: '/files/reference',
   },
 ]
+

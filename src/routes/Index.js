@@ -22,7 +22,7 @@ class IndexPage extends Component{
   componentDidMount(){
 
     let {app,history} = this.props
-    if(!app.user.username){
+    if(!app.user.token){
       console.log(app.user)
       history.push('/login')
     }
@@ -77,7 +77,7 @@ class IndexPage extends Component{
           {iconFontJS && <script src={iconFontJS}/>}
           {iconFontCSS && <link rel="stylesheet" href={iconFontCSS}/>}
         </Helmet>
-        {user.username?<Layout className={classnames({ [styles.dark]: darkTheme, [styles.light]: !darkTheme })}>
+        {user.token?<Layout className={classnames({ [styles.dark]: darkTheme, [styles.light]: !darkTheme })}>
           {!isNavbar && <Sider
             trigger={null}
             collapsible
