@@ -91,7 +91,7 @@ function RouterConfig({history, app}) {
   })
   const Pro_InfoCard = dynamic({
     app,
-    models: [appModel],
+    models: ()=> [import('./routes/project/infoCard/model')],
     component:()=> import('./routes/project/infoCard/index'),
   })
   const Up_MeterUp = dynamic({

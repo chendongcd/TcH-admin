@@ -1,7 +1,7 @@
-import { queryRule, removeRule, addRule, updateRule } from '@/services/api';
+import {queryProInfoList,queryProInfoDetail,addProInfo,updateProInfo} from '../../../services/project/project'
 const delay = timeout => new Promise(resolve => setTimeout(resolve, timeout));
 export default {
-  namespace: 'Sys_project',
+  namespace: 'pro_proInfo',
 
   state: {
     data: {
@@ -11,35 +11,27 @@ export default {
   },
 
   effects: {
-    *fetch({ payload }, { call, put }) {
-      const response = yield call(queryRule, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
+    *fetch({ payload}, { call, put }) {
+      const response = yield call(queryProInfoList, payload);
+      // yield put({
+      //   type: 'save',
+      //   payload: response,
+      // });
     },
-    *add({ payload, callback }, { call, put }) {
-      const response = yield call(addRule, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
+    *add({ payload,token, callback }, { call, put }) {
+      const response = yield call(addProInfo, payload,token);
+      // yield put({
+      //   type: 'save',
+      //   payload: response,
+      // });
       if (callback) callback();
     },
-    *remove({ payload, callback }, { call, put }) {
-      const response = yield call(removeRule, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
+    *fetchDetail({ payload, callback }, { call, put }) {
+      const response = yield call(queryProInfoDetail, payload);
       if (callback) callback();
     },
-    *update({ payload, callback }, { call, put }) {
-      const response = yield call(updateRule, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
+    *update({ payload, token,callback }, { call, put }) {
+      const response = yield call(updateProInfo, payload,token);
       if (callback) callback();
     },
   },
