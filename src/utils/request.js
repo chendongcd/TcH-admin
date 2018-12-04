@@ -1,4 +1,4 @@
-import {notification, message} from 'antd';
+import {message} from 'antd';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -11,6 +11,7 @@ const codeMessage = {
   404: '发出的请求针对的是不存在的记录，服务器没有进行操作。',
   406: '请求的格式不可得。',
   410: '请求的资源被永久删除，且不会再得到的。',
+  420: '请求参数错误',
   422: '用户密码错误，请重新输入',
   500: '服务器发生错误，请检查服务器。',
   502: '网关错误。',
@@ -72,14 +73,14 @@ export default function request(url, options, token) {
     }
     req.setRequestHeader('Content-Type', 'application/json')
     if (token) {
-      req.setRequestHeader('Authorization', `Bearer ${token}`)
+      req.setRequestHeader('Authorization', `${token}`)
     }
 
     req.onload = function () {
       console.log(req)
-      if (req.readyState === 4&&req.status==200) {
-           checkStatus(JSON.parse(req.response))
-          resolve(JSON.parse(req.response))
+      if (req.readyState === 4 && req.status == 200) {
+        checkStatus(JSON.parse(req.response))
+        resolve(JSON.parse(req.response))
       } else {
         reject(Error(req.statusText))
       }

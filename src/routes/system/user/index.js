@@ -32,8 +32,8 @@ const getValue = obj =>
 const statusMap = ['default', 'processing', 'success', 'error'];
 const status = ['关闭', '运行中', '已上线', '异常'];
 
-const CreateForm = Form.create()(props => {
-  const {modalVisible, form, handleAdd, handleModalVisible,handleUpdateModalVisible,updateModalVisible,handleCheckDetail,selectedValues,checkDetail} = props;
+/*const CreateForm = Form.create()(props => {
+  const {modalVisible, form, handleAdd, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = props;
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -41,28 +41,21 @@ const CreateForm = Form.create()(props => {
       handleAdd(fieldsValue);
     });
   };
+  const _onSelect = (value) => {
+    console.log(value)
+  }
   return (
     <Modal
       destroyOnClose
-      title={checkDetail?'用户详情':updateModalVisible?"编辑用户":"新建用户"}
+      title={checkDetail ? '用户详情' : updateModalVisible ? "编辑用户" : "新建用户"}
       visible={modalVisible}
       onOk={okHandle}
-      onCancel={() => checkDetail?handleCheckDetail():updateModalVisible?handleUpdateModalVisible():handleModalVisible()}
+      onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
     >
-      <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="账号名称">
-        {form.getFieldDecorator('desc', {
-          rules: [{required: true, message: '请输入账号名称'}],
-        })(<Input disabled={checkDetail} placeholder="请输入"/>)}
-      </FormItem>
-      <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="账号密码">
-        {form.getFieldDecorator('name', {
-          rules: [{required: true, message: '请输入账号密码'}],
-        })(<Input disabled={checkDetail} placeholder="请输入"/>)}
-      </FormItem>
       <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="账号类型">
-        {form.getFieldDecorator('desc', {
+        {form.getFieldDecorator('type', {
           rules: [{required: true, message: '请选择账号类型'}],
-        })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
+        })(<Select onSelect={(e) => _onSelect(e)} disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
           <Option value="0">公司</Option>
           <Option value="1">项目部</Option>
         </Select>)}
@@ -75,9 +68,112 @@ const CreateForm = Form.create()(props => {
           <Option value="1">管理员</Option>
         </Select>)}
       </FormItem>
+      <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="账号名称">
+        {form.getFieldDecorator('desc', {
+          rules: [{required: true, message: '请输入账号名称'}],
+        })(<Input disabled={checkDetail} placeholder="请输入"/>)}
+      </FormItem>
+      <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="账号密码">
+        {form.getFieldDecorator('name', {
+          rules: [{required: true, message: '请输入账号密码'}],
+        })(<Input disabled={checkDetail} placeholder="请输入"/>)}
+      </FormItem>
     </Modal>
   );
-});
+});*/
+
+@Form.create()
+class CreateForm extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      type: 0,
+    }
+    this.isLoad = false
+  }
+
+  componentDidMount() {
+
+  }
+
+  okHandle = (handleAdd, form,updateModalVisible) => {
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      //form.resetFields();
+      handleAdd(fieldsValue,updateModalVisible);
+    });
+  }
+
+  _onSelect = (value) => {
+    this.setState({type: value})
+  }
+
+  getOptions = async (func, param) => {
+    this.isLoad = false
+    await func(param)
+    this.isLoad = true
+  }
+
+  render() {
+    const {modalVisible, form, handleAdd, getProNames, getRoleNames, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail, proNames, roleNames} = this.props;
+    return (
+      <Modal
+        destroyOnClose
+        maskClosable={false}
+        title={checkDetail ? '用户详情' : updateModalVisible ? "编辑用户" : "新建用户"}
+        visible={modalVisible}
+        onOk={() => this.okHandle(handleAdd, form,updateModalVisible)}
+        onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
+      >
+        <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="账号类型">
+          {form.getFieldDecorator('type', {
+            rules: [{required: true, message: '请选择账号类型'}],
+          })(<Select onSelect={(e) => this._onSelect(e)} disabled={checkDetail} placeholder="请选择"
+                     style={{width: '100%'}}>
+            <Option value="0">公司</Option>
+            <Option value="1">项目部</Option>
+          </Select>)}
+        </FormItem>
+        {this.state.type == 1 ? <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="项目名称">
+          {form.getFieldDecorator('proName', {
+            rules: [{required: true, message: '请选择项目名称'}],
+          })(<Select onFocus={() => this.getOptions(getProNames, proNames)}
+                     notFoundContent={this.isLoad ? '暂无数据' : '正在加载'}
+                     mode={'multiple'} disabled={checkDetail}
+                     placeholder="请选择" style={{width: '100%'}}>
+            {proNames.map((item, index) => {
+              return <Option key={index} value={`{"id":${item.id}}`}>{item.name}</Option>
+            })}
+          </Select>)}
+        </FormItem> : null}
+        <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="角色权限">
+          {form.getFieldDecorator('role', {
+            rules: [{required: true, message: '请选择角色权限'}],
+          })(
+            <Select onFocus={() =>this.getOptions(getRoleNames,roleNames)}
+                    disabled={checkDetail}
+                    notFoundContent={this.isLoad?'暂无数据':'正在加载'}
+                    placeholder="请选择"
+                    style={{width: '100%'}}>
+              {roleNames.map((item, index) => {
+                return <Option key={index} value={item.id}>{item.name}</Option>
+              })}
+            </Select>)}
+        </FormItem>
+        <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="账号名称">
+          {form.getFieldDecorator('account', {
+            rules: [{required: true, message: '请输入账号名称'}],
+          })(<Input disabled={checkDetail} placeholder="请输入"/>)}
+        </FormItem>
+        <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="账号密码">
+          {form.getFieldDecorator('password', {
+            rules: [{required: true, message: '请输入账号密码'}],
+          })(<Input disabled={checkDetail} placeholder="请输入"/>)}
+        </FormItem>
+      </Modal>
+    );
+  }
+}
 
 @Form.create()
 class User extends Component {
@@ -89,8 +185,8 @@ class User extends Component {
       updateModalVisible: false,
       selectedRows: [],
       formValues: {},
-      selectedValues:{},
-      checkDetail:false
+      selectedValues: {},
+      checkDetail: false
     }
   }
 
@@ -166,9 +262,9 @@ class User extends Component {
         <Fragment>
           <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
           <Divider type="vertical"/>
-          <a onClick={()=>this.handleCheckDetail(true,record)}>查看</a>
+          <a onClick={() => this.handleCheckDetail(true, record)}>查看</a>
           <Divider type="vertical"/>
-          <a >禁用</a>
+          <a>禁用</a>
         </Fragment>
       ),
     },
@@ -176,9 +272,11 @@ class User extends Component {
 
   componentDidMount() {
     const {dispatch} = this.props;
+    this.getProNames([])
+    this.getRoleNames([])
     // dispatch({
-    //   type:'sys_user/fetch',
-    //   payload:{page:1,pageSize:10,status:1,code:'001',projectName:'A'}
+    //   type:'sys_user/queryUserList',
+    //   payload:{page:1,pageSize:10}
     // })
     _setTimeOut(() => this.setState({pageLoading: false}), 1000)
     dispatch({
@@ -291,45 +389,48 @@ class User extends Component {
   handleUpdateModalVisible = (flag, record) => {
     this.setState({
       updateModalVisible: !!flag,
-      modalVisible:!!flag,
+      modalVisible: !!flag,
       selectedValues: record || {},
     });
   };
 
-  handleCheckDetail=(flag, record) => {
+  handleCheckDetail = (flag, record) => {
     this.setState({
       checkDetail: !!flag,
-      modalVisible:!!flag,
+      modalVisible: !!flag,
       selectedValues: record || {},
     });
   };
 
-  handleAdd = fields => {
-    const {dispatch} = this.props;
-    dispatch({
-      type: 'rule/add',
-      payload: {
-        desc: fields.desc,
-      },
-    });
-
-    message.success('添加成功');
-    this.handleModalVisible();
-  };
-
-  handleUpdate = fields => {
-    const {dispatch} = this.props;
-    dispatch({
-      type: 'rule/update',
-      payload: {
-        name: fields.name,
-        desc: fields.desc,
-        key: fields.key,
-      },
-    });
-
-    message.success('配置成功');
-    this.handleUpdateModalVisible();
+  handleAdd = (fields,updateModalVisible) => {
+    const {dispatch,app:{user}} = this.props;
+    const payload = {
+      account:fields.account,
+      password:fields.password,
+      projects:fields.proName.map(a=>JSON.parse(a)),
+    }
+    if(updateModalVisible){
+      dispatch({
+        type:'sys_user/updateUser',
+        payload:{...payload,...{id:1}},
+        token:user.token
+      })
+    }else {
+      dispatch({
+        type:'sys_user/addUser',
+        payload:payload,
+        token:user.token
+      })
+    }
+    // dispatch({
+    //   type: 'sys_user/addUser',
+    //   payload: {
+    //     desc: fields.desc,
+    //   },
+    // });
+    //
+    // message.success('添加成功');
+    // this.handleModalVisible();
   };
 
   renderSimpleForm() {
@@ -382,8 +483,9 @@ class User extends Component {
     const {
       rule: {data},
       loading,
+      sys_user: {proNames, roleNames}
     } = this.props;
-    const {selectedRows, modalVisible, updateModalVisible, pageLoading,selectedValues,checkDetail} = this.state;
+    const {selectedRows, modalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail} = this.state;
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
         <Menu.Item key="remove">删除</Menu.Item>
@@ -395,14 +497,19 @@ class User extends Component {
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
-      handleUpdateModalVisible:this.handleUpdateModalVisible,
-      handleCheckDetail:this.handleCheckDetail
+      handleUpdateModalVisible: this.handleUpdateModalVisible,
+      handleCheckDetail: this.handleCheckDetail,
+      getProNames: this.getProNames,
+      getRoleNames: this.getRoleNames
     };
     const parentState = {
-      updateModalVisible:updateModalVisible,
-      modalVisible:modalVisible,
-      selectedValues:selectedValues,
-      checkDetail:checkDetail
+      updateModalVisible: updateModalVisible,
+      modalVisible: modalVisible,
+      selectedValues: selectedValues,
+      checkDetail: checkDetail,
+      proNames: proNames,
+      roleNames: roleNames,
+      loading: loading
     }
     return (
       <Page inner={true} loading={pageLoading}>
@@ -428,7 +535,7 @@ class User extends Component {
                 selectedRows={selectedRows}
                 loading={loading.effects['rule/fetch']}
                 data={data}
-                scroll={{ x: '110%' }}
+                scroll={{x: '110%'}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
@@ -440,8 +547,30 @@ class User extends Component {
       </Page>
     )
   }
+
+  getProNames = (proName) => {
+    if (proName.length < 1) {
+      this.props.dispatch(
+        {
+          type: 'sys_user/queryProNames',
+          payload: {page: 1, pageSize: 10}
+        }
+      )
+    }
+  }
+
+  getRoleNames = (roleName) => {
+    if (roleName.length < 1) {
+      this.props.dispatch(
+        {
+          type: 'sys_user/queryRoleNames',
+          payload: {page: 1, pageSize: 10}
+        }
+      )
+    }
+  }
 }
 
 User.propTypes = {}
 
-export default connect(({app, rule,sys_user, loading}) => ({app, rule,sys_user, loading}))(User)
+export default connect(({app, rule, sys_user, loading}) => ({app, rule, sys_user, loading}))(User)

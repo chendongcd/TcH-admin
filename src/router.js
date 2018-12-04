@@ -76,7 +76,7 @@ function RouterConfig({history, app}) {
   })
   const Sys_Project = dynamic({
     app,
-    models: [appModel],
+    models: ()=>[import('./routes/system/project/model')],
     component:()=> import('./routes/system/project/index'),
   })
   const Sys_Permission = dynamic({

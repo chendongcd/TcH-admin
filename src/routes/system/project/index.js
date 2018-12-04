@@ -1,7 +1,6 @@
-import React, {Component, PureComponent, Fragment} from 'react'
+import React, {Component, Fragment} from 'react'
 import {connect} from 'dva'
 import moment from 'moment';
-
 import {
   Row,
   Col,
@@ -13,23 +12,17 @@ import {
   Button,
   Dropdown,
   Menu,
-  DatePicker,
   Modal,
-  message,
   Badge,
   Divider,
-  Steps,
-  Radio,
 } from 'antd';
-import {Page, PageHeader, PageHeaderWrapper, StandardTable} from 'components'
+import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
 import {_setTimeOut} from "utils";
+import {proTypes} from 'common/menu'
 
 const FormItem = Form.Item;
-const {Step} = Steps;
-const {TextArea} = Input;
 const {Option} = Select;
-const RadioGroup = Radio.Group;
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
@@ -38,41 +31,37 @@ const statusMap = ['default', 'processing', 'success', 'error'];
 const status = ['关闭', '运行中', '已上线', '异常'];
 
 const CreateForm = Form.create()(props => {
-  const {modalVisible, form, handleAdd, handleModalVisible,handleUpdateModalVisible,updateModalVisible,selectedValues} = props;
+  const {modalVisible, form, handleAdd, handleModalVisible, handleUpdateModalVisible, updateModalVisible, selectedValues} = props;
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      form.resetFields();
-      handleAdd(fieldsValue);
+      //form.resetFields();
+      handleAdd(fieldsValue, updateModalVisible);
     });
   };
- // console.log(selectedValues)
+  // console.log(selectedValues)
   return (
     <Modal
       destroyOnClose
-      title={updateModalVisible?"编辑项目":"新增项目"}
+      title={updateModalVisible ? "编辑项目" : "新增项目"}
       visible={modalVisible}
       onOk={okHandle}
-      onCancel={() =>updateModalVisible?handleUpdateModalVisible():handleModalVisible()}
+      onCancel={() => updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
     >
       <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="项目名称">
         {form.getFieldDecorator('name', {
           rules: [{required: true, message: '项目名不能为空',}],
-          initialValue:selectedValues.name?selectedValues.name:''
+          initialValue: selectedValues.name ? selectedValues.name : ''
         })(<Input placeholder="请输入"/>)}
       </FormItem>
       <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="工程类别">
-        {form.getFieldDecorator('desc', {
-          rules: [{required: true, message: '请选择工程类别', min: 5}],
-          initialValue:selectedValues.name?'市政工程':''
+        {form.getFieldDecorator('proType', {
+          rules: [{required: true, message: '请选择工程类别'}],
+          initialValue: selectedValues.name ? selectedValues.name : ''
         })(<Select placeholder="请选择" style={{width: '100%'}}>
-          <Option value="0">市政工程</Option>
-          <Option value="1">房建工程</Option>
-          <Option value="2">铁路工程</Option>
-          <Option value="3">公路工程</Option>
-          <Option value="4">水利工程</Option>
-          <Option value="5">国防工程</Option>
-          <Option value="6">其他工程</Option>
+          {proTypes.map((item, index) => {
+            return <Option key={index} value={item.id}>{item.value}</Option>
+          })}
         </Select>)}
       </FormItem>
     </Modal>
@@ -89,7 +78,7 @@ class Project extends Component {
       updateModalVisible: false,
       selectedRows: [],
       pageLoading: true,
-      selectedValues:{}
+      selectedValues: {}
     }
   }
 
@@ -153,18 +142,24 @@ class Project extends Component {
     },
     {
       title: '操作',
-      render: (val, record) => (
-        <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
-          <Divider type="vertical"/>
-          <a >禁用</a>
-        </Fragment>
-      ),
+      render: (val, record) => {
+        return (
+          <Fragment>
+            <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
+            <Divider type="vertical"/>
+            <a>禁用</a>
+          </Fragment>
+        )
+      },
     },
   ];
 
   componentDidMount() {
     const {dispatch} = this.props;
+    dispatch({
+      type: 'sys_pro/queryProList',
+      payload: {page: 1, pageSize: 10}
+    });
     _setTimeOut(() => this.setState({pageLoading: false}), 1000)
     dispatch({
       type: 'rule/fetch',
@@ -276,37 +271,35 @@ class Project extends Component {
   handleUpdateModalVisible = (flag, record) => {
     this.setState({
       updateModalVisible: !!flag,
-      modalVisible:!!flag,
+      modalVisible: !!flag,
       selectedValues: record || {},
     });
   };
 
-  handleAdd = fields => {
-    const {dispatch} = this.props;
-    dispatch({
-      type: 'rule/add',
-      payload: {
-        desc: fields.desc,
-      },
-    });
-
-    message.success('添加成功');
-    this.handleModalVisible();
-  };
-
-  handleUpdate = fields => {
-    const {dispatch} = this.props;
-    dispatch({
-      type: 'rule/update',
-      payload: {
-        name: fields.name,
-        desc: fields.desc,
-        key: fields.key,
-      },
-    });
-
-    message.success('配置成功');
-    this.handleUpdateModalVisible();
+  handleAdd = (fields, updateModalVisible) => {
+    const {dispatch, app: {user}} = this.props;
+    if (updateModalVisible) {
+      dispatch({
+        type: 'sys_pro/updatePro',
+        payload: {
+          name: fields.name,
+          dictId: fields.proType,
+          id: 1
+        },
+        token: user.token,
+        callback: this.handleUpdateModalVisible
+      });
+    } else {
+      dispatch({
+        type: 'sys_pro/addPro',
+        payload: {
+          name: fields.name,
+          dictId: fields.proType
+        },
+        token: user.token,
+        callback: this.handleModalVisible
+      });
+    }
   };
 
   renderSimpleForm() {
@@ -371,7 +364,7 @@ class Project extends Component {
       loading,
     } = this.props;
     //console.log(loading)
-    const {selectedRows, modalVisible, pageLoading,updateModalVisible,selectedValues} = this.state;
+    const {selectedRows, modalVisible, pageLoading, updateModalVisible, selectedValues} = this.state;
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
         <Menu.Item key="remove">禁用</Menu.Item>
@@ -382,12 +375,12 @@ class Project extends Component {
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
-      handleUpdateModalVisible:this.handleUpdateModalVisible
+      handleUpdateModalVisible: this.handleUpdateModalVisible
     };
     const parentState = {
-      updateModalVisible:updateModalVisible,
-      modalVisible:modalVisible,
-      selectedValues:selectedValues
+      updateModalVisible: updateModalVisible,
+      modalVisible: modalVisible,
+      selectedValues: selectedValues
     }
     return (
       <Page inner={true} loading={pageLoading}>
@@ -428,4 +421,4 @@ class Project extends Component {
 
 Project.propTypes = {}
 
-export default connect(({app, rule, loading}) => ({app, rule, loading}))(Project)
+export default connect(({app, rule, sys_pro, loading}) => ({app, rule, sys_pro, loading}))(Project)

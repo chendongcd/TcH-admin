@@ -7,42 +7,34 @@ import {
   Card,
   Form,
   Input,
-  Select,
   Icon,
   Button,
   Dropdown,
   Menu,
   Tree,
   Modal,
-  message,
   Drawer,
   Divider,
-  Radio,
   Collapse
 } from 'antd';
 import {arrayToTree, _setTimeOut} from 'utils'
 import {menuData} from '../../../common/menu'
-import {Page, PageHeader, PageHeaderWrapper, StandardTable} from 'components'
+import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
 
 const FormItem = Form.Item;
-const {Option} = Select;
-const RadioGroup = Radio.Group;
 const TreeNode = Tree.TreeNode;
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const statusMap = ['default', 'processing', 'success', 'error'];
-const status = ['关闭', '运行中', '已上线', '异常'];
-
 const CreateForm = Form.create()(props => {
   const {modalVisible, form, handleAdd, handleModalVisible,handleUpdateModalVisible,updateModalVisible,selectedValues} = props;
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      form.resetFields();
-      handleAdd(fieldsValue);
+    //  form.resetFields();
+      handleAdd(fieldsValue, updateModalVisible);
     });
   };
   return (
@@ -54,7 +46,7 @@ const CreateForm = Form.create()(props => {
       onCancel={() => updateModalVisible?handleUpdateModalVisible():handleModalVisible()}
     >
       <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="角色名称">
-        {form.getFieldDecorator('desc', {
+        {form.getFieldDecorator('roleName', {
           rules: [{required: true, message: '请输入角色名称'}],
           initialValue:selectedValues.name?selectedValues.name:''
         })(<Input placeholder="请输入"/>)}
@@ -291,13 +283,13 @@ class Permission extends Component {
 
   componentDidMount() {
     const {dispatch} = this.props;
-    // dispatch({
-    //   type:'sys_per/fetch',
-    //   payload:{page:1,pageSize:10,name:'公'}
-    // })
     dispatch({
-      type:'sys_per/fetchDetail',
-      payload:{roleId:1}
+      type:'sys_per/query',
+      payload:{page:1,pageSize:10,name:'公'}
+    })
+    dispatch({
+      type:'sys_per/queryDetail',
+      payload:{roleId:3}
     })
     _setTimeOut(() => this.setState({pageLoading: false}), 1000)
     dispatch({
@@ -415,17 +407,33 @@ class Permission extends Component {
     });
   };
 
-  handleAdd = fields => {
-    const {dispatch} = this.props;
-    dispatch({
-      type: 'rule/add',
-      payload: {
-        desc: fields.desc,
-      },
-    });
-
-    message.success('添加成功');
-    this.handleModalVisible();
+  handleAdd = (fields, updateModalVisible) => {
+    const {dispatch,app:{user}} = this.props;
+    if(updateModalVisible){
+      dispatch({
+        type: 'sys_per/updateRole',
+        payload: {
+          id:3,
+          name: fields.roleName,
+          description:'用于公司管理项目角色'
+        },
+        token:user.token,
+        callback:this.handleUpdateModalVisible
+      })
+    }else {
+     dispatch({
+        type: 'sys_per/addRole',
+        payload: {
+          name: fields.roleName,
+          description:'用于公司管理项目角色'
+        },
+        token:user.token,
+       callback:this.handleModalVisible
+      })
+    }
+    //
+    // message.success('添加成功');
+    // this.handleModalVisible();
   };
 
   renderSimpleForm() {
@@ -474,7 +482,6 @@ class Permission extends Component {
   render() {
     const {
       rule: {data},
-      sys_per,
       loading,
     } = this.props;
     const {selectedRows, modalVisible, pageLoading,updateModalVisible,selectedValues} = this.state;

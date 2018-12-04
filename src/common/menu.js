@@ -35,8 +35,7 @@ export const menuData = [
     bpid: '2',
     mpid: '2',
     name: '用户管理',
-    route: '/system/user',
-    permissions:'PERMISSIONS_SYSTEM_USER'
+    route: '/system/user'
   },
   {
     id: '3',
@@ -44,6 +43,7 @@ export const menuData = [
     icon: 'project',
     name: '项目部管理',
     route: '/project',
+    permissions:'PERMISSIONS_SYSTEM_PROJECT'
   },
   {
     id: '31',
@@ -164,5 +164,50 @@ export const menuData = [
     name: '参考文献',
     route: '/files/reference',
   },
+]
+
+export const proTypes = [
+  {
+    "id": 1,
+    "value": "市政工程",
+    "type": "project_type",
+    "description": "市政工程"
+  },
+  {
+    "id": 2,
+    "value": "房建工程",
+    "type": "project_type",
+    "description": "房建工程"
+  },
+  {
+    "id": 3,
+    "value": "铁路工程",
+    "type": "project_type",
+    "description": "铁路工程"
+  },
+  {
+    "id": 4,
+    "value": "公路工程",
+    "type": "project_type",
+    "description": "公路工程"
+  },
+  {
+    "id": 5,
+    "value": "水利工程",
+    "type": "project_type",
+    "description": "水利工程"
+  },
+  {
+    "id": 6,
+    "value": "国防工程",
+    "type": "project_type",
+    "description": "国防工程"
+  },
+  {
+    "id": 7,
+    "value": "其他",
+    "type": "project_type",
+    "description": "其他工程"
+  }
 ]
 

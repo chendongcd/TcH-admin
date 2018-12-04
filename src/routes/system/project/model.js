@@ -1,7 +1,8 @@
-import { queryRule, removeRule, addRule, updateRule } from '@/services/api';
+import {addPro,updatePro,queryProDetail,queryProList,queryRule} from '../../../services/system/sys_project'
+import {message} from "antd/lib/index";
 const delay = timeout => new Promise(resolve => setTimeout(resolve, timeout));
 export default {
-  namespace: 'Sys_project',
+  namespace: 'sys_pro',
 
   state: {
     data: {
@@ -18,29 +19,29 @@ export default {
         payload: response,
       });
     },
-    *add({ payload, callback }, { call, put }) {
-      const response = yield call(addRule, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
+    *addPro({ payload, token,callback }, { call, put }) {
+      const response = yield call(addPro, payload,token);
+      console.log(response)
+      if(response.code=='200'){
+        message.success('新增成功');
+        if (callback) callback();
+      }
     },
-    *remove({ payload, callback }, { call, put }) {
-      const response = yield call(removeRule, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
+    *updatePro({ payload, token,callback }, { call, put }) {
+      const response = yield call(updatePro, payload,token);
+      console.log(response)
+      if(response.code=='200'){
+        message.success('修改成功');
+        if (callback) callback();
+      }
     },
-    *update({ payload, callback }, { call, put }) {
-      const response = yield call(updateRule, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
+    *queryProList({ payload }, { call, put }) {
+      const response = yield call(queryProList, payload);
+      console.log(response)
+    },
+    *queryProDetail({ payload }, { call, put }) {
+      const response = yield call(queryProDetail, payload);
+      console.log(response)
     },
   },
 
