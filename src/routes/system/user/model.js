@@ -16,10 +16,12 @@ export default {
     *queryUserList({ payload }, { call, put }) {
       const response = yield call(queryUserList, payload);
     //  console.log(response)
-      yield put({
-        type: 'save',
-        payload: response,
-      });
+      if(response.code=='200'){
+        yield put({
+          type: 'save',
+          payload: response,
+        });
+      }
     },
     *addUser({payload,token},{call,put}){
       const response = yield call(addUser, payload,token);
@@ -36,11 +38,11 @@ export default {
 
     *queryProNames({payload},{call,put}){
       const response = yield call(queryProList, payload);
-     // console.log(response)
+      //console.log(response)
       if(response.code=='200'){
         yield put({
           type:'saveProName',
-          payload:response.entity
+          payload:response.list
         })
       }
     },
@@ -51,7 +53,7 @@ export default {
       if(response.code=='200'){
         yield put({
           type:'saveRoleName',
-          payload:response.entity
+          payload:response.list
         })
       }
     },

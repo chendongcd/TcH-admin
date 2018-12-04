@@ -34,7 +34,7 @@ const CreateForm = Form.create()(props => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
     //  form.resetFields();
-      handleAdd(fieldsValue, updateModalVisible);
+      handleAdd(fieldsValue, updateModalVisible,selectedValues);
     });
   };
   return (
@@ -247,30 +247,30 @@ class Permission extends Component {
   columns = [
     {
       title: '角色编码',
-      dataIndex: 'code',
+      dataIndex: 'id',
     },
     {
       title: '角色名称',
-      dataIndex: 'owner',
+      dataIndex: 'name',
     },
     {
       title: '创建时间',
-      dataIndex: 'createdAt',
-      sorter: true,
+      dataIndex: 'createdTime',
       render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
     },
     {
       title: '最新修改人',
-      dataIndex: 'updateUser'
+      dataIndex: 'updateUser',
+      render: val => <span>没有</span>,
     },
     {
       title: '最新修改时间',
-      dataIndex: 'updatedAt',
-      sorter: true,
-      render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
+      dataIndex: 'updateTime',
+      render: val => <span>没有</span>,
     },
     {
       title: '操作',
+      dataIndex: 'operat',
       render: (val, record) => (
         <Fragment>
           <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
@@ -283,18 +283,18 @@ class Permission extends Component {
 
   componentDidMount() {
     const {dispatch} = this.props;
-    dispatch({
-      type:'sys_per/query',
-      payload:{page:1,pageSize:10,name:'公'}
-    })
-    dispatch({
-      type:'sys_per/queryDetail',
-      payload:{roleId:3}
-    })
+    // dispatch({
+    //   type:'sys_per/queryDetail',
+    //   payload:{roleId:3}
+    // })
     _setTimeOut(() => this.setState({pageLoading: false}), 1000)
     dispatch({
+      type:'sys_per/query',
+      payload:{page:1,pageSize:10}
+    })
+    /*dispatch({
       type: 'rule/fetch',
-    });
+    });*/
   }
 
   componentWillUnmount() {
@@ -312,7 +312,7 @@ class Permission extends Component {
     }, {});
 
     const params = {
-      currentPage: pagination.current,
+      page: pagination.current,
       pageSize: pagination.pageSize,
       ...formValues,
       ...filters,
@@ -320,9 +320,9 @@ class Permission extends Component {
     if (sorter.field) {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
-
+    console.log(params)
     dispatch({
-      type: 'rule/fetch',
+      type: 'sys_per/query',
       payload: params,
     });
   };
@@ -334,8 +334,8 @@ class Permission extends Component {
       formValues: {},
     });
     dispatch({
-      type: 'rule/fetch',
-      payload: {},
+      type: 'sys_per/query',
+      payload: {page:1,pageSize:10},
     });
   };
 
@@ -343,24 +343,6 @@ class Permission extends Component {
     const {dispatch} = this.props;
     const {selectedRows} = this.state;
 
-    if (!selectedRows) return;
-    switch (e.key) {
-      case 'remove':
-        dispatch({
-          type: 'rule/remove',
-          payload: {
-            key: selectedRows.map(row => row.key),
-          },
-          callback: () => {
-            this.setState({
-              selectedRows: [],
-            });
-          },
-        });
-        break;
-      default:
-        break;
-    }
   };
 
   handleSelectRows = rows => {
@@ -407,18 +389,22 @@ class Permission extends Component {
     });
   };
 
-  handleAdd = (fields, updateModalVisible) => {
+  handleAdd = (fields, updateModalVisible,selectedValues) => {
     const {dispatch,app:{user}} = this.props;
     if(updateModalVisible){
       dispatch({
         type: 'sys_per/updateRole',
         payload: {
-          id:3,
+          id:selectedValues.id,
           name: fields.roleName,
           description:'用于公司管理项目角色'
         },
         token:user.token,
         callback:this.handleUpdateModalVisible
+      })
+      dispatch({
+        type:'sys_per/query',
+        payload:{page:1,pageSize:10}
       })
     }else {
      dispatch({
@@ -481,7 +467,7 @@ class Permission extends Component {
 
   render() {
     const {
-      rule: {data},
+      sys_per:{data},
       loading,
     } = this.props;
     const {selectedRows, modalVisible, pageLoading,updateModalVisible,selectedValues} = this.state;
@@ -522,7 +508,8 @@ class Permission extends Component {
               </div>
               <StandardTable
                 selectedRows={selectedRows}
-                loading={loading.effects['rule/fetch']}
+                rowKey="id"
+                loading={loading.effects['sys_per/query']}
                 data={data}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
