@@ -3,23 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="f9cf8453-fce7-4f76-8b42-acb0ec5757a4" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/0.async.js" afterPath="$PROJECT_DIR$/public/0.async.js" />
-      <change beforePath="$PROJECT_DIR$/1.async.js" afterPath="$PROJECT_DIR$/public/1.async.js" />
-      <change beforePath="$PROJECT_DIR$/10.async.js" afterPath="$PROJECT_DIR$/public/10.async.js" />
-      <change beforePath="$PROJECT_DIR$/11.async.js" afterPath="$PROJECT_DIR$/public/11.async.js" />
-      <change beforePath="$PROJECT_DIR$/12.async.js" afterPath="$PROJECT_DIR$/public/12.async.js" />
-      <change beforePath="$PROJECT_DIR$/13.async.js" afterPath="$PROJECT_DIR$/public/13.async.js" />
-      <change beforePath="$PROJECT_DIR$/14.async.js" afterPath="$PROJECT_DIR$/public/14.async.js" />
-      <change beforePath="$PROJECT_DIR$/15.async.js" afterPath="$PROJECT_DIR$/public/15.async.js" />
-      <change beforePath="$PROJECT_DIR$/16.async.js" afterPath="$PROJECT_DIR$/public/16.async.js" />
-      <change beforePath="$PROJECT_DIR$/2.async.js" afterPath="$PROJECT_DIR$/public/2.async.js" />
-      <change beforePath="$PROJECT_DIR$/3.async.js" afterPath="$PROJECT_DIR$/public/3.async.js" />
-      <change beforePath="$PROJECT_DIR$/4.async.js" afterPath="$PROJECT_DIR$/public/4.async.js" />
-      <change beforePath="$PROJECT_DIR$/5.async.js" afterPath="$PROJECT_DIR$/public/5.async.js" />
-      <change beforePath="$PROJECT_DIR$/6.async.js" afterPath="$PROJECT_DIR$/public/6.async.js" />
-      <change beforePath="$PROJECT_DIR$/7.async.js" afterPath="$PROJECT_DIR$/public/7.async.js" />
-      <change beforePath="$PROJECT_DIR$/8.async.js" afterPath="$PROJECT_DIR$/public/8.async.js" />
-      <change beforePath="$PROJECT_DIR$/9.async.js" afterPath="$PROJECT_DIR$/public/9.async.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -216,6 +199,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/public" />
       <recent name="$PROJECT_DIR$/mock" />
       <recent name="$PROJECT_DIR$/mock/system" />
@@ -278,7 +262,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="338750000" />
+    <option name="totallyTimeSpent" value="338886000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="46" y="30" width="1439" height="821" extended-state="0" />
