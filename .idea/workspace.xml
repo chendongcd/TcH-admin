@@ -2,8 +2,24 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f9cf8453-fce7-4f76-8b42-acb0ec5757a4" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/.gitignore" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/0.async.js" afterPath="$PROJECT_DIR$/public/0.async.js" />
+      <change beforePath="$PROJECT_DIR$/1.async.js" afterPath="$PROJECT_DIR$/public/1.async.js" />
+      <change beforePath="$PROJECT_DIR$/10.async.js" afterPath="$PROJECT_DIR$/public/10.async.js" />
+      <change beforePath="$PROJECT_DIR$/11.async.js" afterPath="$PROJECT_DIR$/public/11.async.js" />
+      <change beforePath="$PROJECT_DIR$/12.async.js" afterPath="$PROJECT_DIR$/public/12.async.js" />
+      <change beforePath="$PROJECT_DIR$/13.async.js" afterPath="$PROJECT_DIR$/public/13.async.js" />
+      <change beforePath="$PROJECT_DIR$/14.async.js" afterPath="$PROJECT_DIR$/public/14.async.js" />
+      <change beforePath="$PROJECT_DIR$/15.async.js" afterPath="$PROJECT_DIR$/public/15.async.js" />
+      <change beforePath="$PROJECT_DIR$/16.async.js" afterPath="$PROJECT_DIR$/public/16.async.js" />
+      <change beforePath="$PROJECT_DIR$/2.async.js" afterPath="$PROJECT_DIR$/public/2.async.js" />
+      <change beforePath="$PROJECT_DIR$/3.async.js" afterPath="$PROJECT_DIR$/public/3.async.js" />
+      <change beforePath="$PROJECT_DIR$/4.async.js" afterPath="$PROJECT_DIR$/public/4.async.js" />
+      <change beforePath="$PROJECT_DIR$/5.async.js" afterPath="$PROJECT_DIR$/public/5.async.js" />
+      <change beforePath="$PROJECT_DIR$/6.async.js" afterPath="$PROJECT_DIR$/public/6.async.js" />
+      <change beforePath="$PROJECT_DIR$/7.async.js" afterPath="$PROJECT_DIR$/public/7.async.js" />
+      <change beforePath="$PROJECT_DIR$/8.async.js" afterPath="$PROJECT_DIR$/public/8.async.js" />
+      <change beforePath="$PROJECT_DIR$/9.async.js" afterPath="$PROJECT_DIR$/public/9.async.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -20,8 +36,8 @@
       <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" column="0" lean-forward="true" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+            <state relative-caret-position="60">
+              <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -151,8 +167,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="227" />
-    <option name="y" value="23" />
+    <option name="x" value="46" />
+    <option name="y" value="30" />
     <option name="width" value="1439" />
     <option name="height" value="821" />
   </component>
@@ -199,17 +215,18 @@
     <property name="node.js.selected.package.eslint" value="$PROJECT_DIR$/node_modules/eslint" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public" />
+      <recent name="$PROJECT_DIR$/mock" />
+      <recent name="$PROJECT_DIR$/mock/system" />
+      <recent name="$PROJECT_DIR$/src/routes" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/src/routes/document/fileReference" />
       <recent name="$PROJECT_DIR$/src/routes/document/fileRead" />
       <recent name="$PROJECT_DIR$/src/routes/evaluation/proEvaluate" />
       <recent name="$PROJECT_DIR$/src/routes/peopleManage/info" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/mock" />
-      <recent name="$PROJECT_DIR$/mock/system" />
-      <recent name="$PROJECT_DIR$/src/routes" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -261,10 +278,11 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="338511000" />
+    <option name="totallyTimeSpent" value="338705000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="227" y="23" width="1439" height="821" extended-state="0" />
+    <frame x="46" y="30" width="1439" height="821" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="TypeScript" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13046545" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -275,7 +293,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.46005508" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.46005508" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -434,8 +452,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="0" lean-forward="true" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+        <state relative-caret-position="60">
+          <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
           <folding />
         </state>
       </provider>
