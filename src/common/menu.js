@@ -4,7 +4,7 @@ export const menuData = [
     icon: 'home',
     name: '首页',
     route: '/home',
-    permissions:'PERMISSIONS_HOME'
+    permission:'PERMISSIONS_HOME'
   },
   {
     id: '2',
@@ -12,7 +12,7 @@ export const menuData = [
     name: '系统管理',
     bpid: '1',
     route: '/system',
-    permissions:'PERMISSIONS_SYSTEM'
+    permission:'PERMISSIONS_SYSTEM'
   },
   {
     id: '21',
@@ -20,7 +20,13 @@ export const menuData = [
     mpid: '2',
     name: '项目管理',
     route: '/system/project',
-    permissions:'PERMISSIONS_SYSTEM_PROJECT'
+    permission:'PERMISSIONS_SYSTEM_PROJECT',
+    buttons:[
+      {name:'新增',permission:'PERMISSIONS_SYSTEM_PROJECT_ADD'},
+      {name:'编辑',permission:'PERMISSIONS_SYSTEM_PROJECT_UPDATE'},
+      {name:'启用',permission:'PERMISSIONS_SYSTEM_PROJECT_ENABLE'},
+      {name:'禁用',permission:'PERMISSIONS_SYSTEM_PROJECT_DISABLE'},
+    ]
   },
   {
     id: '22',
@@ -28,14 +34,28 @@ export const menuData = [
     mpid: '2',
     name: '权限管理',
     route: '/system/permission',
-    permissions:'PERMISSIONS_SYSTEM_PER'
+    permission:'PERMISSIONS_SYSTEM_PER',
+    buttons:[
+      {name:'新增',permission:'PERMISSIONS_SYSTEM_PER_ADD'},
+      {name:'编辑',permission:'PERMISSIONS_SYSTEM_PER_UPDATE'},
+      {name:'查看',permission:'PERMISSIONS_SYSTEM_PER_LOOK'},
+      {name:'权限设置',permission:'PERMISSIONS_SYSTEM_PER_SET'},
+    ]
   },
   {
     id: '23',
     bpid: '2',
     mpid: '2',
     name: '用户管理',
-    route: '/system/user'
+    route: '/system/user',
+    permission:'PERMISSIONS_SYSTEM_USER',
+    buttons:[
+      {name:'新增',permission:'PERMISSIONS_SYSTEM_USER_ADD'},
+      {name:'编辑',permission:'PERMISSIONS_SYSTEM_USER_UPDATE'},
+      {name:'查看',permission:'PERMISSIONS_SYSTEM_USER_LOOK'},
+      {name:'启用',permission:'PERMISSIONS_SYSTEM_USER_ENABLE'},
+      {name:'禁用',permission:'PERMISSIONS_SYSTEM_USER_DISABLE'},
+    ]
   },
   {
     id: '3',
@@ -43,7 +63,7 @@ export const menuData = [
     icon: 'project',
     name: '项目部管理',
     route: '/project',
-    permissions:'PERMISSIONS_SYSTEM_PROJECT'
+    permission:'PERMISSIONS_PROJECT_MANAGER',
   },
   {
     id: '31',
@@ -51,6 +71,13 @@ export const menuData = [
     mpid: '3',
     name: '工程项目信息卡',
     route: '/project/infoCard',
+    permission:'PERMISSIONS_PROJECT_MANAGER_INFO',
+    buttons:[
+      {name:'新增',permission:'PERMISSIONS_PROJECT_MANAGER_INFO_ADD'},
+      {name:'编辑',permission:'PERMISSIONS_PROJECT_MANAGER_INFO_UPDATE'},
+      {name:'查看',permission:'PERMISSIONS_PROJECT_MANAGER_INFO_LOOK'},
+      {name:'导出',permission:'PERMISSIONS_PROJECT_MANAGER_INFO_EXPORT'},
+    ]
   },
   {
     id: '4',
@@ -58,6 +85,7 @@ export const menuData = [
     icon: 'up-square',
     name: '对上管理',
     route: '/up',
+    permission:'PERMISSIONS_UP_MANAGER',
   },
   {
     id: '41',
@@ -65,6 +93,13 @@ export const menuData = [
     mpid: '4',
     name: '对上计量台账',
     route: '/up/meterUp',
+    permission:'PERMISSIONS_UP_MANAGER_ACCOUNT',
+    buttons:[
+      {name:'新增',permission:'PERMISSIONS_UP_MANAGER_ACCOUNT_ADD'},
+      {name:'编辑',permission:'PERMISSIONS_UP_MANAGER_ACCOUNT_UPDATE'},
+      {name:'查看',permission:'PERMISSIONS_UP_MANAGER_ACCOUNT_LOOK'},
+      {name:'导出',permission:'PERMISSIONS_UP_MANAGER_ACCOUNT_EXPORT'},
+    ]
   },
   {
     id: '5',
@@ -72,6 +107,7 @@ export const menuData = [
     icon: 'schedule',
     name: '分包商管理',
     route: '/sub',
+    permission:'PERMISSIONS_SUB_MANAGER',
   },
   {
     id: '51',
@@ -79,6 +115,12 @@ export const menuData = [
     mpid: '5',
     name: '分包商资质信息',
     route: '/sub/qualification',
+    permission:'PERMISSIONS_SUB_MANAGER_INFO',
+    buttons:[
+      {name:'新增',permission:'PERMISSIONS_SUB_MANAGER_INFO_ADD'},
+      {name:'编辑',permission:'PERMISSIONS_SUB_MANAGER_INFO_UPDATE'},
+      {name:'查看',permission:'PERMISSIONS_SUB_MANAGER_INFO_LOOK'},
+    ]
   },
   {
     id: '52',
@@ -86,6 +128,12 @@ export const menuData = [
     mpid: '5',
     name: '分包商履历',
     route: '/sub/resume',
+    permission:'PERMISSIONS_SUB_MANAGER_RESUME',
+    buttons:[
+      {name:'新增',permission:'PERMISSIONS_SUB_MANAGER_RESUME_ADD'},
+      {name:'编辑',permission:'PERMISSIONS_SUB_MANAGER_RESUME_UPDATE'},
+      {name:'查看',permission:'PERMISSIONS_SUB_MANAGER_RESUME_LOOK'},
+    ]
   },
   {
     id: '6',
@@ -93,6 +141,7 @@ export const menuData = [
     icon: 'down-square',
     name: '对下管理',
     route: '/down',
+    permission:'PERMISSIONS_DOWN_MANAGER',
   },
   {
     id: '61',
@@ -100,6 +149,14 @@ export const menuData = [
     mpid: '6',
     name: '所属队伍台账',
     route: '/down/account',
+    permission:'PERMISSIONS_DOWN_MANAGER_TEAM',
+    buttons:[
+      {name:'新增',permission:'PERMISSIONS_DOWN_MANAGER_TEAM_ADD'},
+      {name:'修改',permission:'PERMISSIONS_DOWN_MANAGER_TEAM_UPDATE'},
+      {name:'查看',permission:'PERMISSIONS_DOWN_MANAGER_TEAM_LOOK'},
+      {name:'公司编辑',permission:'PERMISSIONS_DOWN_MANAGER_TEAM_COMPANY'},
+      {name:'导出',permission:'PERMISSIONS_DOWN_MANAGER_TEAM_EXPORT'},
+    ]
   },
   {
     id: '62',
@@ -107,6 +164,13 @@ export const menuData = [
     mpid: '6',
     name: '对下验工计价台账',
     route: '/down/inspect',
+    permission:'PERMISSIONS_DOWN_MANAGER_CHECK',
+    buttons:[
+      {name:'新增',permission:'PERMISSIONS_DOWN_MANAGER_CHECK_ADD'},
+      {name:'编辑',permission:'PERMISSIONS_DOWN_MANAGER_CHECK_UPDATE'},
+      {name:'查看',permission:'PERMISSIONS_DOWN_MANAGER_CHECK_LOOK'},
+      {name:'导出',permission:'PERMISSIONS_DOWN_MANAGER_CHECK_EXPORT'},
+    ]
   },
   {
     id: '7',
@@ -114,6 +178,7 @@ export const menuData = [
     icon: 'team',
     name: '经管人员管理',
     route: '/people',
+    permission:'PERMISSIONS_PEOPLE_MANAGER',
   },
   {
     id: '71',
@@ -121,6 +186,13 @@ export const menuData = [
     mpid: '7',
     name: '人员信息',
     route: '/people/info',
+    permission:'PERMISSIONS_PEOPLE_MANAGER_INFO',
+    buttons:[
+      {name:'新增',permission:'PERMISSIONS_PEOPLE_MANAGER_INFO_ADD'},
+      {name:'编辑',permission:'PERMISSIONS_PEOPLE_MANAGER_INFO_UPDATE'},
+      {name:'查看',permission:'PERMISSIONS_PEOPLE_MANAGER_INFO_LOOK'},
+      {name:'导出',permission:'PERMISSIONS_PEOPLE_MANAGER_INFO_EXPORT'},
+    ]
   },
   {
     id: '8',
@@ -128,6 +200,7 @@ export const menuData = [
     icon: 'edit',
     name: '项目评估台账',
     route: '/evaluation',
+    permission:'PERMISSIONS_PROJECT_ACCOUNT',
   },
   {
     id: '81',
@@ -135,6 +208,13 @@ export const menuData = [
     mpid: '8',
     name: '项目评估',
     route: '/evaluation/evaluate',
+    permission:'PERMISSIONS_PROJECT_ACCOUNT_EVALUATION',
+    buttons:[
+      {name:'新增',permission:'PERMISSIONS_PROJECT_ACCOUNT_EVALUATION_ADD'},
+      {name:'编辑',permission:'PERMISSIONS_PROJECT_ACCOUNT_EVALUATION_UPDATE'},
+      {name:'查看',permission:'PERMISSIONS_PROJECT_ACCOUNT_EVALUATION_LOOK'},
+      {name:'导出',permission:'PERMISSIONS_PROJECT_ACCOUNT_EVALUATION_EXPORT'},
+    ]
   },
   {
     id: '9',
@@ -142,6 +222,7 @@ export const menuData = [
     icon: 'file-text',
     name: '报表管理',
     route: '/report',
+    permission:'PERMISSIONS_REPORTL_MANAGER',
   },
   {
     id: '10',
@@ -149,6 +230,7 @@ export const menuData = [
     icon: 'folder',
     name: '文档管理',
     route: '/files',
+    permission:'PERMISSIONS_FILE_MANAGER',
   },
   {
     id: '11',
@@ -156,6 +238,12 @@ export const menuData = [
     mpid: '10',
     name: '文件阅览',
     route: '/files/read',
+    permission:'PERMISSIONS_FILE_MANAGER_YULAN',
+    buttons:[
+      {name:'新增',permission:'PERMISSIONS_FILE_MANAGER_YULAN_ADD'},
+      {name:'编辑',permission:'PERMISSIONS_FILE_MANAGER_YULAN_UPDATE'},
+      {name:'查看',permission:'PERMISSIONS_FILE_MANAGER_YULAN_LOOK'},
+    ]
   },
   {
     id: '12',
@@ -163,6 +251,12 @@ export const menuData = [
     mpid: '10',
     name: '参考文献',
     route: '/files/reference',
+    permission:'PERMISSIONS_FILE_MANAGER_WENXIAN',
+    buttons:[
+      {name:'新增',permission:'PERMISSIONS_FILE_MANAGER_WENXIAN_ADD'},
+      {name:'编辑',permission:'PERMISSIONS_FILE_MANAGER_WENXIAN_UPDATE'},
+      {name:'查看',permission:'PERMISSIONS_FILE_MANAGER_WENXIAN_LOOK'},
+    ]
   },
 ]
 

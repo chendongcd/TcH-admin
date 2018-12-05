@@ -1,5 +1,6 @@
-import {addPro,updatePro,queryProDetail,queryProList,queryRule} from '../../../services/system/sys_project'
+import {addPro, updatePro, queryProDetail, queryProList, queryRule,updateProStatus} from '../../../services/system/sys_project'
 import {message} from "antd/lib/index";
+
 const delay = timeout => new Promise(resolve => setTimeout(resolve, timeout));
 export default {
   namespace: 'sys_pro',
@@ -12,36 +13,52 @@ export default {
   },
 
   effects: {
-    *fetch({ payload }, { call, put }) {
+    * fetch({payload}, {call, put}) {
       const response = yield call(queryRule, payload);
       yield put({
         type: 'save',
         payload: response,
       });
     },
-    *addPro({ payload, token,callback }, { call, put }) {
-      const response = yield call(addPro, payload,token);
+    * addPro({payload, token, callback, callback2}, {call, put}) {
+      const response = yield call(addPro, payload, token);
       console.log(response)
-      if(response.code=='200'){
+      if (response.code == '200') {
         message.success('新增成功');
-        if (callback) callback();
+        callback();
+        callback2();
       }
     },
-    *updatePro({ payload, token,callback }, { call, put }) {
-      const response = yield call(updatePro, payload,token);
+    * updatePro({payload, token, callback, callback2}, {call, put}) {
+      const response = yield call(updatePro, payload, token);
       console.log(response)
-      if(response.code=='200'){
+      if (response.code == '200') {
         message.success('修改成功');
-        if (callback) callback();
+        callback();
+        callback2();
       }
     },
-    *queryProList({ payload }, { call, put }) {
+    * queryProList({payload}, {call, put}) {
       const response = yield call(queryProList, payload);
       console.log(response)
+      if (response.code == '200') {
+        yield put({
+          type: 'save',
+          payload: response,
+        });
+      }
     },
-    *queryProDetail({ payload }, { call, put }) {
+    * queryProDetail({payload}, {call, put}) {
       const response = yield call(queryProDetail, payload);
       console.log(response)
+    },
+    * updateProStatus({payload, token}, {call, put}) {
+      const response = yield call(updateProStatus, payload, token);
+      console.log(response)
+      if (response.code == '200') {
+        return true
+      }
+      return false
     },
   },
 

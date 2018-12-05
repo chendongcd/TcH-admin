@@ -1,6 +1,7 @@
 import {queryUserList,addUser,queryUserInfo,updateUser,updateStatusUser} from '../../../services/system/sys_user'
 import {queryProList} from '../../../services/system/sys_project'
 import {queryRoleList} from '../../../services/system/sys_per'
+import {message} from 'antd'
 export default {
   namespace:'sys_user',
 
@@ -23,17 +24,34 @@ export default {
         });
       }
     },
-    *addUser({payload,token},{call,put}){
+    *addUser({payload,token,callback,callback2},{call,put}){
       const response = yield call(addUser, payload,token);
+      console.log(response)
+      if(response.code=='200'){
+        message.success('新增用户成功')
+        callback()
+        callback2()
+      }
     },
-    *updateUser({payload,token},{call,put}){
+    *updateUser({payload,token,callback,callback2},{call,put}){
       const response = yield call(updateUser, payload,token);
+      if(response.code=='200'){
+        message.success('用户信息修改成功')
+        callback()
+        callback2()
+      }
     },
     *queryUserInfo({payload},{call,put}){
       const response = yield call(queryUserInfo, payload);
     },
     *updateStatusUser({payload,token},{call,put}){
       const response = yield call(updateStatusUser, payload,token);
+    //  console.log(response)
+      if(response.code=='200'){
+        message.success(`该用户已被${payload.disable == 0 ? '启用' : '禁用'}`)
+        return true
+      }
+      return false
     },
 
     *queryProNames({payload},{call,put}){

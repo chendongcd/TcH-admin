@@ -27,8 +27,8 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const statusMap = ['default', 'processing', 'success', 'error'];
-const status = ['关闭', '运行中', '已上线', '异常'];
+const statusMap = ['success', 'error'];
+const status = ['启用', '禁用'];
 
 const CreateForm = Form.create()(props => {
   const {modalVisible, form, handleAdd, handleModalVisible, handleUpdateModalVisible, updateModalVisible, selectedValues} = props;
@@ -36,7 +36,7 @@ const CreateForm = Form.create()(props => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
       //form.resetFields();
-      handleAdd(fieldsValue, updateModalVisible);
+      handleAdd(fieldsValue, updateModalVisible,selectedValues);
     });
   };
   // console.log(selectedValues)
@@ -57,7 +57,7 @@ const CreateForm = Form.create()(props => {
       <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="工程类别">
         {form.getFieldDecorator('proType', {
           rules: [{required: true, message: '请选择工程类别'}],
-          initialValue: selectedValues.name ? selectedValues.name : ''
+          initialValue: selectedValues.projectType ? selectedValues.projectType : ''
         })(<Select placeholder="请选择" style={{width: '100%'}}>
           {proTypes.map((item, index) => {
             return <Option key={index} value={item.id}>{item.value}</Option>
@@ -93,7 +93,7 @@ class Project extends Component {
     },
     {
       title: '工程类别',
-      dataIndex: 'desc',
+      dataIndex: 'projectType',
     },
     {
       title: '状态',
@@ -106,15 +106,7 @@ class Project extends Component {
         {
           text: status[1],
           value: 1,
-        },
-        {
-          text: status[2],
-          value: 2,
-        },
-        {
-          text: status[3],
-          value: 3,
-        },
+        }
       ],
       render(val) {
         return <Badge status={statusMap[val]} text={status[val]}/>;
@@ -147,7 +139,7 @@ class Project extends Component {
           <Fragment>
             <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
             <Divider type="vertical"/>
-            <a>禁用</a>
+            <a onClick={()=>this.updateStatus({id:record.id,status:record.status==0?1:0})}>{record.status==0?'禁用':'启用'}</a>
           </Fragment>
         )
       },
@@ -155,15 +147,8 @@ class Project extends Component {
   ];
 
   componentDidMount() {
-    const {dispatch} = this.props;
-    dispatch({
-      type: 'sys_pro/queryProList',
-      payload: {page: 1, pageSize: 10}
-    });
     _setTimeOut(() => this.setState({pageLoading: false}), 1000)
-    dispatch({
-      type: 'rule/fetch',
-    });
+    this.getList()
   }
 
   componentWillUnmount() {
@@ -276,7 +261,7 @@ class Project extends Component {
     });
   };
 
-  handleAdd = (fields, updateModalVisible) => {
+  handleAdd = (fields, updateModalVisible,selectedValues) => {
     const {dispatch, app: {user}} = this.props;
     if (updateModalVisible) {
       dispatch({
@@ -284,10 +269,11 @@ class Project extends Component {
         payload: {
           name: fields.name,
           dictId: fields.proType,
-          id: 1
+          id: selectedValues.id
         },
         token: user.token,
-        callback: this.handleUpdateModalVisible
+        callback: this.handleUpdateModalVisible,
+        callback2:this.getList
       });
     } else {
       dispatch({
@@ -297,7 +283,8 @@ class Project extends Component {
           dictId: fields.proType
         },
         token: user.token,
-        callback: this.handleModalVisible
+        callback: this.handleModalVisible,
+        callback2:this.getList
       });
     }
   };
@@ -358,10 +345,24 @@ class Project extends Component {
     return this.renderSimpleForm();
   }
 
+  updateStatus= payload =>{
+    this.props.dispatch(
+      {
+        type: 'sys_pro/updateProStatus',
+        payload: payload,
+        token:this.props.app.user.token
+      }
+    ).then(res=>{
+      if(res) {
+        this.getList()
+      }
+    })
+  }
+
   render() {
     const {
-      rule: {data},
       loading,
+      sys_pro:{data}
     } = this.props;
     //console.log(loading)
     const {selectedRows, modalVisible, pageLoading, updateModalVisible, selectedValues} = this.state;
@@ -404,8 +405,9 @@ class Project extends Component {
               </div>
               <StandardTable
                 selectedRows={selectedRows}
-                loading={loading.effects['rule/fetch']}
+                loading={loading.effects['sys_pro/queryProList']}
                 data={data}
+                rowKey="id"
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
@@ -416,6 +418,13 @@ class Project extends Component {
         </PageHeaderWrapper>
       </Page>
     )
+  }
+
+  getList=(page=1,pageSize=10)=>{
+    this.props.dispatch({
+      type: 'sys_pro/queryProList',
+      payload: {page: page, pageSize: pageSize}
+    });
   }
 }
 

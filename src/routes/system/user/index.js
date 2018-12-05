@@ -17,7 +17,6 @@ import {
   message,
   Badge,
   Divider,
-  Radio,
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
@@ -32,56 +31,6 @@ const getValue = obj =>
 const statusMap = [ 'success', 'error'];
 const status = ['启用', '禁用'];
 
-/*const CreateForm = Form.create()(props => {
-  const {modalVisible, form, handleAdd, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = props;
-  const okHandle = () => {
-    form.validateFields((err, fieldsValue) => {
-      if (err) return;
-      form.resetFields();
-      handleAdd(fieldsValue);
-    });
-  };
-  const _onSelect = (value) => {
-    console.log(value)
-  }
-  return (
-    <Modal
-      destroyOnClose
-      title={checkDetail ? '用户详情' : updateModalVisible ? "编辑用户" : "新建用户"}
-      visible={modalVisible}
-      onOk={okHandle}
-      onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
-    >
-      <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="账号类型">
-        {form.getFieldDecorator('type', {
-          rules: [{required: true, message: '请选择账号类型'}],
-        })(<Select onSelect={(e) => _onSelect(e)} disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
-          <Option value="0">公司</Option>
-          <Option value="1">项目部</Option>
-        </Select>)}
-      </FormItem>
-      <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="角色权限">
-        {form.getFieldDecorator('desc', {
-          rules: [{required: true, message: '请选择角色权限'}],
-        })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
-          <Option value="0">开发者</Option>
-          <Option value="1">管理员</Option>
-        </Select>)}
-      </FormItem>
-      <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="账号名称">
-        {form.getFieldDecorator('desc', {
-          rules: [{required: true, message: '请输入账号名称'}],
-        })(<Input disabled={checkDetail} placeholder="请输入"/>)}
-      </FormItem>
-      <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="账号密码">
-        {form.getFieldDecorator('name', {
-          rules: [{required: true, message: '请输入账号密码'}],
-        })(<Input disabled={checkDetail} placeholder="请输入"/>)}
-      </FormItem>
-    </Modal>
-  );
-});*/
-
 @Form.create()
 class CreateForm extends Component {
   constructor(props) {
@@ -92,14 +41,19 @@ class CreateForm extends Component {
     this.isLoad = false
   }
 
-  componentDidMount() {
-
+  componentDidUpdate(preProp,preState){
+    if(this.props.updateModalVisible&&this.props.selectedValues.type==1&&!preProp.updateModalVisible){
+      this.setState({type:1})
+    }
   }
 
   okHandle = (handleAdd, form,updateModalVisible,selectedValues) => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
       //form.resetFields();
+      if(isNaN(fieldsValue.type)){
+        fieldsValue.type=fieldsValue.type=='公司'?"0":"1"
+      }
       handleAdd(fieldsValue,updateModalVisible,selectedValues);
     });
   }
@@ -116,19 +70,19 @@ class CreateForm extends Component {
 
   render() {
     const {modalVisible, form, handleAdd, getProNames, getRoleNames, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail, proNames, roleNames} = this.props;
-   // console.log(roleNames)
     return (
       <Modal
         destroyOnClose
         maskClosable={false}
         title={checkDetail ? '用户详情' : updateModalVisible ? "编辑用户" : "新建用户"}
         visible={modalVisible}
-        onOk={() => this.okHandle(handleAdd, form,updateModalVisible,selectedValues)}
+        onOk={() =>checkDetail?handleCheckDetail():this.okHandle(handleAdd, form,updateModalVisible,selectedValues)}
         onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
       >
         <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="账号类型">
           {form.getFieldDecorator('type', {
-            rules: [{required: true, message: '请选择账号类型',initialValue:selectedValues.type?selectedValues.type:-1}],
+            rules: [{required: true, message: '请选择账号类型',}],
+            initialValue:(selectedValues.type==0||selectedValues.type==1)?String(selectedValues.type):''
           })(<Select onSelect={(e) => this._onSelect(e)} disabled={checkDetail} placeholder="请选择"
                      style={{width: '100%'}}>
             <Option value="0">公司</Option>
@@ -137,13 +91,14 @@ class CreateForm extends Component {
         </FormItem>
         {this.state.type == 1 ? <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="项目名称">
           {form.getFieldDecorator('proName', {
-            rules: [{required: true, message: '请选择项目名称',initialValue:selectedValues.projectId?selectedValues.projectId:''}],
+            rules: [{required: true, message: '请选择项目名称'}],
+            initialValue:selectedValues.projectId?[selectedValues.projectId]:[]
           })(<Select onFocus={() => this.getOptions(getProNames, proNames)}
                      notFoundContent={this.isLoad ? '暂无数据' : '正在加载'}
                      mode={'multiple'} disabled={checkDetail}
                      placeholder="请选择" style={{width: '100%'}}>
             {proNames.map((item, index) => {
-              return <Option key={index} value={`{"id":${item.id}}`}>{item.name}</Option>
+              return <Option key={item.id} value={item.id}>{item.name}</Option>
             })}
           </Select>)}
         </FormItem> : null}
@@ -164,11 +119,13 @@ class CreateForm extends Component {
         <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="账号名称">
           {form.getFieldDecorator('account', {
             rules: [{required: true, message: '请输入账号名称'}],
+            initialValue:selectedValues.name?selectedValues.name:''
           })(<Input disabled={checkDetail} placeholder="请输入"/>)}
         </FormItem>
         <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="账号密码">
           {form.getFieldDecorator('password', {
             rules: [{required: true, message: '请输入账号密码'}],
+            initialValue:selectedValues.password?selectedValues.password:''
           })(<Input disabled={checkDetail} placeholder="请输入"/>)}
         </FormItem>
       </Modal>
@@ -202,8 +159,12 @@ class User extends Component {
       render: val => <span>{val==0?'公司':'项目部'}</span>,
     },
     {
-      title: '项目名称',
+      title: '账号名称',
       dataIndex: 'name',
+    },
+    {
+      title: '项目名称',
+      dataIndex: 'projectName',
     },
     {
       title: '项目密码',
@@ -249,25 +210,21 @@ class User extends Component {
           <Divider type="vertical"/>
           <a onClick={() => this.handleCheckDetail(true, record)}>查看</a>
           <Divider type="vertical"/>
-          <a>{record.disable==0?'禁用':'启用'}</a>
+          <a onClick={()=>this.updateStatus({id:record.id,disable:record.disable==0?1:0})}>{record.disable==0?'禁用':'启用'}</a>
         </Fragment>
       )},
     },
   ];
 
   componentDidMount() {
-    const {dispatch} = this.props;
     this.getProNames([])
     this.getRoleNames([])
-    // dispatch({
-    //   type:'sys_user/queryUserList',
-    //   payload:{page:1,pageSize:10}
-    // })
+    /*this.props.dispatch({
+      type:'sys_user/queryUserInfo',
+      payload:{userId:1}
+    })*/
     _setTimeOut(() => this.setState({pageLoading: false}), 1000)
-    dispatch({
-      type:'sys_user/queryUserList',
-      payload:{page:1,pageSize:10}
-    })
+    this.getList()
     // dispatch({
     //   type: 'rule/fetch',
     // });
@@ -278,7 +235,6 @@ class User extends Component {
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    const {dispatch} = this.props;
     const {formValues} = this.state;
 
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
@@ -288,7 +244,7 @@ class User extends Component {
     }, {});
 
     const params = {
-      currentPage: pagination.current,
+      page: pagination.current,
       pageSize: pagination.pageSize,
       ...formValues,
       ...filters,
@@ -297,10 +253,7 @@ class User extends Component {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
 
-    dispatch({
-      type: 'rule/fetch',
-      payload: params,
-    });
+    this.getList(...params)
   };
 
   handleFormReset = () => {
@@ -309,10 +262,7 @@ class User extends Component {
     this.setState({
       formValues: {},
     });
-    dispatch({
-      type: 'rule/fetch',
-      payload: {},
-    });
+    this.getList()
   };
 
   handleMenuClick = e => {
@@ -320,23 +270,6 @@ class User extends Component {
     const {selectedRows} = this.state;
 
     if (!selectedRows) return;
-    switch (e.key) {
-      case 'remove':
-        dispatch({
-          type: 'rule/remove',
-          payload: {
-            key: selectedRows.map(row => row.key),
-          },
-          callback: () => {
-            this.setState({
-              selectedRows: [],
-            });
-          },
-        });
-        break;
-      default:
-        break;
-    }
   };
 
   handleSelectRows = rows => {
@@ -393,22 +326,31 @@ class User extends Component {
 
   handleAdd = (fields,updateModalVisible,selectedValues) => {
     const {dispatch,app:{user}} = this.props;
-    const payload = {
+    const payload =fields.type=="1"? {
       account:fields.account,
       password:fields.password,
-      projects:fields.proName.map(a=>JSON.parse(a)),
+      projects:fields.proName.map(a=>JSON.parse(`{"id":${a}}`)),
+      type:1
+    }:{
+      account:fields.account,
+      password:fields.password,
+      type:0
     }
     if(updateModalVisible){
       dispatch({
         type:'sys_user/updateUser',
         payload:{...payload,...{id:selectedValues.id}},
-        token:user.token
+        token:user.token,
+        callback:this.handleUpdateModalVisible,
+        callback2:this.getList
       })
     }else {
       dispatch({
         type:'sys_user/addUser',
         payload:payload,
-        token:user.token
+        token:user.token,
+        callback:this.handleModalVisible,
+        callback2:this.getList
       })
     }
     // dispatch({
@@ -468,6 +410,20 @@ class User extends Component {
     return this.renderSimpleForm();
   }
 
+  updateStatus= payload =>{
+    this.props.dispatch(
+      {
+        type: 'sys_user/updateStatusUser',
+        payload: payload,
+        token:this.props.app.user.token
+      }
+    ).then(res=>{
+      if(res) {
+        this.getList()
+      }
+    })
+  }
+
   render() {
     const {
       loading,
@@ -481,7 +437,6 @@ class User extends Component {
         <Menu.Item key="false">禁用</Menu.Item>
       </Menu>
     );
-   // console.log(roleNames)
 
     const parentMethods = {
       handleAdd: this.handleAdd,
@@ -558,6 +513,13 @@ class User extends Component {
         }
       )
     }
+  }
+
+  getList=(page=1,pageSize=10)=>{
+    this.props.dispatch({
+      type:'sys_user/queryUserList',
+      payload:{page:page,pageSize:pageSize}
+    })
   }
 }
 
