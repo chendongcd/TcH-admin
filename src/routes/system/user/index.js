@@ -28,7 +28,7 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const statusMap = [ 'success', 'error'];
+const statusMap = ['success', 'error'];
 const status = ['启用', '禁用'];
 
 @Form.create()
@@ -41,20 +41,20 @@ class CreateForm extends Component {
     this.isLoad = false
   }
 
-  componentDidUpdate(preProp,preState){
-    if(this.props.updateModalVisible&&this.props.selectedValues.type==1&&!preProp.updateModalVisible){
-      this.setState({type:1})
+  componentDidUpdate(preProp, preState) {
+    if (this.props.updateModalVisible && this.props.selectedValues.type == 1 && !preProp.updateModalVisible) {
+      this.setState({type: 1})
     }
   }
 
-  okHandle = (handleAdd, form,updateModalVisible,selectedValues) => {
+  okHandle = (handleAdd, form, updateModalVisible, selectedValues) => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
       //form.resetFields();
-      if(isNaN(fieldsValue.type)){
-        fieldsValue.type=fieldsValue.type=='公司'?"0":"1"
+      if (isNaN(fieldsValue.type)) {
+        fieldsValue.type = fieldsValue.type == '公司' ? "0" : "1"
       }
-      handleAdd(fieldsValue,updateModalVisible,selectedValues);
+      handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
   }
 
@@ -76,13 +76,13 @@ class CreateForm extends Component {
         maskClosable={false}
         title={checkDetail ? '用户详情' : updateModalVisible ? "编辑用户" : "新建用户"}
         visible={modalVisible}
-        onOk={() =>checkDetail?handleCheckDetail():this.okHandle(handleAdd, form,updateModalVisible,selectedValues)}
+        onOk={() => checkDetail ? handleCheckDetail() : this.okHandle(handleAdd, form, updateModalVisible, selectedValues)}
         onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
       >
         <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="账号类型">
           {form.getFieldDecorator('type', {
             rules: [{required: true, message: '请选择账号类型',}],
-            initialValue:(selectedValues.type==0||selectedValues.type==1)?String(selectedValues.type):''
+            initialValue: (selectedValues.type == 0 || selectedValues.type == 1) ? String(selectedValues.type) : ''
           })(<Select onSelect={(e) => this._onSelect(e)} disabled={checkDetail} placeholder="请选择"
                      style={{width: '100%'}}>
             <Option value="0">公司</Option>
@@ -92,7 +92,7 @@ class CreateForm extends Component {
         {this.state.type == 1 ? <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="项目名称">
           {form.getFieldDecorator('proName', {
             rules: [{required: true, message: '请选择项目名称'}],
-            initialValue:selectedValues.projectId?[selectedValues.projectId]:[]
+            initialValue: selectedValues.projectId ? [selectedValues.projectId] : []
           })(<Select onFocus={() => this.getOptions(getProNames, proNames)}
                      notFoundContent={this.isLoad ? '暂无数据' : '正在加载'}
                      mode={'multiple'} disabled={checkDetail}
@@ -106,9 +106,9 @@ class CreateForm extends Component {
           {form.getFieldDecorator('role', {
             rules: [{required: true, message: '请选择角色权限'}],
           })(
-            <Select onFocus={() => this.getOptions(getRoleNames,roleNames)}
+            <Select onFocus={() => this.getOptions(getRoleNames, roleNames)}
                     disabled={checkDetail}
-                    notFoundContent={this.isLoad?'暂无数据':'正在加载'}
+                    notFoundContent={this.isLoad ? '暂无数据' : '正在加载'}
                     placeholder="请选择"
                     style={{width: '100%'}}>
               {roleNames.map((item, index) => {
@@ -119,13 +119,13 @@ class CreateForm extends Component {
         <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="账号名称">
           {form.getFieldDecorator('account', {
             rules: [{required: true, message: '请输入账号名称'}],
-            initialValue:selectedValues.name?selectedValues.name:''
+            initialValue: selectedValues.name ? selectedValues.name : ''
           })(<Input disabled={checkDetail} placeholder="请输入"/>)}
         </FormItem>
         <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="账号密码">
           {form.getFieldDecorator('password', {
             rules: [{required: true, message: '请输入账号密码'}],
-            initialValue:selectedValues.password?selectedValues.password:''
+            initialValue: selectedValues.password ? selectedValues.password : ''
           })(<Input disabled={checkDetail} placeholder="请输入"/>)}
         </FormItem>
       </Modal>
@@ -156,7 +156,7 @@ class User extends Component {
     {
       title: '账号类别',
       dataIndex: 'type',
-      render: val => <span>{val==0?'公司':'项目部'}</span>,
+      render: val => <span>{val == 0 ? '公司' : '项目部'}</span>,
     },
     {
       title: '账号名称',
@@ -205,14 +205,18 @@ class User extends Component {
       title: '操作',
       render: (val, record) => {
         return (
-        <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
-          <Divider type="vertical"/>
-          <a onClick={() => this.handleCheckDetail(true, record)}>查看</a>
-          <Divider type="vertical"/>
-          <a onClick={()=>this.updateStatus({id:record.id,disable:record.disable==0?1:0})}>{record.disable==0?'禁用':'启用'}</a>
-        </Fragment>
-      )},
+          <Fragment>
+            <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
+            <Divider type="vertical"/>
+            <a onClick={() => this.handleCheckDetail(true, record)}>查看</a>
+            <Divider type="vertical"/>
+            <a onClick={() => this.updateStatus({
+              id: record.id,
+              disable: record.disable == 0 ? 1 : 0
+            })}>{record.disable == 0 ? '禁用' : '启用'}</a>
+          </Fragment>
+        )
+      },
     },
   ];
 
@@ -257,11 +261,8 @@ class User extends Component {
   };
 
   handleFormReset = () => {
-    const {form, dispatch} = this.props;
+    const {form} = this.props;
     form.resetFields();
-    this.setState({
-      formValues: {},
-    });
     this.getList()
   };
 
@@ -275,30 +276,6 @@ class User extends Component {
   handleSelectRows = rows => {
     this.setState({
       selectedRows: rows,
-    });
-  };
-
-  handleSearch = e => {
-    e.preventDefault();
-
-    const {dispatch, form} = this.props;
-
-    form.validateFields((err, fieldsValue) => {
-      if (err) return;
-
-      const values = {
-        ...fieldsValue,
-        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
-      };
-
-      this.setState({
-        formValues: values,
-      });
-
-      dispatch({
-        type: 'rule/fetch',
-        payload: values,
-      });
     });
   };
 
@@ -324,33 +301,33 @@ class User extends Component {
     });
   };
 
-  handleAdd = (fields,updateModalVisible,selectedValues) => {
-    const {dispatch,app:{user}} = this.props;
-    const payload =fields.type=="1"? {
-      account:fields.account,
-      password:fields.password,
-      projects:fields.proName.map(a=>JSON.parse(`{"id":${a}}`)),
-      type:1
-    }:{
-      account:fields.account,
-      password:fields.password,
-      type:0
+  handleAdd = (fields, updateModalVisible, selectedValues) => {
+    const {dispatch, app: {user}} = this.props;
+    const payload = fields.type == "1" ? {
+      account: fields.account,
+      password: fields.password,
+      projects: fields.proName.map(a => JSON.parse(`{"id":${a}}`)),
+      type: 1
+    } : {
+      account: fields.account,
+      password: fields.password,
+      type: 0
     }
-    if(updateModalVisible){
+    if (updateModalVisible) {
       dispatch({
-        type:'sys_user/updateUser',
-        payload:{...payload,...{id:selectedValues.id}},
-        token:user.token,
-        callback:this.handleUpdateModalVisible,
-        callback2:this.getList
+        type: 'sys_user/updateUser',
+        payload: {...payload, ...{id: selectedValues.id}},
+        token: user.token,
+        callback: this.handleUpdateModalVisible,
+        callback2: this.getList
       })
-    }else {
+    } else {
       dispatch({
-        type:'sys_user/addUser',
-        payload:payload,
-        token:user.token,
-        callback:this.handleModalVisible,
-        callback2:this.getList
+        type: 'sys_user/addUser',
+        payload: payload,
+        token: user.token,
+        callback: this.handleModalVisible,
+        callback2: this.getList
       })
     }
     // dispatch({
@@ -369,31 +346,37 @@ class User extends Component {
       form: {getFieldDecorator},
     } = this.props;
     return (
-      <Form onSubmit={this.handleSearch} layout="inline">
+      <Form layout="inline">
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={6} sm={24}>
             <FormItem label="用户编码">
-              {getFieldDecorator('code')(<Input placeholder="请输入"/>)}
+              {getFieldDecorator('code', {
+                initialValue: ''
+              })(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="用户名称">
-              {getFieldDecorator('code')(<Input placeholder="请输入"/>)}
+              {getFieldDecorator('name', {
+                initialValue: ''
+              })(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="用户状态">
-              {getFieldDecorator('status')(
+              {getFieldDecorator('status', {
+                initialValue: ''
+              })(
                 <Select placeholder="请选择" style={{width: '100%'}}>
-                  <Option value="0">禁用</Option>
-                  <Option value="1">启用</Option>
+                  <Option value="1">禁用</Option>
+                  <Option value="0">启用</Option>
                 </Select>
               )}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <span className={styles.submitButtons}>
-              <Button type="primary" htmlType="submit">
+              <Button onClick={() => this.searchList()} type="primary" htmlType="submit">
                 查询
               </Button>
               <Button style={{marginLeft: 8}} onClick={this.handleFormReset}>
@@ -410,15 +393,15 @@ class User extends Component {
     return this.renderSimpleForm();
   }
 
-  updateStatus= payload =>{
+  updateStatus = payload => {
     this.props.dispatch(
       {
         type: 'sys_user/updateStatusUser',
         payload: payload,
-        token:this.props.app.user.token
+        token: this.props.app.user.token
       }
-    ).then(res=>{
-      if(res) {
+    ).then(res => {
+      if (res) {
         this.getList()
       }
     })
@@ -427,7 +410,7 @@ class User extends Component {
   render() {
     const {
       loading,
-      sys_user: {proNames, roleNames,data}
+      sys_user: {proNames, roleNames, data}
     } = this.props;
     const {selectedRows, modalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail} = this.state;
     const menu = (
@@ -515,11 +498,28 @@ class User extends Component {
     }
   }
 
-  getList=(page=1,pageSize=10)=>{
+  getList = (page = 1, pageSize = 10) => {
     this.props.dispatch({
-      type:'sys_user/queryUserList',
-      payload:{page:page,pageSize:pageSize}
+      type: 'sys_user/queryUserList',
+      payload: {page: page, pageSize: pageSize}
     })
+  }
+
+  searchList = (page = 1, pageSize = 10) => {
+    this.props.form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      //  form.resetFields();
+      this.props.dispatch({
+        type: 'sys_user/queryUserList',
+        payload: {
+          page: page,
+          pageSize: pageSize,
+          name: fieldsValue.name,
+          code:fieldsValue.code,
+          disable:fieldsValue.status
+        }
+      });
+    });
   }
 }
 

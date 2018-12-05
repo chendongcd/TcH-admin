@@ -36,7 +36,7 @@ const CreateForm = Form.create()(props => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
       //form.resetFields();
-      handleAdd(fieldsValue, updateModalVisible,selectedValues);
+      handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
   };
   // console.log(selectedValues)
@@ -139,7 +139,10 @@ class Project extends Component {
           <Fragment>
             <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
             <Divider type="vertical"/>
-            <a onClick={()=>this.updateStatus({id:record.id,status:record.status==0?1:0})}>{record.status==0?'禁用':'启用'}</a>
+            <a onClick={() => this.updateStatus({
+              id: record.id,
+              status: record.status == 0 ? 1 : 0
+            })}>{record.status == 0 ? '禁用' : '启用'}</a>
           </Fragment>
         )
       },
@@ -156,7 +159,6 @@ class Project extends Component {
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    const {dispatch} = this.props;
     const {formValues} = this.state;
 
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
@@ -166,7 +168,7 @@ class Project extends Component {
     }, {});
 
     const params = {
-      currentPage: pagination.current,
+      page: pagination.current,
       pageSize: pagination.pageSize,
       ...formValues,
       ...filters,
@@ -175,22 +177,13 @@ class Project extends Component {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
 
-    dispatch({
-      type: 'rule/fetch',
-      payload: params,
-    });
+   this.getList(...params)
   };
 
   handleFormReset = () => {
-    const {form, dispatch} = this.props;
+    const {form} = this.props;
     form.resetFields();
-    this.setState({
-      formValues: {},
-    });
-    dispatch({
-      type: 'rule/fetch',
-      payload: {},
-    });
+    this.getList()
   };
 
   handleMenuClick = e => {
@@ -261,7 +254,7 @@ class Project extends Component {
     });
   };
 
-  handleAdd = (fields, updateModalVisible,selectedValues) => {
+  handleAdd = (fields, updateModalVisible, selectedValues) => {
     const {dispatch, app: {user}} = this.props;
     if (updateModalVisible) {
       dispatch({
@@ -273,7 +266,7 @@ class Project extends Component {
         },
         token: user.token,
         callback: this.handleUpdateModalVisible,
-        callback2:this.getList
+        callback2: this.getList
       });
     } else {
       dispatch({
@@ -284,7 +277,7 @@ class Project extends Component {
         },
         token: user.token,
         callback: this.handleModalVisible,
-        callback2:this.getList
+        callback2: this.getList
       });
     }
   };
@@ -294,34 +287,30 @@ class Project extends Component {
       form: {getFieldDecorator},
     } = this.props;
     return (
-      <Form onSubmit={this.handleSearch} layout="inline">
+      <Form layout="inline">
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
-          <Col md={6} sm={24}>
+          <Col md={8} sm={24}>
             <FormItem label="项目编码">
-              {getFieldDecorator('code')(<Input placeholder="请输入"/>)}
+              {getFieldDecorator('code', {
+                initialValue: ''
+              })(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
-          <Col md={6} sm={24}>
+          <Col md={8} sm={24}>
             <FormItem label="项目名称">
-              {getFieldDecorator('code')(<Input placeholder="请输入"/>)}
+              {getFieldDecorator('projectName', {
+                initialValue: ''
+              })(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
-          <Col md={6} sm={24}>
+          <Col md={8} sm={24}>
             <FormItem label="项目状态">
-              {getFieldDecorator('desc')(
+              {getFieldDecorator('status', {
+                initialValue: ''
+              })(
                 <Select placeholder="请选择" style={{width: '100%'}}>
-                  <Option value="0">禁用</Option>
-                  <Option value="1">启用</Option>
-                </Select>
-              )}
-            </FormItem>
-          </Col>
-          <Col md={6} sm={24}>
-            <FormItem label="项目状态">
-              {getFieldDecorator('status')(
-                <Select placeholder="请选择" style={{width: '100%'}}>
-                  <Option value="0">禁用</Option>
-                  <Option value="1">启用</Option>
+                  <Option value="1">禁用</Option>
+                  <Option value="0">启用</Option>
                 </Select>
               )}
             </FormItem>
@@ -329,7 +318,7 @@ class Project extends Component {
         </Row>
         <div style={{overflow: 'hidden'}}>
           <div style={{float: 'right', marginBottom: 24}}>
-            <Button type="primary" htmlType="submit">
+            <Button onClick={()=>this.searchList()} type="primary" htmlType="submit">
               查询
             </Button>
             <Button style={{marginLeft: 8}} onClick={this.handleFormReset}>
@@ -345,15 +334,15 @@ class Project extends Component {
     return this.renderSimpleForm();
   }
 
-  updateStatus= payload =>{
+  updateStatus = payload => {
     this.props.dispatch(
       {
         type: 'sys_pro/updateProStatus',
         payload: payload,
-        token:this.props.app.user.token
+        token: this.props.app.user.token
       }
-    ).then(res=>{
-      if(res) {
+    ).then(res => {
+      if (res) {
         this.getList()
       }
     })
@@ -362,7 +351,7 @@ class Project extends Component {
   render() {
     const {
       loading,
-      sys_pro:{data}
+      sys_pro: {data}
     } = this.props;
     //console.log(loading)
     const {selectedRows, modalVisible, pageLoading, updateModalVisible, selectedValues} = this.state;
@@ -420,10 +409,27 @@ class Project extends Component {
     )
   }
 
-  getList=(page=1,pageSize=10)=>{
+  getList = (page = 1, pageSize = 10) => {
     this.props.dispatch({
       type: 'sys_pro/queryProList',
       payload: {page: page, pageSize: pageSize}
+    });
+  }
+
+  searchList = (page = 1, pageSize = 10) => {
+    this.props.form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      //  form.resetFields();
+      this.props.dispatch({
+        type: 'sys_pro/queryProList',
+        payload: {
+          page: page,
+          pageSize: pageSize,
+          projectName: fieldsValue.projectName,
+          code:fieldsValue.code,
+          status:fieldsValue.status
+        }
+      });
     });
   }
 }

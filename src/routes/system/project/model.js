@@ -39,6 +39,7 @@ export default {
       }
     },
     * queryProList({payload}, {call, put}) {
+      console.log(payload)
       const response = yield call(queryProList, payload);
       console.log(response)
       if (response.code == '200') {
