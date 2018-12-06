@@ -48,6 +48,7 @@ const CreateForm = Form.create()(props => {
       handleAdd(fieldsValue);
     });
   };
+  console.log(proNames)
   return (
     <Modal
       destroyOnClose
@@ -365,6 +366,7 @@ class MeterUp extends Component {
   ];
 
   componentDidMount() {
+    this.getProNames([])
     _setTimeOut(()=>this.setState({pageLoading:false}),1000)
     this.getList()
     /*dispatch({
@@ -625,7 +627,7 @@ class MeterUp extends Component {
 
   render() {
     const {
-      rule: {data,proNames},
+      meterUp: {data,proNames},
       loading,
     } = this.props;
     const {selectedRows, modalVisible,updateModalVisible,pageLoading,selectedValues,checkDetail} = this.state;
