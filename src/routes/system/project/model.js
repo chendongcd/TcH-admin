@@ -20,23 +20,21 @@ export default {
         payload: response,
       });
     },
-    * addPro({payload, token, callback, callback2}, {call, put}) {
+    * addPro({payload, token}, {call, put}) {
       const response = yield call(addPro, payload, token);
-      console.log(response)
       if (response.code == '200') {
         message.success('新增成功');
-        callback();
-        callback2();
+       return true
       }
+      return false
     },
-    * updatePro({payload, token, callback, callback2}, {call, put}) {
+    * updatePro({payload, token}, {call, put}) {
       const response = yield call(updatePro, payload, token);
-      console.log(response)
       if (response.code == '200') {
         message.success('修改成功');
-        callback();
-        callback2();
+        return true
       }
+      return false
     },
     * queryProList({payload}, {call, put}) {
       console.log(payload)

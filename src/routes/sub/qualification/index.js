@@ -1,4 +1,4 @@
-import React, {Component,Fragment} from 'react'
+import React, {Component, Fragment} from 'react'
 import {connect} from 'dva'
 import moment from 'moment';
 
@@ -31,11 +31,11 @@ const getValue = obj =>
     .join(',');
 const statusMap = ['default', 'processing', 'success', 'error'];
 const status = ['关闭', '运行中', '已上线', '异常'];
-const info_css={
-  color:'#fa541c'
+const info_css = {
+  color: '#fa541c'
 }
 const CreateForm = Form.create()(props => {
-  const {modalVisible, form, handleAdd, handleModalVisible, normFile,handleUpdateModalVisible,updateModalVisible,handleCheckDetail,selectedValues,checkDetail} = props;
+  const {modalVisible, form, handleAdd, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = props;
 
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
@@ -48,19 +48,19 @@ const CreateForm = Form.create()(props => {
   return (
     <Modal
       destroyOnClose
-      title={checkDetail?'分包商资质信息卡':updateModalVisible?"编辑分包商资质信息卡":"新增分包商资质信息卡"}
+      title={checkDetail ? '分包商资质信息卡' : updateModalVisible ? "编辑分包商资质信息卡" : "新增分包商资质信息卡"}
       bodyStyle={{padding: 0 + 'px'}}
       visible={modalVisible}
       width={992}
       maskClosable={false}
       onOk={okHandle}
-      onCancel={() => checkDetail?handleCheckDetail():updateModalVisible?handleUpdateModalVisible():handleModalVisible()}
+      onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
     >
       <div className={styles.modalContent}>
         <Row gutter={8}>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="分包商全称">
-              {form.getFieldDecorator('proName1', {
+              {form.getFieldDecorator('name', {
                 rules: [{required: true, message: '请输入分包商全称'}],
               })(<Input disabled={checkDetail} placeholder="请输入分包商全称"/>)}
             </FormItem>
@@ -69,14 +69,14 @@ const CreateForm = Form.create()(props => {
         <Row gutter={8}>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="成立日期">
-              {form.getFieldDecorator('proName2', {
+              {form.getFieldDecorator('setUpTime', {
                 rules: [{required: true, message: '请选择成立日期'}],
               })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="纳税人类型">
-              {form.getFieldDecorator('proType3', {
+              {form.getFieldDecorator('taxpayerTypeId', {
                 rules: [{required: true}],
               })(<Select disabled={checkDetail} placeholder="请选择纳税人类型" style={{width: '100%'}}>
                 <Option value="0">一般纳税人</Option>
@@ -86,33 +86,34 @@ const CreateForm = Form.create()(props => {
           </Col>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="注册资本金">
-              {form.getFieldDecorator('proType4', {
+              {form.getFieldDecorator('registeredCapital', {
                 rules: [{required: true}],
-              })(<Input disabled={checkDetail} placeholder="请选择日期" addonAfter="万元"/>)}
+              })(<Input disabled={checkDetail} placeholder="请输入注册资本金" addonAfter="万元"/>)}
             </FormItem>
           </Col>
         </Row>
         <Row gutter={8}>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="分包商类型">
-              {form.getFieldDecorator('proName', {
+              {form.getFieldDecorator('typeId', {
                 rules: [{required: true, message: '请选择分包商类型'}],
               })(<Select disabled={checkDetail} placeholder="请选择分包商类型" style={{width: '100%'}}>
-                <Option value="0">关闭</Option>
-                <Option value="1">运行中</Option>
+                <Option value="0">劳务分包</Option>
+                <Option value="1">专业分包</Option>
+                <Option value="2">劳务派遣</Option>
               </Select>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="电话">
-              {form.getFieldDecorator('proType', {
+              {form.getFieldDecorator('phone', {
                 rules: [{required: true}],
               })(<Input disabled={checkDetail} placeholder="请输入电话"/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="电子邮箱">
-              {form.getFieldDecorator('proType', {
+              {form.getFieldDecorator('email', {
                 rules: [{required: true}],
               })(<Input disabled={checkDetail} placeholder="请输入电子邮箱"/>)}
             </FormItem>
@@ -120,15 +121,15 @@ const CreateForm = Form.create()(props => {
         </Row>
         <Row gutter={0}>
           <Col md={16} sm={24}>
-            <FormItem style={{marginLeft:14+'px'}} labelCol={{span: 3}} wrapperCol={{span: 15}} label="注册地址">
-              {form.getFieldDecorator('proType5', {
+            <FormItem style={{marginLeft: 14 + 'px'}} labelCol={{span: 3}} wrapperCol={{span: 15}} label="注册地址">
+              {form.getFieldDecorator('address', {
                 rules: [{required: true}],
               })(<Input disabled={checkDetail} placeholder="请输入注册地址"/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="邮编">
-              {form.getFieldDecorator('proType6', {
+              {form.getFieldDecorator('zipCode', {
                 rules: [{required: true}],
               })(<Input disabled={checkDetail} placeholder="请输入邮编"/>)}
             </FormItem>
@@ -137,11 +138,21 @@ const CreateForm = Form.create()(props => {
         <Row gutter={8}>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="专业类型">
-              {form.getFieldDecorator('proName7', {
+              {form.getFieldDecorator('professionType', {
                 rules: [{required: true, message: '请选择专业类型'}],
               })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">劳务承包</Option>
-                <Option value="1">专业承包</Option>
+                <Option value="0">临建工程</Option>
+                <Option value="1">路基工程</Option>
+                <Option value="2">路面工程</Option>
+                <Option value="3">桥梁工程</Option>
+                <Option value="4">涵洞工程</Option>
+                <Option value="5">隧道工程</Option>
+                <Option value="6">附属工程</Option>
+                <Option value="7">装饰装修工程</Option>
+                <Option value="8">弱电工程</Option>
+                <Option value="9">强电工程</Option>
+                <Option value="10">给排水工程</Option>
+                <Option value="11">通风工程</Option>
               </Select>)}
             </FormItem>
           </Col>
@@ -154,21 +165,21 @@ const CreateForm = Form.create()(props => {
         <Row gutter={8}>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="姓名">
-              {form.getFieldDecorator('proActualDays2', {
+              {form.getFieldDecorator('legalPersonName', {
                 rules: [{required: true, message: '请输入姓名'}],
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入姓名"/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="职务">
-              {form.getFieldDecorator('proActualDays3', {
-                rules: [{required: true, message: '请输入预付款'}],
+              {form.getFieldDecorator('legalPersonPosition', {
+                rules: [{required: true, message: '请输入职务'}],
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入职务"/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="身份证号码">
-              {form.getFieldDecorator('proActualDays4', {
+              {form.getFieldDecorator('legalPersonCard', {
                 rules: [{required: true, message: '请输入身份证号码'}],
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入身份证"/>)}
             </FormItem>
@@ -177,14 +188,14 @@ const CreateForm = Form.create()(props => {
         <Row gutter={8}>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系方式">
-              {form.getFieldDecorator('proActualDays5', {
+              {form.getFieldDecorator('legalPersonPhone', {
                 rules: [{required: true, message: '请输入联系方式'}],
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入联系方式"/>)}
             </FormItem>
           </Col>
           <Col md={16} sm={24}>
-            <FormItem labelCol={{span: 3}} style={{marginLeft:14+'px'}} wrapperCol={{span: 15}} label="家庭住址">
-              {form.getFieldDecorator('proActualDay6', {
+            <FormItem labelCol={{span: 3}} style={{marginLeft: 14 + 'px'}} wrapperCol={{span: 15}} label="家庭住址">
+              {form.getFieldDecorator('legalPersonAddress', {
                 rules: [{required: true, message: '请输入家庭住址'}],
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入家庭住址"/>)}
             </FormItem>
@@ -194,25 +205,25 @@ const CreateForm = Form.create()(props => {
       <Row align={'middle'} gutter={0} className={styles.titleView}>
         <div className={styles.title}>营业执照</div>
       </Row>
-      <div className={styles.modalContent} style={{paddingLeft:0}}>
+      <div className={styles.modalContent} style={{paddingLeft: 0}}>
         <Row gutter={2}>
           <Col md={10} sm={24}>
             <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="统一社会信誉代码">
-              {form.getFieldDecorator('proActualDays8', {
+              {form.getFieldDecorator('businessLicenseCode', {
                 rules: [{required: true, message: '请输入统一社会信誉代码'}],
               })(<Input disabled={checkDetail} placeholder="请输入统一社会信誉代码"/>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
-            <FormItem style={{paddingLeft:5+'px'}} labelCol={{span: 8}} wrapperCol={{span: 15}} label="有效期限">
-              {form.getFieldDecorator('proActualDays9', {
+            <FormItem style={{paddingLeft: 5 + 'px'}} labelCol={{span: 8}} wrapperCol={{span: 15}} label="有效期限">
+              {form.getFieldDecorator('businessLicenseValidityPeriod', {
                 rules: [{required: true, message: '请选择期限'}],
               })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="发证机关">
-              {form.getFieldDecorator('proActualDays11', {
+              {form.getFieldDecorator('businessLicenseFrom', {
                 rules: [{required: true, message: '请输入发证机关'}],
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入发证机关"/>)}
             </FormItem>
@@ -227,21 +238,21 @@ const CreateForm = Form.create()(props => {
         <Row gutter={8}>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="证书编号">
-              {form.getFieldDecorator('proActualDays', {
+              {form.getFieldDecorator('qualificationCode', {
                 rules: [{required: true, message: '请输入证书编号'}],
               })(<Input disabled={checkDetail} placeholder="请输入证书编号"/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="有效期限">
-              {form.getFieldDecorator('proActualDays12', {
+              {form.getFieldDecorator('qualificationValidityPeriod', {
                 rules: [{required: true, message: '请选择期限'}],
               })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="发证机关">
-              {form.getFieldDecorator('proActualDays13', {
+              {form.getFieldDecorator('qualificationFrom', {
                 rules: [{required: true, message: '请输入发证机关'}],
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入发证机关"/>)}
             </FormItem>
@@ -256,21 +267,21 @@ const CreateForm = Form.create()(props => {
         <Row gutter={8}>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="编号">
-              {form.getFieldDecorator('proActualDays', {
+              {form.getFieldDecorator('safetyCode:', {
                 rules: [{required: true, message: '请输入编号'}],
               })(<Input placeholder="请输入编号"/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="有效期限">
-              {form.getFieldDecorator('proActualDays14', {
+              {form.getFieldDecorator('safetyValidityPeriod', {
                 rules: [{required: true, message: '请选择期限'}],
               })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="发证机关">
-              {form.getFieldDecorator('proActualDays15', {
+              {form.getFieldDecorator('safetyFrom', {
                 rules: [{required: true, message: '请输入发证机关'}],
               })(<Input style={{marginTop: 4}} placeholder="请输入发证机关"/>)}
             </FormItem>
@@ -285,21 +296,21 @@ const CreateForm = Form.create()(props => {
         <Row gutter={8}>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="开户银行">
-              {form.getFieldDecorator('proActualDays16', {
+              {form.getFieldDecorator('bank', {
                 rules: [{required: true, message: '请输入开户银行'}],
               })(<Input disabled={checkDetail} placeholder="请输入开户银行"/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="银行账号">
-              {form.getFieldDecorator('proActualDays17', {
+              {form.getFieldDecorator('bankAccount', {
                 rules: [{required: true, message: '请输入银行账号'}],
               })(<Input disabled={checkDetail} placeholder="请输入银行账号"/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="发证机关">
-              {form.getFieldDecorator('proActualDays18', {
+              {form.getFieldDecorator('bankFrom', {
                 rules: [{required: true, message: '请输入发证机关'}],
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入发证机关"/>)}
             </FormItem>
@@ -312,7 +323,7 @@ const CreateForm = Form.create()(props => {
       <div className={styles.modalContent}>
         <Row gutter={8}>
           <Col md={24} sm={24}>
-            <FormItem style={{marginLeft:14+'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="附件">
+            <FormItem style={{marginLeft: 14 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="附件">
               {form.getFieldDecorator('dragger', {
                 valuePropName: 'fileList',
                 getValueFromEvent: normFile,
@@ -376,7 +387,7 @@ const CreateReview = Form.create()(props => {
       </Row>
       <Row gutter={8}>
         <Col md={12} sm={24}>
-          <FormItem labelCol={{span:9}} wrapperCol={{span: 10}} label="资质是否齐全">
+          <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="资质是否齐全">
             {form.getFieldDecorator('proName100', {
               rules: [{required: true, message: '请选择'}],
             })(<Select placeholder="请选择" style={{width: '100%'}}>
@@ -388,7 +399,7 @@ const CreateReview = Form.create()(props => {
       </Row>
       <Row gutter={8}>
         <Col md={24} sm={24}>
-          <FormItem style={{marginLeft:21+'px'}} labelCol={{span: 4}} wrapperCol={{span: 15}} label="备注">
+          <FormItem style={{marginLeft: 21 + 'px'}} labelCol={{span: 4}} wrapperCol={{span: 15}} label="备注">
             {form.getFieldDecorator('proSummary', {
               rules: [{required: true}],
             })(<Input.TextArea width={'100%'} placeholder="请输入" rows={4}/>)}
@@ -415,7 +426,7 @@ const CreateReview = Form.create()(props => {
           </Row>
           <Row gutter={8}>
             <Col md={24} sm={24}>
-              <FormItem style={{marginLeft:21+'px'}} labelCol={{span: 5}} wrapperCol={{span: 15}} label="备注">
+              <FormItem style={{marginLeft: 21 + 'px'}} labelCol={{span: 5}} wrapperCol={{span: 15}} label="备注">
                 {form.getFieldDecorator('proSummary', {
                   rules: [{required: true}],
                 })(<Input.TextArea width={'100%'} placeholder="请输入" rows={4}/>)}
@@ -474,6 +485,7 @@ const CreateReview = Form.create()(props => {
     </Modal>
   );
 });
+
 @Form.create()
 class Qualification extends Component {
 
@@ -487,15 +499,15 @@ class Qualification extends Component {
       pageLoading: true,
       expandForm: false,
       reviewType: -1,
-      selectedValues:{},
-      checkDetail:false
+      selectedValues: {},
+      checkDetail: false
     }
   }
 
   columns = [
     {
       title: '分包商备案编码',
-      dataIndex: 'code',
+      dataIndex: 'businessLicenseCode',
     },
     {
       title: '分包商全称',
@@ -503,63 +515,43 @@ class Qualification extends Component {
     },
     {
       title: '分包商类型',
-      render(val) {
-        return <span>专业承包</span>;
-      }
+      dataIndex: 'typeStr'
     },
     {
       title: '专业类别',
-      render(val) {
-        return <span>强电专业</span>;
-      }
+      dataIndex: 'professionStr'
     },
     {
       title: '纳税人类型',
-      render(val) {
-        return <span>小规模纳税人</span>;
-      }
+      dataIndex: 'taxpayerTypeStr'
     },
     {
       title: '法人',
-      render(val) {
-        return <span>李蛋蛋</span>;
-      }
+      dataIndex: 'legalPersonName'
     },
     {
       title: '注册本金（万元）',
-      render(val) {
-        return <span>100</span>;
-      }
+      dataIndex: 'registeredCapital'
     },
     {
       title: '资料是否齐全',
-      render(val) {
-        return <span>是</span>;
-      }
+      dataIndex: 'qualification'
     },
     {
       title: '股份公司综合信誉评价',
-      render(val) {
-        return <span>优秀</span>;
-      }
+      dataIndex: 'companyGroupEvaluation'
     },
     {
       title: '集团公司综合信誉评价',
-      render(val) {
-        return <span>优秀</span>;
-      }
+      dataIndex: 'groupEvaluation'
     },
     {
       title: '公司本级综合信誉评价',
-      render(val) {
-        return <span>优秀</span>;
-      }
+      dataIndex: 'companyEvaluation'
     },
     {
       title: '证件期限',
-      render(val) {
-        return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
-      },
+      dataIndex: 'businessLicenseValidityPeriod'
     },
     {
       title: '备注',
@@ -573,7 +565,7 @@ class Qualification extends Component {
         <Fragment>
           <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
           <Divider type="vertical"/>
-          <a onClick={()=>this.handleCheckDetail(true,record)}>查看</a>
+          <a onClick={() => this.handleCheckDetail(true, record)}>查看</a>
           <Divider type="vertical"/>
           <a>下载附件</a>
         </Fragment>
@@ -583,13 +575,15 @@ class Qualification extends Component {
 
   componentDidMount() {
     const {dispatch} = this.props;
+    this.getList()
     _setTimeOut(() => this.setState({pageLoading: false}), 1000)
+    this.getList()
     // setTimeout(() => {
     //   this.setState({pageLoading:false})
     // },1000)
-    dispatch({
-      type: 'rule/fetch', payload: {pageSize: 5}
-    });
+    // dispatch({
+    //   type: 'rule/fetch', payload: {pageSize: 5}
+    // });
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
@@ -706,20 +700,20 @@ class Qualification extends Component {
   handleUpdateModalVisible = (flag, record) => {
     this.setState({
       updateModalVisible: !!flag,
-      modalVisible:!!flag,
+      modalVisible: !!flag,
       selectedValues: record || {},
     });
   };
 
-  handleCheckDetail=(flag, record) => {
+  handleCheckDetail = (flag, record) => {
     this.setState({
       checkDetail: !!flag,
-      modalVisible:!!flag,
+      modalVisible: !!flag,
       selectedValues: record || {},
     });
   };
 
-  handleAdd = fields => {
+  handleAdd = (fields, updateModalVisible, selectedValues) => {
     // const {dispatch} = this.props;
     // dispatch({
     //   type: 'rule/add',
@@ -727,23 +721,32 @@ class Qualification extends Component {
     //     desc: fields.desc,
     //   },
     // });
-    message.success('添加成功');
-    this.handleModalVisible();
-  };
-
-  handleUpdate = fields => {
-    const {dispatch} = this.props;
-    dispatch({
-      type: 'rule/update',
-      payload: {
-        name: fields.name,
-        desc: fields.desc,
-        key: fields.key,
-      },
-    });
-
-    message.success('配置成功');
-    this.handleUpdateModalVisible();
+    const {dispatch, app: {user}} = this.props;
+    const payload = {
+      account: fields.account,
+      password: fields.password,
+      type: 0
+    }
+    if (updateModalVisible) {
+      // dispatch({
+      //   type: 'sub_qua/update',
+      //   payload: {...payload, ...{id: selectedValues.id}},
+      //   token: user.token,
+      //   callback: this.handleUpdateModalVisible,
+      //   callback2: this.getList
+      // })
+    } else {
+      dispatch({
+        type: 'sub_qua/add',
+        payload: payload,
+        token: user.token
+      }).then(res => {
+        if (res) {
+          this.this.handleModalVisible()
+          this.getList()
+        }
+      })
+    }
   };
 
   renderAdvancedForm() {
@@ -752,7 +755,7 @@ class Qualification extends Component {
     } = this.props;
     const {expandForm} = this.state;
     return (
-      <Form onSubmit={this.handleSearch} layout="inline">
+      <Form layout="inline">
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={6} sm={24}>
             <FormItem label="分包商全称">
@@ -761,16 +764,16 @@ class Qualification extends Component {
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="分包商类型">
-              {getFieldDecorator('name')(<Select placeholder="请选择" style={{width: '100%'}}>
+              {getFieldDecorator('typeId:')(<Select placeholder="请选择" style={{width: '100%'}}>
                 <Option value="0">劳务分包</Option>
                 <Option value="1">专业分包</Option>
-                <Option value="1">劳务派遣</Option>
+                <Option value="2">劳务派遣</Option>
               </Select>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="专业类别">
-              {getFieldDecorator('name')(<Select placeholder="请选择" style={{width: '100%'}}>
+              {getFieldDecorator('professionType')(<Select placeholder="请选择" style={{width: '100%'}}>
                 <Option value="0">临建工程</Option>
                 <Option value="1">路基工程</Option>
                 <Option value="2">路面工程</Option>
@@ -788,7 +791,7 @@ class Qualification extends Component {
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="注册资金">
-              {getFieldDecorator('name')(<Select placeholder="请选择" style={{width: '100%'}}>
+              {getFieldDecorator('registeredCapital')(<Select placeholder="请选择" style={{width: '100%'}}>
                 <Option value="0">500万以下</Option>
                 <Option value="1">500万-1000万</Option>
                 <Option value="2">1000万-3000万</Option>
@@ -802,28 +805,28 @@ class Qualification extends Component {
         {expandForm ? <Row gutter={{md: 4, lg: 12, xl: 24}}>
           <Col md={8} sm={24}>
             <FormItem label="股份公司综合信誉评价">
-              {getFieldDecorator('name')(<Select placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">优秀</Option>
-                <Option value="1">合格</Option>
-                <Option value="2">不合格</Option>
+              {getFieldDecorator('companyGroupEvaluation')(<Select placeholder="请选择" style={{width: '100%'}}>
+                <Option value="优秀">优秀</Option>
+                <Option value="合格">合格</Option>
+                <Option value="不合格">不合格</Option>
               </Select>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="集团公司综合信誉评价">
-              {getFieldDecorator('name')(<Select placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">优秀</Option>
-                <Option value="1">合格</Option>
-                <Option value="2">不合格</Option>
+              {getFieldDecorator('groupEvaluation')(<Select placeholder="请选择" style={{width: '100%'}}>
+                <Option value="优秀">优秀</Option>
+                <Option value="合格">合格</Option>
+                <Option value="不合格">不合格</Option>
               </Select>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="公司本级综合信誉评价">
-              {getFieldDecorator('name')(<Select placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">优秀</Option>
-                <Option value="1">合格</Option>
-                <Option value="2">不合格</Option>
+              {getFieldDecorator('companyEvaluation')(<Select placeholder="请选择" style={{width: '100%'}}>
+                <Option value="优秀">优秀</Option>
+                <Option value="合格">合格</Option>
+                <Option value="不合格">不合格</Option>
               </Select>)}
             </FormItem>
           </Col>
@@ -859,10 +862,10 @@ class Qualification extends Component {
 
   render() {
     const {
-      rule: {data},
+      sub_qua: {data},
       loading,
     } = this.props;
-    const {selectedRows, modalVisible,updateModalVisible, pageLoading,selectedValues,checkDetail, reviewType} = this.state;
+    const {selectedRows, modalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail, reviewType} = this.state;
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
         <Menu.Item key="edit">编辑</Menu.Item>
@@ -875,15 +878,15 @@ class Qualification extends Component {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
       normFile: this.normFile,
-      handleReviewModal:this.handleReviewModal,
-      handleUpdateModalVisible:this.handleUpdateModalVisible,
-      handleCheckDetail:this.handleCheckDetail
+      handleReviewModal: this.handleReviewModal,
+      handleUpdateModalVisible: this.handleUpdateModalVisible,
+      handleCheckDetail: this.handleCheckDetail
     };
     const parentState = {
-      updateModalVisible:updateModalVisible,
-      modalVisible:modalVisible,
-      selectedValues:selectedValues,
-      checkDetail:checkDetail
+      updateModalVisible: updateModalVisible,
+      modalVisible: modalVisible,
+      selectedValues: selectedValues,
+      checkDetail: checkDetail
     }
     return (
       <Page inner={true} loading={pageLoading}>
@@ -916,8 +919,9 @@ class Qualification extends Component {
               </div>
               <StandardTable
                 selectedRows={selectedRows}
-                loading={loading.effects['rule/fetch']}
+                loading={loading.effects['sub_qua/fetch']}
                 bordered
+                rowKey="id"
                 data={data}
                 scroll={{x: '200%'}}
                 columns={this.columns}
@@ -932,8 +936,51 @@ class Qualification extends Component {
       </Page>
     )
   }
+
+  getProNames = (proName) => {
+    if (proName.length < 1) {
+      this.props.dispatch(
+        {
+          type: 'sub_qua/queryProNames',
+          payload: {page: 1, pageSize: 10}
+        }
+      )
+    }
+  }
+
+  getList = (page = 1, pageSize = 10) => {
+    this.props.dispatch({
+      type: 'sub_qua/fetch',
+      payload: {page: page, pageSize: pageSize}
+    });
+  }
+
+  searchList = (page = 1, pageSize = 10) => {
+    this.props.form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      //  form.resetFields();
+      this.props.dispatch({
+        type: 'sub_qua/fetch',
+        payload: {
+          page: page,
+          pageSize: pageSize,
+          projectName: fieldsValue.projectName,
+          mileageNumber: fieldsValue.mileageNumber,
+          totalPrice: fieldsValue.totalPrice,
+          contractStartTime: fieldsValue.contractStartTime,
+          contractEndTime: fieldsValue.contractEndTime,
+          realContractStartTime: fieldsValue.realContractStartTime,
+          realContractEndTime: fieldsValue.realContractEndTime,
+          status: fieldsValue.status,
+          projectManager: fieldsValue.projectManager,
+          chiefEngineer: fieldsValue.chiefEngineer,
+          projectSecretary: fieldsValue.status,
+        }
+      });
+    });
+  }
 }
 
 Qualification.propTypes = {}
 
-export default connect(({app, rule, loading}) => ({app, rule, loading}))(Qualification)
+export default connect(({app, rule, loading, sub_qua}) => ({app, rule, loading, sub_qua}))(Qualification)

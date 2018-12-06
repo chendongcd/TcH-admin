@@ -1,5 +1,6 @@
 import {updateUp,addUp,queryUpDetail,queryUpList} from '../../../services/upToBack/meterUp';
 import {queryProList} from "../../../services/system/sys_project";
+import {message} from "antd/lib/index";
 export default {
   namespace: 'meterUp',
 
@@ -26,21 +27,21 @@ export default {
       const response = yield call(queryUpDetail, payload);
       if (callback) callback();
     },
-    *add({ payload, callback }, { call, put }) {
+    *add({ payload}, { call, put }) {
       const response = yield call(addUp, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
+      if(response.code=='200'){
+        message.success('新增成功');
+        return true
+      }
+      return false
     },
-    *update({ payload, callback }, { call, put }) {
+    *update({ payload}, { call, put }) {
       const response = yield call(updateUp, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
+      if(response.code=='200'){
+        message.success('修改成功');
+        return true
+      }
+      return false
     },
     *queryProNames({payload},{call,put}){
       const response = yield call(queryProList, payload);

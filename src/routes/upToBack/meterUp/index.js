@@ -526,17 +526,23 @@ class MeterUp extends Component {
       dispatch({
         type: 'meterUp/update',
         payload: {...payload, ...{id: selectedValues.id}},
-        token: user.token,
-        callback: this.handleUpdateModalVisible,
-        callback2: this.getList
+        token: user.token
+      }).then(res=>{
+        if(res){
+          this.handleUpdateModalVisible()
+          this.getList()
+        }
       })
     } else {
       dispatch({
         type: 'meterUp/add',
         payload: payload,
-        token: user.token,
-        callback: this.handleModalVisible,
-        callback2: this.getList
+        token: user.token
+      }).then(res=>{
+        if(res){
+          this.handleModalVisible()
+          this.getList()
+        }
       })
     }
   };
@@ -565,10 +571,7 @@ class MeterUp extends Component {
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={6} sm={24}>
             <FormItem label="项目名称">
-              {getFieldDecorator('name')(<Select placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">项目1</Option>
-                <Option value="1">项目2</Option>
-              </Select>)}
+              {getFieldDecorator('projectName')(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
@@ -674,7 +677,7 @@ class MeterUp extends Component {
               </div>
               <StandardTable
                 selectedRows={selectedRows}
-                loading={loading.effects['rule/fetch']}
+                loading={loading.effects['meterUp/fetch']}
                 bordered
                 data={data}
                 scroll={{ x: '200%' }}

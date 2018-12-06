@@ -1,5 +1,6 @@
 import {queryProInfoList,queryProInfoDetail,addProInfo,updateProInfo} from '../../../services/project/project'
 import {queryProList} from "../../../services/system/sys_project";
+import {message} from "antd/lib/index";
 const delay = timeout => new Promise(resolve => setTimeout(resolve, timeout));
 export default {
   namespace: 'pro_proInfo',
@@ -23,21 +24,25 @@ export default {
         });
       }
     },
-    *add({ payload,token, callback }, { call, put }) {
+    *add({ payload,token }, { call, put }) {
       const response = yield call(addProInfo, payload,token);
-      // yield put({
-      //   type: 'save',
-      //   payload: response,
-      // });
-      if (callback) callback();
+      if(response.code=='200'){
+        message.success('新增成功');
+        return true
+      }
+      return false
     },
     *fetchDetail({ payload, callback }, { call, put }) {
       const response = yield call(queryProInfoDetail, payload);
       if (callback) callback();
     },
-    *update({ payload, token,callback }, { call, put }) {
+    *update({ payload, token }, { call, put }) {
       const response = yield call(updateProInfo, payload,token);
-      if (callback) callback();
+      if(response.code=='200'){
+        message.success('修改成功');
+        return true
+      }
+      return false
     },
     *queryProNames({payload},{call,put}){
       const response = yield call(queryProList, payload);

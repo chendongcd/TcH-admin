@@ -101,7 +101,7 @@ function RouterConfig({history, app}) {
   })
   const Sub_Qualification = dynamic({
     app,
-    models:[appModel],
+    models:()=> [import('./routes/sub/qualification/model')],
     component:()=> import('./routes/sub/qualification/index')
   })
   const Sub_Resume = dynamic({

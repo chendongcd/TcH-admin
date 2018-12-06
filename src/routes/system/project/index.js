@@ -264,10 +264,13 @@ class Project extends Component {
           dictId: fields.proType,
           id: selectedValues.id
         },
-        token: user.token,
-        callback: this.handleUpdateModalVisible,
-        callback2: this.getList
-      });
+        token: user.token
+      }).then(res=>{
+        if(res){
+          this.handleUpdateModalVisible()
+          this.getList()
+        }
+      })
     } else {
       dispatch({
         type: 'sys_pro/addPro',
@@ -275,10 +278,13 @@ class Project extends Component {
           name: fields.name,
           dictId: fields.proType
         },
-        token: user.token,
-        callback: this.handleModalVisible,
-        callback2: this.getList
-      });
+        token: user.token
+      }).then(res=>{
+        if(res){
+          this.handleModalVisible()
+          this.getList()
+        }
+      })
     }
   };
 
