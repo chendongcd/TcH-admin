@@ -38,7 +38,7 @@ const info_css={
   color:'#fa541c'
 }
 const CreateForm = Form.create()(props => {
-  const {modalVisible, form, handleAdd, handleModalVisible,normFile,handleUpdateModalVisible,updateModalVisible,handleCheckDetail,selectedValues,checkDetail} = props;
+  const {proNames,modalVisible, form, handleAdd, handleModalVisible,normFile,handleUpdateModalVisible,updateModalVisible,handleCheckDetail,selectedValues,checkDetail} = props;
 
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
@@ -63,11 +63,13 @@ const CreateForm = Form.create()(props => {
         <Row gutter={8}>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="项目名称">
-              {form.getFieldDecorator('proName', {
+              {form.getFieldDecorator('projectId', {
                 rules: [{required: true, message: '请选择项目'}],
+                initialValue: selectedValues.projectId ? selectedValues.projectId : '',
               })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">项目1</Option>
-                <Option value="1">项目2</Option>
+                {proNames.map((item, index) => {
+                  return <Option key={item.id} item={item} value={item.id}>{item.name}</Option>
+                })}
               </Select>)}
             </FormItem>
           </Col>
@@ -75,14 +77,14 @@ const CreateForm = Form.create()(props => {
         <Row gutter={8}>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="计量期数">
-              {form.getFieldDecorator('proName', {
+              {form.getFieldDecorator('meteringNum', {
                 rules: [{required: true, message: '请输入期数'}],
               })(<Input disabled={checkDetail} placeholder="请输入期数"/>)}
             </FormItem>
           </Col>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="计量日期">
-              {form.getFieldDecorator('proType', {
+              {form.getFieldDecorator('meteringTime', {
                 rules: [{required: true}],
               })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择量日期"/>)}
             </FormItem>
@@ -96,7 +98,7 @@ const CreateForm = Form.create()(props => {
       <Row gutter={8}>
         <Col md={8} sm={24}>
           <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="预付款">
-            {form.getFieldDecorator('proActualDays', {
+            {form.getFieldDecorator('plan', {
               rules: [{required: true, message: '请输入预付款'}],
             })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入预付款" addonAfter="元"/>)}
           </FormItem>
@@ -110,14 +112,14 @@ const CreateForm = Form.create()(props => {
         <Row gutter={8}>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="含税金额">
-              {form.getFieldDecorator('proActualDays', {
+              {form.getFieldDecorator('valuationAmountTax', {
                 rules: [{required: true, message: '请输入含税金额'}],
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入含税金额" addonAfter="元"/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="税率">
-              {form.getFieldDecorator('proActualDays', {
+              {form.getFieldDecorator('tax', {
                 rules: [{required: true, message: '请输入税率'}],
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入税率" />)}
             </FormItem>
@@ -131,7 +133,7 @@ const CreateForm = Form.create()(props => {
         <Row gutter={8}>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="含税金额">
-              {form.getFieldDecorator('proActualDays', {
+              {form.getFieldDecorator('realAmountTax', {
                 rules: [{required: true, message: '请输入含税金额'}],
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入含税金额" addonAfter="元"/>)}
             </FormItem>
@@ -146,7 +148,7 @@ const CreateForm = Form.create()(props => {
         <Row gutter={8}>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="已支付金额">
-              {form.getFieldDecorator('proActualDays', {
+              {form.getFieldDecorator('alreadyPaidAmount', {
                 rules: [{required: true, message: '请输入已支付金额'}],
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入已支付金额" addonAfter="元"/>)}
             </FormItem>
@@ -171,7 +173,7 @@ const CreateForm = Form.create()(props => {
           </Col>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="已完未计价金额">
-              {form.getFieldDecorator('proActualDays', {
+              {form.getFieldDecorator('notCalculatedAmount', {
                 rules: [{required: true, message: '请输入已完未计价金额'}],
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入已完未计价金额" addonAfter="元"/>)}
             </FormItem>
@@ -186,7 +188,7 @@ const CreateForm = Form.create()(props => {
         <Row gutter={8}>
           <Col md={24} sm={24}>
             <FormItem style={{marginLeft:14+'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="备注">
-              {form.getFieldDecorator('proSummary', {
+              {form.getFieldDecorator('remark', {
                 rules: [{required: true}],
               })(<Input.TextArea disabled={checkDetail} width={'100%'} placeholder="请输入" rows={4}/>)}
             </FormItem>
@@ -239,7 +241,7 @@ class MeterUp extends Component {
     },
     {
       title: '项目名称',
-      dataIndex: 'name',
+      dataIndex: 'projectName',
     },
     {
       title: '计量期数',
@@ -363,14 +365,11 @@ class MeterUp extends Component {
   ];
 
   componentDidMount() {
-    const {dispatch} = this.props;
     _setTimeOut(()=>this.setState({pageLoading:false}),1000)
-    // setTimeout(() => {
-    //   this.setState({pageLoading:false})
-    // },1000)
-    dispatch({
+    this.getList()
+    /*dispatch({
       type: 'rule/fetch',payload:{pageSize:5}
-    });
+    });*/
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
@@ -487,7 +486,7 @@ class MeterUp extends Component {
     });
   };
 
-  handleAdd = fields => {
+  handleAdd = (fields, updateModalVisible, selectedValues) => {
     // const {dispatch} = this.props;
     // dispatch({
     //   type: 'rule/add',
@@ -495,8 +494,49 @@ class MeterUp extends Component {
     //     desc: fields.desc,
     //   },
     // });
-    message.success('添加成功');
-    this.handleModalVisible();
+    const {dispatch, app: {user}} = this.props;
+    const payload = {
+      projectId: fields.projectId,
+      address: fields.address,
+      orgAddress: fields.orgAddress,
+      status: fields.status,
+      mileageNumber: fields.mileageNumber,
+      totalPrice: fields.totalPrice,
+      contractNumber: fields.contractNumber,
+      contractDay: fields.contractDay,
+      contractStartTime: fields.contractStartTime,
+      contractEndTime: fields.contractEndTime,
+      realContractDay: fields.realContractDay,
+      realContractStartTime: fields.realContractStartTime,
+      realContractEndTime: fields.realContractEndTime,
+      proprietorCompany: fields.proprietorCompany,
+      proprietorAddress: fields.proprietorAddress,
+      proprietorPhone: fields.proprietorPhone,
+      supervisionCompany: fields.supervisionCompany,
+      supervisionAddress: fields.supervisionAddress,
+      supervisionPhone: fields.supervisionPhone,
+      inputPerson: fields.inputPerson,
+      formalEmployee: fields.formalEmployee,
+      externalEmployee: fields.externalEmployee,
+      description: fields.description,
+    }
+    if (updateModalVisible) {
+      dispatch({
+        type: 'meterUp/update',
+        payload: {...payload, ...{id: selectedValues.id}},
+        token: user.token,
+        callback: this.handleUpdateModalVisible,
+        callback2: this.getList
+      })
+    } else {
+      dispatch({
+        type: 'meterUp/add',
+        payload: payload,
+        token: user.token,
+        callback: this.handleModalVisible,
+        callback2: this.getList
+      })
+    }
   };
 
   handleUpdate = fields => {
@@ -585,7 +625,7 @@ class MeterUp extends Component {
 
   render() {
     const {
-      rule: {data},
+      rule: {data,proNames},
       loading,
     } = this.props;
     const {selectedRows, modalVisible,updateModalVisible,pageLoading,selectedValues,checkDetail} = this.state;
@@ -607,7 +647,8 @@ class MeterUp extends Component {
       updateModalVisible:updateModalVisible,
       modalVisible:modalVisible,
       selectedValues:selectedValues,
-      checkDetail:checkDetail
+      checkDetail:checkDetail,
+      proNames:proNames
     }
     return (
       <Page inner={true} loading={pageLoading}>
@@ -646,8 +687,51 @@ class MeterUp extends Component {
       </Page>
     )
   }
+
+  getProNames = (proName) => {
+    if (proName.length < 1) {
+      this.props.dispatch(
+        {
+          type: 'pro_proInfo/queryProNames',
+          payload: {page: 1, pageSize: 10}
+        }
+      )
+    }
+  }
+
+  getList = (page = 1, pageSize = 10) => {
+    this.props.dispatch({
+      type: 'meterUp/fetch',
+      payload: {page: page, pageSize: pageSize}
+    });
+  }
+
+  searchList = (page = 1, pageSize = 10) => {
+    this.props.form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      //  form.resetFields();
+      this.props.dispatch({
+        type: 'meterUp/fetch',
+        payload: {
+          page: page,
+          pageSize: pageSize,
+          projectName: fieldsValue.projectName,
+          mileageNumber: fieldsValue.mileageNumber,
+          totalPrice: fieldsValue.totalPrice,
+          contractStartTime: fieldsValue.contractStartTime,
+          contractEndTime: fieldsValue.contractEndTime,
+          realContractStartTime: fieldsValue.realContractStartTime,
+          realContractEndTime: fieldsValue.realContractEndTime,
+          status: fieldsValue.status,
+          projectManager: fieldsValue.projectManager,
+          chiefEngineer: fieldsValue.chiefEngineer,
+          projectSecretary: fieldsValue.status,
+        }
+      });
+    });
+  }
 }
 
 MeterUp.propTypes = {}
 
-export default connect(({app, rule,loading}) => ({app, rule,loading}))(MeterUp)
+export default connect(({app, rule,loading,meterUp}) => ({app, rule,loading,meterUp}))(MeterUp)

@@ -35,7 +35,7 @@ const getValue = obj =>
     .map(key => obj[key])
     .join(',');
 const statusMap = ['default', 'processing', 'success', 'error'];
-const status = ['关闭', '运行中', '已上线', '异常'];
+const status = ['在建', '完工未结算', '完工已结算', '停工'];
 const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/
 let uuid = 0;
 
@@ -532,7 +532,7 @@ class InfoCard extends Component {
     },
     {
       title: '项目名称',
-      dataIndex: 'name',
+      dataIndex: 'projectName',
     },
     {
       title: '工程状态',
@@ -563,14 +563,16 @@ class InfoCard extends Component {
       title: '计划工期',
       children: [{
         title: '合同开工日期',
-        key: 'plan_start',
+        dataIndex: 'contractStartTime',
+        key: 'contractStartTime',
         render(val) {
           return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
         },
       },
         {
           title: '合同完工日期',
-          key: 'plan_end',
+          dataIndex: 'contractEndTime',
+          key: 'contractEndTime',
           render(val) {
             return <span>{moment(val.updatedAt).format('YYYY/MM/DD')}</span>;
           },
@@ -580,14 +582,16 @@ class InfoCard extends Component {
       title: '实际工期',
       children: [{
         title: '实际开工日期',
-        key: 'actul_start',
+        dataIndex: 'realContractStartTime',
+        key: 'realContractStartTime',
         render(val) {
           return <span>{moment(val.updatedAt).format('YYYY/MM/DD')}</span>;
         },
       },
         {
           title: '实际完工日期',
-          key: 'actul_end',
+          dataIndex: 'realContractStartTime',
+          key: 'realContractStartTime',
           render(val) {
             return <span>{moment(val.updatedAt).format('YYYY/MM/DD')}</span>;
           },
@@ -612,14 +616,15 @@ class InfoCard extends Component {
     },
     {
       title: '项目经理',
-      dataIndex: 'owner',
+      dataIndex: 'projectManager',
     },
     {
       title: '项目书记',
-      dataIndex: 'updateUser',
+      dataIndex: 'projectSecretary',
     },
     {
       title: '总工',
+      dataIndex: 'chiefEngineer',
       render: val => <span>李蛋蛋</span>,
     },
     {

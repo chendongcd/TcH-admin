@@ -1,33 +1,33 @@
-import { queryRule, removeRule, addRule, updateRule } from '@/services/api';
-const delay = timeout => new Promise(resolve => setTimeout(resolve, timeout));
+import {updateUp,addUp,queryUpDetail,queryUpList} from '../../../services/upToBack/meterUp';
+import {queryProList} from "../../../services/system/sys_project";
 export default {
-  namespace: 'Sys_project',
+  namespace: 'meterUp',
 
   state: {
     data: {
       list: [],
       pagination: {},
     },
+    proNames:[],
   },
 
   effects: {
     *fetch({ payload }, { call, put }) {
-      const response = yield call(queryRule, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
+      const response = yield call(queryUpList, payload);
+      console.log(response)
+      if(response.code == '200'){
+        yield put({
+          type: 'save',
+          payload: response,
+        });
+      }
     },
-    *add({ payload, callback }, { call, put }) {
-      const response = yield call(addRule, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
+    *fetchDetail({ payload, callback }, { call, put }) {
+      const response = yield call(queryUpDetail, payload);
       if (callback) callback();
     },
-    *remove({ payload, callback }, { call, put }) {
-      const response = yield call(removeRule, payload);
+    *add({ payload, callback }, { call, put }) {
+      const response = yield call(addUp, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -35,12 +35,22 @@ export default {
       if (callback) callback();
     },
     *update({ payload, callback }, { call, put }) {
-      const response = yield call(updateRule, payload);
+      const response = yield call(updateUp, payload);
       yield put({
         type: 'save',
         payload: response,
       });
       if (callback) callback();
+    },
+    *queryProNames({payload},{call,put}){
+      const response = yield call(queryProList, payload);
+      //console.log(response)
+      if(response.code=='200'){
+        yield put({
+          type:'saveProName',
+          payload:response.list
+        })
+      }
     },
   },
 
@@ -50,6 +60,12 @@ export default {
         ...state,
         data: action.payload,
       };
+    },
+    saveProName(state,action){
+      return{
+        ...state,
+        proNames:action.payload
+      }
     },
   },
 

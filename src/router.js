@@ -96,7 +96,7 @@ function RouterConfig({history, app}) {
   })
   const Up_MeterUp = dynamic({
     app,
-    models: [appModel],
+    models: ()=> [import('./routes/upToBack/meterUp/model')],
     component:()=> import('./routes/upToBack/meterUp/index'),
   })
   const Sub_Qualification = dynamic({
