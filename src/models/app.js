@@ -35,7 +35,7 @@ export default {
   subscriptions: {
     setupHistory({dispatch, history}) {
       history.listen((location) => {
-        console.log(getStorage('userInfo'))
+        //console.log(getStorage('userInfo'))
         console.log(location)
         dispatch({
           type: 'updateState',
@@ -104,8 +104,8 @@ export default {
     },
 
     switchTheme (state) {
-      console.log(state)
-      console.log(`${prefix}darkTheme`, !state.darkTheme)
+     // console.log(state)
+     // console.log(`${prefix}darkTheme`, !state.darkTheme)
       window.localStorage.setItem(`${prefix}darkTheme`, !state.darkTheme)
       return {
         ...state,

@@ -77,7 +77,7 @@ export default function request(url, options, token) {
     }
 
     req.onload = function () {
-      console.log(req)
+    //  console.log(req)
       if (req.readyState === 4 && req.status == 200) {
           checkStatus(JSON.parse(req.response))
         resolve(JSON.parse(req.response))

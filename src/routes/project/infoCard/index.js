@@ -36,18 +36,25 @@ const getValue = obj =>
     .join(',');
 const statusMap = ['default', 'processing', 'success', 'error'];
 const status = ['关闭', '运行中', '已上线', '异常'];
+const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/
 let uuid = 0;
 
-const CreateForm = Form.create()(props => {
-  const {modalVisible, form, handleAdd, handleModalVisible,handleUpdateModalVisible,updateModalVisible,handleCheckDetail,selectedValues,checkDetail} = props;
-  const {getFieldDecorator, getFieldValue} = form
-  getFieldDecorator('managers', {initialValue: [{manaName: '', manaTime: '', manaPhone: ''}]});
-  getFieldDecorator('secretary', {initialValue: [{secreName: '', secreTime: '', secrePhone: ''}]});
-  getFieldDecorator('chiefEngineer', {initialValue: [{chiefName: '', chiefTime: '', chiefPhone: ''}]});
-  const managers = getFieldValue('managers');
-  const secretary = getFieldValue('secretary');
-  const chiefEngineer = getFieldValue('chiefEngineer');
-  const remove = (k, type, form) => {
+@Form.create()
+class CreateForm extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {}
+    this.selectProject = {}
+  }
+
+  // const {getFieldDecorator, getFieldValue} = form
+  // getFieldDecorator('managers', {initialValue: [{manaName: '', manaTime: '', manaPhone: ''}]});
+  // getFieldDecorator('secretary', {initialValue: [{secreName: '', secreTime: '', secrePhone: ''}]});
+  // getFieldDecorator('chiefEngineer', {initialValue: [{chiefName: '', chiefTime: '', chiefPhone: ''}]});
+  // const managers = getFieldValue('managers');
+  // const secretary = getFieldValue('secretary');
+  // const chiefEngineer = getFieldValue('chiefEngineer');
+  remove = (k, type, form) => {
     // can use data-binding to get
     const keys = form.getFieldValue(type);
     // We need at least one passenger
@@ -70,7 +77,8 @@ const CreateForm = Form.create()(props => {
     // can use data-binding to set
     form.setFieldsValue(object);
   }
-  const add = (type, form) => {
+
+  add = (type, form) => {
     // can use data-binding to get
     const keys = form.getFieldValue(type);
     const nextKeys = keys.concat(uuid);
@@ -92,126 +100,143 @@ const CreateForm = Form.create()(props => {
     }
     form.setFieldsValue(object);
   }
-  const formManager = managers.map((key, index) => {
-    let isLast = (managers.length == index + 1)
-    return (<Row key={`manager${index}`} gutter={8}>
-      <Col className={styles.colPeople} md={6} sm={24}>
-        <FormItem required={true} labelCol={{span: 5}} wrapperCol={{span: 15}} label="姓名">
-          <Input disabled={checkDetail} placeholder="请输入姓名"/>
-          {/*          {form.getFieldDecorator(`names[${key}]`, {
-            rules: [{required: true, message: '请输入姓名'}],
-          })(<Input placeholder="请输入姓名"/>)}*/}
-        </FormItem>
-      </Col>
-      <Col className={styles.colPeople} md={7} sm={24}>
-        <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
-          <DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择任职时间"/>
-          {/*{form.getFieldDecorator('manaTime', {
-            rules: [{required: true, message: '请选择任职时间'}],
-          })( <DatePicker style={{width: '100%'}} placeholder="请选择任职时间"/>)}*/}
-        </FormItem>
-      </Col>
-      <Col className={styles.colPeople} md={7} sm={24}>
-        <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系电话">
-          <Input disabled={checkDetail} placeholder="请输入联系电话"/>
-          {/*{form.getFieldDecorator('manaPhone', {
-            rules: [{required: true, message: '请输入联系电话'}],
-          })(<Input placeholder="请输入联系电话"/>)}*/}
-        </FormItem>
-      </Col>
-      {checkDetail?null:<Col className={styles.colPeople} md={4} sm={24}>
-        {isLast ?
-          <Button style={{marginTop: 4 + 'px'}} shape="circle" type="primary" onClick={() => add('managers', form)}>
-            <Icon type="plus"/>
-          </Button> : <Button style={{marginTop: 4 + 'px'}} shape="circle" type="danger"
-                              onClick={() => remove(key, 'managers', form)}>
-            <Icon type="minus"/>
-          </Button>}
-      </Col>}
-    </Row>)
-  })
-  const formSecretary = secretary.map((key, index) => {
-    let isLast = (secretary.length == index + 1)
-    return (<Row key={`secretary${index}`} gutter={8}>
-      <Col className={styles.colPeople} md={6} sm={24}>
-        <FormItem required={true}
-                  labelCol={{span: 5}}
-                  wrapperCol={{span: 15}}
-                  label="姓名">
-          {/*          {form.getFieldDecorator('secreName', {
-            rules: [{required: true, message: '请输入姓名'}],
-          })(<Input placeholder="请输入姓名"/>)}*/}
-          <Input disabled={checkDetail} placeholder="请输入姓名"/>
-        </FormItem>
-      </Col>
-      <Col className={styles.colPeople} md={7} sm={24}>
-        <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
-          {/*          {form.getFieldDecorator('secreTime', {
-            rules: [{required: true, message: '请选择任职时间'}],
-          })( <DatePicker style={{width: '100%'}} placeholder="请选择任职时间"/>)}*/}
-          <DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择任职时间"/>
-        </FormItem>
-      </Col>
-      <Col className={styles.colPeople} md={7} sm={24}>
-        <FormItem min={1} type={'number'} required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系电话">
-          {/* {form.getFieldDecorator('secrePhone', {
-            rules: [{required: true, message: '请输入联系电话'}],
-          })(<Input placeholder="请输入联系电话"/>)}*/}
-          <Input disabled={checkDetail} placeholder="请输入联系电话"/>
-        </FormItem>
-      </Col>
-      {checkDetail?null:<Col className={styles.colPeople} md={4} sm={24}>
-        {isLast ?
-          <Button style={{marginTop: 4 + 'px'}} shape="circle" type="primary" onClick={() => add('secretary', form)}>
-            <Icon type="plus"/>
-          </Button> : <Button style={{marginTop: 4 + 'px'}} shape="circle" type="danger"
-                              onClick={() => remove(key, 'secretary', form)}>
-            <Icon type="minus"/>
-          </Button>}
-      </Col>}
-    </Row>)
-  })
-  const formChiefEngineer = chiefEngineer.map((key, index) => {
-    let isLast = (chiefEngineer.length == index + 1)
-    return (<Row key={`chiefEngineer${index}`} gutter={8}>
-      <Col className={styles.colPeople} md={6} sm={24}>
-        <FormItem required={true} labelCol={{span: 5}} wrapperCol={{span: 15}} label="姓名">
-          {/*          {form.getFieldDecorator('chiefName', {
-            rules: [{required: true, message: '请输入姓名'}],
-          })(<Input placeholder="请输入姓名"/>)}*/}
-          <Input disabled={checkDetail} placeholder="请输入姓名"/>
-        </FormItem>
-      </Col>
-      <Col className={styles.colPeople} md={7} sm={24}>
-        <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
-          {/*          {form.getFieldDecorator('chiefTime', {
-            rules: [{required: true, message: '请选择任职时间'}],
-          })( <DatePicker style={{width: '100%'}} placeholder="请选择任职时间"/>)}*/}
-          <DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择任职时间"/>
-        </FormItem>
-      </Col>
-      <Col className={styles.colPeople} md={7} sm={24}>
-        <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系电话">
-          {/*          {form.getFieldDecorator('chiefPhone', {
-            rules: [{required: true, message: '请输入联系电话'}],
-          })(<Input placeholder="请输入联系电话"/>)}*/}
-          <Input disabled={checkDetail} placeholder="请输入联系电话"/>
-        </FormItem>
-      </Col>
-      {checkDetail?null:<Col className={styles.colPeople} md={4} sm={24}>
-        {isLast ?
-          <Button style={{marginTop: 4 + 'px'}} shape="circle" type="primary"
-                  onClick={() => add('chiefEngineer', form)}>
-            <Icon type="plus"/>
-          </Button> : <Button style={{marginTop: 4 + 'px'}} shape="circle" type="danger"
-                              onClick={() => remove(key, 'chiefEngineer', form)}>
-            <Icon type="minus"/>
-          </Button>}
-      </Col>}
-    </Row>)
-  })
 
-  const okHandle = () => {
+  formManager = (managers, checkDetail, form) => {
+    if (managers) {
+      return managers.map((key, index) => {
+        let isLast = (managers.length == index + 1)
+        return (<Row key={`manager${index}`} gutter={8}>
+          <Col className={styles.colPeople} md={6} sm={24}>
+            <FormItem required={true} labelCol={{span: 5}} wrapperCol={{span: 15}} label="姓名">
+              <Input disabled={checkDetail} placeholder="请输入姓名"/>
+              {/*          {form.getFieldDecorator(`names[${key}]`, {
+            rules: [{required: true, message: '请输入姓名'}],
+          })(<Input placeholder="请输入姓名"/>)}*/}
+            </FormItem>
+          </Col>
+          <Col className={styles.colPeople} md={7} sm={24}>
+            <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
+              <DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择任职时间"/>
+              {/*{form.getFieldDecorator('manaTime', {
+            rules: [{required: true, message: '请选择任职时间'}],
+          })( <DatePicker style={{width: '100%'}} placeholder="请选择任职时间"/>)}*/}
+            </FormItem>
+          </Col>
+          <Col className={styles.colPeople} md={7} sm={24}>
+            <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系电话">
+              <Input disabled={checkDetail} placeholder="请输入联系电话"/>
+              {/*{form.getFieldDecorator('manaPhone', {
+            rules: [{required: true, message: '请输入联系电话'}],
+          })(<Input placeholder="请输入联系电话"/>)}*/}
+            </FormItem>
+          </Col>
+          {checkDetail ? null : <Col className={styles.colPeople} md={4} sm={24}>
+            {isLast ?
+              <Button style={{marginTop: 4 + 'px'}} shape="circle" type="primary"
+                      onClick={() => this.add('managers', form)}>
+                <Icon type="plus"/>
+              </Button> : <Button style={{marginTop: 4 + 'px'}} shape="circle" type="danger"
+                                  onClick={() => this.remove(key, 'managers', form)}>
+                <Icon type="minus"/>
+              </Button>}
+          </Col>}
+        </Row>)
+      })
+    }
+  }
+
+  formSecretary = (secretary, checkDetail, form) => {
+    if (secretary) {
+      return secretary.map((key, index) => {
+        let isLast = (secretary.length == index + 1)
+        return (<Row key={`secretary${index}`} gutter={8}>
+          <Col className={styles.colPeople} md={6} sm={24}>
+            <FormItem required={true}
+                      labelCol={{span: 5}}
+                      wrapperCol={{span: 15}}
+                      label="姓名">
+              {/*          {form.getFieldDecorator('secreName', {
+            rules: [{required: true, message: '请输入姓名'}],
+          })(<Input placeholder="请输入姓名"/>)}*/}
+              <Input disabled={checkDetail} placeholder="请输入姓名"/>
+            </FormItem>
+          </Col>
+          <Col className={styles.colPeople} md={7} sm={24}>
+            <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
+              {/*          {form.getFieldDecorator('secreTime', {
+            rules: [{required: true, message: '请选择任职时间'}],
+          })( <DatePicker style={{width: '100%'}} placeholder="请选择任职时间"/>)}*/}
+              <DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择任职时间"/>
+            </FormItem>
+          </Col>
+          <Col className={styles.colPeople} md={7} sm={24}>
+            <FormItem min={1} type={'number'} required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系电话">
+              {/* {form.getFieldDecorator('secrePhone', {
+            rules: [{required: true, message: '请输入联系电话'}],
+          })(<Input placeholder="请输入联系电话"/>)}*/}
+              <Input disabled={checkDetail} placeholder="请输入联系电话"/>
+            </FormItem>
+          </Col>
+          {checkDetail ? null : <Col className={styles.colPeople} md={4} sm={24}>
+            {isLast ?
+              <Button style={{marginTop: 4 + 'px'}} shape="circle" type="primary"
+                      onClick={() => this.add('secretary', form)}>
+                <Icon type="plus"/>
+              </Button> : <Button style={{marginTop: 4 + 'px'}} shape="circle" type="danger"
+                                  onClick={() => this.remove(key, 'secretary', form)}>
+                <Icon type="minus"/>
+              </Button>}
+          </Col>}
+        </Row>)
+      })
+    }
+  }
+
+  formChiefEngineer = (chiefEngineer, checkDetail, form) => {
+    if (chiefEngineer) {
+      return chiefEngineer.map((key, index) => {
+        let isLast = (chiefEngineer.length == index + 1)
+        return (<Row key={`chiefEngineer${index}`} gutter={8}>
+          <Col className={styles.colPeople} md={6} sm={24}>
+            <FormItem required={true} labelCol={{span: 5}} wrapperCol={{span: 15}} label="姓名">
+              {/*          {form.getFieldDecorator('chiefName', {
+            rules: [{required: true, message: '请输入姓名'}],
+          })(<Input placeholder="请输入姓名"/>)}*/}
+              <Input disabled={checkDetail} placeholder="请输入姓名"/>
+            </FormItem>
+          </Col>
+          <Col className={styles.colPeople} md={7} sm={24}>
+            <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
+              {/*          {form.getFieldDecorator('chiefTime', {
+            rules: [{required: true, message: '请选择任职时间'}],
+          })( <DatePicker style={{width: '100%'}} placeholder="请选择任职时间"/>)}*/}
+              <DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择任职时间"/>
+            </FormItem>
+          </Col>
+          <Col className={styles.colPeople} md={7} sm={24}>
+            <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系电话">
+              {/*          {form.getFieldDecorator('chiefPhone', {
+            rules: [{required: true, message: '请输入联系电话'}],
+          })(<Input placeholder="请输入联系电话"/>)}*/}
+              <Input disabled={checkDetail} placeholder="请输入联系电话"/>
+            </FormItem>
+          </Col>
+          {checkDetail ? null : <Col className={styles.colPeople} md={4} sm={24}>
+            {isLast ?
+              <Button style={{marginTop: 4 + 'px'}} shape="circle" type="primary"
+                      onClick={() => this.add('chiefEngineer', form)}>
+                <Icon type="plus"/>
+              </Button> : <Button style={{marginTop: 4 + 'px'}} shape="circle" type="danger"
+                                  onClick={() => this.remove(key, 'chiefEngineer', form)}>
+                <Icon type="minus"/>
+              </Button>}
+          </Col>}
+        </Row>)
+      })
+    }
+  }
+
+  okHandle = (form, handleAdd) => {
     form.validateFields((err, fieldsValue) => {
       console.log(fieldsValue)
       if (err) return;
@@ -219,250 +244,269 @@ const CreateForm = Form.create()(props => {
       handleAdd(fieldsValue);
     });
   };
-  return (
-    <Modal
-      destroyOnClose
-      title={checkDetail?'工程项目信息':updateModalVisible?"编辑工程项目信息":"新增工程项目信息"}
-      bodyStyle={{padding: 0 + 'px'}}
-      visible={modalVisible}
-      width={992}
-      maskClosable={false}
-      onOk={okHandle}
-      onCancel={() => checkDetail?handleCheckDetail():updateModalVisible?handleUpdateModalVisible():handleModalVisible()}
-    >
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="项目名称">
-              {form.getFieldDecorator('proName', {
-                rules: [{required: true, message: '请选择项目'}],
-              })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">项目1</Option>
-                <Option value="1">项目2</Option>
-              </Select>)}
-            </FormItem>
-          </Col>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="项目类别">
-              {form.getFieldDecorator('proType', {
-                rules: [{required: true}],
-              })(<Input disabled={checkDetail} placeholder="自动带出"/>)}
-            </FormItem>
-          </Col>
+
+  onSelect=(value,option)=>{
+   // console.log(option)
+    this.selectProject = option.props.item
+    this.props.form.setFieldsValue({projectType:this.selectProject.projectType});
+  }
+
+  render() {
+    const {proNames, modalVisible, form, handleAdd, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
+    const {getFieldDecorator} = this.props.form
+    getFieldDecorator('managers', {initialValue: [{manaName: '', manaTime: '', manaPhone: ''}]});
+    getFieldDecorator('secretary', {initialValue: [{secreName: '', secreTime: '', secrePhone: ''}]});
+    getFieldDecorator('chiefEngineer', {initialValue: [{chiefName: '', chiefTime: '', chiefPhone: ''}]});
+    const managers = form.getFieldValue('managers');
+    const secretary = form.getFieldValue('secretary');
+    const chiefEngineer = form.getFieldValue('chiefEngineer');
+    return (
+      <Modal
+        destroyOnClose
+        title={checkDetail ? '工程项目信息' : updateModalVisible ? "编辑工程项目信息" : "新增工程项目信息"}
+        bodyStyle={{padding: 0 + 'px'}}
+        visible={modalVisible}
+        width={992}
+        maskClosable={false}
+        onOk={() => this.okHandle(form, handleAdd)}
+        onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
+      >
+        <div className={styles.modalContent}>
+          <Row gutter={8}>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="项目名称">
+                {form.getFieldDecorator('projectId', {
+                  rules: [{required: true, message: '请选择项目'}],
+                  initialValue: selectedValues.projectId ? selectedValues.projectId : '',
+                })(<Select onSelect={this.onSelect} disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
+                  {proNames.map((item, index) => {
+                    return <Option key={item.id} item={item} value={item.id}>{item.name}</Option>
+                  })}
+                </Select>)}
+              </FormItem>
+            </Col>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="项目类别">
+                {form.getFieldDecorator('projectType', {
+                  rules: [{required: true}],
+                })(<Input disabled={checkDetail} placeholder="自动带出"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="工程地点">
+                {form.getFieldDecorator('address', {
+                  rules: [{required: true, message: '请输入工程地点'}],
+                })(<Input disabled={checkDetail} placeholder="请输入工程地点"/>)}
+              </FormItem>
+            </Col>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="工程状态">
+                {form.getFieldDecorator('status', {
+                  rules: [{required: true, message: '请选择项目'}],
+                })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
+                  <Option value="0">在建</Option>
+                  <Option value="1">完工未结算</Option>
+                  <Option value="2">完工已结算</Option>
+                  <Option value="3">停工</Option>
+                </Select>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={4}>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="项目部地址">
+                {form.getFieldDecorator('orgAddress', {
+                  rules: [{required: true, message: '请输入项目部地址'}],
+                })(<Input disabled={checkDetail} placeholder="请输入项目部地址"/>)}
+              </FormItem>
+            </Col>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="里程桩号">
+                {form.getFieldDecorator('mileageNumber', {
+                  rules: [{required: true, message: '请输入里程桩号(数字)',pattern:reg}],
+                })(<Input disabled={checkDetail} placeholder="请输入里程桩号"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="暂估合同额">
+                {form.getFieldDecorator('temSum', {
+                  rules: [{required: true, message: '请输入暂估合同额',pattern:reg}],
+                })(<Input disabled={checkDetail} placeholder="请输入暂估合同额" addonAfter="万元"/>)}
+              </FormItem>
+            </Col>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="有效合同额">
+                {form.getFieldDecorator('conSum', {
+                  rules: [{required: true, message: '请输入有效合同额',pattern:reg}],
+                })(<Input disabled={checkDetail} placeholder="请输入有效合同额" addonAfter="万元"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同编码">
+                {form.getFieldDecorator('contractNumber', {
+                  rules: [{required: true, message: '请输入合同编码',pattern:reg}],
+                })(<Input disabled={checkDetail} placeholder="请输入合同编码"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="合同工期">
+                {form.getFieldDecorator('contractDay', {
+                  rules: [{required: true, message: '请输入合同工期',pattern:reg}],
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入合同工期" addonAfter="天"/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="合同开工日期">
+                {form.getFieldDecorator('contractStartTime', {
+                  rules: [{required: true, message: '请选择合同开工日期'}],
+                })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择合同开工日期"/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="合同竣工日期">
+                {form.getFieldDecorator('contractEndTime', {
+                  rules: [{required: true, message: '请选择合同竣工日期'}],
+                })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择合同竣工日期"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="实际工期">
+                {form.getFieldDecorator('realContractDay', {
+                  rules: [{required: true, message: '请输入实际工期',pattern:reg}],
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入实际工期" addonAfter="天"/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="实际开工日期">
+                {form.getFieldDecorator('realContractStartTime', {
+                  rules: [{required: true, message: '请选择实际开工日期'}],
+                })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择实际开工日期"/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="实际竣工日期">
+                {form.getFieldDecorator('realContractEndTime', {
+                  rules: [{required: true, message: '请选择实际竣工日期'}],
+                })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择实际竣工日期"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="业主单位">
+                {form.getFieldDecorator('proprietorCompany', {
+                  rules: [{required: true, message: '请输入业主单位'}],
+                })(<Input disabled={checkDetail} placeholder="请输入业主单位"/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="业主地址">
+                {form.getFieldDecorator('proprietorAddress', {
+                  rules: [{required: true, message: '请输入业主地址'}],
+                })(<Input disabled={checkDetail} placeholder="请输入业主地址"/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系电话">
+                {form.getFieldDecorator('proprietorPhone', {
+                  rules: [{required: true, pattern:reg, message: '请输入正确的联系方式'}],
+                })(<Input disabled={checkDetail} placeholder="请输入业主电话"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="监管单位">
+                {form.getFieldDecorator('supervisionCompany', {
+                  rules: [{required: true, message: '请输入监管单位'}],
+                })(<Input disabled={checkDetail} placeholder="请输入监管单位"/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="监管地址">
+                {form.getFieldDecorator('supervisionAddress', {
+                  rules: [{required: true, message: '请输入监管地址'}],
+                })(<Input disabled={checkDetail} placeholder="请输入监管地址"/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="监管电话">
+                {form.getFieldDecorator('supervisionPhone', {
+                  rules: [{required: true, pattern:reg, message: '请输入正确的联系方式'}],
+                })(<Input disabled={checkDetail} placeholder="请输入监管电话"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+        <Row align={'middle'} gutter={0} className={styles.titleView}>
+          <div className={styles.title}>项目经理</div>
         </Row>
-        <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="工程地点">
-              {form.getFieldDecorator('proSite', {
-                rules: [{required: true, message: '请输入工程地点'}],
-              })(<Input disabled={checkDetail} placeholder="请输入工程地点"/>)}
-            </FormItem>
-          </Col>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="工程状态">
-              {form.getFieldDecorator('proStatus', {
-                rules: [{required: true, message: '请选择项目'}],
-              })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">在建</Option>
-                <Option value="1">完工未结算</Option>
-                <Option value="2">完工已结算</Option>
-                <Option value="3">停工</Option>
-              </Select>)}
-            </FormItem>
-          </Col>
+        <div className={styles.modalContent}>
+          {this.formManager(managers, checkDetail, form)}
+        </div>
+        <Row align={'middle'} gutter={0} className={styles.titleView}>
+          <div className={styles.title}>项目书记</div>
         </Row>
-        <Row gutter={4}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="项目部地址">
-              {form.getFieldDecorator('proPlace', {
-                rules: [{required: true, message: '请输入项目部地址'}],
-              })(<Input disabled={checkDetail} placeholder="请输入项目部地址"/>)}
-            </FormItem>
-          </Col>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="里程桩号">
-              {form.getFieldDecorator('proMileage', {
-                rules: [{required: true, message: '请输入里程桩号'}],
-              })(<Input disabled={checkDetail} placeholder="请输入里程桩号"/>)}
-            </FormItem>
-          </Col>
+        <div className={styles.modalContent}>
+          {this.formSecretary(secretary, checkDetail, form)}
+        </div>
+        <Row align={'middle'} gutter={0} className={styles.titleView}>
+          <div className={styles.title}>总工程师</div>
         </Row>
-        <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="暂估合同额">
-              {form.getFieldDecorator('temSum', {
-                rules: [{required: true, message: '请输入暂估合同额'}],
-              })(<Input disabled={checkDetail} placeholder="请输入暂估合同额" addonAfter="万元"/>)}
-            </FormItem>
-          </Col>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="有效合同额">
-              {form.getFieldDecorator('conSum', {
-                rules: [{required: true, message: '请输入有效合同额'}],
-              })(<Input disabled={checkDetail} placeholder="请输入有效合同额" addonAfter="万元"/>)}
-            </FormItem>
-          </Col>
+        <div className={styles.modalContent}>
+          {this.formChiefEngineer(chiefEngineer, checkDetail, form)}
+        </div>
+        <Row align={'middle'} gutter={0} className={styles.titleView}>
+          <div className={styles.title}>统计</div>
         </Row>
-        <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同编码">
-              {form.getFieldDecorator('proCode', {
-                rules: [{required: true, message: '请输入合同编码'}],
-              })(<Input disabled={checkDetail} placeholder="请输入合同编码"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="合同工期">
-              {form.getFieldDecorator('proContractDays', {
-                rules: [{required: true, message: '请输入合同工期'}],
-              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入合同工期" addonAfter="天"/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="合同开工日期">
-              {form.getFieldDecorator('proContractStart', {
-                rules: [{required: true, message: '请选择合同开工日期'}],
-              })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择合同开工日期"/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="合同竣工日期">
-              {form.getFieldDecorator('proContractEnd', {
-                rules: [{required: true, message: '请选择合同竣工日期'}],
-              })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择合同竣工日期"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="实际工期">
-              {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true, message: '请输入实际工期'}],
-              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入实际工期" addonAfter="天"/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="实际开工日期">
-              {form.getFieldDecorator('proActualStart', {
-                rules: [{required: true, message: '请选择实际开工日期'}],
-              })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择实际开工日期"/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="实际竣工日期">
-              {form.getFieldDecorator('proActualEnd', {
-                rules: [{required: true, message: '请选择实际竣工日期'}],
-              })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择实际竣工日期"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="业主单位">
-              {form.getFieldDecorator('proOwnerUnit', {
-                rules: [{required: true, message: '请输入业主单位'}],
-              })(<Input disabled={checkDetail} placeholder="请输入业主单位"/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="业主地址">
-              {form.getFieldDecorator('proOwnerSite', {
-                rules: [{required: true, message: '请输入业主地址'}],
-              })(<Input disabled={checkDetail} placeholder="请输入业主地址"/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系电话">
-              {form.getFieldDecorator('proOwnerPhone', {
-                rules: [{required: true, type: "number", message: '请输入正确的联系方式'}],
-              })(<Input disabled={checkDetail} placeholder="请输入业主电话"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="监管单位">
-              {form.getFieldDecorator('proSubUnit', {
-                rules: [{required: true, message: '请输入监管单位'}],
-              })(<Input disabled={checkDetail} placeholder="请输入监管单位"/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="监管地址">
-              {form.getFieldDecorator('proSubSite', {
-                rules: [{required: true, message: '请输入监管地址'}],
-              })(<Input disabled={checkDetail} placeholder="请输入监管地址"/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="监管电话">
-              {form.getFieldDecorator('proSubPhone', {
-                rules: [{required: true, type: "number", message: '请输入正确的联系方式'}],
-              })(<Input disabled={checkDetail} placeholder="请输入监管电话"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-      </div>
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>项目经理</div>
-      </Row>
-      <div className={styles.modalContent}>
-        {formManager}
-      </div>
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>项目书记</div>
-      </Row>
-      <div className={styles.modalContent}>
-        {formSecretary}
-      </div>
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>总工程师</div>
-      </Row>
-      <div className={styles.modalContent}>
-        {formChiefEngineer}
-      </div>
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>统计</div>
-      </Row>
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="投入人员">
-              {form.getFieldDecorator('proPersons', {
-                rules: [{required: true, message: '请输入投入人员数'}],
-              })(<Input disabled={checkDetail} placeholder="请输入投入人员数" addonAfter="人"/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="正式职工">
-              {form.getFieldDecorator('proFormalPersons', {
-                rules: [{required: true, message: '请输入正式职工数'}],
-              })(<Input disabled={checkDetail} placeholder="请输入正式职工数" addonAfter="人"/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="外聘人员">
-              {form.getFieldDecorator('proRentPersons', {
-                rules: [{required: true, message: '请输入外聘人员数'}],
-              })(<Input disabled={checkDetail} placeholder="请输入外聘人员数" addonAfter="人"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={24} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="工程概况">
-              {form.getFieldDecorator('proSummary', {
-                rules: [{required: true}],
-              })(<Input.TextArea width={'100%'} disabled={checkDetail} placeholder="请输入" rows={4}/>)}
-            </FormItem>
-          </Col>
-        </Row>
-      </div>
-    </Modal>
-  );
-});
+        <div className={styles.modalContent}>
+          <Row gutter={8}>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="投入人员">
+                {form.getFieldDecorator('inputPerson', {
+                  rules: [{required: true, message: '请输入投入人员数'}],
+                })(<Input disabled={checkDetail} placeholder="请输入投入人员数" addonAfter="人"/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="正式职工">
+                {form.getFieldDecorator('formalEmployee', {
+                  rules: [{required: true, message: '请输入正式职工数'}],
+                })(<Input disabled={checkDetail} placeholder="请输入正式职工数" addonAfter="人"/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="外聘人员">
+                {form.getFieldDecorator('externalEmployee', {
+                  rules: [{required: true, message: '请输入外聘人员数'}],
+                })(<Input disabled={checkDetail} placeholder="请输入外聘人员数" addonAfter="人"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={24} sm={24}>
+              <FormItem style={{marginLeft:12+'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="工程概况">
+                {form.getFieldDecorator('description', {
+                  rules: [{required: true}],
+                })(<Input.TextArea width={'100%'} disabled={checkDetail} placeholder="请输入" rows={4}/>)}
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+      </Modal>
+    )
+  }
+}
 
 @Form.create()
 class InfoCard extends Component {
@@ -476,8 +520,8 @@ class InfoCard extends Component {
       selectedRows: [],
       formValues: {},
       pageLoading: true,
-      selectedValues:{},
-      checkDetail:false
+      selectedValues: {},
+      checkDetail: false
     }
   }
 
@@ -584,18 +628,16 @@ class InfoCard extends Component {
         <Fragment>
           <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
           <Divider type="vertical"/>
-          <a onClick={()=>this.handleCheckDetail(true,record)}>查看</a>
+          <a onClick={() => this.handleCheckDetail(true, record)}>查看</a>
         </Fragment>
       ),
     },
   ];
 
   componentDidMount() {
-    const {dispatch} = this.props;
+    this.getProNames([])
     _setTimeOut(() => this.setState({pageLoading: false}), 1000)
-    dispatch({
-      type: 'rule/fetch',
-    });
+    this.getList()
   }
 
   componentWillUnmount() {
@@ -629,15 +671,9 @@ class InfoCard extends Component {
   };
 
   handleFormReset = () => {
-    const {form, dispatch} = this.props;
+    const {form} = this.props;
     form.resetFields();
-    this.setState({
-      formValues: {},
-    });
-    dispatch({
-      type: 'rule/fetch',
-      payload: {},
-    });
+    this.getList()
   };
 
   toggleForm = () => {
@@ -710,20 +746,20 @@ class InfoCard extends Component {
   handleUpdateModalVisible = (flag, record) => {
     this.setState({
       updateModalVisible: !!flag,
-      modalVisible:!!flag,
+      modalVisible: !!flag,
       selectedValues: record || {},
     });
   };
 
-  handleCheckDetail=(flag, record) => {
+  handleCheckDetail = (flag, record) => {
     this.setState({
       checkDetail: !!flag,
-      modalVisible:!!flag,
+      modalVisible: !!flag,
       selectedValues: record || {},
     });
   };
 
-  handleAdd = fields => {
+  handleAdd = (fields, updateModalVisible, selectedValues) => {
     // const {dispatch} = this.props;
     // dispatch({
     //   type: 'rule/add',
@@ -731,9 +767,49 @@ class InfoCard extends Component {
     //     desc: fields.desc,
     //   },
     // });
-    console.log(fields)
-    message.success('添加成功');
-    this.handleModalVisible();
+    const {dispatch, app: {user}} = this.props;
+    const payload = {
+      projectId: fields.projectId,
+      address: fields.address,
+      orgAddress: fields.orgAddress,
+      status: fields.status,
+      mileageNumber: fields.mileageNumber,
+      totalPrice: fields.totalPrice,
+      contractNumber: fields.contractNumber,
+      contractDay: fields.contractDay,
+      contractStartTime: fields.contractStartTime,
+      contractEndTime: fields.contractEndTime,
+      realContractDay: fields.realContractDay,
+      realContractStartTime: fields.realContractStartTime,
+      realContractEndTime: fields.realContractEndTime,
+      proprietorCompany: fields.proprietorCompany,
+      proprietorAddress: fields.proprietorAddress,
+      proprietorPhone: fields.proprietorPhone,
+      supervisionCompany: fields.supervisionCompany,
+      supervisionAddress: fields.supervisionAddress,
+      supervisionPhone: fields.supervisionPhone,
+      inputPerson: fields.inputPerson,
+      formalEmployee: fields.formalEmployee,
+      externalEmployee: fields.externalEmployee,
+      description: fields.description,
+    }
+    if (updateModalVisible) {
+      dispatch({
+        type: 'sys_user/update',
+        payload: {...payload, ...{id: selectedValues.id}},
+        token: user.token,
+        callback: this.handleUpdateModalVisible,
+        callback2: this.getList
+      })
+    } else {
+      dispatch({
+        type: 'sys_user/add',
+        payload: payload,
+        token: user.token,
+        callback: this.handleModalVisible,
+        callback2: this.getList
+      })
+    }
   };
 
   handleUpdate = fields => {
@@ -761,60 +837,62 @@ class InfoCard extends Component {
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={6} sm={24}>
             <FormItem label="项目名称">
-              {getFieldDecorator('name')(<Input placeholder="请输入"/>)}
+              {getFieldDecorator('projectName')(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="项目经理">
-              {getFieldDecorator('name')(<Input placeholder="请输入"/>)}
+              {getFieldDecorator('projectManager')(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="项目书记">
-              {getFieldDecorator('name')(<Input placeholder="请输入"/>)}
+              {getFieldDecorator('projectSecretary')(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="总工">
-              {getFieldDecorator('name')(<Input placeholder="请输入"/>)}
+              {getFieldDecorator('chiefEngineer')(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
         </Row>
         {expandForm ? <Row gutter={{md: 4, lg: 12, xl: 24}}>
           <Col md={5} sm={24}>
             <FormItem label="计划开工日期">
-              {getFieldDecorator('date')(
+              {getFieldDecorator('contractStartTime')(
                 <DatePicker style={{width: '100%'}} placeholder="请选择日期"/>
               )}
             </FormItem>
           </Col>
           <Col md={5} sm={24}>
             <FormItem label="计划完工日期">
-              {getFieldDecorator('date')(
+              {getFieldDecorator('contractEndTime')(
                 <DatePicker style={{width: '100%'}} placeholder="请选择日期"/>
               )}
             </FormItem>
           </Col>
           <Col md={5} sm={24}>
             <FormItem label="实际开工日期">
-              {getFieldDecorator('date')(
+              {getFieldDecorator('realContractStartTime')(
                 <DatePicker style={{width: '100%'}} placeholder="请选择日期"/>
               )}
             </FormItem>
           </Col>
           <Col md={5} sm={24}>
-            <FormItem label="计划完工日期">
-              {getFieldDecorator('date')(
+            <FormItem label="实际完工日期">
+              {getFieldDecorator('realContractStartTime')(
                 <DatePicker style={{width: '100%'}} placeholder="请选择日期"/>
               )}
             </FormItem>
           </Col>
           <Col md={4} sm={24}>
             <FormItem label="工程状态">
-              {getFieldDecorator('status3')(
+              {getFieldDecorator('status')(
                 <Select placeholder="请选择" style={{width: '100%'}}>
-                  <Option value="0">关闭</Option>
-                  <Option value="1">运行中</Option>
+                  <Option value="0">在建</Option>
+                  <Option value="1">完工未结算</Option>
+                  <Option value="2">完工已结算</Option>
+                  <Option value="3">停工</Option>
                 </Select>
               )}
             </FormItem>
@@ -843,10 +921,10 @@ class InfoCard extends Component {
 
   render() {
     const {
-      rule: {data},
+      pro_proInfo: {data, proNames},
       loading,
     } = this.props;
-    const {selectedRows, modalVisible, updateModalVisible,selectedValues, pageLoading,checkDetail} = this.state;
+    const {selectedRows, modalVisible, updateModalVisible, selectedValues, pageLoading, checkDetail} = this.state;
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
         <Menu.Item key="edit">编辑</Menu.Item>
@@ -857,14 +935,15 @@ class InfoCard extends Component {
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
-      handleUpdateModalVisible:this.handleUpdateModalVisible,
-      handleCheckDetail:this.handleCheckDetail
+      handleUpdateModalVisible: this.handleUpdateModalVisible,
+      handleCheckDetail: this.handleCheckDetail
     };
     const parentState = {
-      updateModalVisible:updateModalVisible,
-      modalVisible:modalVisible,
-      selectedValues:selectedValues,
-      checkDetail:checkDetail
+      updateModalVisible: updateModalVisible,
+      modalVisible: modalVisible,
+      selectedValues: selectedValues,
+      checkDetail: checkDetail,
+      proNames: proNames
     }
     return (
       <Page inner={true} loading={pageLoading}>
@@ -888,9 +967,9 @@ class InfoCard extends Component {
               </div>
               <StandardTable
                 selectedRows={selectedRows}
-                loading={loading.effects['rule/fetch']}
+                loading={loading.effects['pro_proInfo/fetch']}
                 data={data}
-                scroll={{x:'150%'}}
+                scroll={{x: '150%'}}
                 bordered
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
@@ -903,8 +982,51 @@ class InfoCard extends Component {
       </Page>
     )
   }
+
+  getProNames = (proName) => {
+    if (proName.length < 1) {
+      this.props.dispatch(
+        {
+          type: 'pro_proInfo/queryProNames',
+          payload: {page: 1, pageSize: 10}
+        }
+      )
+    }
+  }
+
+  getList = (page = 1, pageSize = 10) => {
+    this.props.dispatch({
+      type: 'pro_proInfo/fetch',
+      payload: {page: page, pageSize: pageSize}
+    });
+  }
+
+  searchList = (page = 1, pageSize = 10) => {
+    this.props.form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      //  form.resetFields();
+      this.props.dispatch({
+        type: 'pro_proInfo/fetch',
+        payload: {
+          page: page,
+          pageSize: pageSize,
+          projectName: fieldsValue.projectName,
+          mileageNumber: fieldsValue.mileageNumber,
+          totalPrice: fieldsValue.totalPrice,
+          contractStartTime: fieldsValue.contractStartTime,
+          contractEndTime: fieldsValue.contractEndTime,
+          realContractStartTime: fieldsValue.realContractStartTime,
+          realContractEndTime: fieldsValue.realContractEndTime,
+          status: fieldsValue.status,
+          projectManager: fieldsValue.projectManager,
+          chiefEngineer: fieldsValue.chiefEngineer,
+          projectSecretary: fieldsValue.status,
+        }
+      });
+    });
+  }
 }
 
 InfoCard.propTypes = {}
 
-export default connect(({app, rule, loading}) => ({app, rule, loading}))(InfoCard)
+export default connect(({app, rule, loading, pro_proInfo}) => ({app, rule, loading, pro_proInfo}))(InfoCard)

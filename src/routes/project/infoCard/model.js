@@ -1,4 +1,5 @@
 import {queryProInfoList,queryProInfoDetail,addProInfo,updateProInfo} from '../../../services/project/project'
+import {queryProList} from "../../../services/system/sys_project";
 const delay = timeout => new Promise(resolve => setTimeout(resolve, timeout));
 export default {
   namespace: 'pro_proInfo',
@@ -8,15 +9,19 @@ export default {
       list: [],
       pagination: {},
     },
+    proNames:[],
   },
 
   effects: {
     *fetch({ payload}, { call, put }) {
       const response = yield call(queryProInfoList, payload);
-      // yield put({
-      //   type: 'save',
-      //   payload: response,
-      // });
+      console.log(payload)
+      if(response.code == '200'){
+        yield put({
+          type: 'save',
+          payload: response,
+        });
+      }
     },
     *add({ payload,token, callback }, { call, put }) {
       const response = yield call(addProInfo, payload,token);
@@ -34,6 +39,16 @@ export default {
       const response = yield call(updateProInfo, payload,token);
       if (callback) callback();
     },
+    *queryProNames({payload},{call,put}){
+      const response = yield call(queryProList, payload);
+      //console.log(response)
+      if(response.code=='200'){
+        yield put({
+          type:'saveProName',
+          payload:response.list
+        })
+      }
+    },
   },
 
   reducers: {
@@ -42,6 +57,12 @@ export default {
         ...state,
         data: action.payload,
       };
+    },
+    saveProName(state,action){
+      return{
+        ...state,
+        proNames:action.payload
+      }
     },
   },
 
