@@ -1,4 +1,4 @@
-import {addSubQua,querySubQuaList} from '../../../services/sub/qualification'
+import {addSubQua,querySubQuaList,updateSubQua} from '../../../services/sub/qualification'
 import {queryProList} from "../../../services/system/sys_project";
 import {message} from "antd/lib/index";
 export default {
@@ -8,9 +8,7 @@ export default {
     data: {
       list: [],
       pagination: {},
-    },
-    proNames:[],
-  },
+    }},
 
   effects: {
     *fetch({ payload }, { call, put }) {
@@ -40,14 +38,13 @@ export default {
         })
       }
     },
-    // *update({ payload, callback }, { call, put }) {
-    //   const response = yield call(updateRule, payload);
-    //   yield put({
-    //     type: 'save',
-    //     payload: response,
-    //   });
-    //   if (callback) callback();
-    // },
+    *update({ payload }, { call, put }) {
+      const response = yield call(updateSubQua, payload);
+      if(response.code=='200'){
+        return true
+      }
+      return false
+    },
   },
 
   reducers: {
@@ -56,13 +53,7 @@ export default {
         ...state,
         data: action.payload,
       };
-    },
-    saveProName(state,action){
-      return{
-        ...state,
-        proNames:action.payload
-      }
-    },
+    }
   },
 
 };

@@ -375,12 +375,12 @@ const CreateReview = Form.create()(props => {
       <Row gutter={8}>
         <Col md={12} sm={24}>
           <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="股份公司综合信誉评价">
-            {form.getFieldDecorator('proName100', {
+            {form.getFieldDecorator('shareEvaluation', {
               rules: [{required: true, message: '请选择'}],
             })(<Select placeholder="请选择" style={{width: '100%'}}>
-              <Option value="0">优秀</Option>
-              <Option value="1">合格</Option>
-              <Option value="2">不合格</Option>
+              <Option value="优秀">优秀</Option>
+              <Option value="合格">合格</Option>
+              <Option value="不合格">不合格</Option>
             </Select>)}
           </FormItem>
         </Col>
@@ -388,11 +388,11 @@ const CreateReview = Form.create()(props => {
       <Row gutter={8}>
         <Col md={12} sm={24}>
           <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="资质是否齐全">
-            {form.getFieldDecorator('proName100', {
+            {form.getFieldDecorator('qualification', {
               rules: [{required: true, message: '请选择'}],
             })(<Select placeholder="请选择" style={{width: '100%'}}>
-              <Option value="0">是</Option>
-              <Option value="1">否</Option>
+              <Option value="是">是</Option>
+              <Option value="否">否</Option>
             </Select>)}
           </FormItem>
         </Col>
@@ -400,7 +400,7 @@ const CreateReview = Form.create()(props => {
       <Row gutter={8}>
         <Col md={24} sm={24}>
           <FormItem style={{marginLeft: 21 + 'px'}} labelCol={{span: 4}} wrapperCol={{span: 15}} label="备注">
-            {form.getFieldDecorator('proSummary', {
+            {form.getFieldDecorator('shareRemark', {
               rules: [{required: true}],
             })(<Input.TextArea width={'100%'} placeholder="请输入" rows={4}/>)}
           </FormItem>
@@ -414,7 +414,7 @@ const CreateReview = Form.create()(props => {
           <Row gutter={8}>
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 11}} wrapperCol={{span: 12}} label="集团公司综合信誉评价">
-                {form.getFieldDecorator('proName100', {
+                {form.getFieldDecorator('groupEvaluation', {
                   rules: [{required: true, message: '请选择'}],
                 })(<Select placeholder="请选择" style={{width: '100%'}}>
                   <Option value="0">优秀</Option>
@@ -427,7 +427,7 @@ const CreateReview = Form.create()(props => {
           <Row gutter={8}>
             <Col md={24} sm={24}>
               <FormItem style={{marginLeft: 21 + 'px'}} labelCol={{span: 5}} wrapperCol={{span: 15}} label="备注">
-                {form.getFieldDecorator('proSummary', {
+                {form.getFieldDecorator('groupRemark', {
                   rules: [{required: true}],
                 })(<Input.TextArea width={'100%'} placeholder="请输入" rows={4}/>)}
               </FormItem>
@@ -440,14 +440,14 @@ const CreateReview = Form.create()(props => {
           <Row gutter={8}>
             <Col md={8} sm={24}>
               <FormItem labelCol={{span: 11}} wrapperCol={{span: 12}} label="公司信誉评价">
-                {form.getFieldDecorator('proName100', {
+                {form.getFieldDecorator('companyEvaluation', {
                   rules: [{required: true, message: '请选择'}],
                 })(<Select placeholder="请选择" style={{width: '100%'}}>
-                  <Option value="0">优秀</Option>
-                  <Option value="1">良好</Option>
-                  <Option value="2">合格</Option>
-                  <Option value="3">不合格</Option>
-                  <Option value="4">限制使用</Option>
+                  <Option value="优秀">优秀</Option>
+                  <Option value="良好">良好</Option>
+                  <Option value="合格">合格</Option>
+                  <Option value="不合格">不合格</Option>
+                  <Option value="限制使用">限制使用</Option>
                 </Select>)}
               </FormItem>
             </Col>
@@ -455,11 +455,11 @@ const CreateReview = Form.create()(props => {
           <Row gutter={8}>
             <Col md={8} sm={24}>
               <FormItem labelCol={{span: 11}} wrapperCol={{span: 12}} label="集团公司信誉评价">
-                {form.getFieldDecorator('proName100', {
+                {form.getFieldDecorator('companyGroupEvaluation', {
                   rules: [{required: true, message: '请选择'}],
                 })(<Select placeholder="请选择" style={{width: '100%'}}>
-                  <Option value="0">合格</Option>
-                  <Option value="1">不合格</Option>
+                  <Option value="合格">合格</Option>
+                  <Option value="不合格">不合格</Option>
                 </Select>)}
               </FormItem>
             </Col>
@@ -574,8 +574,6 @@ class Qualification extends Component {
   ];
 
   componentDidMount() {
-    const {dispatch} = this.props;
-    this.getList()
     _setTimeOut(() => this.setState({pageLoading: false}), 1000)
     this.getList()
     // setTimeout(() => {
@@ -597,7 +595,7 @@ class Qualification extends Component {
     }, {});
 
     const params = {
-      currentPage: pagination.current,
+      page: pagination.current,
       pageSize: pagination.pageSize,
       ...formValues,
       ...filters,
@@ -606,22 +604,13 @@ class Qualification extends Component {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
 
-    dispatch({
-      type: 'rule/fetch',
-      payload: params,
-    });
+    this.getList(...params)
   };
 
   handleFormReset = () => {
-    const {form, dispatch} = this.props;
+    const {form} = this.props;
     form.resetFields();
-    this.setState({
-      formValues: {},
-    });
-    dispatch({
-      type: 'rule/fetch',
-      payload: {},
-    });
+    this.getList()
   };
 
   toggleForm = () => {
@@ -691,7 +680,7 @@ class Qualification extends Component {
     });
   };
 
-  handleReviewModal = flag => {
+  handleReviewModal = (flag=-1) => {
     this.setState({
       reviewType: flag
     })
@@ -713,7 +702,7 @@ class Qualification extends Component {
     });
   };
 
-  handleAdd = (fields, updateModalVisible, selectedValues) => {
+  handleAdd = (fieldsValue, updateModalVisible, selectedValues) => {
     // const {dispatch} = this.props;
     // dispatch({
     //   type: 'rule/add',
@@ -723,9 +712,33 @@ class Qualification extends Component {
     // });
     const {dispatch, app: {user}} = this.props;
     const payload = {
-      account: fields.account,
-      password: fields.password,
-      type: 0
+      name: fieldsValue.name,
+      typeId: fieldsValue.typeId,
+      professionType: fieldsValue.professionType,
+      registeredCapital: fieldsValue.registeredCapital,
+      taxpayerTypeId: fieldsValue.taxpayerTypeId,
+      email: fieldsValue.email,
+      phone: fieldsValue.phone,
+      address: fieldsValue.address,
+      zipCode: fieldsValue.zipCode,
+      legalPersonName: fieldsValue.legalPersonName,
+      legalPersonPosition: fieldsValue.legalPersonPosition,
+      legalPersonCard: fieldsValue.legalPersonCard,
+      legalPersonPhone: fieldsValue.legalPersonPhone,
+      legalPersonAddress: fieldsValue.legalPersonAddress,
+      businessLicenseCode: fieldsValue.registeredCapital,
+      businessLicenseValidityPeriod: fieldsValue.businessLicenseValidityPeriod,
+      businessLicenseFrom: fieldsValue.businessLicenseFrom,
+      qualificationCode: fieldsValue.qualificationCode,
+      qualificationValidityPeriod: fieldsValue.qualificationValidityPeriod,
+      qualificationFrom: fieldsValue.qualificationFrom,
+      safetyCode: fieldsValue.safetyCode,
+      safetyValidityPeriod: fieldsValue.safetyValidityPeriod,
+      bank: fieldsValue.bank,
+      bankAccount: fieldsValue.bankAccount,
+      bankFrom: fieldsValue.bankFrom,
+      annex: fieldsValue.annex,
+
     }
     if (updateModalVisible) {
       // dispatch({
@@ -937,17 +950,6 @@ class Qualification extends Component {
     )
   }
 
-  getProNames = (proName) => {
-    if (proName.length < 1) {
-      this.props.dispatch(
-        {
-          type: 'sub_qua/queryProNames',
-          payload: {page: 1, pageSize: 10}
-        }
-      )
-    }
-  }
-
   getList = (page = 1, pageSize = 10) => {
     this.props.dispatch({
       type: 'sub_qua/fetch',
@@ -964,20 +966,42 @@ class Qualification extends Component {
         payload: {
           page: page,
           pageSize: pageSize,
-          projectName: fieldsValue.projectName,
-          mileageNumber: fieldsValue.mileageNumber,
-          totalPrice: fieldsValue.totalPrice,
-          contractStartTime: fieldsValue.contractStartTime,
-          contractEndTime: fieldsValue.contractEndTime,
-          realContractStartTime: fieldsValue.realContractStartTime,
-          realContractEndTime: fieldsValue.realContractEndTime,
-          status: fieldsValue.status,
-          projectManager: fieldsValue.projectManager,
-          chiefEngineer: fieldsValue.chiefEngineer,
-          projectSecretary: fieldsValue.status,
+          name: fieldsValue.name,
+          typeId: fieldsValue.typeId,
+          professionType: fieldsValue.professionType,
+          registeredCapital: fieldsValue.registeredCapital,
+          companyGroupEvaluation: fieldsValue.companyGroupEvaluation,
+          companyEvaluation: fieldsValue.companyEvaluation,
+          groupEvaluation: fieldsValue.groupEvaluation
         }
       });
     });
+  }
+
+  handleReview = (fieldsValue, selectedValues, type) => {
+    //type:0股份公司 1集团公司 2公司本级
+    const {dispatch, app: {user}} = this.props;
+    const payload = type == 0 ? {
+      shareEvaluation: fieldsValue.shareEvaluation,
+      qualification: fieldsValue.qualification,
+      shareRemark: fieldsValue.shareRemark
+    } : type == 1 ? {
+      groupEvaluation: fieldsValue.groupEvaluation,
+      groupRemark: fieldsValue.groupRemark
+    } : {
+      companyEvaluation: fieldsValue.companyEvaluation,
+      companyGroupEvaluation: fieldsValue.companyGroupEvaluation
+    }
+    dispatch({
+      type: 'sub_qua/update',
+      payload: {...payload, ...{id: selectedValues.id,}},
+      token: user.token
+    }).then(res=>{
+      if(res){
+        this.handleUpdateModalVisible()
+        this.getList()
+      }
+    })
   }
 }
 
