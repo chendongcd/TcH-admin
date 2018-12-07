@@ -245,8 +245,7 @@ class CreateForm extends Component {
     });
   };
 
-  onSelect = (value, option) => {
-    // console.log(option)
+  onChange = (value, option) => {
     this.selectProject = option.props.item
     this.props.form.setFieldsValue({projectType: this.selectProject.projectType});
   }
@@ -278,9 +277,9 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('projectId', {
                   rules: [{required: true, message: '请选择项目'}],
                   initialValue: selectedValues.projectId ? selectedValues.projectId : '',
-                })(<Select onSelect={this.onSelect} disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
+                })(<Select showSearch={true} optionFilterProp={'name'} onChange={this.onChange} disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
                   {proNames.map((item, index) => {
-                    return <Option key={item.id} item={item} value={item.id}>{item.name}</Option>
+                    return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
                   })}
                 </Select>)}
               </FormItem>
@@ -566,7 +565,7 @@ class InfoCard extends Component {
         dataIndex: 'contractStartTime',
         key: 'contractStartTime',
         render(val) {
-          return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
+          return <span>{moment(val).format('YYYY/MM/DD')}</span>;
         },
       },
         {
@@ -574,7 +573,7 @@ class InfoCard extends Component {
           dataIndex: 'contractEndTime',
           key: 'contractEndTime',
           render(val) {
-            return <span>{moment(val.updatedAt).format('YYYY/MM/DD')}</span>;
+            return <span>{moment(val).format('YYYY/MM/DD')}</span>;
           },
         },]
     },
@@ -585,13 +584,13 @@ class InfoCard extends Component {
         dataIndex: 'realContractStartTime',
         key: 'realContractStartTime',
         render(val) {
-          return <span>{moment(val.updatedAt).format('YYYY/MM/DD')}</span>;
+          return <span>{moment(val).format('YYYY/MM/DD')}</span>;
         },
       },
         {
           title: '实际完工日期',
-          dataIndex: 'realContractStartTime',
-          key: 'realContractStartTime',
+          dataIndex: 'realContractEndTime',
+          key: 'realContractEndTime',
           render(val) {
             return <span>{moment(val.updatedAt).format('YYYY/MM/DD')}</span>;
           },

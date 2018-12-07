@@ -45,7 +45,7 @@ export default {
     },
     *queryProNames({payload},{call,put}){
       const response = yield call(queryProList, payload);
-      //console.log(response)
+      console.log(response)
       if(response.code=='200'){
         yield put({
           type:'saveProName',

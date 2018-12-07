@@ -48,7 +48,7 @@ const CreateForm = Form.create()(props => {
       handleAdd(fieldsValue);
     });
   };
-  console.log(proNames)
+  //console.log(proNames)
   return (
     <Modal
       destroyOnClose
@@ -67,9 +67,9 @@ const CreateForm = Form.create()(props => {
               {form.getFieldDecorator('projectId', {
                 rules: [{required: true, message: '请选择项目'}],
                 initialValue: selectedValues.projectId ? selectedValues.projectId : '',
-              })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
+              })(<Select showSearch={true} optionFilterProp={'name'} disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
                 {proNames.map((item, index) => {
-                  return <Option key={item.id} item={item} value={item.id}>{item.name}</Option>
+                  return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
                 })}
               </Select>)}
             </FormItem>
@@ -697,7 +697,7 @@ class MeterUp extends Component {
     if (proName.length < 1) {
       this.props.dispatch(
         {
-          type: 'pro_proInfo/queryProNames',
+          type: 'meterUp/queryProNames',
           payload: {page: 1, pageSize: 10}
         }
       )
