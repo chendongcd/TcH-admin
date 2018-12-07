@@ -66,6 +66,7 @@ class StandardTable extends PureComponent {
     const {
       data: { list, pagination },
       rowKey,
+      isRowSelection,
       ...rest
     } = this.props;
 
@@ -74,18 +75,16 @@ class StandardTable extends PureComponent {
       showQuickJumper: pagination.total>100,
       ...pagination,
     };
-
-    const rowSelection = {
+    const rowSelection = isRowSelection?{
       selectedRowKeys,
       onChange: this.handleRowSelectChange,
       getCheckboxProps: record => ({
         disabled: record.disabled,
       }),
-    };
-
+    }:null;
     return (
       <div className={styles.standardTable}>
-        {/*<div className={styles.tableAlert}>
+        {rowSelection?<div className={styles.tableAlert}>
           <Alert
             message={
               <Fragment>
@@ -107,11 +106,10 @@ class StandardTable extends PureComponent {
             type="info"
             showIcon
           />
-        </div>*/}
-
+        </div>:null}
         <Table
           rowKey={rowKey || 'key'}
-          /*rowSelection={rowSelection}*/
+          rowSelection={rowSelection}
           dataSource={list}
           pagination={paginationProps}
           onChange={this.handleTableChange}

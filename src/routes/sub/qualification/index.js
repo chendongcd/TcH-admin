@@ -29,8 +29,6 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const statusMap = ['default', 'processing', 'success', 'error'];
-const status = ['关闭', '运行中', '已上线', '异常'];
 const info_css = {
   color: '#fa541c'
 }
@@ -345,15 +343,13 @@ const CreateForm = Form.create()(props => {
 });
 
 const CreateReview = Form.create()(props => {
-  const {modalVisible, form, handleAdd, handleReviewModal} = props;
-  const {getFieldDecorator, getFieldValue} = form
-
+  const {modalVisible, form, handleReview, handleReviewModal} = props;
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       console.log(fieldsValue)
       if (err) return;
       // form.resetFields();
-      handleAdd(fieldsValue);
+      handleReview(fieldsValue,modalVisible);
     });
   };
 
@@ -561,6 +557,8 @@ class Qualification extends Component {
     },
     {
       title: '操作',
+      fixed: 'right',
+      width:175,
       render: (val, record) => (
         <Fragment>
           <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
@@ -568,6 +566,12 @@ class Qualification extends Component {
           <a onClick={() => this.handleCheckDetail(true, record)}>查看</a>
           <Divider type="vertical"/>
           <a>下载附件</a>
+         {/* <Divider type="horizontal"/>
+          <a onClick={() => this.handleReviewModal(0,record)}> 股份公司综合信誉评价</a>
+          <Divider type="horizontal"/>
+          <a onClick={() => this.handleReviewModal(1,record)}>集团公司综合信誉评价</a>
+          <Divider type="horizontal"/>
+          <a onClick={() => this.handleReviewModal(2,record)}>公司本级综合信誉评价</a>*/}
         </Fragment>
       ),
     },
@@ -625,29 +629,19 @@ class Qualification extends Component {
     const {selectedRows} = this.state;
 
     if (!selectedRows) return;
-    switch (e.key) {
-      case 'remove':
-        dispatch({
-          type: 'rule/remove',
-          payload: {
-            key: selectedRows.map(row => row.key),
-          },
-          callback: () => {
-            this.setState({
-              selectedRows: [],
-            });
-          },
-        });
-        break;
-      default:
-        break;
+    if(e.key==3){
+      return
+    }else {
+      this.handleReviewModal(e.key)
     }
   };
 
   handleSelectRows = rows => {
-    this.setState({
-      selectedRows: rows,
-    });
+    if(rows.length<=1) {
+      this.setState({
+        selectedRows: rows,
+      });
+    }
   };
 
   handleSearch = e => {
@@ -877,13 +871,15 @@ class Qualification extends Component {
     const {
       sub_qua: {data},
       loading,
+      app:{darkTheme}
     } = this.props;
     const {selectedRows, modalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail, reviewType} = this.state;
     const menu = (
-      <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
-        <Menu.Item key="edit">编辑</Menu.Item>
-        <Menu.Item key="export">导出</Menu.Item>
-        <Menu.Item key="export1">下载分包商信息卡</Menu.Item>
+      <Menu theme={darkTheme?'dark':'light'} onClick={this.handleMenuClick} selectedKeys={[]}>
+        <Menu.Item  key="0">股份公司综合信誉评价</Menu.Item>
+        <Menu.Item key="1">集团公司综合信誉评价</Menu.Item>
+        <Menu.Item key="2"> 公司本级综合信誉评价</Menu.Item>
+        <Menu.Item key="3">导出</Menu.Item>
       </Menu>
     );
 
@@ -893,13 +889,15 @@ class Qualification extends Component {
       normFile: this.normFile,
       handleReviewModal: this.handleReviewModal,
       handleUpdateModalVisible: this.handleUpdateModalVisible,
-      handleCheckDetail: this.handleCheckDetail
+      handleCheckDetail: this.handleCheckDetail,
+      handleReview:this.handleReview
     };
     const parentState = {
       updateModalVisible: updateModalVisible,
       modalVisible: modalVisible,
       selectedValues: selectedValues,
-      checkDetail: checkDetail
+      checkDetail: checkDetail,
+      selectedRows:selectedRows
     }
     return (
       <Page inner={true} loading={pageLoading}>
@@ -911,20 +909,20 @@ class Qualification extends Component {
                 <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                   新增
                 </Button>
-                <Button icon="edit" type="primary" onClick={() => this.handleReviewModal(0)}>
+{/*                {selectedRows.length > 0?<Button icon="edit" type="primary" onClick={() => this.handleReviewModal(0)}>
                   股份公司综合信誉评价
-                </Button>
-                <Button icon="edit" type="primary" onClick={() => this.handleReviewModal(1)}>
+                </Button>:null}
+                {selectedRows.length > 0?<Button icon="edit" type="primary" onClick={() => this.handleReviewModal(1)}>
                   集团公司综合信誉评价
-                </Button>
-                <Button icon="edit" type="primary" onClick={() => this.handleReviewModal(2)}>
+                </Button>:null}
+                {selectedRows.length > 0? <Button icon="edit" type="primary" onClick={() => this.handleReviewModal(2)}>
                   公司本级综合信誉评价
-                </Button>
+                </Button>:null}*/}
                 {selectedRows.length > 0 && (
                   <span>
                   <Dropdown overlay={menu}>
                     <Button>
-                     操作 <Icon type="down"/>
+                     更多操作 <Icon type="down"/>
                     </Button>
                   </Dropdown>
                 </span>
@@ -936,6 +934,7 @@ class Qualification extends Component {
                 bordered
                 rowKey="id"
                 data={data}
+                isRowSelection={true}
                 scroll={{x: '200%'}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
@@ -978,7 +977,7 @@ class Qualification extends Component {
     });
   }
 
-  handleReview = (fieldsValue, selectedValues, type) => {
+  handleReview = (fieldsValue, type) => {
     //type:0股份公司 1集团公司 2公司本级
     const {dispatch, app: {user}} = this.props;
     const payload = type == 0 ? {
@@ -994,7 +993,7 @@ class Qualification extends Component {
     }
     dispatch({
       type: 'sub_qua/update',
-      payload: {...payload, ...{id: selectedValues.id,}},
+      payload: {...payload, ...{id: this.state.selectedRows[0].id,}},
       token: user.token
     }).then(res=>{
       if(res){
