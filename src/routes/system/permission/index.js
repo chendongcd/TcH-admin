@@ -165,16 +165,16 @@ class CreatDrawer extends Component {
         </Collapse>
         <Divider style={{marginTop: 0, marginBottom: 0}}/>
         <Spin style={{flex:1,marginBottom: 53 + 'px', overflow: 'scroll'}} spinning={!selectedValues.resouces} tip="加载中">
-          <Tree
+          {selectedValues.resouces?<Tree
             checkable
             showIcon
-            defaultCheckedKeys={selectedValues.resouces}
-            defaultSelectedKeys={selectedValues.resouces}
+            defaultCheckedKeys={selectedValues.resouces?selectedValues.resouces:[]}
+            defaultSelectedKeys={selectedValues.resouces?selectedValues.resouces:[]}
             onCheck={this.onCheck}
-           // style={{marginBottom: 53 + 'px', overflow: 'scroll'}}
+            // style={{marginBottom: 53 + 'px', overflow: 'scroll'}}
           >
             {this.renderTree(menuTree)}
-          </Tree>
+          </Tree>:null}
         </Spin>
         <div
           style={{
@@ -422,6 +422,7 @@ class Permission extends Component {
     }).then(res=>{
       if(res) {
         res.resouces = res.resouces.map(a=>a.permission)
+        //console.log(res.resouces)
         this.setState({
           selectedValues: res
         });

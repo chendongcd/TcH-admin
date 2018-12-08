@@ -119,7 +119,7 @@ class CreateForm extends Component {
         <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="账号名称">
           {form.getFieldDecorator('account', {
             rules: [{required: true, message: '请输入账号名称'}],
-            initialValue: selectedValues.name ? selectedValues.name : ''
+            initialValue: selectedValues.account ? selectedValues.account : ''
           })(<Input disabled={checkDetail} placeholder="请输入"/>)}
         </FormItem>
         <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="账号密码">
@@ -160,7 +160,7 @@ class User extends Component {
     },
     {
       title: '账号名称',
-      dataIndex: 'name',
+      dataIndex: 'account',
     },
     {
       title: '项目名称',

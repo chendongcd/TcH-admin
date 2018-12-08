@@ -11,7 +11,7 @@ export async function queryRoleList(params) {
 }
 
 export async function queryRoleDetail(params) {
-  console.log('请求角色详情',`${apiDev}/role/list/v1.1`)
+  console.log('请求角色详情',`${apiDev}/role/details/v1.1`)
   return request(`${api}/details/v1.1`,{
     method: 'GET',
     body: params

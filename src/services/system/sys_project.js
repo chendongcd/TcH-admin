@@ -69,8 +69,8 @@ export async function queryProDetail(params) {
   });
 }
 export async function updateProStatus(params,token) {
-  console.log('请求禁用、启用项目',`${api}/update_status/v1.1`)
-  return request(`${api}/update_status/v1.1`,{
+  console.log('请求禁用、启用项目',`${api}/update/v1.1`)
+  return request(`${api}/update/v1.1`,{
     method: 'POST',
     body: params
   },token);
