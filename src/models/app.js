@@ -2,16 +2,15 @@ import {routerRedux} from 'dva/router'
 import {signIn,signOut} from '../services/app'
 import config from 'config'
 import {menuData} from '../common/menu'
+import {getMenus} from 'utils'
 import {setStorage,getStorage} from 'utils/localStorage'
 const delay = timeout => new Promise(resolve => setTimeout(resolve, timeout));
 const {prefix} = config
 
 function getMenu(user) {
-  //if(user&&user.id==0){
-    return menuData
-  // }else if(user){
-  // return menuData.filter(a=>a.id!=2)
-  // }
+  if(user&&user.id){
+    return getMenus([...user.permissionsMap.menu,...[menuData[0].permission]])
+   }
   return []
 }
 
@@ -60,8 +59,11 @@ export default {
     * login({payload}, {call, put}) {
       const res = yield call(signIn, payload)
       if (res.code == 200) {
-        let menu = menuData
+        let menu = getMenus([...res.entity.permissionsMap.menu,...[menuData[0].permission]])
+       // console.log(res)
+       // console.log(getMenus([...res.entity.permissionsMap.menu,...[menuData[0].permission]]))
         setStorage('userInfo',res.entity)
+       // console.log(menu)
         yield put({type: 'updateState', payload: {user: res.entity, loading: true,menu:menu}})
         yield put(routerRedux.push('/home'))
         yield call(delay, 500)

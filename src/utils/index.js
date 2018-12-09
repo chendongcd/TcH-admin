@@ -1,12 +1,13 @@
 /* global window */
 import cloneDeep from 'lodash.clonedeep'
+import {menuData} from "../common/menu";
 
 export classnames from 'classnames'
 export config from './config'
 export request from './request'
 export requestDev from './requestDev'
-export { color } from './theme'
-export {setStorage,getStorage} from './localStorage'
+export {color} from './theme'
+export {setStorage, getStorage} from './localStorage'
 
 // 连字符转驼峰
 String.prototype.hyphenToHump = function () {
@@ -48,7 +49,7 @@ Date.prototype.format = function (format) {
  * @param  name {String}
  * @return  {String}
  */
-export function queryURL (name) {
+export function queryURL(name) {
   let reg = new RegExp(`(^|&)${name}=([^&]*)(&|$)`, 'i')
   let r = window.location.search.substr(1).match(reg)
   if (r != null) return decodeURI(r[2])
@@ -62,7 +63,7 @@ export function queryURL (name) {
  * @param   {String}    keyAlias
  * @return  {Array}
  */
-export function queryArray (array, key, keyAlias = 'key') {
+export function queryArray(array, key, keyAlias = 'key') {
   if (!(array instanceof Array)) {
     return null
   }
@@ -81,14 +82,13 @@ export function queryArray (array, key, keyAlias = 'key') {
  * @param   {String}    children
  * @return  {Array}
  */
-export function arrayToTree (array, id = 'id', pid = 'pid', children = 'children') {
+export function arrayToTree(array, id = 'id', pid = 'pid', children = 'children') {
   let data = cloneDeep(array)
   let result = []
   let hash = {}
   data.forEach((item, index) => {
     hash[data[index][id]] = data[index]
   })
-
   data.forEach((item) => {
     let hashVP = hash[item[pid]]
     if (hashVP) {
@@ -101,6 +101,16 @@ export function arrayToTree (array, id = 'id', pid = 'pid', children = 'children
   return result
 }
 
-export function _setTimeOut(func,time=1000){
-   setTimeout(() => func(),time)
+export function _setTimeOut(func, time = 1000) {
+  setTimeout(() => func(), time)
+}
+
+/*筛选用户拥有的菜单权限*/
+export function getMenus(menus) {
+  return menuData.filter(a=>menus.includes(a.permission))
+}
+
+/*筛选用户当前页面拥有的按钮权限*/
+export function getButtons(pageButtons, button) {
+  return pageButtons.includes(button)
 }

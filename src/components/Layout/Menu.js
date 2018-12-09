@@ -4,15 +4,26 @@ import { Menu, Icon } from 'antd'
 import { Link } from 'react-router-dom'
 import { arrayToTree, queryArray } from 'utils'
 import pathToRegexp from 'path-to-regexp'
-
+import {menuData} from "../../common/menu";
 const { SubMenu } = Menu
 let openKeysFlag = false
 
 const Menus = ({
   siderFold, darkTheme, navOpenKeys, changeOpenKeys, menu, location,
 }) => {
-  // 生成树状
-  const menuTree = arrayToTree(menu.filter(_ => _.mpid !== '-1'), 'id', 'mpid')
+ // const menuTrees = arrayToTree(menuData.filter(_ => _.mpid !== '-1'), 'id', 'mpid').filter()
+  const menuPer = menu.map(a=>a.permission)
+  // 生成树状 .filter(a=>menu.includes(a.permission))
+  let menuTree = arrayToTree(menuData.filter(_ => _.mpid !== '-1'), 'id', 'mpid').filter(a=>menuPer.includes(a.permission))
+  menuTree = menuTree.map(a=>{
+    if(a.children){
+      a.children = a.children.filter(b=>menuPer.includes(b.permission))
+    }
+    return a
+  })
+  // console.log(menu)
+  // console.log(menuTree)
+  //console.log(menuTree)
   const levelMap = {}
 
   // 递归生成菜单

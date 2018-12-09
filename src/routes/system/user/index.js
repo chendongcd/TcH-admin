@@ -103,7 +103,7 @@ class CreateForm extends Component {
           </Select>)}
         </FormItem> : null}
         <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="角色权限">
-          {form.getFieldDecorator('role', {
+          {form.getFieldDecorator('roleId', {
             rules: [{required: true, message: '请选择角色权限'}],
           })(
             <Select onFocus={() => this.getOptions(getRoleNames, roleNames)}
@@ -203,6 +203,8 @@ class User extends Component {
     },
     {
       title: '操作',
+      fixed: 'right',
+      width:160,
       render: (val, record) => {
         return (
           <Fragment>
@@ -307,11 +309,13 @@ class User extends Component {
       account: fields.account,
       password: fields.password,
       projects: fields.proName.map(a => JSON.parse(`{"id":${a}}`)),
-      type: 1
+      type: 1,
+      roleId:fields.roleId
     } : {
       account: fields.account,
       password: fields.password,
-      type: 0
+      type: 0,
+      roleId:fields.roleId
     }
     if (updateModalVisible) {
       dispatch({

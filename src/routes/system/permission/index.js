@@ -30,45 +30,46 @@ const getValue = obj =>
     .map(key => obj[key])
     .join(',');
 const CreateForm = Form.create()(props => {
-  const {modalVisible, form, handleAdd, handleModalVisible,handleUpdateModalVisible,updateModalVisible,selectedValues} = props;
+  const {modalVisible, form, handleAdd, handleModalVisible, handleUpdateModalVisible, updateModalVisible, selectedValues} = props;
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-    //  form.resetFields();
-      handleAdd(fieldsValue, updateModalVisible,selectedValues);
+      //  form.resetFields();
+      handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
   };
 
   return (
     <Modal
       destroyOnClose
-      title={updateModalVisible?"编辑角色":"新增角色"}
+      title={updateModalVisible ? "编辑角色" : "新增角色"}
       visible={modalVisible}
       onOk={okHandle}
-      onCancel={() => updateModalVisible?handleUpdateModalVisible():handleModalVisible()}
+      onCancel={() => updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
     >
       <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="角色名称">
         {form.getFieldDecorator('roleName', {
           rules: [{required: true, message: '请输入角色名称'}],
-          initialValue:selectedValues.name?selectedValues.name:''
+          initialValue: selectedValues.name ? selectedValues.name : ''
         })(<Input placeholder="请输入"/>)}
       </FormItem>
     </Modal>
   );
 });
 
-class CreatDrawer extends Component {
-
+class CustomTree extends Component {
   constructor(props) {
     super(props)
     this.state = {
-
+      checkStrictly: true
     }
-    this.resouces=[]
   }
 
-  onCheck = (checkedKeys, info) => {
-    this.resouces=checkedKeys
+  componentDidUpdate(prevProps, preState) {
+    console.log(prevProps.selectedValues)
+    // if(!prevProps.selectedValues.resouces&&this.props.selectedValues.resouces){
+    //   this.setState({checkStrictly:false})
+    // }
   }
 
   renderSubTree = (trees) => {
@@ -79,8 +80,8 @@ class CreatDrawer extends Component {
     }) : null
   }
 
-  renderButton = (buttons)=>{
-    return buttons.map((button,index)=>{
+  renderButton = (buttons) => {
+    return buttons.map((button, index) => {
       return <TreeNode selectable={false} title={button.name} key={button.permission}/>
     })
   }
@@ -95,12 +96,93 @@ class CreatDrawer extends Component {
     })
   }
 
-  onCertain = (setPermission,selectedValues)=>{
-    setPermission({id:selectedValues.id,resouces:this.resouces.map(a=>JSON.parse(`{"permission":"${a}"}`))})
+  render() {
+    const {selectedValues, onCheck} = this.props
+    console.log(123)
+    // console.log(this.state.checkStrictly)
+    // 生成树状
+    const menuTree = arrayToTree(menuData.filter(_ => (_.mpid !== '-1' && _.id !== '1')), 'id', 'mpid')
+    return (
+      <Tree
+        checkable
+        showIcon
+        checkStrictly={this.state.checkStrictly}
+        defaultCheckedKeys={selectedValues.resouces ? selectedValues.resouces : []}
+        defaultSelectedKeys={selectedValues.resouces ? selectedValues.resouces : []}
+        onCheck={onCheck}
+        // style={{marginBottom: 53 + 'px', overflow: 'scroll'}}
+      >
+        {this.renderTree(menuTree)}
+      </Tree>
+    )
+  }
+}
+
+class CreatDrawer extends Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      checkedKeys: [],
+      buttons: []
+    }
+    this.resouces = []
+  }
+
+  componentDidUpdate(prevProps, preState) {
+    // console.log(prevProps.selectedValues)
+    if (!prevProps.selectedValues.resouces && this.props.selectedValues.resouces) {
+      ///this.setState({checkStrictly:false})
+      this.setState({checkedKeys: this.props.selectedValues.resouces})
+    }
+  }
+
+  onCheck = (checkedKeys, info) => {
+    // this.resouces=[...checkedKeys,...info.halfCheckedKeys]
+   // console.log(info)
+    console.log(checkedKeys)
+    this.resouces = checkedKeys.checked
+    this.setState({checkedKeys})
+  }
+
+  renderSubTree = (trees) => {
+    return trees.children ? trees.children.map((tree, index) => {
+      return (<TreeNode selectable={false} title={tree.name} key={tree.permission}>
+        {this.renderButton(tree.buttons)}
+      </TreeNode>)
+    }) : null
+  }
+
+  renderButton = (buttons = []) => {
+    return buttons.map((button, index) => {
+      return <TreeNode selectable={false} title={button.name} key={button.permission}/>
+    })
+  }
+
+  renderTree = (menuTree) => {
+    return menuTree.map((a, aIndex) => {
+      return (
+        <TreeNode selectable={false} item={[]} icon={<Icon type={a.icon}/>} title={a.name} key={a.permission}>
+          {this.renderSubTree(a)}
+        </TreeNode>
+      )
+    })
+  }
+
+  onCertain = (setPermission, selectedValues) => {
+    //console.log(this.resouces)
+    const res = this.resouces.length == 0 ? selectedValues.resouces : this.resouces
+    setPermission({id: selectedValues.id, resouces: res.map(a => JSON.parse(`{"permission":"${a}"}`))})
+    this.setState({checkedKeys: []})
+  }
+
+  _onClose = (onClose) => {
+    onClose()
+    this.setState({checkedKeys: []})
   }
 
   render() {
-    const {onClose, drawVisible,selectedValues,setPermission} = this.props
+    const {onClose, drawVisible, selectedValues, setPermission} = this.props
     const DescriptionItem = ({title, content}) => (
       <div
         style={{
@@ -124,13 +206,14 @@ class CreatDrawer extends Component {
     );
     // 生成树状
     const menuTree = arrayToTree(menuData.filter(_ => (_.mpid !== '-1' && _.id !== '1')), 'id', 'mpid')
+    // console.log()
     return (
       <Drawer
         width={440}
         title="权限设置"
         placement="right"
         closable={false}
-        onClose={onClose}
+        onClose={() => this._onClose(onClose)}
         style={{paddingBottom: 53 + 'px'}}
         visible={drawVisible}
       >
@@ -164,17 +247,18 @@ class CreatDrawer extends Component {
           </Collapse.Panel>
         </Collapse>
         <Divider style={{marginTop: 0, marginBottom: 0}}/>
-        <Spin style={{flex:1,marginBottom: 53 + 'px', overflow: 'scroll'}} spinning={!selectedValues.resouces} tip="加载中">
-          {selectedValues.resouces?<Tree
+        <Spin style={{flex: 1, marginBottom: 53 + 'px', overflow: 'scroll', flexDirection: 'row'}}
+              spinning={!selectedValues.resouces} tip="加载中">
+          <Tree
             checkable
             showIcon
-            defaultCheckedKeys={selectedValues.resouces?selectedValues.resouces:[]}
-            defaultSelectedKeys={selectedValues.resouces?selectedValues.resouces:[]}
+            checkStrictly
+            checkedKeys={this.state.checkedKeys}
             onCheck={this.onCheck}
             // style={{marginBottom: 53 + 'px', overflow: 'scroll'}}
           >
             {this.renderTree(menuTree)}
-          </Tree>:null}
+          </Tree>
         </Spin>
         <div
           style={{
@@ -191,7 +275,7 @@ class CreatDrawer extends Component {
         >
           <Button disabled={!selectedValues.resouces} style={{
             marginRight: 8,
-          }} onClick={()=>this.onCertain(setPermission,selectedValues)} type="primary">
+          }} onClick={() => this.onCertain(setPermission, selectedValues)} type="primary">
             确认
           </Button>
           <Button
@@ -217,7 +301,7 @@ class Permission extends Component {
       formValues: {},
       drawVisible: false,
       pageLoading: true,
-      selectedValues:{}
+      selectedValues: {}
     }
   }
 
@@ -298,7 +382,7 @@ class Permission extends Component {
   handleFormReset = () => {
     const {form} = this.props;
     form.resetFields();
-   this.getList()
+    this.getList()
   };
 
   handleMenuClick = e => {
@@ -322,36 +406,37 @@ class Permission extends Component {
   handleUpdateModalVisible = (flag, record) => {
     this.setState({
       updateModalVisible: !!flag,
-      modalVisible:!!flag,
+      modalVisible: !!flag,
       selectedValues: record || {},
     });
   };
 
-  handleAdd = (fields, updateModalVisible,selectedValues) => {
-    const {dispatch,app:{user}} = this.props;
-    if(updateModalVisible){
+  handleAdd = (fields, updateModalVisible, selectedValues) => {
+    const {dispatch, app: {user}} = this.props;
+    if (updateModalVisible) {
       dispatch({
         type: 'sys_per/updateRole',
         payload: {
-          id:selectedValues.id,
+          id: selectedValues.id,
           name: fields.roleName,
-          description:'用于公司管理项目角色'
+          description: '用于公司管理项目角色'
         },
-        token:user.token}).then(res=>{
-        if(res){
+        token: user.token
+      }).then(res => {
+        if (res) {
           this.handleUpdateModalVisible()
           this.getList()
         }
       })
-    }else {
-     dispatch({
+    } else {
+      dispatch({
         type: 'sys_per/addRole',
         payload: {
           name: fields.roleName,
-          description:'用于公司管理项目角色'
+          description: '用于公司管理项目角色'
         },
-        token:user.token,
-       callback:this.handleModalVisible
+        token: user.token,
+        callback: this.handleModalVisible
       })
     }
     //
@@ -373,7 +458,7 @@ class Permission extends Component {
           </Col>
           <Col md={6} sm={24}>
             <span className={styles.submitButtons}>
-              <Button onClick={()=>this.searchList()} type="primary" htmlType="submit">
+              <Button onClick={() => this.searchList()} type="primary" htmlType="submit">
                 查询
               </Button>
               <Button style={{marginLeft: 8}} onClick={this.handleFormReset}>
@@ -393,7 +478,7 @@ class Permission extends Component {
   showDrawer = (value) => {
     this.setState({
       drawVisible: true,
-      selectedValues:value
+      selectedValues: value
     });
     this.getRoleDetail(value.id)
   };
@@ -401,34 +486,34 @@ class Permission extends Component {
   onDrawClose = () => {
     this.setState({
       drawVisible: false,
-      selectedValues:{}
+      selectedValues: {}
     });
   }
 
-  setPermission=(payload)=>{
-
+  setPermission = (payload) => {
+    // console.log(payload)
     this.props.dispatch({
       type: 'sys_per/updateRolePer',
       payload: payload,
-      token:this.props.app.user.token,
-      callback:this.onDrawClose
+      token: this.props.app.user.token,
+      callback: this.onDrawClose
     })
   }
 
-  getRoleDetail=(id=2)=>{
+  getRoleDetail = (id = 2) => {
     this.props.dispatch({
-      type:'sys_per/queryDetail',
-      payload:{roleId:id}
-    }).then(res=>{
-      if(res) {
-        res.resouces = res.resouces.map(a=>a.permission)
+      type: 'sys_per/queryDetail',
+      payload: {roleId: id}
+    }).then(res => {
+      if (res) {
+        res.resouces = res.resouces.map(a => a.permission)
         //console.log(res.resouces)
         this.setState({
           selectedValues: res
         });
-      }else{
+      } else {
         this.setState({
-          selectedValues:  []
+          selectedValues: []
         });
       }
     })
@@ -436,10 +521,10 @@ class Permission extends Component {
 
   render() {
     const {
-      sys_per:{data},
+      sys_per: {data},
       loading,
     } = this.props;
-    const {selectedRows, modalVisible, pageLoading,updateModalVisible,selectedValues} = this.state;
+    const {selectedRows, modalVisible, pageLoading, updateModalVisible, selectedValues} = this.state;
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
         <Menu.Item key="edit">权限设置</Menu.Item>
@@ -448,12 +533,12 @@ class Permission extends Component {
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
-      handleUpdateModalVisible:this.handleUpdateModalVisible
+      handleUpdateModalVisible: this.handleUpdateModalVisible
     };
     const parentState = {
-      updateModalVisible:updateModalVisible,
-      modalVisible:modalVisible,
-      selectedValues:selectedValues
+      updateModalVisible: updateModalVisible,
+      modalVisible: modalVisible,
+      selectedValues: selectedValues
     }
     return (
       <Page inner={true} loading={pageLoading}>
@@ -488,25 +573,26 @@ class Permission extends Component {
           </Card>
           <CreateForm {...parentMethods} {...parentState}/>
         </PageHeaderWrapper>
-        <CreatDrawer setPermission={this.setPermission} selectedValues={selectedValues} onClose={this.onDrawClose} drawVisible={this.state.drawVisible}/>
+        <CreatDrawer setPermission={this.setPermission} selectedValues={selectedValues} onClose={this.onDrawClose}
+                     drawVisible={this.state.drawVisible}/>
       </Page>
     )
   }
 
-  getList=(page=1,pageSize=10)=>{
+  getList = (page = 1, pageSize = 10) => {
     this.props.dispatch({
       type: 'sys_per/query',
       payload: {page: page, pageSize: pageSize}
     });
   }
 
-  searchList=(page=1,pageSize=10)=>{
+  searchList = (page = 1, pageSize = 10) => {
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
       //  form.resetFields();
       this.props.dispatch({
         type: 'sys_per/query',
-        payload: {page: page, pageSize: pageSize,name:fieldsValue.searchName}
+        payload: {page: page, pageSize: pageSize, name: fieldsValue.searchName}
       });
     });
   }
@@ -514,4 +600,4 @@ class Permission extends Component {
 
 Permission.propTypes = {}
 
-export default connect(({app, rule,sys_per, loading}) => ({app, rule,sys_per, loading}))(Permission)
+export default connect(({app, rule, sys_per, loading}) => ({app, rule, sys_per, loading}))(Permission)
