@@ -14,13 +14,13 @@ import {
   Dropdown,
   Menu,
   Modal,
-  message,
   Badge,
   Divider,
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-import {_setTimeOut} from "utils";
+import {_setTimeOut,getButtons} from "utils";
+import {menuData} from 'common/menu'
 
 const FormItem = Form.Item;
 const {Option} = Select;
@@ -30,6 +30,7 @@ const getValue = obj =>
     .join(',');
 const statusMap = ['success', 'error'];
 const status = ['启用', '禁用'];
+const pageButtons = menuData[4].buttons.map(a=>a.permission)
 
 @Form.create()
 class CreateForm extends Component {
@@ -206,16 +207,21 @@ class User extends Component {
       fixed: 'right',
       width:160,
       render: (val, record) => {
+        const button = this.props.app.user.permissionsMap.button
         return (
           <Fragment>
-            <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
+            {getButtons(button,pageButtons[1])? <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>:null}
             <Divider type="vertical"/>
-            <a onClick={() => this.handleCheckDetail(true, record)}>查看</a>
+            {getButtons(button,pageButtons[2])?  <a onClick={() => this.handleCheckDetail(true, record)}>查看</a>:null}
             <Divider type="vertical"/>
-            <a onClick={() => this.updateStatus({
+            {getButtons(button,pageButtons[3])&&record.disable == 1? <a onClick={() => this.updateStatus({
               id: record.id,
-              disable: record.disable == 0 ? 1 : 0
-            })}>{record.disable == 0 ? '禁用' : '启用'}</a>
+              disable: 1
+            })}>启用</a>:null}
+            {getButtons(button,pageButtons[4])&&record.disable == 0? <a onClick={() => this.updateStatus({
+              id: record.id,
+              disable: 0
+            })}>禁用</a>:null}
           </Fragment>
         )
       },
@@ -414,7 +420,8 @@ class User extends Component {
   render() {
     const {
       loading,
-      sys_user: {proNames, roleNames, data}
+      sys_user: {proNames, roleNames, data},
+      app:{user}
     } = this.props;
     const {selectedRows, modalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail} = this.state;
     const menu = (
@@ -449,9 +456,9 @@ class User extends Component {
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
               <div className={styles.tableListOperator}>
-                <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+                {getButtons(user.permissionsMap.button,pageButtons[0])? <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                   新增
-                </Button>
+                </Button>:null}
                 {selectedRows.length > 0 && (
                   <span>
                   <Dropdown overlay={menu}>

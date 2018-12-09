@@ -13,6 +13,7 @@ const Menus = ({
 }) => {
  // const menuTrees = arrayToTree(menuData.filter(_ => _.mpid !== '-1'), 'id', 'mpid').filter()
   const menuPer = menu.map(a=>a.permission)
+ // console.log(menu)
   // 生成树状 .filter(a=>menu.includes(a.permission))
   let menuTree = arrayToTree(menuData.filter(_ => _.mpid !== '-1'), 'id', 'mpid').filter(a=>menuPer.includes(a.permission))
   menuTree = menuTree.map(a=>{
@@ -22,7 +23,6 @@ const Menus = ({
     return a
   })
   // console.log(menu)
-  // console.log(menuTree)
   //console.log(menuTree)
   const levelMap = {}
 

@@ -18,9 +18,10 @@ import {
   message,
   Divider,
 } from 'antd';
-import {Page,PageHeaderWrapper, StandardTable} from 'components'
+import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-import {_setTimeOut} from 'utils'
+import {_setTimeOut, getButtons} from "utils";
+import {proTypes, menuData} from 'common/menu'
 
 
 const FormItem = Form.Item;
@@ -31,9 +32,10 @@ const getValue = obj =>
     .join(',');
 const statusMap = ['default', 'processing', 'success', 'error'];
 const status = ['关闭', '运行中', '已上线', '异常'];
+const pageButtons = menuData[11].buttons.map(a => a.permission)
 
 const CreateForm = Form.create()(props => {
-  const {modalVisible, form, handleAdd, handleModalVisible,handleUpdateModalVisible,updateModalVisible,handleCheckDetail,selectedValues,checkDetail} = props;
+  const {modalVisible, form, handleAdd, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = props;
 
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
@@ -46,13 +48,13 @@ const CreateForm = Form.create()(props => {
   return (
     <Modal
       destroyOnClose
-      title={checkDetail?'分包履历':updateModalVisible?"编辑分包履历":"新增分包履历"}
+      title={checkDetail ? '分包履历' : updateModalVisible ? "编辑分包履历" : "新增分包履历"}
       bodyStyle={{padding: 0 + 'px'}}
       visible={modalVisible}
       width={992}
       maskClosable={false}
       onOk={okHandle}
-      onCancel={() => checkDetail?handleCheckDetail():updateModalVisible?handleUpdateModalVisible():handleModalVisible()}
+      onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
     >
       <div className={styles.modalContent}>
         <Row gutter={8}>
@@ -171,7 +173,7 @@ const CreateReview = Form.create()(props => {
         </Row>
         <Row gutter={8}>
           <Col md={24} sm={24}>
-            <FormItem style={{marginLeft:21+'px'}} labelCol={{span: 3}} wrapperCol={{span: 15}} label="备注">
+            <FormItem style={{marginLeft: 21 + 'px'}} labelCol={{span: 3}} wrapperCol={{span: 15}} label="备注">
               {form.getFieldDecorator('proSummary', {
                 rules: [{required: true}],
               })(<Input.TextArea width={'100%'} placeholder="请输入" rows={4}/>)}
@@ -277,15 +279,18 @@ class Resume extends Component {
     },
     {
       title: '操作',
-      render: (val, record) => (
-        <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
-          <Divider type="vertical"/>
-          <a onClick={() => this.handleCheckDetail(true, record)}>查看</a>
-          <Divider type="vertical"/>
-          <a>导出</a>
-        </Fragment>
-      ),
+      render: (val, record) => {
+        const button = this.props.app.user.permissionsMap.button
+        return (
+          <Fragment>
+            {getButtons(button,pageButtons[1])?<a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>:null}
+            <Divider type="vertical"/>
+            {getButtons(button,pageButtons[2])?<a onClick={() => this.handleCheckDetail(true, record)}>查看</a>:null}
+            <Divider type="vertical"/>
+            {getButtons(button,pageButtons[3])? <a>导出</a>:null}
+          </Fragment>
+        )
+      }
     },
   ];
 
@@ -363,9 +368,10 @@ class Resume extends Component {
   };
 
   handleSelectRows = rows => {
-    this.setState({
-      selectedRows: rows,
-    });
+    console.log(rows)
+      this.setState({
+        selectedRows: rows,
+      });
   };
 
   handleSearch = e => {
@@ -502,11 +508,12 @@ class Resume extends Component {
     const {
       rule: {data},
       loading,
+      app:{user}
     } = this.props;
     const {selectedRows, modalVisible, pageLoading, reviewType, updateModalVisible, checkDetail, selectedValues} = this.state;
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
-        <Menu.Item key="edit">编辑</Menu.Item>
+        <Menu.Item key="edit" onClick={() => this.handleReviewModal(true)}>项目部评价</Menu.Item>
         <Menu.Item key="export">导出</Menu.Item>
       </Menu>
     );
@@ -531,26 +538,21 @@ class Resume extends Component {
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
               <div className={styles.tableListOperator}>
-                <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+                {getButtons(user.permissionsMap.button,pageButtons[0])? <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                   新增
-                </Button>
-                <Button icon="edit" type="primary" onClick={() => this.handleReviewModal(true)}>
-                  项目部评价
-                </Button>
-                {selectedRows.length > 0 && (
-                  <span>
-                  <Dropdown overlay={menu}>
-                    <Button>
-                     操作 <Icon type="down"/>
-                    </Button>
-                  </Dropdown>
-                </span>
+                </Button>:null}
+                {selectedRows.length == 1 && (
+                  <Button icon="edit" type="primary" onClick={() => this.handleReviewModal(true)}>
+                    项目部评价
+                  </Button>
                 )}
               </div>
               <StandardTable
                 selectedRows={selectedRows}
                 loading={loading.effects['rule/fetch']}
                 bordered
+                isRowSelection={true}
+                filterMultiple={false}
                 data={data}
                 scroll={{x: '150%'}}
                 columns={this.columns}

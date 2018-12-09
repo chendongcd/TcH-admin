@@ -80,7 +80,6 @@ class Project extends Component {
       pageLoading: true,
       selectedValues: {}
     }
-    console.log()
   }
 
   columns = [

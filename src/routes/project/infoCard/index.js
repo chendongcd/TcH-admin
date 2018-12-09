@@ -1,4 +1,4 @@
-import React, {Component, PureComponent, Fragment} from 'react'
+import React, {Component, Fragment} from 'react'
 import {connect} from 'dva'
 import moment from 'moment';
 
@@ -21,9 +21,10 @@ import {
   Radio,
   Divider
 } from 'antd';
-import {Page, PageHeader, PageHeaderWrapper, StandardTable} from 'components'
+import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-import {_setTimeOut} from 'utils'
+import {_setTimeOut, getButtons} from 'utils'
+import {menuData} from 'common/menu'
 
 const FormItem = Form.Item;
 const {Step} = Steps;
@@ -38,6 +39,7 @@ const statusMap = ['default', 'processing', 'success', 'error'];
 const status = ['在建', '完工未结算', '完工已结算', '停工'];
 const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/
 let uuid = 0;
+const pageButtons = menuData[6].buttons.map(a => a.permission)
 
 @Form.create()
 class CreateForm extends Component {
@@ -277,7 +279,8 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('projectId', {
                   rules: [{required: true, message: '请选择项目'}],
                   initialValue: selectedValues.projectId ? selectedValues.projectId : '',
-                })(<Select showSearch={true} optionFilterProp={'name'} onChange={this.onChange} disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
+                })(<Select showSearch={true} optionFilterProp={'name'} onChange={this.onChange} disabled={checkDetail}
+                           placeholder="请选择" style={{width: '100%'}}>
                   {proNames.map((item, index) => {
                     return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
                   })}
@@ -628,13 +631,21 @@ class InfoCard extends Component {
     },
     {
       title: '操作',
-      render: (val, record) => (
-        <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
-          <Divider type="vertical"/>
-          <a onClick={() => this.handleCheckDetail(true, record)}>查看</a>
-        </Fragment>
-      ),
+      render: (val, record) => {
+        const button = this.props.app.user.permissionsMap.button
+        return (
+          <Fragment>
+            {getButtons(button, pageButtons[1]) ?
+              <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a> : null}
+            <Divider type="vertical"/>
+            {getButtons(button, pageButtons[2]) ?
+              <a onClick={() => this.handleCheckDetail(true, record)}>查看</a> : null}
+            <Divider type="vertical"/>
+            {getButtons(button, pageButtons[3]) ?
+              <a>导出</a> : null}
+          </Fragment>
+        )
+      }
     },
   ];
 
@@ -933,6 +944,7 @@ class InfoCard extends Component {
     const {
       pro_proInfo: {data, proNames},
       loading,
+      app:{user}
     } = this.props;
     const {selectedRows, modalVisible, updateModalVisible, selectedValues, pageLoading, checkDetail} = this.state;
     const menu = (
@@ -962,9 +974,10 @@ class InfoCard extends Component {
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
               <div className={styles.tableListOperator}>
-                <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
-                  新增
-                </Button>
+                {getButtons(user.permissionsMap.button,pageButtons[0]) ?
+                  <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+                    新增
+                  </Button> : null}
                 {selectedRows.length > 0 && (
                   <span>
                   <Dropdown overlay={menu}>

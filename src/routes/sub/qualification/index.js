@@ -1,6 +1,5 @@
 import React, {Component, Fragment} from 'react'
 import {connect} from 'dva'
-import moment from 'moment';
 
 import {
   Row,
@@ -15,13 +14,14 @@ import {
   Menu,
   DatePicker,
   Modal,
-  message,
   Upload,
   Divider,
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-import {_setTimeOut} from 'utils'
+import {_setTimeOut,getButtons} from 'utils'
+import {menuData} from 'common/menu'
+const pageButtons = menuData[10].buttons.map(a=>a.permission)
 
 const FormItem = Form.Item;
 const {Option} = Select;
@@ -349,7 +349,7 @@ const CreateReview = Form.create()(props => {
       console.log(fieldsValue)
       if (err) return;
       // form.resetFields();
-      handleReview(fieldsValue,modalVisible);
+      handleReview(fieldsValue, modalVisible);
     });
   };
 
@@ -556,24 +556,44 @@ class Qualification extends Component {
       },
     },
     {
-      title: '操作',
-      fixed: 'right',
-      width:175,
-      render: (val, record) => (
-        <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
-          <Divider type="vertical"/>
-          <a onClick={() => this.handleCheckDetail(true, record)}>查看</a>
-          <Divider type="vertical"/>
-          <a>下载附件</a>
-         {/* <Divider type="horizontal"/>
+      title: '下载分包商资质信息卡',
+      render: (val, record) => {
+        const button = this.props.app.user.permissionsMap.button
+        return (
+          <Fragment>
+            <a>下载附件</a>
+            {/* <Divider type="horizontal"/>
           <a onClick={() => this.handleReviewModal(0,record)}> 股份公司综合信誉评价</a>
           <Divider type="horizontal"/>
           <a onClick={() => this.handleReviewModal(1,record)}>集团公司综合信誉评价</a>
           <Divider type="horizontal"/>
           <a onClick={() => this.handleReviewModal(2,record)}>公司本级综合信誉评价</a>*/}
-        </Fragment>
-      ),
+          </Fragment>
+        )
+      }
+    },
+    {
+      title: '操作',
+      fixed: 'right',
+      width: 175,
+      render: (val, record) => {
+        const button = this.props.app.user.permissionsMap.button
+        return (
+          <Fragment>
+            {getButtons(button,pageButtons[1])?<a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>:null}
+            <Divider type="vertical"/>
+            {getButtons(button,pageButtons[2])?<a onClick={() => this.handleCheckDetail(true, record)}>查看</a>:null}
+            <Divider type="vertical"/>
+            <a>下载附件</a>
+            {/* <Divider type="horizontal"/>
+          <a onClick={() => this.handleReviewModal(0,record)}> 股份公司综合信誉评价</a>
+          <Divider type="horizontal"/>
+          <a onClick={() => this.handleReviewModal(1,record)}>集团公司综合信誉评价</a>
+          <Divider type="horizontal"/>
+          <a onClick={() => this.handleReviewModal(2,record)}>公司本级综合信誉评价</a>*/}
+          </Fragment>
+        )
+      }
     },
   ];
 
@@ -629,15 +649,15 @@ class Qualification extends Component {
     const {selectedRows} = this.state;
 
     if (!selectedRows) return;
-    if(e.key==3){
+    if (e.key == 3) {
       return
-    }else {
+    } else {
       this.handleReviewModal(e.key)
     }
   };
 
   handleSelectRows = rows => {
-    if(rows.length<=1) {
+    if (rows.length <= 1) {
       this.setState({
         selectedRows: rows,
       });
@@ -674,7 +694,7 @@ class Qualification extends Component {
     });
   };
 
-  handleReviewModal = (flag=-1) => {
+  handleReviewModal = (flag = -1) => {
     this.setState({
       reviewType: flag
     })
@@ -871,12 +891,12 @@ class Qualification extends Component {
     const {
       sub_qua: {data},
       loading,
-      app:{darkTheme}
+      app: {darkTheme,user}
     } = this.props;
     const {selectedRows, modalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail, reviewType} = this.state;
     const menu = (
-      <Menu theme={darkTheme?'dark':'light'} onClick={this.handleMenuClick} selectedKeys={[]}>
-        <Menu.Item  key="0">股份公司综合信誉评价</Menu.Item>
+      <Menu theme={darkTheme ? 'dark' : 'light'} onClick={this.handleMenuClick} selectedKeys={[]}>
+        <Menu.Item key="0">股份公司综合信誉评价</Menu.Item>
         <Menu.Item key="1">集团公司综合信誉评价</Menu.Item>
         <Menu.Item key="2"> 公司本级综合信誉评价</Menu.Item>
         <Menu.Item key="3">导出</Menu.Item>
@@ -890,14 +910,14 @@ class Qualification extends Component {
       handleReviewModal: this.handleReviewModal,
       handleUpdateModalVisible: this.handleUpdateModalVisible,
       handleCheckDetail: this.handleCheckDetail,
-      handleReview:this.handleReview
+      handleReview: this.handleReview
     };
     const parentState = {
       updateModalVisible: updateModalVisible,
       modalVisible: modalVisible,
       selectedValues: selectedValues,
       checkDetail: checkDetail,
-      selectedRows:selectedRows
+      selectedRows: selectedRows
     }
     return (
       <Page inner={true} loading={pageLoading}>
@@ -906,10 +926,10 @@ class Qualification extends Component {
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
               <div className={styles.tableListOperator}>
-                <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+                {getButtons(user.permissionsMap.button,pageButtons[0])?  <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                   新增
-                </Button>
-{/*                {selectedRows.length > 0?<Button icon="edit" type="primary" onClick={() => this.handleReviewModal(0)}>
+                </Button>:null}
+                {/*                {selectedRows.length > 0?<Button icon="edit" type="primary" onClick={() => this.handleReviewModal(0)}>
                   股份公司综合信誉评价
                 </Button>:null}
                 {selectedRows.length > 0?<Button icon="edit" type="primary" onClick={() => this.handleReviewModal(1)}>
@@ -995,8 +1015,8 @@ class Qualification extends Component {
       type: 'sub_qua/update',
       payload: {...payload, ...{id: this.state.selectedRows[0].id,}},
       token: user.token
-    }).then(res=>{
-      if(res){
+    }).then(res => {
+      if (res) {
         this.handleUpdateModalVisible()
         this.getList()
       }

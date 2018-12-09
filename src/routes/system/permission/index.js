@@ -18,7 +18,7 @@ import {
   Collapse,
   Spin
 } from 'antd';
-import {arrayToTree, _setTimeOut} from 'utils'
+import {arrayToTree, _setTimeOut, getButtons} from 'utils'
 import {menuData} from '../../../common/menu'
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
@@ -56,67 +56,7 @@ const CreateForm = Form.create()(props => {
     </Modal>
   );
 });
-
-class CustomTree extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      checkStrictly: true
-    }
-  }
-
-  componentDidUpdate(prevProps, preState) {
-    console.log(prevProps.selectedValues)
-    // if(!prevProps.selectedValues.resouces&&this.props.selectedValues.resouces){
-    //   this.setState({checkStrictly:false})
-    // }
-  }
-
-  renderSubTree = (trees) => {
-    return trees.children ? trees.children.map((tree, index) => {
-      return (<TreeNode selectable={false} title={tree.name} key={tree.permission}>
-        {this.renderButton(tree.buttons)}
-      </TreeNode>)
-    }) : null
-  }
-
-  renderButton = (buttons) => {
-    return buttons.map((button, index) => {
-      return <TreeNode selectable={false} title={button.name} key={button.permission}/>
-    })
-  }
-
-  renderTree = (menuTree) => {
-    return menuTree.map((a, aIndex) => {
-      return (
-        <TreeNode selectable={false} icon={<Icon type={a.icon}/>} title={a.name} key={a.permission}>
-          {this.renderSubTree(a)}
-        </TreeNode>
-      )
-    })
-  }
-
-  render() {
-    const {selectedValues, onCheck} = this.props
-    console.log(123)
-    // console.log(this.state.checkStrictly)
-    // 生成树状
-    const menuTree = arrayToTree(menuData.filter(_ => (_.mpid !== '-1' && _.id !== '1')), 'id', 'mpid')
-    return (
-      <Tree
-        checkable
-        showIcon
-        checkStrictly={this.state.checkStrictly}
-        defaultCheckedKeys={selectedValues.resouces ? selectedValues.resouces : []}
-        defaultSelectedKeys={selectedValues.resouces ? selectedValues.resouces : []}
-        onCheck={onCheck}
-        // style={{marginBottom: 53 + 'px', overflow: 'scroll'}}
-      >
-        {this.renderTree(menuTree)}
-      </Tree>
-    )
-  }
-}
+const pageButtons = menuData[3].buttons.map(a=>a.permission)
 
 class CreatDrawer extends Component {
 
@@ -139,8 +79,8 @@ class CreatDrawer extends Component {
 
   onCheck = (checkedKeys, info) => {
     // this.resouces=[...checkedKeys,...info.halfCheckedKeys]
-   // console.log(info)
-    console.log(checkedKeys)
+    // console.log(info)
+    // console.log(checkedKeys)
     this.resouces = checkedKeys.checked
     this.setState({checkedKeys})
   }
@@ -331,14 +271,18 @@ class Permission extends Component {
     },
     {
       title: '操作',
-      dataIndex: 'operat',
-      render: (val, record) => (
-        <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
-          <Divider type="vertical"/>
-          <a onClick={() => this.showDrawer(record)}>权限设置</a>
-        </Fragment>
-      ),
+      render: (val, record) => {
+        const button = this.props.app.user.permissionsMap.button
+        return (
+          <Fragment>
+            {getButtons(button, pageButtons[1]) ?
+              <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a> : null}
+            <Divider type="vertical"/>
+            {getButtons(button, pageButtons[3]) ?
+              <a onClick={() => this.showDrawer(record)}>权限设置</a> : null}
+          </Fragment>
+        )
+      }
     },
   ];
 
@@ -523,6 +467,7 @@ class Permission extends Component {
     const {
       sys_per: {data},
       loading,
+      app:{user}
     } = this.props;
     const {selectedRows, modalVisible, pageLoading, updateModalVisible, selectedValues} = this.state;
     const menu = (
@@ -547,9 +492,10 @@ class Permission extends Component {
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
               <div className={styles.tableListOperator}>
-                <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
-                  新增
-                </Button>
+                {getButtons(user.permissionsMap.button, pageButtons[0]) ?
+                  <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+                    新增
+                  </Button> : null}
                 {selectedRows.length > 0 && (
                   <span>
                   <Dropdown overlay={menu}>

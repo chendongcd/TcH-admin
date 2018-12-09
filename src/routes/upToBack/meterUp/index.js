@@ -1,4 +1,4 @@
-import React, {Component,Fragment} from 'react'
+import React, {Component, Fragment} from 'react'
 import {connect} from 'dva'
 import moment from 'moment';
 
@@ -19,9 +19,10 @@ import {
   Upload,
   Divider
 } from 'antd';
-import {Page,PageHeaderWrapper, StandardTable} from 'components'
+import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-import {_setTimeOut} from 'utils'
+import {_setTimeOut, getButtons} from 'utils'
+import {menuData} from 'common/menu'
 
 const FormItem = Form.Item;
 const {Option} = Select;
@@ -33,12 +34,12 @@ const statusMap = ['default', 'processing', 'success', 'error'];
 const status = ['关闭', '运行中', '已上线', '异常'];
 let uuid = 0;
 
-
-const info_css={
-  color:'#fa541c'
+const pageButtons = menuData[8].buttons.map(a => a.permission)
+const info_css = {
+  color: '#fa541c'
 }
 const CreateForm = Form.create()(props => {
-  const {proNames,modalVisible, form, handleAdd, handleModalVisible,normFile,handleUpdateModalVisible,updateModalVisible,handleCheckDetail,selectedValues,checkDetail} = props;
+  const {proNames, modalVisible, form, handleAdd, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = props;
 
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
@@ -52,13 +53,13 @@ const CreateForm = Form.create()(props => {
   return (
     <Modal
       destroyOnClose
-      title={checkDetail?'对上计量台账':updateModalVisible?"编辑对上计量台账":"新增对上计量台账"}
+      title={checkDetail ? '对上计量台账' : updateModalVisible ? "编辑对上计量台账" : "新增对上计量台账"}
       bodyStyle={{padding: 0 + 'px'}}
       visible={modalVisible}
       width={992}
       maskClosable={false}
       onOk={okHandle}
-      onCancel={() => checkDetail?handleCheckDetail():updateModalVisible?handleUpdateModalVisible():handleModalVisible()}
+      onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
     >
       <div className={styles.modalContent}>
         <Row gutter={8}>
@@ -67,7 +68,8 @@ const CreateForm = Form.create()(props => {
               {form.getFieldDecorator('projectId', {
                 rules: [{required: true, message: '请选择项目'}],
                 initialValue: selectedValues.projectId ? selectedValues.projectId : '',
-              })(<Select showSearch={true} optionFilterProp={'name'} disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
+              })(<Select showSearch={true} optionFilterProp={'name'} disabled={checkDetail} placeholder="请选择"
+                         style={{width: '100%'}}>
                 {proNames.map((item, index) => {
                   return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
                 })}
@@ -96,15 +98,15 @@ const CreateForm = Form.create()(props => {
         <div className={styles.title}>预付款金额</div>
       </Row>
       <div className={styles.modalContent}>
-      <Row gutter={8}>
-        <Col md={8} sm={24}>
-          <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="预付款">
-            {form.getFieldDecorator('plan', {
-              rules: [{required: true, message: '请输入预付款'}],
-            })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入预付款" addonAfter="元"/>)}
-          </FormItem>
-        </Col>
-      </Row>
+        <Row gutter={8}>
+          <Col md={8} sm={24}>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="预付款">
+              {form.getFieldDecorator('plan', {
+                rules: [{required: true, message: '请输入预付款'}],
+              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入预付款" addonAfter="元"/>)}
+            </FormItem>
+          </Col>
+        </Row>
       </div>
       <Row align={'middle'} gutter={0} className={styles.titleView}>
         <div className={styles.title}>计价金额</div>
@@ -122,7 +124,7 @@ const CreateForm = Form.create()(props => {
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="税率">
               {form.getFieldDecorator('tax', {
                 rules: [{required: true, message: '请输入税率'}],
-              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入税率" />)}
+              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入税率"/>)}
             </FormItem>
           </Col>
         </Row>
@@ -154,7 +156,7 @@ const CreateForm = Form.create()(props => {
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入已支付金额" addonAfter="元"/>)}
             </FormItem>
           </Col>
-          <Col style={{paddingTop:11+'px'}} md={8} sm={24}>
+          <Col style={{paddingTop: 11 + 'px'}} md={8} sm={24}>
             <span style={info_css}>备注：不含预付款金额</span>
           </Col>
         </Row>
@@ -188,7 +190,7 @@ const CreateForm = Form.create()(props => {
       <div className={styles.modalContent}>
         <Row gutter={8}>
           <Col md={24} sm={24}>
-            <FormItem style={{marginLeft:14+'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="备注">
+            <FormItem style={{marginLeft: 14 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="备注">
               {form.getFieldDecorator('remark', {
                 rules: [{required: true}],
               })(<Input.TextArea disabled={checkDetail} width={'100%'} placeholder="请输入" rows={4}/>)}
@@ -197,19 +199,19 @@ const CreateForm = Form.create()(props => {
         </Row>
         <Row gutter={8}>
           <Col md={24} sm={24}>
-            <FormItem style={{marginLeft:14+'px'}} labelCol={{span:2}} wrapperCol={{span: 15}} label="附件" >
-                {form.getFieldDecorator('dragger', {
-                  valuePropName: 'fileList',
-                  getValueFromEvent: normFile,
-                })(
-                  <Upload.Dragger name="files" action="/upload.do">
-                    <p className="ant-upload-drag-icon">
-                      <Icon type="inbox" />
-                    </p>
-                    <p className="ant-upload-text">点击或拖动附件进入</p>
-                  </Upload.Dragger>
-                )}
-                <span style={info_css}>备注：请以一份PDF格式文件上传封面和汇总表</span>
+            <FormItem style={{marginLeft: 14 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="附件">
+              {form.getFieldDecorator('dragger', {
+                valuePropName: 'fileList',
+                getValueFromEvent: normFile,
+              })(
+                <Upload.Dragger name="files" action="/upload.do">
+                  <p className="ant-upload-drag-icon">
+                    <Icon type="inbox"/>
+                  </p>
+                  <p className="ant-upload-text">点击或拖动附件进入</p>
+                </Upload.Dragger>
+              )}
+              <span style={info_css}>备注：请以一份PDF格式文件上传封面和汇总表</span>
             </FormItem>
           </Col>
         </Row>
@@ -229,9 +231,9 @@ class MeterUp extends Component {
       updateModalVisible: false,
       selectedRows: [],
       formValues: {},
-      pageLoading:true,
-      selectedValues:{},
-      checkDetail:false
+      pageLoading: true,
+      selectedValues: {},
+      checkDetail: false
     }
   }
 
@@ -264,7 +266,7 @@ class MeterUp extends Component {
     },
     {
       title: '计价金额（元）',
-      children: [    {
+      children: [{
         title: '含税',
         key: 'plan_account',
         render(val) {
@@ -287,23 +289,23 @@ class MeterUp extends Component {
     },
     {
       title: '实际应付金额（元）',
-      children: [    {
+      children: [{
         title: '含税',
         key: 'actul_account',
         render(val) {
           return <span>15万</span>;
         },
       }, {
-          title: '不含税',
+        title: '不含税',
         key: 'actul_account_noTax',
-          render(val) {
-            return <span>311</span>;
-          },
-        }]
+        render(val) {
+          return <span>311</span>;
+        },
+      }]
     },
     {
       title: '资金拨付情况（元）',
-      children: [    {
+      children: [{
         title: '已支付金额',
         key: 'paid',
         render(val) {
@@ -318,7 +320,7 @@ class MeterUp extends Component {
           },
         }, {
           title: '拨付率',
-          key:'pay_per',
+          key: 'pay_per',
           render(val) {
             return <span>311</span>;
           },
@@ -326,16 +328,16 @@ class MeterUp extends Component {
     },
     {
       title: '其他计价（元）',
-      children: [    {
+      children: [{
         title: '超计价',
-        key:'more_plan',
+        key: 'more_plan',
         render(val) {
           return <span>15万</span>;
         },
       },
         {
           title: '已完未计',
-          key:'end_noPlan',
+          key: 'end_noPlan',
           render(val) {
             return <span>3</span>;
           },
@@ -355,19 +357,25 @@ class MeterUp extends Component {
     },
     {
       title: '操作',
-      render: (val, record) => (
-        <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
-          <Divider type="vertical"/>
-          <a onClick={()=>this.handleCheckDetail(true,record)}>查看</a>
-        </Fragment>
-      ),
+      render: (val, record) => {
+        const button = this.props.app.user.permissionsMap.button
+        return (
+          <Fragment>
+            {getButtons(button,pageButtons[1])?<a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>:null}
+            <Divider type="vertical"/>
+            {getButtons(button,pageButtons[2])?<a onClick={() => this.handleCheckDetail(true, record)}>查看</a>:null}
+            <Divider type="vertical"/>
+            {getButtons(button, pageButtons[3]) ?
+              <a>导出</a> : null}
+          </Fragment>
+        )
+      }
     },
   ];
 
   componentDidMount() {
     this.getProNames([])
-    _setTimeOut(()=>this.setState({pageLoading:false}),1000)
+    _setTimeOut(() => this.setState({pageLoading: false}), 1000)
     this.getList()
     /*dispatch({
       type: 'rule/fetch',payload:{pageSize:5}
@@ -475,15 +483,15 @@ class MeterUp extends Component {
   handleUpdateModalVisible = (flag, record) => {
     this.setState({
       updateModalVisible: !!flag,
-      modalVisible:!!flag,
+      modalVisible: !!flag,
       selectedValues: record || {},
     });
   };
 
-  handleCheckDetail=(flag, record) => {
+  handleCheckDetail = (flag, record) => {
     this.setState({
       checkDetail: !!flag,
-      modalVisible:!!flag,
+      modalVisible: !!flag,
       selectedValues: record || {},
     });
   };
@@ -527,8 +535,8 @@ class MeterUp extends Component {
         type: 'meterUp/update',
         payload: {...payload, ...{id: selectedValues.id}},
         token: user.token
-      }).then(res=>{
-        if(res){
+      }).then(res => {
+        if (res) {
           this.handleUpdateModalVisible()
           this.getList()
         }
@@ -538,8 +546,8 @@ class MeterUp extends Component {
         type: 'meterUp/add',
         payload: payload,
         token: user.token
-      }).then(res=>{
-        if(res){
+      }).then(res => {
+        if (res) {
           this.handleModalVisible()
           this.getList()
         }
@@ -581,36 +589,36 @@ class MeterUp extends Component {
               )}
             </FormItem>
           </Col>
-          <Col style={{flexDirection:'row',display:'flex'}} md={12} sm={24}>
+          <Col style={{flexDirection: 'row', display: 'flex'}} md={12} sm={24}>
             <FormItem label="拨付率">
               {getFieldDecorator('give')(<Input placeholder="请输入" addonAfter={'%'}/>)}
             </FormItem>
-               <FormItem style={{marginLeft:15+'px'}} label="至">
+            <FormItem style={{marginLeft: 15 + 'px'}} label="至">
               {getFieldDecorator('give')(<Input placeholder="请输入" addonAfter={'%'}/>)}
             </FormItem>
           </Col>
         </Row>
-       <Row gutter={{md: 8, lg: 24, xl: 48}}>
-            <Col style={{flexDirection:'row',display:'flex'}} md={12} sm={24}>
-              <FormItem label="产值计价率">
-                {getFieldDecorator('give')(<Input placeholder="请输入" addonAfter={'%'}/>)}
-              </FormItem>
-              <FormItem style={{marginLeft:15+'px'}} label="至">
-                {getFieldDecorator('give')(<Input placeholder="请输入" addonAfter={'%'}/>)}
-              </FormItem>
-            </Col>
-         <Col md={12} sm={24}>
-           <div style={{overflow: 'hidden'}}>
-             <div style={{float: 'right', marginBottom: 24}}>
-               <Button type="primary" htmlType="submit">
-                 查询
-               </Button>
-               <Button style={{marginLeft: 8}} onClick={this.handleFormReset}>
-                 重置
-               </Button>
-             </div>
-           </div>
-         </Col>
+        <Row gutter={{md: 8, lg: 24, xl: 48}}>
+          <Col style={{flexDirection: 'row', display: 'flex'}} md={12} sm={24}>
+            <FormItem label="产值计价率">
+              {getFieldDecorator('give')(<Input placeholder="请输入" addonAfter={'%'}/>)}
+            </FormItem>
+            <FormItem style={{marginLeft: 15 + 'px'}} label="至">
+              {getFieldDecorator('give')(<Input placeholder="请输入" addonAfter={'%'}/>)}
+            </FormItem>
+          </Col>
+          <Col md={12} sm={24}>
+            <div style={{overflow: 'hidden'}}>
+              <div style={{float: 'right', marginBottom: 24}}>
+                <Button type="primary" htmlType="submit">
+                  查询
+                </Button>
+                <Button style={{marginLeft: 8}} onClick={this.handleFormReset}>
+                  重置
+                </Button>
+              </div>
+            </div>
+          </Col>
         </Row>
       </Form>
     );
@@ -630,10 +638,11 @@ class MeterUp extends Component {
 
   render() {
     const {
-      meterUp: {data,proNames},
+      meterUp: {data, proNames},
       loading,
+      app:{user}
     } = this.props;
-    const {selectedRows, modalVisible,updateModalVisible,pageLoading,selectedValues,checkDetail} = this.state;
+    const {selectedRows, modalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail} = this.state;
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
         <Menu.Item key="edit">编辑</Menu.Item>
@@ -644,16 +653,16 @@ class MeterUp extends Component {
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
-      normFile:this.normFile,
-      handleUpdateModalVisible:this.handleUpdateModalVisible,
-      handleCheckDetail:this.handleCheckDetail
+      normFile: this.normFile,
+      handleUpdateModalVisible: this.handleUpdateModalVisible,
+      handleCheckDetail: this.handleCheckDetail
     };
     const parentState = {
-      updateModalVisible:updateModalVisible,
-      modalVisible:modalVisible,
-      selectedValues:selectedValues,
-      checkDetail:checkDetail,
-      proNames:proNames
+      updateModalVisible: updateModalVisible,
+      modalVisible: modalVisible,
+      selectedValues: selectedValues,
+      checkDetail: checkDetail,
+      proNames: proNames
     }
     return (
       <Page inner={true} loading={pageLoading}>
@@ -662,9 +671,9 @@ class MeterUp extends Component {
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
               <div className={styles.tableListOperator}>
-                <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+                {getButtons(user.permissionsMap.button,pageButtons[0])?  <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                   新增
-                </Button>
+                </Button>:null}
                 {selectedRows.length > 0 && (
                   <span>
                   <Dropdown overlay={menu}>
@@ -680,7 +689,7 @@ class MeterUp extends Component {
                 loading={loading.effects['meterUp/fetch']}
                 bordered
                 data={data}
-                scroll={{ x: '200%' }}
+                scroll={{x: '200%'}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
@@ -739,4 +748,4 @@ class MeterUp extends Component {
 
 MeterUp.propTypes = {}
 
-export default connect(({app, rule,loading,meterUp}) => ({app, rule,loading,meterUp}))(MeterUp)
+export default connect(({app, rule, loading, meterUp}) => ({app, rule, loading, meterUp}))(MeterUp)
