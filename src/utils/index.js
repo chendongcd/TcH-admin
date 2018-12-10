@@ -111,6 +111,6 @@ export function getMenus(menus) {
 }
 
 /*筛选用户当前页面拥有的按钮权限*/
-export function getButtons(pageButtons, button) {
+export function getButtons(pageButtons=[], button) {
   return pageButtons.includes(button)
 }

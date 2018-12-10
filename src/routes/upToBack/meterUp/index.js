@@ -30,9 +30,6 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const statusMap = ['default', 'processing', 'success', 'error'];
-const status = ['关闭', '运行中', '已上线', '异常'];
-let uuid = 0;
 
 const pageButtons = menuData[8].buttons.map(a => a.permission)
 const info_css = {
@@ -358,14 +355,15 @@ class MeterUp extends Component {
     {
       title: '操作',
       render: (val, record) => {
-        const button = this.props.app.user.permissionsMap.button
+        const user = this.props.app.user
+        const button = user.permissionsMap.button
         return (
           <Fragment>
-            {getButtons(button,pageButtons[1])?<a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>:null}
+            {user.token&&getButtons(button,pageButtons[1])?<a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>:null}
             <Divider type="vertical"/>
-            {getButtons(button,pageButtons[2])?<a onClick={() => this.handleCheckDetail(true, record)}>查看</a>:null}
+            {user.token&&getButtons(button,pageButtons[2])?<a onClick={() => this.handleCheckDetail(true, record)}>查看</a>:null}
             <Divider type="vertical"/>
-            {getButtons(button, pageButtons[3]) ?
+            {user.token&&getButtons(button, pageButtons[3]) ?
               <a>导出</a> : null}
           </Fragment>
         )
@@ -671,10 +669,10 @@ class MeterUp extends Component {
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
               <div className={styles.tableListOperator}>
-                {getButtons(user.permissionsMap.button,pageButtons[0])?  <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+                {user.token&&getButtons(user.permissionsMap.button,pageButtons[0])?  <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                   新增
                 </Button>:null}
-                {selectedRows.length > 0 && (
+               {/* {selectedRows.length > 0 && (
                   <span>
                   <Dropdown overlay={menu}>
                     <Button>
@@ -682,7 +680,7 @@ class MeterUp extends Component {
                     </Button>
                   </Dropdown>
                 </span>
-                )}
+                )}*/}
               </div>
               <StandardTable
                 selectedRows={selectedRows}

@@ -19,9 +19,10 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-import {_setTimeOut,getButtons} from 'utils'
+import {_setTimeOut, getButtons} from 'utils'
 import {menuData} from 'common/menu'
-const pageButtons = menuData[10].buttons.map(a=>a.permission)
+
+const pageButtons = menuData[10].buttons.map(a => a.permission)
 
 const FormItem = Form.Item;
 const {Option} = Select;
@@ -577,14 +578,34 @@ class Qualification extends Component {
       fixed: 'right',
       width: 175,
       render: (val, record) => {
-        const button = this.props.app.user.permissionsMap.button
+        const user = this.props.app.user
+        const button = user.permissionsMap.button
+        const menu = (
+          <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
+            {getButtons(button, pageButtons[4]) ? <Menu.Item key="0">股份公司综合信誉评价</Menu.Item> : null}
+            {getButtons(button, pageButtons[5]) ? <Menu.Item key="1"> 集团公司综合信誉评价</Menu.Item> : null}
+            {getButtons(button, pageButtons[6]) ? <Menu.Item key="2">公司本级综合信誉评价</Menu.Item> : null}
+            {pageButtons[3] ? <Menu.Item key="export">导出</Menu.Item> : null}
+          </Menu>
+        );
+        const more = (user.token && (getButtons(button, pageButtons[3]) || getButtons(button, pageButtons[4]) || getButtons(button, pageButtons[5]) || getButtons(button, pageButtons[6]))
+          ?
+          <Fragment>
+            <Divider type="vertical"/>
+            <Dropdown overlay={menu}>
+              <a className="ant-dropdown-link">
+                更多 <Icon type="down"/>
+              </a>
+            </Dropdown>
+          </Fragment> : null)
         return (
           <Fragment>
-            {getButtons(button,pageButtons[1])?<a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>:null}
+            {user.token && getButtons(button, pageButtons[1]) ?
+              <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a> : null}
             <Divider type="vertical"/>
-            {getButtons(button,pageButtons[2])?<a onClick={() => this.handleCheckDetail(true, record)}>查看</a>:null}
-            <Divider type="vertical"/>
-            <a>下载附件</a>
+            {user.token && getButtons(button, pageButtons[2]) ?
+              <a onClick={() => this.handleCheckDetail(true, record)}>查看</a> : null}
+            {more}
             {/* <Divider type="horizontal"/>
           <a onClick={() => this.handleReviewModal(0,record)}> 股份公司综合信誉评价</a>
           <Divider type="horizontal"/>
@@ -645,7 +666,6 @@ class Qualification extends Component {
   };
 
   handleMenuClick = e => {
-    const {dispatch} = this.props;
     const {selectedRows} = this.state;
 
     if (!selectedRows) return;
@@ -891,7 +911,7 @@ class Qualification extends Component {
     const {
       sub_qua: {data},
       loading,
-      app: {darkTheme,user}
+      app: {darkTheme, user}
     } = this.props;
     const {selectedRows, modalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail, reviewType} = this.state;
     const menu = (
@@ -926,27 +946,10 @@ class Qualification extends Component {
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
               <div className={styles.tableListOperator}>
-                {getButtons(user.permissionsMap.button,pageButtons[0])?  <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
-                  新增
-                </Button>:null}
-                {/*                {selectedRows.length > 0?<Button icon="edit" type="primary" onClick={() => this.handleReviewModal(0)}>
-                  股份公司综合信誉评价
-                </Button>:null}
-                {selectedRows.length > 0?<Button icon="edit" type="primary" onClick={() => this.handleReviewModal(1)}>
-                  集团公司综合信誉评价
-                </Button>:null}
-                {selectedRows.length > 0? <Button icon="edit" type="primary" onClick={() => this.handleReviewModal(2)}>
-                  公司本级综合信誉评价
-                </Button>:null}*/}
-                {selectedRows.length > 0 && (
-                  <span>
-                  <Dropdown overlay={menu}>
-                    <Button>
-                     更多操作 <Icon type="down"/>
-                    </Button>
-                  </Dropdown>
-                </span>
-                )}
+                {user.token && getButtons(user.permissionsMap.button, pageButtons[0]) ?
+                  <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+                    新增
+                  </Button> : null}
               </div>
               <StandardTable
                 selectedRows={selectedRows}
@@ -954,7 +957,6 @@ class Qualification extends Component {
                 bordered
                 rowKey="id"
                 data={data}
-                isRowSelection={true}
                 scroll={{x: '200%'}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}

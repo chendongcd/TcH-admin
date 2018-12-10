@@ -272,13 +272,13 @@ class Permission extends Component {
     {
       title: '操作',
       render: (val, record) => {
-        const button = this.props.app.user.permissionsMap.button
+        const user = this.props.app.user
         return (
           <Fragment>
-            {getButtons(button, pageButtons[1]) ?
+            {user.token&&getButtons(user.permissionsMap.button, pageButtons[1]) ?
               <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a> : null}
             <Divider type="vertical"/>
-            {getButtons(button, pageButtons[3]) ?
+            {user.token&&getButtons(user.permissionsMap.button, pageButtons[3]) ?
               <a onClick={() => this.showDrawer(record)}>权限设置</a> : null}
           </Fragment>
         )
@@ -470,11 +470,6 @@ class Permission extends Component {
       app:{user}
     } = this.props;
     const {selectedRows, modalVisible, pageLoading, updateModalVisible, selectedValues} = this.state;
-    const menu = (
-      <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
-        <Menu.Item key="edit">权限设置</Menu.Item>
-      </Menu>
-    );
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
@@ -492,11 +487,11 @@ class Permission extends Component {
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
               <div className={styles.tableListOperator}>
-                {getButtons(user.permissionsMap.button, pageButtons[0]) ?
+                {user.token&&getButtons(user.permissionsMap.button, pageButtons[0]) ?
                   <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                     新增
                   </Button> : null}
-                {selectedRows.length > 0 && (
+                {/*{selectedRows.length > 0 && (
                   <span>
                   <Dropdown overlay={menu}>
                     <Button>
@@ -504,7 +499,7 @@ class Permission extends Component {
                     </Button>
                   </Dropdown>
                 </span>
-                )}
+                )}*/}
               </div>
               <StandardTable
                 selectedRows={selectedRows}

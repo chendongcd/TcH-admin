@@ -207,18 +207,19 @@ class User extends Component {
       fixed: 'right',
       width:160,
       render: (val, record) => {
-        const button = this.props.app.user.permissionsMap.button
+        const user = this.props.app.user
+        const button = user.permissionsMap.button
         return (
           <Fragment>
-            {getButtons(button,pageButtons[1])? <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>:null}
+            {user.token&&getButtons(button,pageButtons[1])? <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>:null}
             <Divider type="vertical"/>
-            {getButtons(button,pageButtons[2])?  <a onClick={() => this.handleCheckDetail(true, record)}>查看</a>:null}
+            {user.token&&getButtons(button,pageButtons[2])?  <a onClick={() => this.handleCheckDetail(true, record)}>查看</a>:null}
             <Divider type="vertical"/>
-            {getButtons(button,pageButtons[3])&&record.disable == 1? <a onClick={() => this.updateStatus({
+            {user.token&&getButtons(button,pageButtons[3])&&record.disable == 1? <a onClick={() => this.updateStatus({
               id: record.id,
               disable: 1
             })}>启用</a>:null}
-            {getButtons(button,pageButtons[4])&&record.disable == 0? <a onClick={() => this.updateStatus({
+            {user.token&&getButtons(button,pageButtons[4])&&record.disable == 0? <a onClick={() => this.updateStatus({
               id: record.id,
               disable: 0
             })}>禁用</a>:null}
@@ -456,7 +457,7 @@ class User extends Component {
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
               <div className={styles.tableListOperator}>
-                {getButtons(user.permissionsMap.button,pageButtons[0])? <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+                {user.token&&getButtons(user.permissionsMap.button,pageButtons[0])? <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                   新增
                 </Button>:null}
                 {selectedRows.length > 0 && (

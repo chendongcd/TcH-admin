@@ -11,7 +11,7 @@ export const menuData = [
     icon: 'radius-setting',
     name: '系统管理',
     bpid: '1',
-    route: '/system',
+   // route: '/system',
     permission:'PERMISSIONS_SYSTEM'
   },
   {
@@ -62,7 +62,7 @@ export const menuData = [
     bpid: '1',
     icon: 'project',
     name: '项目部管理',
-    route: '/project',
+  //  route: '/project',
     permission:'PERMISSIONS_PROJECT_MANAGER',
   },
   {
@@ -84,7 +84,7 @@ export const menuData = [
     bpid: '1',
     icon: 'up-square',
     name: '对上管理',
-    route: '/up',
+   // route: '/up',
     permission:'PERMISSIONS_UP_MANAGER',
   },
   {
@@ -106,7 +106,7 @@ export const menuData = [
     bpid: '1',
     icon: 'schedule',
     name: '分包商管理',
-    route: '/sub',
+   // route: '/sub',
     permission:'PERMISSIONS_SUB_MANAGER',
   },
   {
@@ -120,6 +120,10 @@ export const menuData = [
       {name:'新增',permission:'PERMISSIONS_SUB_MANAGER_INFO_ADD'},
       {name:'编辑',permission:'PERMISSIONS_SUB_MANAGER_INFO_UPDATE'},
       {name:'查看',permission:'PERMISSIONS_SUB_MANAGER_INFO_LOOK'},
+      {name:'导出',permission:'PERMISSIONS_SUB_MANAGER_INFO_EXPORT'},
+      {name:'股份公司综合荣誉评价',permission:'PERMISSIONS_SUB_MANAGER_INFO_EVALUATION_GF'},
+      {name:'集团公司综合荣誉评价',permission:'PERMISSIONS_SUB_MANAGER_INFO_EVALUATION_GROUP'},
+      {name:'公司本级综合荣誉评价',permission:'PERMISSIONS_SUB_MANAGER_INFO_EVALUATION_COMPANY'},
     ]
   },
   {
@@ -133,6 +137,8 @@ export const menuData = [
       {name:'新增',permission:'PERMISSIONS_SUB_MANAGER_RESUME_ADD'},
       {name:'编辑',permission:'PERMISSIONS_SUB_MANAGER_RESUME_UPDATE'},
       {name:'查看',permission:'PERMISSIONS_SUB_MANAGER_RESUME_LOOK'},
+      {name:'导出',permission:'PERMISSIONS_SUB_MANAGER_RESUME_EXPORT'},
+      {name:'项目部评价',permission:'PERMISSIONS_SUB_MANAGER_RESUME_EVALUATION_PROJECT'},
     ]
   },
   {
@@ -140,7 +146,7 @@ export const menuData = [
     bpid: '1',
     icon: 'down-square',
     name: '对下管理',
-    route: '/down',
+   // route: '/down',
     permission:'PERMISSIONS_DOWN_MANAGER',
   },
   {
@@ -177,7 +183,7 @@ export const menuData = [
     bpid: '1',
     icon: 'team',
     name: '经管人员管理',
-    route: '/people',
+  //  route: '/people',
     permission:'PERMISSIONS_PEOPLE_MANAGER',
   },
   {
@@ -199,7 +205,7 @@ export const menuData = [
     bpid: '1',
     icon: 'edit',
     name: '项目评估台账',
-    route: '/evaluation',
+  //  route: '/evaluation',
     permission:'PERMISSIONS_PROJECT_ACCOUNT',
   },
   {
@@ -221,7 +227,7 @@ export const menuData = [
     bpid: '1',
     icon: 'file-text',
     name: '报表管理',
-    route: '/report',
+ //   route: '/report',
     permission:'PERMISSIONS_REPORTL_MANAGER',
   },
   {
@@ -229,7 +235,7 @@ export const menuData = [
     bpid: '1',
     icon: 'folder',
     name: '文档管理',
-    route: '/files',
+  //  route: '/files',
     permission:'PERMISSIONS_FILE_MANAGER',
   },
   {

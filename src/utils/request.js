@@ -73,6 +73,8 @@ export default function request(url, options, token) {
     }
     req.setRequestHeader('Content-Type', 'application/json')
     if (token) {
+      console.log(token)
+      console.log(url)
       req.setRequestHeader('Authorization', `${token}`)
     }
 

@@ -11,26 +11,18 @@ import {
   Select,
   Icon,
   Button,
-  Dropdown,
-  Menu,
   DatePicker,
   Modal,
   message,
   Badge,
-  Steps,
-  Radio,
   Divider
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
 import {_setTimeOut, getButtons} from 'utils'
 import {menuData} from 'common/menu'
-
 const FormItem = Form.Item;
-const {Step} = Steps;
-const {TextArea} = Input;
 const {Option} = Select;
-const RadioGroup = Radio.Group;
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
@@ -242,6 +234,7 @@ class CreateForm extends Component {
     form.validateFields((err, fieldsValue) => {
       console.log(fieldsValue)
       if (err) return;
+    //  fieldsValue.contractStartTime = moment(fieldsValue.contractStartTime).format('YYYY-MM-DD')
       // form.resetFields();
       handleAdd(fieldsValue);
     });
@@ -255,9 +248,9 @@ class CreateForm extends Component {
   render() {
     const {proNames, modalVisible, form, handleAdd, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
     const {getFieldDecorator} = this.props.form
-    getFieldDecorator('managers', {initialValue: [{manaName: '', manaTime: '', manaPhone: ''}]});
-    getFieldDecorator('secretary', {initialValue: [{secreName: '', secreTime: '', secrePhone: ''}]});
-    getFieldDecorator('chiefEngineer', {initialValue: [{chiefName: '', chiefTime: '', chiefPhone: ''}]});
+    getFieldDecorator('managers', {initialValue: [{name: '', time: '', phone: ''}]});
+    getFieldDecorator('secretary', {initialValue: [{name: '', time: '', phone: ''}]});
+    getFieldDecorator('chiefEngineer', {initialValue: [{name: '', time: '', phone: ''}]});
     const managers = form.getFieldValue('managers');
     const secretary = form.getFieldValue('secretary');
     const chiefEngineer = form.getFieldValue('chiefEngineer');
@@ -335,14 +328,14 @@ class CreateForm extends Component {
           <Row gutter={8}>
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="暂估合同额">
-                {form.getFieldDecorator('temSum', {
+                {form.getFieldDecorator('temporarilyPrice', {
                   rules: [{required: true, message: '请输入暂估合同额', pattern: reg}],
                 })(<Input disabled={checkDetail} placeholder="请输入暂估合同额" addonAfter="万元"/>)}
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="有效合同额">
-                {form.getFieldDecorator('conSum', {
+                {form.getFieldDecorator('totalPrice', {
                   rules: [{required: true, message: '请输入有效合同额', pattern: reg}],
                 })(<Input disabled={checkDetail} placeholder="请输入有效合同额" addonAfter="万元"/>)}
               </FormItem>
@@ -632,16 +625,17 @@ class InfoCard extends Component {
     {
       title: '操作',
       render: (val, record) => {
-        const button = this.props.app.user.permissionsMap.button
+        const user = this.props.app.user
+        const button = user.permissionsMap.button
         return (
           <Fragment>
-            {getButtons(button, pageButtons[1]) ?
+            {user.token&&getButtons(button, pageButtons[1]) ?
               <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a> : null}
             <Divider type="vertical"/>
-            {getButtons(button, pageButtons[2]) ?
+            {user.token&&getButtons(button, pageButtons[2]) ?
               <a onClick={() => this.handleCheckDetail(true, record)}>查看</a> : null}
             <Divider type="vertical"/>
-            {getButtons(button, pageButtons[3]) ?
+            {user.token&&getButtons(button, pageButtons[3]) ?
               <a>导出</a> : null}
           </Fragment>
         )
@@ -790,6 +784,7 @@ class InfoCard extends Component {
       status: fields.status,
       mileageNumber: fields.mileageNumber,
       totalPrice: fields.totalPrice,
+      temporarilyPrice: fields.temporarilyPrice,
       contractNumber: fields.contractNumber,
       contractDay: fields.contractDay,
       contractStartTime: fields.contractStartTime,
@@ -947,12 +942,6 @@ class InfoCard extends Component {
       app:{user}
     } = this.props;
     const {selectedRows, modalVisible, updateModalVisible, selectedValues, pageLoading, checkDetail} = this.state;
-    const menu = (
-      <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
-        <Menu.Item key="edit">编辑</Menu.Item>
-        <Menu.Item key="export">导出</Menu.Item>
-      </Menu>
-    );
 
     const parentMethods = {
       handleAdd: this.handleAdd,
@@ -974,11 +963,11 @@ class InfoCard extends Component {
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
               <div className={styles.tableListOperator}>
-                {getButtons(user.permissionsMap.button,pageButtons[0]) ?
+                {user.token&&getButtons(user.permissionsMap.button,pageButtons[0]) ?
                   <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                     新增
                   </Button> : null}
-                {selectedRows.length > 0 && (
+               {/* {selectedRows.length > 0 && (
                   <span>
                   <Dropdown overlay={menu}>
                     <Button>
@@ -986,13 +975,14 @@ class InfoCard extends Component {
                     </Button>
                   </Dropdown>
                 </span>
-                )}
+                )}*/}
               </div>
               <StandardTable
                 selectedRows={selectedRows}
                 loading={loading.effects['pro_proInfo/fetch']}
                 data={data}
                 scroll={{x: '150%'}}
+                rowKey="id"
                 bordered
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
@@ -1020,7 +1010,8 @@ class InfoCard extends Component {
   getList = (page = 1, pageSize = 10) => {
     this.props.dispatch({
       type: 'pro_proInfo/fetch',
-      payload: {page: page, pageSize: pageSize}
+      payload: {page: page, pageSize: pageSize},
+      token: this.props.app.user.token
     });
   }
 
@@ -1035,7 +1026,6 @@ class InfoCard extends Component {
           pageSize: pageSize,
           projectName: fieldsValue.projectName,
           mileageNumber: fieldsValue.mileageNumber,
-          totalPrice: fieldsValue.totalPrice,
           contractStartTime: fieldsValue.contractStartTime,
           contractEndTime: fieldsValue.contractEndTime,
           realContractStartTime: fieldsValue.realContractStartTime,
@@ -1044,7 +1034,8 @@ class InfoCard extends Component {
           projectManager: fieldsValue.projectManager,
           chiefEngineer: fieldsValue.chiefEngineer,
           projectSecretary: fieldsValue.status,
-        }
+        },
+        token: this.props.app.user.token
       });
     });
   }

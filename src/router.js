@@ -139,6 +139,11 @@ function RouterConfig({history, app}) {
     models:[appModel],
     component:()=> import('./routes/document/fileReference/index')
   })
+  const NotFound = dynamic({
+    app,
+    models:[appModel],
+    component:()=> import('./routes/error/404')
+  })
 
   // const Project = dynamic({
   //   app,
@@ -177,6 +182,7 @@ function RouterConfig({history, app}) {
             <Route path="/evaluation/evaluate"  component={Evaluate_Pro}/>
             <Route path="/files/read"  component={Document_fileRead}/>
             <Route path="/files/reference"  component={Document_fileReference}/>
+            <Route path="/404"  component={NotFound}/>
           </Switch>
         </App>
       </Router>

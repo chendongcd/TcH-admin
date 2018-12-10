@@ -57,7 +57,7 @@ const CreateForm = Form.create()(props => {
       <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="工程类别">
         {form.getFieldDecorator('proType', {
           rules: [{required: true, message: '请选择工程类别'}],
-          initialValue: selectedValues.projectType ? selectedValues.projectType : ''
+          initialValue: selectedValues.dictId ? selectedValues.dictId: ''
         })(<Select placeholder="请选择" style={{width: '100%'}}>
           {proTypes.map((item, index) => {
             return <Option key={index} value={item.id}>{item.value}</Option>
@@ -135,16 +135,17 @@ class Project extends Component {
     {
       title: '操作',
       render: (val, record) => {
-        const button = this.props.app.user.permissionsMap.button
+        const user = this.props.app.user
+        const button = user.permissionsMap.button
         return (
           <Fragment>
-            {getButtons(button,pageButtons[1])?<a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>:null}
+            {user.token&&getButtons(button,pageButtons[1])?<a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>:null}
             <Divider type="vertical"/>
-            {getButtons(button,pageButtons[2])&&record.status == 1? <a onClick={() => this.updateStatus({
+            {user.token&&getButtons(button,pageButtons[2])&&record.status == 1? <a onClick={() => this.updateStatus({
               id: record.id,
               status: record.status
             })}>启用</a>:null}
-            {getButtons(button,pageButtons[3])&&record.status == 0? <a onClick={() => this.updateStatus({
+            {user.token&&getButtons(button,pageButtons[3])&&record.status == 0? <a onClick={() => this.updateStatus({
               id: record.id,
               status: record.status
             })}>禁用</a>:null}
@@ -390,10 +391,10 @@ class Project extends Component {
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
               <div className={styles.tableListOperator}>
-                {getButtons(user.permissionsMap.button,pageButtons[0])? <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+                {user.token&&getButtons(user.permissionsMap.button,pageButtons[0])? <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                   新增
                 </Button>:null}
-                {selectedRows.length > 0 && (
+               {/* {selectedRows.length > 0 && (
                   <span>
                   <Dropdown overlay={menu}>
                     <Button>
@@ -401,7 +402,7 @@ class Project extends Component {
                     </Button>
                   </Dropdown>
                 </span>
-                )}
+                )}*/}
               </div>
               <StandardTable
                 selectedRows={selectedRows}
