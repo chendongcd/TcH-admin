@@ -585,10 +585,9 @@ class Qualification extends Component {
             {getButtons(button, pageButtons[4]) ? <Menu.Item key="0">股份公司综合信誉评价</Menu.Item> : null}
             {getButtons(button, pageButtons[5]) ? <Menu.Item key="1"> 集团公司综合信誉评价</Menu.Item> : null}
             {getButtons(button, pageButtons[6]) ? <Menu.Item key="2">公司本级综合信誉评价</Menu.Item> : null}
-            {pageButtons[3] ? <Menu.Item key="export">导出</Menu.Item> : null}
           </Menu>
         );
-        const more = (user.token && (getButtons(button, pageButtons[3]) || getButtons(button, pageButtons[4]) || getButtons(button, pageButtons[5]) || getButtons(button, pageButtons[6]))
+        const more = (user.token && (getButtons(button, pageButtons[4]) || getButtons(button, pageButtons[5]) || getButtons(button, pageButtons[6]))
           ?
           <Fragment>
             <Divider type="vertical"/>
@@ -949,6 +948,10 @@ class Qualification extends Component {
                 {user.token && getButtons(user.permissionsMap.button, pageButtons[0]) ?
                   <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                     新增
+                  </Button> : null}
+                {user.token && getButtons(user.permissionsMap.button, pageButtons[3]) ?
+                  <Button icon="plus" type="primary">
+                    导出
                   </Button> : null}
               </div>
               <StandardTable

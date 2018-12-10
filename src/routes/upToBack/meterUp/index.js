@@ -362,9 +362,6 @@ class MeterUp extends Component {
             {user.token&&getButtons(button,pageButtons[1])?<a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>:null}
             <Divider type="vertical"/>
             {user.token&&getButtons(button,pageButtons[2])?<a onClick={() => this.handleCheckDetail(true, record)}>查看</a>:null}
-            <Divider type="vertical"/>
-            {user.token&&getButtons(button, pageButtons[3]) ?
-              <a>导出</a> : null}
           </Fragment>
         )
       }
@@ -671,6 +668,9 @@ class MeterUp extends Component {
               <div className={styles.tableListOperator}>
                 {user.token&&getButtons(user.permissionsMap.button,pageButtons[0])?  <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                   新增
+                </Button>:null}
+                {user.token&&getButtons(user.permissionsMap.button,pageButtons[3])?  <Button icon="plus" type="primary">
+                  导出
                 </Button>:null}
                {/* {selectedRows.length > 0 && (
                   <span>

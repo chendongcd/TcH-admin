@@ -284,29 +284,18 @@ class Resume extends Component {
       render: (val, record) => {
         const user = this.props.app.user
         const button = user.permissionsMap.button
-        const menu = (
-          <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
-            <Menu.Item key="edit" onClick={() => this.handleReviewModal(true)}>项目部评价</Menu.Item>
-            <Menu.Item key="export">导出</Menu.Item>
-          </Menu>
-        );
-        const more = (user.token && (getButtons(button, pageButtons[3]) || getButtons(button, pageButtons[4]))
-          ?
-          <Fragment>
-            <Divider type="vertical"/>
-            <Dropdown overlay={menu}>
-              <a className="ant-dropdown-link">
-                更多 <Icon type="down" />
-              </a>
-            </Dropdown>
-          </Fragment> : null)
         return (
           <Fragment>
-            {user.token&&getButtons(button,pageButtons[1])?<a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>:null}
+            {user.token && getButtons(button, pageButtons[1]) ?
+              <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a> : null}
             <Divider type="vertical"/>
-            {user.token&&getButtons(button,pageButtons[2])?<a onClick={() => this.handleCheckDetail(true, record)}>查看</a>:null}
-            {more}
-           {/* {getButtons(button,pageButtons[3])? <a>导出</a>:null}*/}
+            {user.token && getButtons(button, pageButtons[2]) ?
+              <a onClick={() => this.handleCheckDetail(true, record)}>查看</a> : null}
+            {user.token && getButtons(button, pageButtons[4]) ? <Fragment>
+              <Divider type="vertical"/>
+              <a onClick={() => this.handleReviewModal(true)}>项目部评价</a>
+            </Fragment> : null}
+            {/* {getButtons(button,pageButtons[3])? <a>导出</a>:null}*/}
           </Fragment>
         )
       }
@@ -387,9 +376,9 @@ class Resume extends Component {
   };
 
   handleSelectRows = rows => {
-      this.setState({
-        selectedRows: rows,
-      });
+    this.setState({
+      selectedRows: rows,
+    });
   };
 
   handleSearch = e => {
@@ -526,7 +515,7 @@ class Resume extends Component {
     const {
       rule: {data},
       loading,
-      app:{user}
+      app: {user}
     } = this.props;
     const {selectedRows, modalVisible, pageLoading, reviewType, updateModalVisible, checkDetail, selectedValues} = this.state;
 
@@ -550,9 +539,14 @@ class Resume extends Component {
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
               <div className={styles.tableListOperator}>
-                {user.token && getButtons(user.permissionsMap.button,pageButtons[0])? <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
-                  新增
-                </Button>:null}
+                {user.token && getButtons(user.permissionsMap.button, pageButtons[0]) ?
+                  <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+                    新增
+                  </Button> : null}
+                {user.token && getButtons(user.permissionsMap.button, pageButtons[3]) ?
+                  <Button icon="plus" type="primary">
+                    导出
+                  </Button> : null}
               </div>
               <StandardTable
                 selectedRows={selectedRows}
