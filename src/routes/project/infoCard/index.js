@@ -27,8 +27,9 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const statusMap = ['default', 'processing', 'success', 'error'];
-const status = ['在建', '完工未结算', '完工已结算', '停工'];
+const statusMap = ['processing','processing', 'success', 'error'];
+const status = [{id:0,name:'在建'},{id:1,name:'完工未结算'},{id:2,name:'完工已结算'},{id:3,name:'停工'}];
+
 const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/
 let uuid = 0;
 const pageButtons = menuData[6].buttons.map(a => a.permission)
@@ -231,8 +232,15 @@ class CreateForm extends Component {
   okHandle = (form, handleAdd) => {
     form.validateFields((err, fieldsValue) => {
       console.log(fieldsValue)
+      for(let prop in fieldsValue){
+        if(fieldsValue[prop] instanceof moment){
+         // console.log(fieldsValue[prop].format())
+          fieldsValue[prop]=fieldsValue[prop].format().split('+')[0]
+          console.log(fieldsValue[prop])
+        }
+       // console.log(typeof fieldsValue[prop])
+      }
       if (err) return;
-    //  fieldsValue.contractStartTime = moment(fieldsValue.contractStartTime).format('YYYY-MM-DD')
       // form.resetFields();
       handleAdd(fieldsValue);
     });
@@ -303,9 +311,8 @@ class CreateForm extends Component {
                   rules: [{required: true, message: '请选择工程状态'}],
                   initialValue: selectedValues.status ? selectedValues.status : '',
                 })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
-                  {status.map((a,index)=>{
-                  //  console.log(selectedValues.status==index)
-                   return <Option key={index} title={a} value={index}>{a}</Option>
+                  {status.map((item, index) => {
+                    return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
                   })}
                 </Select>)}
               </FormItem>
@@ -557,26 +564,8 @@ class InfoCard extends Component {
     {
       title: '工程状态',
       dataIndex: 'status',
-      filters: [
-        {
-          text: status[0],
-          value: 0,
-        },
-        {
-          text: status[1],
-          value: 1,
-        },
-        {
-          text: status[2],
-          value: 2,
-        },
-        {
-          text: status[3],
-          value: 3,
-        },
-      ],
       render(val) {
-        return <Badge status={statusMap[val]} text={status[val]}/>;
+        return <Badge status={statusMap[val]} text={status[val].name}/>;
       },
     },
     {

@@ -77,6 +77,7 @@ class CreateForm extends Component {
         maskClosable={false}
         title={checkDetail ? '用户详情' : updateModalVisible ? "编辑用户" : "新建用户"}
         visible={modalVisible}
+        className={styles.modalContent}
         onOk={() => checkDetail ? handleCheckDetail() : this.okHandle(handleAdd, form, updateModalVisible, selectedValues)}
         onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
       >
@@ -84,7 +85,7 @@ class CreateForm extends Component {
           {form.getFieldDecorator('type', {
             rules: [{required: true, message: '请选择账号类型',}],
             initialValue: (selectedValues.type == 0 || selectedValues.type == 1) ? String(selectedValues.type) : ''
-          })(<Select onSelect={(e) => this._onSelect(e)} disabled={checkDetail} placeholder="请选择"
+          })(<Select className={styles.customSelect} onSelect={(e) => this._onSelect(e)} disabled={checkDetail} placeholder="请选择"
                      style={{width: '100%'}}>
             <Option value="0">公司</Option>
             <Option value="1">项目部</Option>
@@ -94,7 +95,7 @@ class CreateForm extends Component {
           {form.getFieldDecorator('proName', {
             rules: [{required: true, message: '请选择项目名称'}],
             initialValue: selectedValues.projectId ? [selectedValues.projectId] : []
-          })(<Select onFocus={() => this.getOptions(getProNames, proNames)}
+          })(<Select className={styles.customSelect} onFocus={() => this.getOptions(getProNames, proNames)}
                      notFoundContent={this.isLoad ? '暂无数据' : '正在加载'}
                      mode={'multiple'} disabled={checkDetail}
                      placeholder="请选择" style={{width: '100%'}}>
@@ -107,7 +108,7 @@ class CreateForm extends Component {
           {form.getFieldDecorator('roleId', {
             rules: [{required: true, message: '请选择角色权限'}],
           })(
-            <Select onFocus={() => this.getOptions(getRoleNames, roleNames)}
+            <Select className={styles.customSelect} onFocus={() => this.getOptions(getRoleNames, roleNames)}
                     disabled={checkDetail}
                     notFoundContent={this.isLoad ? '暂无数据' : '正在加载'}
                     placeholder="请选择"
