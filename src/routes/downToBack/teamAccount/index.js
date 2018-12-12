@@ -11,8 +11,6 @@ import {
   Select,
   Icon,
   Button,
-  Dropdown,
-  Menu,
   DatePicker,
   Modal,
   message,
@@ -21,8 +19,9 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-import {_setTimeOut} from 'utils'
-
+import {_setTimeOut,getButtons} from 'utils'
+import {menuData} from 'common/menu'
+const pageButtons = menuData[13].buttons.map(a => a.permission)
 const FormItem = Form.Item;
 const {Option} = Select;
 const getValue = obj =>
@@ -33,7 +32,7 @@ const info_css={
   color:'#fa541c'
 }
 const CreateForm = Form.create()(props => {
-  const {modalVisible, form, handleAdd, handleModalVisible, normFile,handleUpdateModalVisible,updateModalVisible,handleCheckDetail,selectedValues,checkDetail} = props;
+  const {modalVisible, proNames,form, handleAdd, handleModalVisible, normFile,handleUpdateModalVisible,updateModalVisible,handleCheckDetail,selectedValues,checkDetail} = props;
 
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
@@ -58,11 +57,13 @@ const CreateForm = Form.create()(props => {
         <Row gutter={8}>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="项目名称">
-              {form.getFieldDecorator('proName', {
+              {form.getFieldDecorator('projectId', {
                 rules: [{required: true, message: '请选择项目'}],
-              })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">项目1</Option>
-                <Option value="1">项目2</Option>
+                initialValue: selectedValues.projectId ? selectedValues.projectId : '',
+              })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'} disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
+                {proNames.map((item, index) => {
+                  return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
+                })}
               </Select>)}
             </FormItem>
           </Col>
@@ -70,9 +71,10 @@ const CreateForm = Form.create()(props => {
         <Row gutter={8}>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同类型">
-              {form.getFieldDecorator('proName', {
-                rules: [{required: true, message: '请选择合同'}],
-              })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
+              {form.getFieldDecorator('constractType', {
+                rules: [{required: true, message: '请选择合同类型'}],
+                initialValue: selectedValues.constractType ? selectedValues.constractType : '',
+              })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
                 <Option value="0">主合同</Option>
                 <Option value="1">补充合同</Option>
               </Select>)}
@@ -82,15 +84,17 @@ const CreateForm = Form.create()(props => {
         <Row gutter={0}>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="分包商名称">
-              {form.getFieldDecorator('proType5', {
+              {form.getFieldDecorator('subcontractorName', {
                 rules: [{required: true}],
+                initialValue: selectedValues.subcontractorName ? selectedValues.subcontractorName : '',
               })(<Input disabled={checkDetail} placeholder="请输入分包商名称"/>)}
             </FormItem>
           </Col>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="队伍名称">
-              {form.getFieldDecorator('proType6', {
+              {form.getFieldDecorator('teamName', {
                 rules: [{required: true}],
+                initialValue: selectedValues.teamName ? selectedValues.teamName : '',
               })(<Input disabled={checkDetail} placeholder="请输入队伍名称"/>)}
             </FormItem>
           </Col>
@@ -98,15 +102,17 @@ const CreateForm = Form.create()(props => {
         <Row gutter={0}>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同签订日期">
-              {form.getFieldDecorator('proType5', {
+              {form.getFieldDecorator('contractTime', {
                 rules: [{required: true}],
+                initialValue: selectedValues.contractTime ? moment(selectedValues.contractTime) : '',
               })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
             </FormItem>
           </Col>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="预计合同金额">
-              {form.getFieldDecorator('proType6', {
+              {form.getFieldDecorator('estimatedContractAmount', {
                 rules: [{required: true}],
+                initialValue: selectedValues.estimatedContractAmount ? selectedValues.estimatedContractAmount : ''
               })(<Input disabled={checkDetail} placeholder="请预计合同金额" addonAfter='元'/>)}
             </FormItem>
           </Col>
@@ -114,16 +120,18 @@ const CreateForm = Form.create()(props => {
         <Row gutter={0}>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="施工范围">
-              {form.getFieldDecorator('proType5', {
+              {form.getFieldDecorator('constructionScope', {
                 rules: [{required: true}],
+                initialValue: selectedValues.constructionScope ? selectedValues.constructionScope : ''
               })(<Input disabled={checkDetail} placeholder="请输入施工范围"/>)}
             </FormItem>
           </Col>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="队伍状态">
-              {form.getFieldDecorator('proType6', {
+              {form.getFieldDecorator('status', {
                 rules: [{required: true}],
-              })(<Select disabled={checkDetail} placeholder="请选择队伍状态" style={{width: '100%'}}>
+                initialValue: selectedValues.status ? selectedValues.status : ''
+              })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择队伍状态" style={{width: '100%'}}>
                 <Option value="0">正在施工</Option>
                 <Option value="1">完工待结算</Option>
                 <Option value="2">已完结</Option>
@@ -139,15 +147,17 @@ const CreateForm = Form.create()(props => {
         <Row gutter={8}>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="应缴金额">
-              {form.getFieldDecorator('proActualDays', {
+              {form.getFieldDecorator('shouldAmount', {
                 rules: [{required: true, message: '请输入应缴金额'}],
+                initialValue: selectedValues.shouldAmount ? selectedValues.shouldAmount : ''
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入应缴金额" addonAfter="万元"/>)}
             </FormItem>
           </Col>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="实缴金额">
-              {form.getFieldDecorator('proActualDays', {
+              {form.getFieldDecorator('realAmount', {
                 rules: [{required: true, message: '请输入实缴金额'}],
+                initialValue: selectedValues.realAmount ? selectedValues.realAmount : ''
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入实缴金额" addonAfter="万元"/>)}
             </FormItem>
           </Col>
@@ -160,15 +170,17 @@ const CreateForm = Form.create()(props => {
         <Row gutter={8}>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同签订人">
-              {form.getFieldDecorator('proActualDays', {
+              {form.getFieldDecorator('contractPerson', {
                 rules: [{required: true, message: '请输入合同签订人'}],
+                initialValue: selectedValues.contractPerson ? selectedValues.contractPerson : ''
               })(<Input disabled={checkDetail} placeholder="请输入合同签订人"/>)}
             </FormItem>
           </Col>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 12}} label="合同签订人联系电话">
-              {form.getFieldDecorator('proActualDays', {
+              {form.getFieldDecorator('phone', {
                 rules: [{required: true, message: '请输入合同签订人联系电话'}],
+                initialValue: selectedValues.phone ? selectedValues.phone : ''
               })(<Input disabled={checkDetail} placeholder="请输入合同签订人联系电话"/>)}
             </FormItem>
           </Col>
@@ -209,7 +221,6 @@ const CreateForm = Form.create()(props => {
     </Modal>
   );
 });
-
 const CreateCompForm = Form.create()(props => {
   const {modalVisible, form, handleAdd, handleComModalVisible} = props;
 
@@ -262,7 +273,7 @@ const CreateCompForm = Form.create()(props => {
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="是否备案">
               {form.getFieldDecorator('proName', {
                 rules: [{required: true}],
-              })(<Select placeholder="请选择" style={{width: '100%'}}>
+              })(<Select className={styles.customSelect} placeholder="请选择" style={{width: '100%'}}>
                 <Option value="0">是</Option>
                 <Option value="1">否</Option>
               </Select>)}
@@ -451,20 +462,27 @@ class TeamAccount extends Component {
     },
     {
       title: '操作',
-      render: (val, record) => (
+      render: (val, record) => {
+        const user = this.props.app.user
+        const button = user.permissionsMap.button
+        return (
         <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>修改</a>
-          <Divider type="vertical"/>
-          <a onClick={()=>this.handleCheckDetail(true,record)}>查看</a>
-          <Divider type="vertical"/>
-          <a onClick={()=>this.handleComModalVisible(true)}>公司编辑</a>
+          {user.token&&getButtons(button, pageButtons[1]) ?
+            <a onClick={() => this.handleUpdateModalVisible(true, record)}>修改</a> : null}
+          {user.token&&getButtons(button, pageButtons[2]) ?
+            <Fragment>
+              <Divider type="vertical"/>
+              <a onClick={()=>this.handleCheckDetail(true,record)}>查看</a></Fragment> : null}
+          {user.token&&getButtons(button, pageButtons[3]) ?
+            <Fragment>
+              <Divider type="vertical"/>
+              <a onClick={()=>this.handleComModalVisible(true)}>公司编辑</a></Fragment> : null}
         </Fragment>
-      ),
+      )}
     },
   ];
 
   componentDidMount() {
-    const {dispatch} = this.props;
     _setTimeOut(() => this.setState({pageLoading: false}), 1000)
     // setTimeout(() => {
     //   this.setState({pageLoading:false})
@@ -628,17 +646,17 @@ class TeamAccount extends Component {
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={6} sm={24}>
             <FormItem label="项目名称">
-              {getFieldDecorator('name')(<Input placeholder="请输入"/>)}
+              {getFieldDecorator('projectName')(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="分包商名称">
-              {getFieldDecorator('name')(<Input placeholder="请输入"/>)}
+              {getFieldDecorator('subcontractorName')(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="队伍状态">
-              {getFieldDecorator('name')(<Select placeholder="请选择" style={{width: '100%'}}>
+              {getFieldDecorator('status')(<Select placeholder="请选择" style={{width: '100%'}}>
                 <Option value="0">正在施工</Option>
                 <Option value="1">完工待结算</Option>
                 <Option value="2">已结算</Option>
@@ -682,15 +700,11 @@ class TeamAccount extends Component {
 
   render() {
     const {
-      teamAccount: {data},
+      teamAccount: {data,proNames},
       loading,
+      app:{user}
     } = this.props;
     const {selectedRows, modalVisible, pageLoading,comModal,selectedValues,updateModalVisible,checkDetail} = this.state;
-    const menu = (
-      <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
-        <Menu.Item key="export">导出</Menu.Item>
-      </Menu>
-    );
 
     const parentMethods = {
       handleAdd: this.handleAdd,
@@ -704,7 +718,8 @@ class TeamAccount extends Component {
       updateModalVisible:updateModalVisible,
       modalVisible:modalVisible,
       selectedValues:selectedValues,
-      checkDetail:checkDetail
+      checkDetail:checkDetail,
+      proNames: proNames
     }
     return (
       <Page inner={true} loading={pageLoading}>
@@ -713,18 +728,14 @@ class TeamAccount extends Component {
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
               <div className={styles.tableListOperator}>
-                <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
-                  新增
-                </Button>
-                {selectedRows.length > 0 && (
-                  <span>
-                  <Dropdown overlay={menu}>
-                    <Button>
-                     操作 <Icon type="down"/>
-                    </Button>
-                  </Dropdown>
-                </span>
-                )}
+                {user.token&&getButtons(user.permissionsMap.button,pageButtons[0]) ?
+                  <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+                    新增
+                  </Button> : null}
+                {user.token&&getButtons(user.permissionsMap.button,pageButtons[4]) ?
+                  <Button icon="plus" type="primary">
+                    导出
+                  </Button> : null}
               </div>
               <StandardTable
                 selectedRows={selectedRows}
@@ -744,6 +755,17 @@ class TeamAccount extends Component {
         </PageHeaderWrapper>
       </Page>
     )
+  }
+
+  getProNames = (proName) => {
+    if (proName.length < 1) {
+      this.props.dispatch(
+        {
+          type: 'teamAccount/queryProNames',
+          payload: {page: 1, pageSize: 10}
+        }
+      )
+    }
   }
 
   getList = (page = 1, pageSize = 10) => {

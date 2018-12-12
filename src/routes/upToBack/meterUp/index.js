@@ -11,8 +11,6 @@ import {
   Select,
   Icon,
   Button,
-  Dropdown,
-  Menu,
   DatePicker,
   Modal,
   message,
@@ -619,12 +617,6 @@ class MeterUp extends Component {
       app:{user}
     } = this.props;
     const {selectedRows, modalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail} = this.state;
-    const menu = (
-      <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
-        <Menu.Item key="edit">编辑</Menu.Item>
-        <Menu.Item key="export">导出</Menu.Item>
-      </Menu>
-    );
 
     const parentMethods = {
       handleAdd: this.handleAdd,
