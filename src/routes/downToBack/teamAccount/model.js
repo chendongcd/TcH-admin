@@ -1,7 +1,7 @@
-import { queryRule, removeRule, addRule, updateRule } from '@/services/api';
-const delay = timeout => new Promise(resolve => setTimeout(resolve, timeout));
+import {queryTeamList, addTeam, updateCompany, updateTeam} from '../../../services/downToBack/teamAccount'
+
 export default {
-  namespace: 'Sys_project',
+  namespace: 'teamAccount',
 
   state: {
     data: {
@@ -11,36 +11,39 @@ export default {
   },
 
   effects: {
-    *fetch({ payload }, { call, put }) {
-      const response = yield call(queryRule, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
+    * fetch({payload, token}, {call, put}) {
+      const response = yield call(queryTeamList, payload, token);
+      console.log(response)
+      if(response.code=='200') {
+        yield put({
+          type: 'save',
+          payload: response,
+        });
+      }
     },
-    *add({ payload, callback }, { call, put }) {
-      const response = yield call(addRule, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
+    * add({payload, token}, {call, put}) {
+      const response = yield call(addTeam, payload, token);
+      if (response.code == '200') {
+
+        return true
+      }
+      return false
     },
-    *remove({ payload, callback }, { call, put }) {
-      const response = yield call(removeRule, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
+    * update({payload, token}, {call, put}) {
+      const response = yield call(updateTeam, payload, token);
+      if (response.code == '200') {
+
+        return true
+      }
+      return false
     },
-    *update({ payload, callback }, { call, put }) {
-      const response = yield call(updateRule, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
+    * updateCompany({payload, token}, {call, put}) {
+      const response = yield call(updateCompany, payload, token);
+      if (response.code == '200') {
+
+        return true
+      }
+      return false
     },
   },
 

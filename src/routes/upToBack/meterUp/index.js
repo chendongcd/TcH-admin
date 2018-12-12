@@ -237,7 +237,7 @@ class MeterUp extends Component {
   columns = [
     {
       title: '序号',
-      dataIndex: 'code',
+      dataIndex: 'id',
     },
     {
       title: '项目名称',
@@ -245,112 +245,91 @@ class MeterUp extends Component {
     },
     {
       title: '计量期数',
-      render(val) {
-        return <span>{1}</span>;
-      },
+      dataIndex: 'meteringNum',
     },
     {
       title: '计量日期',
+      dataIndex: 'meteringTime',
       render(val) {
         return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
       },
     },
     {
       title: '预付款',
+      dataIndex:'payProportion',
       render(val) {
-        return <span>10万</span>;
+        return <span>{val}万</span>;
       },
     },
     {
       title: '计价金额（元）',
       children: [{
         title: '含税',
-        key: 'plan_account',
-        render(val) {
-          return <span>15万</span>;
-        },
+        dataIndex:'valuationAmountTax',
+        key: 'valuationAmountTax'
       },
         {
           title: '税率（%）',
-          key: 'tax',
-          render(val) {
-            return <span>3</span>;
-          },
+          dataIndex:'tax',
+          key: 'tax'
         }, {
           title: '不含税',
-          key: 'plan_account_noTax',
-          render(val) {
-            return <span>311</span>;
-          },
+          dataIndex:'valuationAmountNotTax',
+          key: 'valuationAmountNotTax',
         }]
     },
     {
       title: '实际应付金额（元）',
       children: [{
         title: '含税',
-        key: 'actul_account',
-        render(val) {
-          return <span>15万</span>;
-        },
+        dataIndex:'realAmountTax',
+        key: 'realAmountTax',
       }, {
         title: '不含税',
-        key: 'actul_account_noTax',
-        render(val) {
-          return <span>311</span>;
-        },
+        dataIndex:'realAmount',
+        key: 'realAmount',
       }]
     },
     {
       title: '资金拨付情况（元）',
       children: [{
         title: '已支付金额',
-        key: 'paid',
-        render(val) {
-          return <span>15万</span>;
-        },
+        dataIndex:'alreadyPaidAmount',
+        key: 'alreadyPaidAmount'
       },
         {
           title: '未支付金额',
-          key: 'noPaid',
-          render(val) {
-            return <span>3</span>;
-          },
+          dataIndex:'unpaidAmount',
+          key: 'unpaidAmount',
         }, {
           title: '拨付率',
-          key: 'pay_per',
-          render(val) {
-            return <span>311</span>;
-          },
+          dataIndex:'payProportion',
+          key: 'payProportion'
         }]
     },
     {
       title: '其他计价（元）',
       children: [{
         title: '超计价',
-        key: 'more_plan',
-        render(val) {
-          return <span>15万</span>;
-        },
+        dataIndex:'extraAmount',
+        key: 'extraAmount',
       },
         {
           title: '已完未计',
-          key: 'end_noPlan',
-          render(val) {
-            return <span>3</span>;
-          },
+          dataIndex:'notCalculatedAmount',
+          key: 'notCalculatedAmount',
         }]
     },
     {
       title: '产值计价率',
+      dataIndex:'realAmount',
       render(val) {
         return <span>2213</span>;
       },
     },
     {
       title: '备注',
-      render(val) {
-        return <span>100万啊实打实的</span>;
-      },
+      dataIndex:'remark'
     },
     {
       title: '操作',
@@ -362,6 +341,8 @@ class MeterUp extends Component {
             {user.token&&getButtons(button,pageButtons[1])?<a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>:null}
             <Divider type="vertical"/>
             {user.token&&getButtons(button,pageButtons[2])?<a onClick={() => this.handleCheckDetail(true, record)}>查看</a>:null}
+            <Divider type="vertical"/>
+            <a href={record.annexUrl} download="附件">下载附件</a>
           </Fragment>
         )
       }
@@ -714,7 +695,8 @@ class MeterUp extends Component {
   getList = (page = 1, pageSize = 10) => {
     this.props.dispatch({
       type: 'meterUp/fetch',
-      payload: {page: page, pageSize: pageSize}
+      payload: {page: page, pageSize: pageSize},
+      token:this.props.app.user.token
     });
   }
 

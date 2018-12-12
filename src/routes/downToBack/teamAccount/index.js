@@ -18,7 +18,6 @@ import {
   message,
   Upload,
   Divider,
-  Radio
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
@@ -26,14 +25,10 @@ import {_setTimeOut} from 'utils'
 
 const FormItem = Form.Item;
 const {Option} = Select;
-const RadioGroup = Radio.Group;
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const statusMap = ['default', 'processing', 'success', 'error'];
-const status = ['关闭', '运行中', '已上线', '异常'];
-let uuid = 0;
 const info_css={
   color:'#fa541c'
 }
@@ -326,48 +321,37 @@ class TeamAccount extends Component {
       children: [
         {
           title: '项目名称',
-          key:'001',
-          dataIndex: 'name',
+          dataIndex: 'projectName',
         },
         {
           title: '合同编码',
-          key:'002',
-          dataIndex: 'code',
+          dataIndex: 'id',
         },
         {
           title: '分包商名称',
-          key:'003',
-          render(val) {
-            return <span>阿里巴巴</span>;
-          },
+          dataIndex:'subcontractorName'
         },
         {
           title: '队伍名称',
-          key:'004',
-          render(val) {
-            return <span>湖人队</span>;
-          },
+          dataIndex:'teamName',
         },
         {
           title: '队伍状态',
-          key:'005',
+          dataIndex:'status',
           render(val) {
             return <span>已完结</span>;
           },
         },
         {
           title: '预计合同金额',
-          key:'006',
+          dataIndex:'estimatedContractAmount',
           render(val) {
-            return <span>10万</span>;
+            return <span>{val}</span>;
           },
         },
         {
           title: '施工范围',
-          key:'007',
-          render(val) {
-            return <span>从南到北</span>;
-          },
+          dataIndex:'constructionScope'
         },
         {
           title: '覆约保证金',
@@ -375,15 +359,10 @@ class TeamAccount extends Component {
           children: [
             {
               title: '应缴金额（万元）',
-              render(val) {
-                return <span>3</span>;
-              },
+              dataIndex:'shouldAmount'
             }, {
-              title: '应缴金额（万元）',
-              key: 'pay_per',
-              render(val) {
-                return <span>311</span>;
-              },
+              title: '实际缴金额（万元）',
+              dataIndex: 'realAmount'
             }]
         },
         {
@@ -391,38 +370,30 @@ class TeamAccount extends Component {
           key:'009',
           children: [{
             title: '合同签订人',
-            key: 'paid',
-            render(val) {
-              return <span>李二狗</span>;
-            },
+            dataIndex: 'contractPerson',
           },
             {
               title: '联系方式',
-              render(val) {
-                return <span>3123123123</span>;
-              },
+              dataIndex:'phone',
             }]
         },
         {
           title: '结算金额',
           key:'0010',
           render(val) {
-            return <span>10万</span>;
+            return <span>没有</span>;
           },
         },
         {
           title: '附件（含同）',
-          key:'0011',
+          dataIndex:'annexUrl',
           render(val) {
-            return <a href="#">下载附件</a>;
+            return <a href={val} download={'附件'}>下载附件</a>;
           },
         },
         {
           title: '备注',
-          key:'0012',
-          render(val) {
-            return <span>nice</span>;
-          },
+          dataIndex:'remark'
         },
       ]
     },
@@ -435,9 +406,9 @@ class TeamAccount extends Component {
           key:'020',
           children: [{
             title:'日期',
-            key:'0200',
+            dataIndex:'teamTime',
             render(val) {
-              return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
+              return <span>{moment(val).format('YYYY/MM/DD')}</span>;
             },
           }]
         },
@@ -446,16 +417,16 @@ class TeamAccount extends Component {
           key:'021',
           children: [{
             title:'日期',
-            key:'0210',
+            dataIndex:'contractTime',
             render(val) {
-              return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
+              return <span>{moment(val).format('YYYY/MM/DD')}</span>;
             },
           },
             {
               title:'是否备案',
               key:'0211',
               render(val) {
-                return <span>是</span>;
+                return <span>没有</span>;
               },
             }]
         },
@@ -464,9 +435,9 @@ class TeamAccount extends Component {
           key:'022',
           children: [{
             title:'日期',
-            key:'0220',
+            dataIndex:'settlementTime',
             render(val) {
-              return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
+              return <span>{moment(val).format('YYYY/MM/DD')}</span>;
             },
           }]
         },
@@ -474,9 +445,8 @@ class TeamAccount extends Component {
     },
     {
       title: '备注',
-      key:'03',
       render(val) {
-        return <span>100万啊实打实的</span>;
+        return <span>没有</span>;
       },
     },
     {
@@ -499,9 +469,7 @@ class TeamAccount extends Component {
     // setTimeout(() => {
     //   this.setState({pageLoading:false})
     // },1000)
-    dispatch({
-      type: 'rule/fetch', payload: {pageSize: 5}
-    });
+   this.getList()
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
@@ -714,7 +682,7 @@ class TeamAccount extends Component {
 
   render() {
     const {
-      rule: {data},
+      teamAccount: {data},
       loading,
     } = this.props;
     const {selectedRows, modalVisible, pageLoading,comModal,selectedValues,updateModalVisible,checkDetail} = this.state;
@@ -760,9 +728,10 @@ class TeamAccount extends Component {
               </div>
               <StandardTable
                 selectedRows={selectedRows}
-                loading={loading.effects['rule/fetch']}
+                loading={loading.effects['teamAccount/fetch']}
                 bordered
                 data={data}
+                rowKey={'id'}
                 scroll={{x: '200%'}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
@@ -776,8 +745,41 @@ class TeamAccount extends Component {
       </Page>
     )
   }
+
+  getList = (page = 1, pageSize = 10) => {
+    this.props.dispatch({
+      type: 'teamAccount/fetch',
+      payload: {page: page, pageSize: pageSize},
+      token:this.props.app.user.token
+    });
+  }
+
+  searchList = (page = 1, pageSize = 10) => {
+    this.props.form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      //  form.resetFields();
+      this.props.dispatch({
+        type: 'teamAccount/fetch',
+        payload: {
+          page: page,
+          pageSize: pageSize,
+          projectName: fieldsValue.projectName,
+          mileageNumber: fieldsValue.mileageNumber,
+          totalPrice: fieldsValue.totalPrice,
+          contractStartTime: fieldsValue.contractStartTime,
+          contractEndTime: fieldsValue.contractEndTime,
+          realContractStartTime: fieldsValue.realContractStartTime,
+          realContractEndTime: fieldsValue.realContractEndTime,
+          status: fieldsValue.status,
+          projectManager: fieldsValue.projectManager,
+          chiefEngineer: fieldsValue.chiefEngineer,
+          projectSecretary: fieldsValue.status,
+        }
+      });
+    });
+  }
 }
 
 TeamAccount.propTypes = {}
 
-export default connect(({app, rule, loading}) => ({app, rule, loading}))(TeamAccount)
+export default connect(({app, rule, loading,teamAccount}) => ({app, rule, loading,teamAccount}))(TeamAccount)

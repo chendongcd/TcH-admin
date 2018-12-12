@@ -116,7 +116,7 @@ function RouterConfig({history, app}) {
   })
   const Down_TeamAccount = dynamic({
     app,
-    models:[appModel],
+    models:()=>[import('./routes/downToBack/teamAccount/model')],
     component:()=> import('./routes/downToBack/teamAccount/index')
   })
   const Evaluate_Pro = dynamic({
