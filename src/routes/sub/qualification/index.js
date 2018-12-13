@@ -579,6 +579,9 @@ class Qualification extends Component {
       width: 175,
       render: (val, record) => {
         const user = this.props.app.user
+        if(!user.token){
+          return null
+        }
         const button = user.permissionsMap.button
         const menu = (
           <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
@@ -587,7 +590,7 @@ class Qualification extends Component {
             {getButtons(button, pageButtons[6]) ? <Menu.Item key="2">公司本级综合信誉评价</Menu.Item> : null}
           </Menu>
         );
-        const more = (user.token && (getButtons(button, pageButtons[4]) || getButtons(button, pageButtons[5]) || getButtons(button, pageButtons[6]))
+        const more = (getButtons(button, pageButtons[4]) || getButtons(button, pageButtons[5]) || getButtons(button, pageButtons[6])
           ?
           <Fragment>
             <Divider type="vertical"/>
@@ -599,10 +602,10 @@ class Qualification extends Component {
           </Fragment> : null)
         return (
           <Fragment>
-            {user.token && getButtons(button, pageButtons[1]) ?
+            {getButtons(button, pageButtons[1]) ?
               <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a> : null}
             <Divider type="vertical"/>
-            {user.token && getButtons(button, pageButtons[2]) ?
+            {getButtons(button, pageButtons[2]) ?
               <a onClick={() => this.handleCheckDetail(true, record)}>查看</a> : null}
             {more}
             {/* <Divider type="horizontal"/>

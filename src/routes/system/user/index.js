@@ -97,7 +97,7 @@ class CreateForm extends Component {
             initialValue: selectedValues.projectId ? [selectedValues.projectId] : []
           })(<Select className={styles.customSelect} onFocus={() => this.getOptions(getProNames, proNames)}
                      notFoundContent={this.isLoad ? '暂无数据' : '正在加载'}
-                     mode={'multiple'} disabled={checkDetail}
+                      disabled={checkDetail}
                      placeholder="请选择" style={{width: '100%'}}>
             {proNames.map((item, index) => {
               return <Option key={item.id} value={item.id}>{item.name}</Option>
@@ -153,7 +153,7 @@ class User extends Component {
   columns = [
     {
       title: '序号编码',
-      dataIndex: 'id',
+      dataIndex: 'code',
     },
     {
       title: '账号类别',
@@ -185,7 +185,7 @@ class User extends Component {
     },
     {
       title: '创建人',
-      dataIndex: 'createUserId',
+      dataIndex: 'createUserStr',
     },
     {
       title: '创建时间',
@@ -195,7 +195,7 @@ class User extends Component {
     },
     {
       title: '最新修改人',
-      dataIndex: 'updateUserId'
+      dataIndex: 'updateUserStr'
     },
     {
       title: '最新修改时间',
@@ -209,18 +209,21 @@ class User extends Component {
       width:160,
       render: (val, record) => {
         const user = this.props.app.user
+        if(!user.token){
+          return null
+        }
         const button = user.permissionsMap.button
         return (
           <Fragment>
-            {user.token&&getButtons(button,pageButtons[1])? <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>:null}
+            {getButtons(button,pageButtons[1])? <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>:null}
             <Divider type="vertical"/>
-            {user.token&&getButtons(button,pageButtons[2])?  <a onClick={() => this.handleCheckDetail(true, record)}>查看</a>:null}
+            {getButtons(button,pageButtons[2])?  <a onClick={() => this.handleCheckDetail(true, record)}>查看</a>:null}
             <Divider type="vertical"/>
-            {user.token&&getButtons(button,pageButtons[3])&&record.disable == 1? <a onClick={() => this.updateStatus({
+            {getButtons(button,pageButtons[3])&&record.disable == 1? <a onClick={() => this.updateStatus({
               id: record.id,
               disable: 1
             })}>启用</a>:null}
-            {user.token&&getButtons(button,pageButtons[4])&&record.disable == 0? <a onClick={() => this.updateStatus({
+            {getButtons(button,pageButtons[4])&&record.disable == 0? <a onClick={() => this.updateStatus({
               id: record.id,
               disable: 0
             })}>禁用</a>:null}
@@ -409,13 +412,6 @@ class User extends Component {
       app:{user}
     } = this.props;
     const {selectedRows, modalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail} = this.state;
-    const menu = (
-      <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
-        <Menu.Item key="remove">删除</Menu.Item>
-        <Menu.Item key="true">启用</Menu.Item>
-        <Menu.Item key="false">禁用</Menu.Item>
-      </Menu>
-    );
 
     const parentMethods = {
       handleAdd: this.handleAdd,
@@ -444,15 +440,6 @@ class User extends Component {
                 {user.token&&getButtons(user.permissionsMap.button,pageButtons[0])? <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                   新增
                 </Button>:null}
-                {selectedRows.length > 0 && (
-                  <span>
-                  <Dropdown overlay={menu}>
-                    <Button>
-                     批量操作 <Icon type="down"/>
-                    </Button>
-                  </Dropdown>
-                </span>
-                )}
               </div>
               <StandardTable
                 selectedRows={selectedRows}

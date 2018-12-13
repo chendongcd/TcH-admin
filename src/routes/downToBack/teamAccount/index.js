@@ -464,16 +464,19 @@ class TeamAccount extends Component {
       title: '操作',
       render: (val, record) => {
         const user = this.props.app.user
+        if(!user.token){
+          return null
+        }
         const button = user.permissionsMap.button
         return (
         <Fragment>
-          {user.token&&getButtons(button, pageButtons[1]) ?
+          {getButtons(button, pageButtons[1]) ?
             <a onClick={() => this.handleUpdateModalVisible(true, record)}>修改</a> : null}
-          {user.token&&getButtons(button, pageButtons[2]) ?
+          {getButtons(button, pageButtons[2]) ?
             <Fragment>
               <Divider type="vertical"/>
               <a onClick={()=>this.handleCheckDetail(true,record)}>查看</a></Fragment> : null}
-          {user.token&&getButtons(button, pageButtons[3]) ?
+          {getButtons(button, pageButtons[3]) ?
             <Fragment>
               <Divider type="vertical"/>
               <a onClick={()=>this.handleComModalVisible(true)}>公司编辑</a></Fragment> : null}

@@ -333,12 +333,15 @@ class MeterUp extends Component {
       title: '操作',
       render: (val, record) => {
         const user = this.props.app.user
+        if(!user.token){
+          return null
+        }
         const button = user.permissionsMap.button
         return (
           <Fragment>
-            {user.token&&getButtons(button,pageButtons[1])?<a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>:null}
+            {getButtons(button,pageButtons[1])?<a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>:null}
             <Divider type="vertical"/>
-            {user.token&&getButtons(button,pageButtons[2])?<a onClick={() => this.handleCheckDetail(true, record)}>查看</a>:null}
+            {getButtons(button,pageButtons[2])?<a onClick={() => this.handleCheckDetail(true, record)}>查看</a>:null}
             <Divider type="vertical"/>
             <a href={record.annexUrl} download="附件">下载附件</a>
           </Fragment>

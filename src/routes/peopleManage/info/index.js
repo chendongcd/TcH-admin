@@ -500,15 +500,18 @@ class PeopleInfo extends Component {
       title: '操作',
       render: (val, record) => {
         const user = this.props.app.user
+        if(!user.token){
+          return null
+        }
         const button = user.permissionsMap.button
         return (
         <Fragment>
-          {user.token && getButtons(button, pageButtons[1]) ?
+          {getButtons(button, pageButtons[1]) ?
             <Fragment>
               <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
               <Divider type="vertical"/>
             </Fragment>: null}
-          {user.token && getButtons(button, pageButtons[2]) ?
+          {getButtons(button, pageButtons[2]) ?
             <Fragment>
               <a onClick={()=>this.handleCheckDetail(true,record)}>查看</a>
               <Divider type="vertical"/>
