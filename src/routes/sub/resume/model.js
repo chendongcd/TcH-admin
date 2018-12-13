@@ -1,7 +1,7 @@
-import { queryRule, removeRule, addRule, updateRule } from '@/services/api';
-const delay = timeout => new Promise(resolve => setTimeout(resolve, timeout));
+import {addSubQua, querySubQuaList, updateSubQua} from "../../../services/sub/qualification";
+import {message} from "antd";
 export default {
-  namespace: 'Sys_project',
+  namespace: 'sub_resume',
 
   state: {
     data: {
@@ -11,36 +11,30 @@ export default {
   },
 
   effects: {
-    *fetch({ payload }, { call, put }) {
-      const response = yield call(queryRule, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
+    * fetch({payload}, {call, put}) {
+      const response = yield call(querySubQuaList, payload);
+      if (response.code == '200') {
+        yield put({
+          type: 'save',
+          payload: response,
+        });
+      }
     },
-    *add({ payload, callback }, { call, put }) {
-      const response = yield call(addRule, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
+    * add({payload}, {call, put}) {
+      const response = yield call(addSubQua, payload);
+      if (response.code == '200') {
+        message.success('新增成功');
+        return true
+      }
+      return false
     },
-    *remove({ payload, callback }, { call, put }) {
-      const response = yield call(removeRule, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
-    },
-    *update({ payload, callback }, { call, put }) {
-      const response = yield call(updateRule, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
+
+    * update({payload}, {call, put}) {
+      const response = yield call(updateSubQua, payload);
+      if (response.code == '200') {
+        return true
+      }
+      return false
     },
   },
 

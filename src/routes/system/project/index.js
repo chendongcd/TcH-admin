@@ -8,10 +8,7 @@ import {
   Form,
   Input,
   Select,
-  Icon,
   Button,
-  Dropdown,
-  Menu,
   Modal,
   Badge,
   Divider,
@@ -368,12 +365,6 @@ class Project extends Component {
     } = this.props;
     //console.log(loading)
     const {selectedRows, modalVisible, pageLoading, updateModalVisible, selectedValues} = this.state;
-    const menu = (
-      <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
-        <Menu.Item key="remove">禁用</Menu.Item>
-        <Menu.Item key="approval">启用</Menu.Item>
-      </Menu>
-    );
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
@@ -394,15 +385,6 @@ class Project extends Component {
                 {user.token&&getButtons(user.permissionsMap.button,pageButtons[0])? <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                   新增
                 </Button>:null}
-               {/* {selectedRows.length > 0 && (
-                  <span>
-                  <Dropdown overlay={menu}>
-                    <Button>
-                     批量操作 <Icon type="down"/>
-                    </Button>
-                  </Dropdown>
-                </span>
-                )}*/}
               </div>
               <StandardTable
                 selectedRows={selectedRows}

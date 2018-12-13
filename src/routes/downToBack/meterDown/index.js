@@ -61,7 +61,7 @@ const CreateForm = Form.create()(props => {
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="项目名称">
               {form.getFieldDecorator('projectId', {
                 rules: [{required: true, message: '请选择项目'}],
-                initialValue: selectedValues.projectId ? selectedValues.projectId : testValue,
+                initialValue: selectedValues.projectId ? selectedValues.projectId : '',
               })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'} disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
                 {proNames.map((item, index) => {
                   return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
@@ -367,15 +367,24 @@ class MeterDown extends Component {
     },
     {
       title: '操作',
-      render: (val, record) => (
+      render: (val, record) => {
+        const user = this.props.app.user
+        const button = user.permissionsMap.button
+        return(
         <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
-          <Divider type="vertical"/>
-          <a onClick={() => this.handleCheckDetail(true, record)}>查看</a>
-          <Divider type="vertical"/>
-          <a>下载附件</a>
+          {user.token && getButtons(button, pageButtons[1]) ?
+            <Fragment>
+              <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
+              <Divider type="vertical"/>
+            </Fragment>: null}
+          {user.token && getButtons(button, pageButtons[2]) ?
+            <Fragment>
+              <a onClick={() => this.handleCheckDetail(true, record)}>查看</a>
+              <Divider type="vertical"/>
+            </Fragment>: null}
+            <a>下载附件</a>
         </Fragment>
-      ),
+      )}
     },
   ];
 
@@ -577,12 +586,12 @@ class MeterDown extends Component {
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={6} sm={24}>
             <FormItem label="项目名称">
-              {getFieldDecorator('name')(<Input placeholder="请输入"/>)}
+              {getFieldDecorator('projectName')(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="分包商名称">
-              {getFieldDecorator('date')(
+              {getFieldDecorator('subcontractorName')(
                 <Input placeholder="请输入"/>
               )}
             </FormItem>
@@ -676,6 +685,10 @@ class MeterDown extends Component {
                 {user.token&&getButtons(user.permissionsMap.button,pageButtons[0]) ?
                   <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                     新增
+                  </Button> : null}
+                {user.token&&getButtons(user.permissionsMap.button,pageButtons[3]) ?
+                  <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+                    导出
                   </Button> : null}
               </div>
               <StandardTable

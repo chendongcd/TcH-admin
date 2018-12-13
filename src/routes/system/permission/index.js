@@ -9,8 +9,6 @@ import {
   Input,
   Icon,
   Button,
-  Dropdown,
-  Menu,
   Tree,
   Modal,
   Drawer,
@@ -78,9 +76,6 @@ class CreatDrawer extends Component {
   }
 
   onCheck = (checkedKeys, info) => {
-    // this.resouces=[...checkedKeys,...info.halfCheckedKeys]
-    // console.log(info)
-    // console.log(checkedKeys)
     this.resouces = checkedKeys.checked
     this.setState({checkedKeys})
   }
@@ -329,12 +324,6 @@ class Permission extends Component {
     this.getList()
   };
 
-  handleMenuClick = e => {
-    const {dispatch} = this.props;
-    const {selectedRows} = this.state;
-
-  };
-
   handleSelectRows = rows => {
     this.setState({
       selectedRows: rows,
@@ -491,15 +480,6 @@ class Permission extends Component {
                   <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                     新增
                   </Button> : null}
-                {/*{selectedRows.length > 0 && (
-                  <span>
-                  <Dropdown overlay={menu}>
-                    <Button>
-                     批量操作 <Icon type="down"/>
-                    </Button>
-                  </Dropdown>
-                </span>
-                )}*/}
               </div>
               <StandardTable
                 selectedRows={selectedRows}

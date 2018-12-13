@@ -2,12 +2,12 @@ import {request,config} from 'utils';
 
 const {apiDev} = config
 const api = `${apiDev}/subcontractor`
-export async function querySubQuaList(params) {
+export async function querySubQuaList(params,token) {
   console.log('请求分包商资质信息列表',`${api}/list/v1.1`)
   return request(`${api}/list/v1.1`,{
     method: 'GET',
     body: params
-  });
+  },token);
 }
 
 export async function querySubQuaDetail(params) {

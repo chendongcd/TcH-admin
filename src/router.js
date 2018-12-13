@@ -126,7 +126,7 @@ function RouterConfig({history, app}) {
   })
   const People_Info = dynamic({
     app,
-    models:[appModel],
+    models:()=>[import('./routes/peopleManage/info/model')],
     component:()=> import('./routes/peopleManage/info/index')
   })
   const Document_fileRead = dynamic({

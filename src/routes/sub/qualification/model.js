@@ -14,8 +14,8 @@ export default {
   },
 
   effects: {
-    * fetch({payload}, {call, put}) {
-      const response = yield call(querySubQuaList, payload);
+    * fetch({payload,token}, {call, put}) {
+      const response = yield call(querySubQuaList, payload,token);
       if (response.code == '200') {
         yield put({
           type: 'save',
@@ -23,8 +23,8 @@ export default {
         });
       }
     },
-    * add({payload}, {call, put}) {
-      const response = yield call(addSubQua, payload);
+    * add({payload,token}, {call, put}) {
+      const response = yield call(addSubQua, payload,token);
       if (response.code == '200') {
         message.success('新增成功');
         return true
@@ -41,8 +41,8 @@ export default {
         })
       }
     },
-    * update({payload}, {call, put}) {
-      const response = yield call(updateSubQua, payload);
+    * update({payload,token}, {call, put}) {
+      const response = yield call(updateSubQua, payload,token);
       if (response.code == '200') {
         return true
       }

@@ -275,14 +275,6 @@ class User extends Component {
     form.resetFields();
     this.getList()
   };
-
-  handleMenuClick = e => {
-    const {dispatch} = this.props;
-    const {selectedRows} = this.state;
-
-    if (!selectedRows) return;
-  };
-
   handleSelectRows = rows => {
     this.setState({
       selectedRows: rows,
@@ -342,15 +334,6 @@ class User extends Component {
         callback2: this.getList
       })
     }
-    // dispatch({
-    //   type: 'sys_user/addUser',
-    //   payload: {
-    //     desc: fields.desc,
-    //   },
-    // });
-    //
-    // message.success('添加成功');
-    // this.handleModalVisible();
   };
 
   renderSimpleForm() {

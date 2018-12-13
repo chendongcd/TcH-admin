@@ -774,13 +774,16 @@ class Qualification extends Component {
 
     }
     if (updateModalVisible) {
-      // dispatch({
-      //   type: 'sub_qua/update',
-      //   payload: {...payload, ...{id: selectedValues.id}},
-      //   token: user.token,
-      //   callback: this.handleUpdateModalVisible,
-      //   callback2: this.getList
-      // })
+      dispatch({
+        type: 'sub_qua/update',
+        payload: {...payload, ...{id: selectedValues.id}},
+        token: user.token
+      }).then(res=>{
+        if (res) {
+          this.handleUpdateModalVisible()
+          this.getList()
+        }
+      })
     } else {
       dispatch({
         type: 'sub_qua/add',
@@ -788,7 +791,7 @@ class Qualification extends Component {
         token: user.token
       }).then(res => {
         if (res) {
-          this.this.handleModalVisible()
+          this.handleModalVisible()
           this.getList()
         }
       })

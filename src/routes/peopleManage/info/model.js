@@ -1,7 +1,8 @@
-import { queryRule, removeRule, addRule, updateRule } from '@/services/api';
-const delay = timeout => new Promise(resolve => setTimeout(resolve, timeout));
+import {queryPeopleList,addPeople,updatePeople} from "../../../services/peopleManage/peopleManage";
+import {message} from "antd";
+import {queryProPerList} from "../../../services/system/sys_project";
 export default {
-  namespace: 'Sys_project',
+  namespace: 'peopleManage',
 
   state: {
     data: {
@@ -11,36 +12,29 @@ export default {
   },
 
   effects: {
-    *fetch({ payload }, { call, put }) {
-      const response = yield call(queryRule, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
+    * fetch({payload,token}, {call, put}) {
+      const response = yield call(queryPeopleList, payload);
+      if (response.code == '200') {
+        yield put({
+          type: 'save',
+          payload: response,
+        });
+      }
     },
-    *add({ payload, callback }, { call, put }) {
-      const response = yield call(addRule, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
+    * add({payload,token}, {call, put}) {
+      const response = yield call(addPeople, payload,token);
+      if (response.code == '200') {
+        message.success('新增成功');
+        return true
+      }
+      return false
     },
-    *remove({ payload, callback }, { call, put }) {
-      const response = yield call(removeRule, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
-    },
-    *update({ payload, callback }, { call, put }) {
-      const response = yield call(updateRule, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
+    * update({payload,token}, {call, put}) {
+      const response = yield call(updatePeople, payload,token);
+      if (response.code == '200') {
+        return true
+      }
+      return false
     },
   },
 
