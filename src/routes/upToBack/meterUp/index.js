@@ -677,8 +677,9 @@ class MeterUp extends Component {
     if (proName.length < 1) {
       this.props.dispatch(
         {
-          type: 'meterUp/queryProNames',
-          payload: {page: 1, pageSize: 10}
+          type: 'pro_proInfo/queryProNames',
+          payload: {page: 1, pageSize: 10},
+          token:this.props.app.user.token
         }
       )
     }

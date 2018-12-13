@@ -3,6 +3,7 @@ import { stringify } from 'qs';
 
 const {apiPrefix,apiDev} = config
 const api = `${apiDev}/project`
+
 export async function queryRule(params) {
   return requestDev(`${apiPrefix}/rule`,{
     method: 'GET',
@@ -54,12 +55,12 @@ export async function queryProList(params) {
     body: params
   });
 }
-export async function queryProPerList(params) {
+export async function queryProPerList(params,token) {
   console.log('请求权限内项目列表',`${api}/permission_list/v1.1`)
   return request(`${api}/permission_list/v1.1`,{
     method: 'GET',
     body: params
-  });
+  },token);
 }
 export async function queryProDetail(params) {
   console.log('请求项目详情',`${api}/details/v1.1`)

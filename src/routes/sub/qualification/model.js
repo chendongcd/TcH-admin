@@ -1,6 +1,7 @@
-import {addSubQua,querySubQuaList,updateSubQua} from '../../../services/sub/qualification'
-import {queryProList} from "../../../services/system/sys_project";
+import {addSubQua, querySubQuaList, updateSubQua} from '../../../services/sub/qualification'
+import {queryProPerList} from "../../../services/system/sys_project";
 import {message} from "antd/lib/index";
+
 export default {
   namespace: 'sub_qua',
 
@@ -8,39 +9,41 @@ export default {
     data: {
       list: [],
       pagination: {},
-    }},
+    },
+    proNames: []
+  },
 
   effects: {
-    *fetch({ payload }, { call, put }) {
+    * fetch({payload}, {call, put}) {
       const response = yield call(querySubQuaList, payload);
-      if(response.code=='200') {
+      if (response.code == '200') {
         yield put({
           type: 'save',
           payload: response,
         });
       }
     },
-    *add({ payload }, { call, put }) {
+    * add({payload}, {call, put}) {
       const response = yield call(addSubQua, payload);
-      if(response.code=='200'){
+      if (response.code == '200') {
         message.success('新增成功');
         return true
       }
       return false
     },
-    *queryProNames({payload},{call,put}){
-      const response = yield call(queryProList, payload);
-      //console.log(response)
-      if(response.code=='200'){
+    * queryProNames({payload, token}, {call, put}) {
+      const response = yield call(queryProPerList, payload, token);
+      console.log(response)
+      if (response.code == '200') {
         yield put({
-          type:'saveProName',
-          payload:response.list
+          type: 'saveProName',
+          payload: response.entity
         })
       }
     },
-    *update({ payload }, { call, put }) {
+    * update({payload}, {call, put}) {
       const response = yield call(updateSubQua, payload);
-      if(response.code=='200'){
+      if (response.code == '200') {
         return true
       }
       return false
@@ -53,7 +56,13 @@ export default {
         ...state,
         data: action.payload,
       };
-    }
+    },
+    saveProName(state, action) {
+      return {
+        ...state,
+        proNames: action.payload
+      }
+    },
   },
 
 };

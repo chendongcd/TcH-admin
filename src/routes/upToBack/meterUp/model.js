@@ -1,5 +1,5 @@
 import {updateUp,addUp,queryUpDetail,queryUpList} from '../../../services/upToBack/meterUp';
-import {queryProList} from "../../../services/system/sys_project";
+import {queryProPerList} from "../../../services/system/sys_project";
 import {message} from "antd/lib/index";
 export default {
   namespace: 'meterUp',
@@ -43,13 +43,13 @@ export default {
       }
       return false
     },
-    *queryProNames({payload},{call,put}){
-      const response = yield call(queryProList, payload);
+    *queryProNames({payload,token},{call,put}){
+      const response = yield call(queryProPerList, payload,token);
       console.log(response)
       if(response.code=='200'){
         yield put({
           type:'saveProName',
-          payload:response.list
+          payload:response.entity
         })
       }
     },

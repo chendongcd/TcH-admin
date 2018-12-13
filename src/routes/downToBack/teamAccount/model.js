@@ -1,5 +1,5 @@
 import {queryTeamList, addTeam, updateCompany, updateTeam} from '../../../services/downToBack/teamAccount'
-import {queryProList} from "../../../services/system/sys_project";
+import { queryProPerList} from "../../../services/system/sys_project";
 
 export default {
   namespace: 'teamAccount',
@@ -47,13 +47,13 @@ export default {
       }
       return false
     },
-    *queryProNames({payload},{call,put}){
-      const response = yield call(queryProList, payload);
+    *queryProNames({payload,token},{call,put}){
+      const response = yield call(queryProPerList, payload,token);
       console.log(response)
       if(response.code=='200'){
         yield put({
           type:'saveProName',
-          payload:response.list
+          payload:response.entity
         })
       }
     },

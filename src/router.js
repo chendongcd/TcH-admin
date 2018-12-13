@@ -111,7 +111,7 @@ function RouterConfig({history, app}) {
   })
   const Down_MeterDown = dynamic({
     app,
-    models:[appModel],
+    models:()=>[import('./routes/downToBack/meterDown/model')],
     component:()=> import('./routes/downToBack/meterDown/index')
   })
   const Down_TeamAccount = dynamic({

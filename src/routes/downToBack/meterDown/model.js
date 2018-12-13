@@ -1,46 +1,52 @@
-import { queryRule, removeRule, addRule, updateRule } from '@/services/api';
-const delay = timeout => new Promise(resolve => setTimeout(resolve, timeout));
+import {addDown, queryDownList, updateDown} from "../../../services/downToBack/meterDown";
+import {queryProPerList} from "../../../services/system/sys_project";
 export default {
-  namespace: 'Sys_project',
+  namespace: 'meterDown',
 
   state: {
     data: {
       list: [],
       pagination: {},
     },
+    proNames:[],
   },
 
   effects: {
-    *fetch({ payload }, { call, put }) {
-      const response = yield call(queryRule, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
+    * fetch({payload, token}, {call, put}) {
+      const response = yield call(queryDownList, payload, token);
+      console.log(response)
+      if(response.code=='200') {
+        yield put({
+          type: 'save',
+          payload: response,
+        });
+      }
     },
-    *add({ payload, callback }, { call, put }) {
-      const response = yield call(addRule, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
+    * add({payload, token}, {call, put}) {
+      const response = yield call(addDown, payload, token);
+      if (response.code == '200') {
+
+        return true
+      }
+      return false
     },
-    *remove({ payload, callback }, { call, put }) {
-      const response = yield call(removeRule, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
+    * update({payload, token}, {call, put}) {
+      const response = yield call(updateDown, payload, token);
+      if (response.code == '200') {
+
+        return true
+      }
+      return false
     },
-    *update({ payload, callback }, { call, put }) {
-      const response = yield call(updateRule, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
+    *queryProNames({payload,token},{call,put}){
+      const response = yield call(queryProPerList, payload,token);
+      console.log(response)
+      if(response.code=='200'){
+        yield put({
+          type:'saveProName',
+          payload:response.entity
+        })
+      }
     },
   },
 
@@ -50,6 +56,12 @@ export default {
         ...state,
         data: action.payload,
       };
+    },
+    saveProName(state,action){
+      return{
+        ...state,
+        proNames:action.payload
+      }
     },
   },
 

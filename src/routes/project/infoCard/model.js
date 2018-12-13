@@ -1,7 +1,7 @@
-import {queryProInfoList,queryProInfoDetail,addProInfo,updateProInfo} from '../../../services/project/project'
-import {queryProList} from "../../../services/system/sys_project";
+import {queryProInfoList, queryProInfoDetail, addProInfo, updateProInfo} from '../../../services/project/project'
+import {queryProPerList} from "../../../services/system/sys_project";
 import {message} from "antd/lib/index";
-const delay = timeout => new Promise(resolve => setTimeout(resolve, timeout));
+
 export default {
   namespace: 'pro_proInfo',
 
@@ -10,49 +10,49 @@ export default {
       list: [],
       pagination: {},
     },
-    proNames:[],
+    proNames: [],
   },
 
   effects: {
-    *fetch({ payload,token}, { call, put }) {
-      const response = yield call(queryProInfoList, payload,token);
+    * fetch({payload, token}, {call, put}) {
+      const response = yield call(queryProInfoList, payload, token);
       console.log(payload)
-      if(response.code == '200'){
+      if (response.code == '200') {
         yield put({
           type: 'save',
           payload: response,
         });
       }
     },
-    *add({ payload,token }, { call, put }) {
+    * add({payload, token}, {call, put}) {
       console.log(payload)
-      const response = yield call(addProInfo, payload,token);
+      const response = yield call(addProInfo, payload, token);
       console.log(response)
-      if(response.code=='200'){
+      if (response.code == '200') {
         message.success('新增成功');
         return true
       }
       return false
     },
-    *fetchDetail({ payload, callback }, { call, put }) {
+    * fetchDetail({payload, callback}, {call, put}) {
       const response = yield call(queryProInfoDetail, payload);
       if (callback) callback();
     },
-    *update({ payload, token }, { call, put }) {
-      const response = yield call(updateProInfo, payload,token);
-      if(response.code=='200'){
+    * update({payload, token}, {call, put}) {
+      const response = yield call(updateProInfo, payload, token);
+      if (response.code == '200') {
         message.success('修改成功');
         return true
       }
       return false
     },
-    *queryProNames({payload},{call,put}){
-      const response = yield call(queryProList, payload);
-      //console.log(response)
-      if(response.code=='200'){
+    * queryProNames({payload, token}, {call, put}) {
+      const response = yield call(queryProPerList, payload, token);
+      console.log(response)
+      if (response.code == '200') {
         yield put({
-          type:'saveProName',
-          payload:response.list
+          type: 'saveProName',
+          payload: response.entity
         })
       }
     },
@@ -65,10 +65,10 @@ export default {
         data: action.payload,
       };
     },
-    saveProName(state,action){
-      return{
+    saveProName(state, action) {
+      return {
         ...state,
-        proNames:action.payload
+        proNames: action.payload
       }
     },
   },

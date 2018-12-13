@@ -1,4 +1,4 @@
-import React, {Component,Fragment} from 'react'
+import React, {Component, Fragment} from 'react'
 import {connect} from 'dva'
 import moment from 'moment';
 
@@ -11,32 +11,30 @@ import {
   Select,
   Icon,
   Button,
-  Dropdown,
-  Menu,
   DatePicker,
   Modal,
   message,
   Upload,
   Divider,
 } from 'antd';
-import {Page,  PageHeaderWrapper, StandardTable} from 'components'
+import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-import {_setTimeOut} from 'utils'
-
+import {_setTimeOut,getButtons} from 'utils'
+import {menuData} from 'common/menu'
+const pageButtons = menuData[14].buttons.map(a => a.permission)
 const FormItem = Form.Item;
 const {Option} = Select;
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const statusMap = ['default', 'processing', 'success', 'error'];
-const status = ['关闭', '运行中', '已上线', '异常'];
-let uuid = 0;
-const info_css={
-  color:'#fa541c'
+const info_css = {
+  color: '#fa541c'
 }
+const vType = ['过程计价', '中期结算','末次结算'];
+const testValue = '123'
 const CreateForm = Form.create()(props => {
-  const {modalVisible, form, handleAdd, handleModalVisible, normFile,handleUpdateModalVisible,updateModalVisible,handleCheckDetail,selectedValues,checkDetail} = props;
+  const {modalVisible,proNames, form, handleAdd, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = props;
 
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
@@ -49,30 +47,33 @@ const CreateForm = Form.create()(props => {
   return (
     <Modal
       destroyOnClose
-      title={checkDetail?'对下验工计价台账':updateModalVisible?"编辑对下验工计价台账":"新增对下验工计价台账"}
+      title={checkDetail ? '对下验工计价台账' : updateModalVisible ? "编辑对下验工计价台账" : "新增对下验工计价台账"}
       bodyStyle={{padding: 0 + 'px'}}
       visible={modalVisible}
       width={992}
       maskClosable={false}
       onOk={okHandle}
-      onCancel={() => checkDetail?handleCheckDetail():updateModalVisible?handleUpdateModalVisible():handleModalVisible()}
+      onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
     >
       <div className={styles.modalContent}>
         <Row gutter={8}>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="项目名称">
-              {form.getFieldDecorator('proName', {
+              {form.getFieldDecorator('projectId', {
                 rules: [{required: true, message: '请选择项目'}],
-              })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">项目1</Option>
-                <Option value="1">项目2</Option>
+                initialValue: selectedValues.projectId ? selectedValues.projectId : testValue,
+              })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'} disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
+                {proNames.map((item, index) => {
+                  return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
+                })}
               </Select>)}
             </FormItem>
           </Col>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="分包商名称">
-              {form.getFieldDecorator('proName', {
+              {form.getFieldDecorator('subcontractorName', {
                 rules: [{required: true}],
+                initialValue: selectedValues.subcontractorName ? selectedValues.subcontractorName : '',
               })(<Input disabled={checkDetail} placehloder='请输入分包商名称'/>)}
             </FormItem>
           </Col>
@@ -80,31 +81,35 @@ const CreateForm = Form.create()(props => {
         <Row gutter={8}>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="队伍名称">
-              {form.getFieldDecorator('proName', {
+              {form.getFieldDecorator('teamName', {
                 rules: [{required: true}],
+                initialValue: selectedValues.teamName ? selectedValues.teamName : testValue,
               })(<Input disabled={checkDetail} placehloder='请输入队伍名称'/>)}
             </FormItem>
           </Col>
           <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="分包商名称">
-              {form.getFieldDecorator('proName', {
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="合同金额">
+              {form.getFieldDecorator('contractPrice', {
                 rules: [{required: true}],
-              })(<Input disabled={checkDetail} placehloder='请输入分包商名称'/>)}
+                initialValue: selectedValues.contractPrice ? selectedValues.contractPrice : testValue,
+              })(<Input disabled={checkDetail} placehloder='请输入合同金额'/>)}
             </FormItem>
           </Col>
         </Row>
         <Row gutter={8}>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="计价期数">
-              {form.getFieldDecorator('proName', {
+              {form.getFieldDecorator('valuationPeriod', {
                 rules: [{required: true, message: '请输入期数'}],
+                initialValue: selectedValues.valuationPeriod ? selectedValues.valuationPeriod : testValue,
               })(<Input disabled={checkDetail} placeholder="请输入期数"/>)}
             </FormItem>
           </Col>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="计价日期">
-              {form.getFieldDecorator('proType', {
+              {form.getFieldDecorator('valuationTime', {
                 rules: [{required: true}],
+                initialValue: selectedValues.valuationTime ? moment(selectedValues.valuationPeriod) : null,
               })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
             </FormItem>
           </Col>
@@ -112,9 +117,10 @@ const CreateForm = Form.create()(props => {
         <Row gutter={8}>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="计价类型">
-              {form.getFieldDecorator('proName', {
+              {form.getFieldDecorator('valuationType', {
                 rules: [{required: true, message: '请选择计价类型'}],
-              })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
+                initialValue: selectedValues.valuationType ? selectedValues.valuationType : testValue,
+              })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
                 <Option value="0">过程结算</Option>
                 <Option value="1">中期结算</Option>
                 <Option value="2">末次结算</Option>
@@ -123,8 +129,9 @@ const CreateForm = Form.create()(props => {
           </Col>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="计价负责人">
-              {form.getFieldDecorator('proName', {
+              {form.getFieldDecorator('valuationPerson', {
                 rules: [{required: true}],
+                initialValue: selectedValues.valuationPerson ? selectedValues.valuationPerson : testValue,
               })(<Input disabled={checkDetail} placehloder='请输入计价负责人'/>)}
             </FormItem>
           </Col>
@@ -137,22 +144,25 @@ const CreateForm = Form.create()(props => {
         <Row gutter={8}>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="计价总金额">
-              {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true, message: '请输入预付款'}],
+              {form.getFieldDecorator('valuationPrice', {
+                rules: [{required: true, message: '请输入计价总金额'}],
+                initialValue: selectedValues.valuationPrice ? selectedValues.valuationPrice : testValue,
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入计价总金额" addonAfter="元"/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="扣款">
-              {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true, message: '请输入预付款'}],
+              {form.getFieldDecorator('valuationPriceReduce', {
+                rules: [{required: true, message: '请输入扣款金额'}],
+                initialValue: selectedValues.valuationPerson ? selectedValues.valuationPerson : testValue,
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入扣款金额" addonAfter="元"/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="扣除保质金">
               {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true, message: '请输入预付款'}],
+                rules: [{required: true, message: '请输入扣除保质金'}],
+                initialValue: selectedValues.valuationPerson ? selectedValues.valuationPerson : testValue,
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入扣除保质金" addonAfter="元"/>)}
             </FormItem>
           </Col>
@@ -162,6 +172,7 @@ const CreateForm = Form.create()(props => {
             <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="扣除覆约保质金">
               {form.getFieldDecorator('proActualDays', {
                 rules: [{required: true, message: '请输入预付款'}],
+                initialValue: selectedValues.valuationPerson ? selectedValues.valuationPerson : testValue,
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入扣除覆约保质金" addonAfter="元"/>)}
             </FormItem>
           </Col>
@@ -169,6 +180,7 @@ const CreateForm = Form.create()(props => {
             <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="计日工及补偿费用">
               {form.getFieldDecorator('proActualDays', {
                 rules: [{required: true, message: '请输入预付款'}],
+                initialValue: selectedValues.valuationPerson ? selectedValues.valuationPerson : testValue,
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入计日工及补偿费用" addonAfter="元"/>)}
             </FormItem>
           </Col>
@@ -176,8 +188,9 @@ const CreateForm = Form.create()(props => {
         <Row gutter={8}>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="应支付金额">
-              {form.getFieldDecorator('proActualDays', {
+              {form.getFieldDecorator('shouldAmount', {
                 rules: [{required: true, message: '请输入应支付金额'}],
+                initialValue: selectedValues.shouldAmount ? selectedValues.shouldAmount : testValue,
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入应支付金额" addonAfter="元"/>)}
             </FormItem>
           </Col>
@@ -185,6 +198,7 @@ const CreateForm = Form.create()(props => {
             <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="已完未计">
               {form.getFieldDecorator('proActualDays', {
                 rules: [{required: true, message: '请输入已完未计'}],
+                initialValue: selectedValues.shouldAmount ? selectedValues.shouldAmount : testValue,
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入已完未计" addonAfter="元"/>)}
             </FormItem>
           </Col>
@@ -197,8 +211,9 @@ const CreateForm = Form.create()(props => {
         <Row gutter={8}>
           <Col md={24} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="备注">
-              {form.getFieldDecorator('proSummary', {
+              {form.getFieldDecorator('remark', {
                 rules: [{required: true}],
+                initialValue: selectedValues.remark ? selectedValues.remark : testValue,
               })(<Input.TextArea disabled={checkDetail} width={'100%'} placeholder="请输入" rows={4}/>)}
             </FormItem>
           </Col>
@@ -237,124 +252,118 @@ class MeterDown extends Component {
       selectedRows: [],
       formValues: {},
       pageLoading: true,
-      selectedValues:{},
-      checkDetail:false
+      selectedValues: {},
+      checkDetail: false
     }
   }
 
   columns = [
     {
       title: '序号',
-      dataIndex: 'code',
+      dataIndex: 'id',
     },
     {
       title: '项目名称',
-      dataIndex: 'name',
+      dataIndex: 'projectName',
     },
     {
       title: '分包商名称',
-      render(val) {
-        return <span>123</span>;
-      },
+      dataIndex: 'subcontractorName',
     },
     {
       title: '队伍名称',
-      render(val) {
-        return <span>123123</span>;
-      },
+      dataIndex: 'teamName',
     },
     {
       title: '合同金额',
-      render(val) {
-        return <span>123123</span>;
-      },
+      dataIndex: 'contractPrice',
     },
     {
       title: '计价期数',
+      dataIndex: 'valuationPeriod',
       render(val) {
-        return <span>123</span>;
+        return <span>{val}</span>;
       },
     },
     {
       title: '计价日期',
+      dataIndex: 'valuationTime',
       render(val) {
-        return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
+        return <span>{moment(val).format('YYYY/MM/DD')}</span>;
       },
     },
     {
       title: '计价类型',
+      dataIndex: 'valuationType',
       render(val) {
-        return <span>中期结算</span>;
+        return <span>{vType[val]}</span>;
       },
     },
     {
       title: '计价金额（含税）',
       children: [
         {
-        title: '计价总金额',
-        key: 'plan_account',
-        render(val) {
-          return <span>15万</span>;
+          title: '计价总金额',
+          dataIndex: 'valuationPrice',
+          render(val) {
+            return <span>{val}</span>;
+          },
         },
-      },
         {
           title: '扣款',
-          key: 'tax',
+          dataIndex: 'valuationPriceReduce',
           render(val) {
-            return <span>3</span>;
+            return <span>{val}</span>;
           },
         }, {
           title: '扣除质保金',
-          key: 'plan_account_noTax',
+          //dataIndex: 'projectName',
           render(val) {
-            return <span>311</span>;
+            return <span>没有</span>;
           },
         },
         {
           title: '扣除覆约保质金',
-          key: 'plan_account_noTaxa',
+         // dataIndex: 'projectName',
           render(val) {
-            return <span>311</span>;
+            return <span>没有</span>;
           },
         },
         {
           title: '计日工及补偿费用',
-          key: 'plan_account_noTaxx',
+         // dataIndex: 'projectName',
           render(val) {
-            return <span>311</span>;
+            return <span>没有</span>;
           },
         },
         {
           title: '应支付金额',
-          key: 'plan_account_noTaxs',
+          dataIndex: 'shouldAmount',
           render(val) {
-            return <span>311</span>;
+            return <span>{val}</span>;
           },
-        },{
+        }, {
           title: '已完成未计',
-          key: 'plan_account_noTaxc',
+         // dataIndex: 'projectName',
           render(val) {
-            return <span>311</span>;
+            return <span>没有</span>;
           },
         }]
     },
     {
       title: '对下计价率',
+      //dataIndex: 'projectName',
       render(val) {
-        return <span>311</span>;
+        return <span>没有</span>;
       },
     },
     {
       title: '计价负责人',
-      render(val) {
-        return <span>鱼得水</span>;
-      },
+      dataIndex: 'valuationPerson',
     },
     {
       title: '备注',
-      render(val) {
-        return <span>100万啊实打实的</span>;
-      },
+      dataIndex: 'remark',
     },
     {
       title: '操作',
@@ -362,7 +371,7 @@ class MeterDown extends Component {
         <Fragment>
           <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
           <Divider type="vertical"/>
-          <a onClick={()=>this.handleCheckDetail(true,record)}>查看</a>
+          <a onClick={() => this.handleCheckDetail(true, record)}>查看</a>
           <Divider type="vertical"/>
           <a>下载附件</a>
         </Fragment>
@@ -371,14 +380,12 @@ class MeterDown extends Component {
   ];
 
   componentDidMount() {
-    const {dispatch} = this.props;
+    // const {dispatch} = this.props;
     _setTimeOut(() => this.setState({pageLoading: false}), 1000)
     // setTimeout(() => {
     //   this.setState({pageLoading:false})
     // },1000)
-    dispatch({
-      type: 'rule/fetch', payload: {pageSize: 5}
-    });
+    this.getList()
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
@@ -482,20 +489,20 @@ class MeterDown extends Component {
   handleUpdateModalVisible = (flag, record) => {
     this.setState({
       updateModalVisible: !!flag,
-      modalVisible:!!flag,
+      modalVisible: !!flag,
       selectedValues: record || {},
     });
   };
 
-  handleCheckDetail=(flag, record) => {
+  handleCheckDetail = (flag, record) => {
     this.setState({
       checkDetail: !!flag,
-      modalVisible:!!flag,
+      modalVisible: !!flag,
       selectedValues: record || {},
     });
   };
 
-  handleAdd = fields => {
+  handleAdd = (fields, updateModalVisible, selectedValues) => {
     // const {dispatch} = this.props;
     // dispatch({
     //   type: 'rule/add',
@@ -503,8 +510,47 @@ class MeterDown extends Component {
     //     desc: fields.desc,
     //   },
     // });
-    message.success('添加成功');
-    this.handleModalVisible();
+    const {dispatch, app: {user}} = this.props;
+    const payload = {
+      projectId: fields.projectId,
+      valuationType: fields.valuationType,
+      valuationTime: fields.valuationTime,
+      valuationPriceReduce: fields.valuationPriceReduce,
+      valuationPrice: fields.valuationPrice,
+      valuationPerson: fields.valuationPerson,
+      valuationPeriod: fields.valuationPeriod,
+      teamName: fields.teamName,
+      subcontractorName:fields.subcontractorName,
+      shouldAmount:fields.shouldAmount,
+      remark:fields.remark,
+      annexUrl:fields.annexUrl,
+      contractPrice:fields.contractPrice,
+      warranty:fields.warranty,
+      compensation:fields.compensation
+    }
+    if (updateModalVisible) {
+      dispatch({
+        type: 'meterDown/update',
+        payload: {...payload, ...{id: selectedValues.id}},
+        token: user.token
+      }).then(res => {
+        if (res) {
+          this.handleUpdateModalVisible()
+          this.getList()
+        }
+      })
+    } else {
+      dispatch({
+        type: 'meterDown/add',
+        payload: payload,
+        token: user.token
+      }).then(res => {
+        if (res) {
+          this.handleModalVisible()
+          this.getList()
+        }
+      })
+    }
   };
 
   handleUpdate = fields => {
@@ -531,13 +577,13 @@ class MeterDown extends Component {
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={6} sm={24}>
             <FormItem label="项目名称">
-              {getFieldDecorator('name')(<Input placeholder="请输入" />)}
+              {getFieldDecorator('name')(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="分包商名称">
               {getFieldDecorator('date')(
-                <Input placeholder="请输入" />
+                <Input placeholder="请输入"/>
               )}
             </FormItem>
           </Col>
@@ -600,29 +646,25 @@ class MeterDown extends Component {
 
   render() {
     const {
-      rule: {data},
+      meterDown: {data,proNames},
       loading,
+      app:{user}
     } = this.props;
-    const {selectedRows, modalVisible, pageLoading,selectedValues,checkDetail,updateModalVisible} = this.state;
-    const menu = (
-      <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
-        <Menu.Item key="edit">编辑</Menu.Item>
-        <Menu.Item key="export">导出</Menu.Item>
-      </Menu>
-    );
+    const {selectedRows, modalVisible, pageLoading, selectedValues, checkDetail, updateModalVisible} = this.state;
 
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
       normFile: this.normFile,
-      handleUpdateModalVisible:this.handleUpdateModalVisible,
-      handleCheckDetail:this.handleCheckDetail
+      handleUpdateModalVisible: this.handleUpdateModalVisible,
+      handleCheckDetail: this.handleCheckDetail
     };
     const parentState = {
-      updateModalVisible:updateModalVisible,
-      modalVisible:modalVisible,
-      selectedValues:selectedValues,
-      checkDetail:checkDetail
+      updateModalVisible: updateModalVisible,
+      modalVisible: modalVisible,
+      selectedValues: selectedValues,
+      checkDetail: checkDetail,
+      proNames:proNames
     }
     return (
       <Page inner={true} loading={pageLoading}>
@@ -631,24 +673,17 @@ class MeterDown extends Component {
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
               <div className={styles.tableListOperator}>
-                <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
-                  新增
-                </Button>
-                {selectedRows.length > 0 && (
-                  <span>
-                  <Dropdown overlay={menu}>
-                    <Button>
-                     操作 <Icon type="down"/>
-                    </Button>
-                  </Dropdown>
-                </span>
-                )}
+                {user.token&&getButtons(user.permissionsMap.button,pageButtons[0]) ?
+                  <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+                    新增
+                  </Button> : null}
               </div>
               <StandardTable
                 selectedRows={selectedRows}
-                loading={loading.effects['rule/fetch']}
+                loading={loading.effects['meterDown/fetch']}
                 bordered
                 data={data}
+                rowKey={'id'}
                 scroll={{x: '200%'}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
@@ -661,8 +696,45 @@ class MeterDown extends Component {
       </Page>
     )
   }
+
+  getProNames = (proName) => {
+    if (proName.length < 1) {
+      this.props.dispatch(
+        {
+          type: 'pro_proInfo/queryProNames',
+          payload: {page: 1, pageSize: 10},
+          token:this.props.app.user.token
+        }
+      )
+    }
+  }
+
+  getList = (page = 1, pageSize = 10) => {
+    this.props.dispatch({
+      type: 'meterDown/fetch',
+      payload: {page: page, pageSize: pageSize},
+      token: this.props.app.user.token
+    });
+  }
+
+  searchList = (page = 1, pageSize = 10) => {
+    this.props.form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      //  form.resetFields();
+      this.props.dispatch({
+        type: 'meterDown/fetch',
+        payload: {
+          page: page,
+          pageSize: pageSize,
+          projectName: fieldsValue.projectName,
+          subcontractorName: fieldsValue.subcontractorName,
+          status: fieldsValue.status,
+        }
+      });
+    });
+  }
 }
 
 MeterDown.propTypes = {}
 
-export default connect(({app, rule, loading}) => ({app, rule, loading}))(MeterDown)
+export default connect(({app, rule, loading, meterDown}) => ({app, rule, loading, meterDown}))(MeterDown)

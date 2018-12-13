@@ -610,7 +610,7 @@ class TeamAccount extends Component {
     });
   };
 
-  handleAdd = fields => {
+  handleAdd = (fields, updateModalVisible, selectedValues) => {
     // const {dispatch} = this.props;
     // dispatch({
     //   type: 'rule/add',
@@ -618,8 +618,47 @@ class TeamAccount extends Component {
     //     desc: fields.desc,
     //   },
     // });
-    message.success('添加成功');
-    this.handleModalVisible();
+    const {dispatch, app: {user}} = this.props;
+    const payload = {
+      projectId: fields.projectId,
+      valuationType: fields.valuationType,
+      valuationTime: fields.valuationTime,
+      valuationPriceReduce: fields.valuationPriceReduce,
+      valuationPrice: fields.valuationPrice,
+      valuationPerson: fields.valuationPerson,
+      valuationPeriod: fields.valuationPeriod,
+      teamName: fields.teamName,
+      subcontractorName:fields.subcontractorName,
+      shouldAmount:fields.shouldAmount,
+      remark:fields.remark,
+      annexUrl:fields.annexUrl,
+      contractPrice:fields.contractPrice,
+      warranty:fields.warranty,
+      compensation:fields.compensation
+    }
+    if (updateModalVisible) {
+      dispatch({
+        type: 'teamAccount/update',
+        payload: {...payload, ...{id: selectedValues.id}},
+        token: user.token
+      }).then(res => {
+        if (res) {
+          this.handleUpdateModalVisible()
+          this.getList()
+        }
+      })
+    } else {
+      dispatch({
+        type: 'teamAccount/add',
+        payload: payload,
+        token: user.token
+      }).then(res => {
+        if (res) {
+          this.handleModalVisible()
+          this.getList()
+        }
+      })
+    }
   };
 
   handleUpdate = fields => {
@@ -761,8 +800,9 @@ class TeamAccount extends Component {
     if (proName.length < 1) {
       this.props.dispatch(
         {
-          type: 'teamAccount/queryProNames',
-          payload: {page: 1, pageSize: 10}
+          type: 'pro_proInfo/queryProNames',
+          payload: {page: 1, pageSize: 10},
+          token:this.props.app.user.token
         }
       )
     }
@@ -786,16 +826,8 @@ class TeamAccount extends Component {
           page: page,
           pageSize: pageSize,
           projectName: fieldsValue.projectName,
-          mileageNumber: fieldsValue.mileageNumber,
-          totalPrice: fieldsValue.totalPrice,
-          contractStartTime: fieldsValue.contractStartTime,
-          contractEndTime: fieldsValue.contractEndTime,
-          realContractStartTime: fieldsValue.realContractStartTime,
-          realContractEndTime: fieldsValue.realContractEndTime,
+          subcontractorName: fieldsValue.subcontractorName,
           status: fieldsValue.status,
-          projectManager: fieldsValue.projectManager,
-          chiefEngineer: fieldsValue.chiefEngineer,
-          projectSecretary: fieldsValue.status,
         }
       });
     });
