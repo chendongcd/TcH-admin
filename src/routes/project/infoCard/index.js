@@ -251,6 +251,7 @@ class CreateForm extends Component {
     form.validateFields((err, fieldsValue) => {
       console.log(this.manager)
       //console.log(fieldsValue)
+      if (err) return;
       for (let prop in fieldsValue) {
         if (fieldsValue[prop] instanceof moment) {
           // console.log(fieldsValue[prop].format())
@@ -259,7 +260,6 @@ class CreateForm extends Component {
         }
         // console.log(typeof fieldsValue[prop])
       }
-      if (err) return;
       fieldsValue.manager = this.manager
       fieldsValue.secretary = this.secretary
       fieldsValue.engineer = this.engineer

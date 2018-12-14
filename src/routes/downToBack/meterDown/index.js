@@ -19,7 +19,7 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-import {_setTimeOut,getButtons} from 'utils'
+import {_setTimeOut,getButtons,cleanObject} from 'utils'
 import {menuData} from 'common/menu'
 const pageButtons = menuData[14].buttons.map(a => a.permission)
 const FormItem = Form.Item;
@@ -33,6 +33,7 @@ const info_css = {
 }
 const vType = ['过程计价', '中期结算','末次结算'];
 const testValue = '123'
+const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
 const CreateForm = Form.create()(props => {
   const {modalVisible,proNames, form, handleAdd, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = props;
 
@@ -40,8 +41,17 @@ const CreateForm = Form.create()(props => {
     form.validateFields((err, fieldsValue) => {
       console.log(fieldsValue)
       if (err) return;
+      for (let prop in fieldsValue) {
+        if (fieldsValue[prop] instanceof moment) {
+          // console.log(fieldsValue[prop].format())
+          fieldsValue[prop] = fieldsValue[prop].format('YYYY-MM-DD')
+          //  console.log(fieldsValue[prop])
+        }
+        // console.log(typeof fieldsValue[prop])
+      }
+      fieldsValue.annexUrl = testPDF
       // form.resetFields();
-      handleAdd(fieldsValue);
+      handleAdd(fieldsValue,updateModalVisible,selectedValues);
     });
   };
   return (
@@ -154,15 +164,15 @@ const CreateForm = Form.create()(props => {
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="扣款">
               {form.getFieldDecorator('valuationPriceReduce', {
                 rules: [{required: true, message: '请输入扣款金额'}],
-                initialValue: selectedValues.valuationPerson ? selectedValues.valuationPerson : testValue,
+                initialValue: selectedValues.valuationPriceReduce ? selectedValues.valuationPriceReduce : testValue,
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入扣款金额" addonAfter="元"/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="扣除保质金">
-              {form.getFieldDecorator('proActualDays', {
+              {form.getFieldDecorator('warranty', {
                 rules: [{required: true, message: '请输入扣除保质金'}],
-                initialValue: selectedValues.valuationPerson ? selectedValues.valuationPerson : testValue,
+                initialValue: selectedValues.warranty ? selectedValues.warranty : testValue,
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入扣除保质金" addonAfter="元"/>)}
             </FormItem>
           </Col>
@@ -170,17 +180,17 @@ const CreateForm = Form.create()(props => {
         <Row gutter={8}>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="扣除覆约保质金">
-              {form.getFieldDecorator('proActualDays', {
+              {form.getFieldDecorator('performanceBond', {
                 rules: [{required: true, message: '请输入预付款'}],
-                initialValue: selectedValues.valuationPerson ? selectedValues.valuationPerson : testValue,
+                initialValue: selectedValues.performanceBond ? selectedValues.performanceBond : testValue,
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入扣除覆约保质金" addonAfter="元"/>)}
             </FormItem>
           </Col>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="计日工及补偿费用">
-              {form.getFieldDecorator('proActualDays', {
+              {form.getFieldDecorator('compensation', {
                 rules: [{required: true, message: '请输入预付款'}],
-                initialValue: selectedValues.valuationPerson ? selectedValues.valuationPerson : testValue,
+                initialValue: selectedValues.compensation ? selectedValues.compensation : testValue,
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入计日工及补偿费用" addonAfter="元"/>)}
             </FormItem>
           </Col>
@@ -196,9 +206,9 @@ const CreateForm = Form.create()(props => {
           </Col>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="已完未计">
-              {form.getFieldDecorator('proActualDays', {
+              {form.getFieldDecorator('endedPrice', {
                 rules: [{required: true, message: '请输入已完未计'}],
-                initialValue: selectedValues.shouldAmount ? selectedValues.shouldAmount : testValue,
+                initialValue: selectedValues.endedPrice ? selectedValues.endedPrice : testValue,
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入已完未计" addonAfter="元"/>)}
             </FormItem>
           </Col>
@@ -212,7 +222,7 @@ const CreateForm = Form.create()(props => {
           <Col md={24} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="备注">
               {form.getFieldDecorator('remark', {
-                rules: [{required: true}],
+                rules: [{required: false}],
                 initialValue: selectedValues.remark ? selectedValues.remark : testValue,
               })(<Input.TextArea disabled={checkDetail} width={'100%'} placeholder="请输入" rows={4}/>)}
             </FormItem>
@@ -305,6 +315,7 @@ class MeterDown extends Component {
         {
           title: '计价总金额',
           dataIndex: 'valuationPrice',
+          key:'valuationPrice',
           render(val) {
             return <span>{val}</span>;
           },
@@ -312,26 +323,24 @@ class MeterDown extends Component {
         {
           title: '扣款',
           dataIndex: 'valuationPriceReduce',
+          key:'aluationPriceReduce',
           render(val) {
             return <span>{val}</span>;
           },
         }, {
           title: '扣除质保金',
-          //dataIndex: 'projectName',
-          render(val) {
-            return <span>没有</span>;
-          },
+          dataIndex: 'warranty',
+          key:'warranty',
         },
         {
           title: '扣除覆约保质金',
-         // dataIndex: 'projectName',
-          render(val) {
-            return <span>没有</span>;
-          },
+          dataIndex: 'performanceBond',
+          key:'performanceBond',
         },
         {
           title: '计日工及补偿费用',
-         // dataIndex: 'projectName',
+          dataIndex: 'compensation',
+          key:'compensation',
           render(val) {
             return <span>没有</span>;
           },
@@ -339,11 +348,13 @@ class MeterDown extends Component {
         {
           title: '应支付金额',
           dataIndex: 'shouldAmount',
+          key:'shouldAmount',
           render(val) {
             return <span>{val}</span>;
           },
         }, {
           title: '已完成未计',
+          key:'valuationPrice2',
          // dataIndex: 'projectName',
           render(val) {
             return <span>没有</span>;
@@ -392,11 +403,8 @@ class MeterDown extends Component {
   ];
 
   componentDidMount() {
-    // const {dispatch} = this.props;
     _setTimeOut(() => this.setState({pageLoading: false}), 1000)
-    // setTimeout(() => {
-    //   this.setState({pageLoading:false})
-    // },1000)
+    this.getProNames()
     this.getList()
   }
 
@@ -427,15 +435,12 @@ class MeterDown extends Component {
   };
 
   handleFormReset = () => {
-    const {form, dispatch} = this.props;
+    const {form} = this.props;
     form.resetFields();
     this.setState({
       formValues: {},
     });
-    dispatch({
-      type: 'rule/fetch',
-      payload: {},
-    });
+    this.getList()
   };
 
   handleMenuClick = e => {
@@ -465,30 +470,6 @@ class MeterDown extends Component {
   handleSelectRows = rows => {
     this.setState({
       selectedRows: rows,
-    });
-  };
-
-  handleSearch = e => {
-    e.preventDefault();
-
-    const {dispatch, form} = this.props;
-
-    form.validateFields((err, fieldsValue) => {
-      if (err) return;
-
-      const values = {
-        ...fieldsValue,
-        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
-      };
-
-      this.setState({
-        formValues: values,
-      });
-
-      dispatch({
-        type: 'rule/fetch',
-        payload: values,
-      });
     });
   };
 
@@ -540,6 +521,8 @@ class MeterDown extends Component {
       warranty:fields.warranty,
       compensation:fields.compensation
     }
+
+
     if (updateModalVisible) {
       dispatch({
         type: 'meterDown/update',
@@ -565,27 +548,12 @@ class MeterDown extends Component {
     }
   };
 
-  handleUpdate = fields => {
-    const {dispatch} = this.props;
-    dispatch({
-      type: 'rule/update',
-      payload: {
-        name: fields.name,
-        desc: fields.desc,
-        key: fields.key,
-      },
-    });
-
-    message.success('配置成功');
-    this.handleUpdateModalVisible();
-  };
-
   renderAdvancedForm() {
     const {
       form: {getFieldDecorator},
     } = this.props;
     return (
-      <Form onSubmit={this.handleSearch} layout="inline">
+      <Form onSubmit={(e)=>this.searchList(e)} layout="inline">
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={6} sm={24}>
             <FormItem label="项目名称">
@@ -601,7 +569,7 @@ class MeterDown extends Component {
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="计价类型">
-              {getFieldDecorator('date')(
+              {getFieldDecorator('valuationType')(
                 <Select placeholder="请选择" style={{width: '100%'}}>
                   <Option value="0">过程结算</Option>
                   <Option value="1">中期结算</Option>
@@ -612,7 +580,7 @@ class MeterDown extends Component {
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="计价日期">
-              {getFieldDecorator('date')(
+              {getFieldDecorator('valuationTime')(
                 <DatePicker style={{width: '100%'}} placeholder="请选择日期"/>
               )}
             </FormItem>
@@ -621,10 +589,10 @@ class MeterDown extends Component {
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col style={{flexDirection: 'row', display: 'flex'}} md={12} sm={24}>
             <FormItem label="对下计价率">
-              {getFieldDecorator('give')(<Input placeholder="请输入" addonAfter={'%'}/>)}
+              {getFieldDecorator('underRate')(<Input placeholder="请输入" addonAfter={'%'}/>)}
             </FormItem>
             <FormItem style={{marginLeft: 15 + 'px'}} label="至">
-              {getFieldDecorator('give')(<Input placeholder="请输入" addonAfter={'%'}/>)}
+              {getFieldDecorator('underRate')(<Input placeholder="请输入" addonAfter={'%'}/>)}
             </FormItem>
           </Col>
           <Col md={12} sm={24}>
@@ -713,11 +681,11 @@ class MeterDown extends Component {
     )
   }
 
-  getProNames = (proName) => {
+  getProNames = (proName=[]) => {
     if (proName.length < 1) {
       this.props.dispatch(
         {
-          type: 'pro_proInfo/queryProNames',
+          type: 'meterDown/queryProNames',
           payload: {page: 1, pageSize: 10},
           token:this.props.app.user.token
         }
@@ -737,15 +705,20 @@ class MeterDown extends Component {
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
       //  form.resetFields();
+
+      let payload = {
+        page: page,
+        pageSize: pageSize,
+        projectName: fieldsValue.projectName,
+        subcontractorName: fieldsValue.subcontractorName,
+        status: fieldsValue.status,
+      }
+
+      cleanObject(payload)
       this.props.dispatch({
         type: 'meterDown/fetch',
-        payload: {
-          page: page,
-          pageSize: pageSize,
-          projectName: fieldsValue.projectName,
-          subcontractorName: fieldsValue.subcontractorName,
-          status: fieldsValue.status,
-        }
+        payload: payload,
+        token: this.props.app.user.token
       });
     });
   }
