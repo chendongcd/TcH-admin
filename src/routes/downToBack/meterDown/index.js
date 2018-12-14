@@ -260,7 +260,7 @@ class MeterDown extends Component {
   columns = [
     {
       title: '序号',
-      dataIndex: 'id',
+      dataIndex: 'code',
     },
     {
       title: '项目名称',

@@ -349,21 +349,21 @@ class User extends Component {
           <Col md={6} sm={24}>
             <FormItem label="用户编码">
               {getFieldDecorator('code', {
-                initialValue: ''
+                initialValue: null
               })(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="用户名称">
               {getFieldDecorator('name', {
-                initialValue: ''
+                initialValue: null
               })(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="用户状态">
               {getFieldDecorator('status', {
-                initialValue: ''
+                initialValue: null
               })(
                 <Select placeholder="请选择" style={{width: '100%'}}>
                   <Option value="1">禁用</Option>

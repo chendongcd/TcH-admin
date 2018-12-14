@@ -38,7 +38,7 @@ const CreateForm = Form.create()(props => {
       console.log(fieldsValue)
       if (err) return;
       // form.resetFields();
-      handleAdd(fieldsValue);
+      handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
   };
   return (
@@ -418,7 +418,7 @@ class PeopleInfo extends Component {
   columns = [
     {
       title: '人员编码',
-      dataIndex: 'id',
+      dataIndex: 'code',
     },
     {
       title: '姓名',

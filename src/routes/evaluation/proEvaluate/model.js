@@ -1,7 +1,6 @@
 import { queryRule, removeRule, addRule, updateRule } from '@/services/api';
-const delay = timeout => new Promise(resolve => setTimeout(resolve, timeout));
 export default {
-  namespace: 'Sys_project',
+  namespace: 'proEvaluate',
 
   state: {
     data: {

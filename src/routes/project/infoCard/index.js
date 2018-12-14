@@ -59,6 +59,14 @@ class CreateForm extends Component {
     this.selectProject = {}
   }
 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (!prevProps.selectedValues.manager && this.props.selectedValues.manager) {
+      this.manager = this.props.selectedValues.manager
+      this.engineer = this.props.selectedValues.engineer
+      this.secretary = this.props.selectedValues.secretary
+    }
+  }
+
   // const {getFieldDecorator, getFieldValue} = form
   // getFieldDecorator('managers', {initialValue: [{manaName: '', manaTime: '', manaPhone: ''}]});
   // getFieldDecorator('secretary', {initialValue: [{secreName: '', secreTime: '', secrePhone: ''}]});
@@ -81,12 +89,12 @@ class CreateForm extends Component {
         secretary: keys.filter(key => key !== k),
       }
       this.secretary = this.secretary.filter(key => key !== k)
-    }else if (type == 'engineer') {
+    } else if (type == 'engineer') {
       object = {
         engineer: keys.filter(key => key !== k),
       }
       this.engineer = this.engineer.filter(key => key !== k)
-    }else{
+    } else {
       this.manager = this.manager.filter(key => key !== k)
     }
     // can use data-binding to set
@@ -108,12 +116,12 @@ class CreateForm extends Component {
         secretary: nextKeys,
       }
       this.secretary = this.secretary.concat({name: '', time: '', phone: ''})
-    }else if (type == 'engineer') {
+    } else if (type == 'engineer') {
       object = {
         engineer: nextKeys,
       }
       this.secretary = this.engineer.concat({name: '', time: '', phone: ''})
-    }else {
+    } else {
       this.manager = this.manager.concat({name: '', time: '', phone: ''})
     }
     form.setFieldsValue(object);
@@ -127,18 +135,21 @@ class CreateForm extends Component {
         return (<Row key={`manager${index}`} gutter={8}>
           <Col className={styles.colPeople} md={6} sm={24}>
             <FormItem required={true} labelCol={{span: 5}} wrapperCol={{span: 15}} label="姓名">
-              <Input  defaultValue={key.name ? key.name : ''} onChange={(e)=>this.manager[index].name=e.target.value} disabled={checkDetail} placeholder="请输入姓名"/>
+              <Input defaultValue={key.name ? key.name : ''} onChange={(e) => this.manager[index].name = e.target.value}
+                     disabled={checkDetail} placeholder="请输入姓名"/>
             </FormItem>
           </Col>
           <Col className={styles.colPeople} md={7} sm={24}>
             <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
-              <DatePicker disabled={checkDetail} onChange={(e,dateString)=>this.manager[index].time = dateString} defaultValue={key.time ? moment(key.time) : null}
+              <DatePicker disabled={checkDetail} onChange={(e, dateString) => this.manager[index].time = dateString}
+                          defaultValue={key.time ? moment(key.time) : null}
                           style={{width: '100%'}} placeholder="请选择任职时间"/>
             </FormItem>
           </Col>
           <Col className={styles.colPeople} md={7} sm={24}>
             <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系电话">
-              <Input disabled={checkDetail} onChange={(e)=>this.manager[index].phone = e.target.value} defaultValue={key.phone ? key.phone : ''} placeholder="请输入联系电话"/>
+              <Input disabled={checkDetail} onChange={(e) => this.manager[index].phone = e.target.value}
+                     defaultValue={key.phone ? key.phone : ''} placeholder="请输入联系电话"/>
             </FormItem>
           </Col>
           {checkDetail ? null : <Col className={styles.colPeople} md={4} sm={24}>
@@ -163,18 +174,22 @@ class CreateForm extends Component {
         return (<Row key={`secretary${index}`} gutter={8}>
           <Col className={styles.colPeople} md={6} sm={24}>
             <FormItem required={true} labelCol={{span: 5}} wrapperCol={{span: 15}} label="姓名">
-              <Input  defaultValue={key.name ? key.name : ''} onChange={(e)=>this.secretary[index].name = e.target.value} disabled={checkDetail} placeholder="请输入姓名"/>
+              <Input defaultValue={key.name ? key.name : ''}
+                     onChange={(e) => this.secretary[index].name = e.target.value} disabled={checkDetail}
+                     placeholder="请输入姓名"/>
             </FormItem>
           </Col>
           <Col className={styles.colPeople} md={7} sm={24}>
             <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
-              <DatePicker disabled={checkDetail} onChange={(e,dateString)=>this.secretary[index].time = dateString} defaultValue={key.time ? moment(key.time) : null}
+              <DatePicker disabled={checkDetail} onChange={(e, dateString) => this.secretary[index].time = dateString}
+                          defaultValue={key.time ? moment(key.time) : null}
                           style={{width: '100%'}} placeholder="请选择任职时间"/>
             </FormItem>
           </Col>
           <Col className={styles.colPeople} md={7} sm={24}>
             <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系电话">
-              <Input disabled={checkDetail} onChange={(e)=>this.secretary[index].phone = e.target.value} defaultValue={key.phone ? key.phone : ''} placeholder="请输入联系电话"/>
+              <Input disabled={checkDetail} onChange={(e) => this.secretary[index].phone = e.target.value}
+                     defaultValue={key.phone ? key.phone : ''} placeholder="请输入联系电话"/>
             </FormItem>
           </Col>
           {checkDetail ? null : <Col className={styles.colPeople} md={4} sm={24}>
@@ -199,18 +214,22 @@ class CreateForm extends Component {
         return (<Row key={`engineer${index}`} gutter={8}>
           <Col className={styles.colPeople} md={6} sm={24}>
             <FormItem required={true} labelCol={{span: 5}} wrapperCol={{span: 15}} label="姓名">
-              <Input  defaultValue={key.name ? key.name : ''} onChange={(e)=>this.engineer[index].name = e.target.value} disabled={checkDetail} placeholder="请输入姓名"/>
+              <Input defaultValue={key.name ? key.name : ''}
+                     onChange={(e) => this.engineer[index].name = e.target.value} disabled={checkDetail}
+                     placeholder="请输入姓名"/>
             </FormItem>
           </Col>
           <Col className={styles.colPeople} md={7} sm={24}>
             <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
-              <DatePicker disabled={checkDetail} onChange={(e,dateString)=>this.engineer[index].time = dateString} defaultValue={key.time ? moment(key.time) : null}
+              <DatePicker disabled={checkDetail} onChange={(e, dateString) => this.engineer[index].time = dateString}
+                          defaultValue={key.time ? moment(key.time) : null}
                           style={{width: '100%'}} placeholder="请选择任职时间"/>
             </FormItem>
           </Col>
           <Col className={styles.colPeople} md={7} sm={24}>
             <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系电话">
-              <Input disabled={checkDetail} onChange={(e)=>this.engineer[index].phone = e.target.value} defaultValue={key.phone ? key.phone : ''} placeholder="请输入联系电话"/>
+              <Input disabled={checkDetail} onChange={(e) => this.engineer[index].phone = e.target.value}
+                     defaultValue={key.phone ? key.phone : ''} placeholder="请输入联系电话"/>
             </FormItem>
           </Col>
           {checkDetail ? null : <Col className={styles.colPeople} md={4} sm={24}>
@@ -228,15 +247,15 @@ class CreateForm extends Component {
     }
   }
 
-  okHandle = (form, handleAdd) => {
+  okHandle = (form, updateModalVisible, handleAdd, selectedValues) => {
     form.validateFields((err, fieldsValue) => {
       console.log(this.manager)
       //console.log(fieldsValue)
       for (let prop in fieldsValue) {
         if (fieldsValue[prop] instanceof moment) {
           // console.log(fieldsValue[prop].format())
-          fieldsValue[prop] = fieldsValue[prop].format().split('+')[0]
-          console.log(fieldsValue[prop])
+          fieldsValue[prop] = fieldsValue[prop].format('YYYY-MM-DD')
+          //  console.log(fieldsValue[prop])
         }
         // console.log(typeof fieldsValue[prop])
       }
@@ -245,7 +264,7 @@ class CreateForm extends Component {
       fieldsValue.secretary = this.secretary
       fieldsValue.engineer = this.engineer
       // form.resetFields();
-      handleAdd(fieldsValue);
+      handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
   };
 
@@ -290,7 +309,7 @@ class CreateForm extends Component {
         visible={modalVisible}
         width={992}
         maskClosable={false}
-        onOk={() => this.okHandle(form, handleAdd)}
+        onOk={() => this.okHandle(form, updateModalVisible, handleAdd, selectedValues)}
         onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
       >
         <div className={styles.modalContent}>
@@ -674,7 +693,7 @@ class InfoCard extends Component {
       width: 150,
       render: (val, record) => {
         const user = this.props.app.user
-        if(!user.token){
+        if (!user.token) {
           return null
         }
         const button = user.permissionsMap.button
@@ -770,30 +789,6 @@ class InfoCard extends Component {
     });
   };
 
-  handleSearch = e => {
-    e.preventDefault();
-
-    const {dispatch, form} = this.props;
-
-    form.validateFields((err, fieldsValue) => {
-      if (err) return;
-
-      const values = {
-        ...fieldsValue,
-        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
-      };
-
-      this.setState({
-        formValues: values,
-      });
-
-      dispatch({
-        type: 'rule/fetch',
-        payload: values,
-      });
-    });
-  };
-
   handleModalVisible = flag => {
     this.setState({
       modalVisible: !!flag,
@@ -855,7 +850,9 @@ class InfoCard extends Component {
       secretary: fields.secretary,
       engineer: fields.engineer,
     }
+    // return console.log(updateModalVisible)
     if (updateModalVisible) {
+      //  return console.log(selectedValues.id)
       dispatch({
         type: 'pro_proInfo/update',
         payload: {...payload, ...{id: selectedValues.id}},
@@ -880,105 +877,110 @@ class InfoCard extends Component {
     }
   };
 
-  handleUpdate = fields => {
-    const {dispatch} = this.props;
-    dispatch({
-      type: 'rule/update',
-      payload: {
-        name: fields.name,
-        desc: fields.desc,
-        key: fields.key,
-      },
-    });
-
-    message.success('配置成功');
-    this.handleUpdateModalVisible();
-  };
-
   renderAdvancedForm() {
     const {
       form: {getFieldDecorator},
     } = this.props;
     const {expandForm} = this.state;
     return (
-      <Form onSubmit={this.handleSearch} layout="inline">
+      <Form layout="inline">
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={6} sm={24}>
             <FormItem label="项目名称">
-              {getFieldDecorator('projectName')(<Input placeholder="请输入"/>)}
+              {getFieldDecorator('projectName', {
+                initialValue: null
+              })(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="项目经理">
-              {getFieldDecorator('manager')(<Input placeholder="请输入"/>)}
+              {getFieldDecorator('manager', {
+                initialValue: null
+              })(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="项目书记">
-              {getFieldDecorator('secretary')(<Input placeholder="请输入"/>)}
+              {getFieldDecorator('secretary', {
+                initialValue: null
+              })(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="总工">
-              {getFieldDecorator('engineer')(<Input placeholder="请输入"/>)}
+              {getFieldDecorator('engineer', {
+                initialValue: null
+              })(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
         </Row>
         {expandForm ? <Row gutter={{md: 4, lg: 12, xl: 24}}>
-          <Col md={5} sm={24}>
+          <Col md={6} sm={24}>
             <FormItem label="计划开工日期">
-              {getFieldDecorator('contractStartTime')(
+              {getFieldDecorator('contractStartTime', {
+                initialValue: null
+              })(
                 <DatePicker style={{width: '100%'}} placeholder="请选择日期"/>
               )}
             </FormItem>
           </Col>
-          <Col md={5} sm={24}>
+          <Col md={6} sm={24}>
             <FormItem label="计划完工日期">
-              {getFieldDecorator('contractEndTime')(
+              {getFieldDecorator('contractEndTime', {
+                initialValue: null
+              })(
                 <DatePicker style={{width: '100%'}} placeholder="请选择日期"/>
               )}
             </FormItem>
           </Col>
-          <Col md={5} sm={24}>
+          <Col md={6} sm={24}>
             <FormItem label="实际开工日期">
-              {getFieldDecorator('realContractStartTime')(
+              {getFieldDecorator('realContractStartTime', {
+                initialValue: null
+              })(
                 <DatePicker style={{width: '100%'}} placeholder="请选择日期"/>
               )}
             </FormItem>
           </Col>
-          <Col md={5} sm={24}>
+          <Col md={6} sm={24}>
             <FormItem label="实际完工日期">
-              {getFieldDecorator('realContractStartTime')(
+              {getFieldDecorator('realContractStartTime', {
+                initialValue: null
+              })(
                 <DatePicker style={{width: '100%'}} placeholder="请选择日期"/>
-              )}
-            </FormItem>
-          </Col>
-          <Col md={4} sm={24}>
-            <FormItem label="工程状态">
-              {getFieldDecorator('status')(
-                <Select placeholder="请选择" style={{width: '100%'}}>
-                  <Option value="0">在建</Option>
-                  <Option value="1">完工未结算</Option>
-                  <Option value="2">完工已结算</Option>
-                  <Option value="3">停工</Option>
-                </Select>
               )}
             </FormItem>
           </Col>
         </Row> : null}
-        <div style={{overflow: 'hidden'}}>
-          <div style={{float: 'right', marginBottom: 24}}>
-            <Button type="primary" htmlType="submit">
-              查询
-            </Button>
-            <Button style={{marginLeft: 8}} onClick={this.handleFormReset}>
-              重置
-            </Button>
-            <a style={{marginLeft: 8}} onClick={this.toggleForm}>
-              {expandForm ? '收起' : '展开'} <Icon type={expandForm ? "up" : "down"}/>
-            </a>
+        <Row>
+          <Col md={6} sm={24}>
+          <FormItem label="工程状态">
+            {getFieldDecorator('status', {
+              initialValue: null
+            })(
+              <Select placeholder="请选择" style={{width: '84%'}}>
+                <Option value="0">在建</Option>
+                <Option value="1">完工未结算</Option>
+                <Option value="2">完工已结算</Option>
+                <Option value="3">停工</Option>
+              </Select>
+            )}
+          </FormItem>
+        </Col>
+          <div style={{overflow: 'hidden'}}>
+            <div style={{float: 'right', marginBottom: 24}}>
+              <Button onClick={()=>this.searchList()} type="primary" htmlType="submit">
+                查询
+              </Button>
+              <Button style={{marginLeft: 8}} onClick={this.handleFormReset}>
+                重置
+              </Button>
+              <a style={{marginLeft: 8}} onClick={this.toggleForm}>
+                {expandForm ? '收起' : '展开'} <Icon type={expandForm ? "up" : "down"}/>
+              </a>
+            </div>
           </div>
-        </div>
+        </Row>
       </Form>
     );
   }
@@ -1072,7 +1074,7 @@ class InfoCard extends Component {
     });
   }
 
-  searchList = (page = 1, pageSize = 10) => {
+  searchList = (page = 1,pageSize = 10) => {
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
       //  form.resetFields();
@@ -1082,15 +1084,9 @@ class InfoCard extends Component {
           page: page,
           pageSize: pageSize,
           projectName: fieldsValue.projectName,
-          mileageNumber: fieldsValue.mileageNumber,
-          contractStartTime: fieldsValue.contractStartTime,
-          contractEndTime: fieldsValue.contractEndTime,
-          realContractStartTime: fieldsValue.realContractStartTime,
-          realContractEndTime: fieldsValue.realContractEndTime,
-          status: fieldsValue.status,
-          projectManager: fieldsValue.projectManager,
-          chiefEngineer: fieldsValue.chiefEngineer,
-          projectSecretary: fieldsValue.status,
+          projectManager: fieldsValue.manager,
+          projectSecretary: fieldsValue.secretary,
+          projectEngineer: fieldsValue.engineer,
         },
         token: this.props.app.user.token
       });

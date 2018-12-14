@@ -304,21 +304,21 @@ class Project extends Component {
           <Col md={8} sm={24}>
             <FormItem label="项目编码">
               {getFieldDecorator('code', {
-                initialValue: ''
+                initialValue: null
               })(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="项目名称">
               {getFieldDecorator('projectName', {
-                initialValue: ''
+                initialValue: null
               })(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="项目状态">
               {getFieldDecorator('status', {
-                initialValue: ''
+                initialValue: null
               })(
                 <Select placeholder="请选择" style={{width: '100%'}}>
                   <Option value="1">禁用</Option>

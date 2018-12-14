@@ -19,7 +19,7 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-import {_setTimeOut, getButtons} from 'utils'
+import {_setTimeOut, getButtons,cleanObject} from 'utils'
 import {menuData} from 'common/menu'
 
 const FormItem = Form.Item;
@@ -33,15 +33,21 @@ const pageButtons = menuData[8].buttons.map(a => a.permission)
 const info_css = {
   color: '#fa541c'
 }
+const testValue = '123'
+const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
 const CreateForm = Form.create()(props => {
   const {proNames, modalVisible, form, handleAdd, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = props;
 
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
-      console.log(fieldsValue)
+      //return
       if (err) return;
+      fieldsValue.annexUrl = testPDF
+      fieldsValue.meteringTime = fieldsValue.meteringTime.format('YYYY-MM-DD')
+      console.log(fieldsValue)
+      //return
       // form.resetFields();
-      handleAdd(fieldsValue);
+      handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
   };
   //console.log(proNames)
@@ -63,7 +69,7 @@ const CreateForm = Form.create()(props => {
               {form.getFieldDecorator('projectId', {
                 rules: [{required: true, message: '请选择项目'}],
                 initialValue: selectedValues.projectId ? selectedValues.projectId : '',
-              })(<Select showSearch={true} optionFilterProp={'name'} disabled={checkDetail} placeholder="请选择"
+              })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'} disabled={checkDetail} placeholder="请选择"
                          style={{width: '100%'}}>
                 {proNames.map((item, index) => {
                   return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
@@ -77,6 +83,7 @@ const CreateForm = Form.create()(props => {
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="计量期数">
               {form.getFieldDecorator('meteringNum', {
                 rules: [{required: true, message: '请输入期数'}],
+                initialValue: selectedValues.meteringNum ? selectedValues.meteringNum : testValue,
               })(<Input disabled={checkDetail} placeholder="请输入期数"/>)}
             </FormItem>
           </Col>
@@ -84,7 +91,8 @@ const CreateForm = Form.create()(props => {
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="计量日期">
               {form.getFieldDecorator('meteringTime', {
                 rules: [{required: true}],
-              })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择量日期"/>)}
+                initialValue: selectedValues.meteringTime ? moment(selectedValues.meteringTime) : null,
+              })(<DatePicker className={styles.customSelect} disabled={checkDetail} style={{width: '100%'}} placeholder="请选择量日期"/>)}
             </FormItem>
           </Col>
         </Row>
@@ -96,8 +104,9 @@ const CreateForm = Form.create()(props => {
         <Row gutter={8}>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="预付款">
-              {form.getFieldDecorator('plan', {
+              {form.getFieldDecorator('prepaymentAmount', {
                 rules: [{required: true, message: '请输入预付款'}],
+                initialValue: selectedValues.prepaymentAmount ? selectedValues.prepaymentAmount : testValue,
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入预付款" addonAfter="元"/>)}
             </FormItem>
           </Col>
@@ -112,6 +121,7 @@ const CreateForm = Form.create()(props => {
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="含税金额">
               {form.getFieldDecorator('valuationAmountTax', {
                 rules: [{required: true, message: '请输入含税金额'}],
+                initialValue: selectedValues.valuationAmountTax ? selectedValues.valuationAmountTax : testValue,
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入含税金额" addonAfter="元"/>)}
             </FormItem>
           </Col>
@@ -119,6 +129,7 @@ const CreateForm = Form.create()(props => {
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="税率">
               {form.getFieldDecorator('tax', {
                 rules: [{required: true, message: '请输入税率'}],
+                initialValue: selectedValues.tax ? selectedValues.tax : testValue,
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入税率"/>)}
             </FormItem>
           </Col>
@@ -133,6 +144,7 @@ const CreateForm = Form.create()(props => {
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="含税金额">
               {form.getFieldDecorator('realAmountTax', {
                 rules: [{required: true, message: '请输入含税金额'}],
+                initialValue: selectedValues.realAmountTax ? selectedValues.realAmountTax : testValue,
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入含税金额" addonAfter="元"/>)}
             </FormItem>
           </Col>
@@ -148,6 +160,7 @@ const CreateForm = Form.create()(props => {
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="已支付金额">
               {form.getFieldDecorator('alreadyPaidAmount', {
                 rules: [{required: true, message: '请输入已支付金额'}],
+                initialValue: selectedValues.alreadyPaidAmount ? selectedValues.alreadyPaidAmount : testValue,
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入已支付金额" addonAfter="元"/>)}
             </FormItem>
           </Col>
@@ -164,8 +177,9 @@ const CreateForm = Form.create()(props => {
         <Row gutter={8}>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="超计价金额">
-              {form.getFieldDecorator('proActualDays', {
+              {form.getFieldDecorator('extraAmount', {
                 rules: [{required: true, message: '请输入超计价金额'}],
+                initialValue: selectedValues.extraAmount ? selectedValues.extraAmount : testValue,
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入超计价金额" addonAfter="元"/>)}
             </FormItem>
           </Col>
@@ -173,6 +187,7 @@ const CreateForm = Form.create()(props => {
             <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="已完未计价金额">
               {form.getFieldDecorator('notCalculatedAmount', {
                 rules: [{required: true, message: '请输入已完未计价金额'}],
+                initialValue: selectedValues.notCalculatedAmount ? selectedValues.notCalculatedAmount : testValue,
               })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入已完未计价金额" addonAfter="元"/>)}
             </FormItem>
           </Col>
@@ -188,16 +203,18 @@ const CreateForm = Form.create()(props => {
             <FormItem style={{marginLeft: 14 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="备注">
               {form.getFieldDecorator('remark', {
                 rules: [{required: true}],
-              })(<Input.TextArea disabled={checkDetail} width={'100%'} placeholder="请输入" rows={4}/>)}
+                initialValue: selectedValues.remark ? selectedValues.remark : testValue,
+              })(<Input.TextArea className={styles.customSelect} disabled={checkDetail} width={'100%'} placeholder="请输入" rows={4}/>)}
             </FormItem>
           </Col>
         </Row>
         <Row gutter={8}>
           <Col md={24} sm={24}>
             <FormItem style={{marginLeft: 14 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="附件">
-              {form.getFieldDecorator('dragger', {
+              {form.getFieldDecorator('annexUrl', {
                 valuePropName: 'fileList',
                 getValueFromEvent: normFile,
+                //initialValue: selectedValues.annexUrl ? selectedValues.annexUrl : 'https://images.unsplash.com/photo-1543364195-bfe6e4932397?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
               })(
                 <Upload.Dragger name="files" action="/upload.do">
                   <p className="ant-upload-drag-icon">
@@ -235,7 +252,7 @@ class MeterUp extends Component {
   columns = [
     {
       title: '序号',
-      dataIndex: 'id',
+      dataIndex: 'code',
     },
     {
       title: '项目名称',
@@ -249,30 +266,27 @@ class MeterUp extends Component {
       title: '计量日期',
       dataIndex: 'meteringTime',
       render(val) {
-        return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
+        return <span>{moment(val).format('YYYY/MM/DD')}</span>;
       },
     },
     {
-      title: '预付款',
-      dataIndex:'payProportion',
-      render(val) {
-        return <span>{val}万</span>;
-      },
+      title: '预付款（元）',
+      dataIndex: 'prepaymentAmount',
     },
     {
       title: '计价金额（元）',
       children: [{
         title: '含税',
-        dataIndex:'valuationAmountTax',
+        dataIndex: 'valuationAmountTax',
         key: 'valuationAmountTax'
       },
         {
           title: '税率（%）',
-          dataIndex:'tax',
+          dataIndex: 'tax',
           key: 'tax'
         }, {
           title: '不含税',
-          dataIndex:'valuationAmountNotTax',
+          dataIndex: 'valuationAmountNotTax',
           key: 'valuationAmountNotTax',
         }]
     },
@@ -280,11 +294,11 @@ class MeterUp extends Component {
       title: '实际应付金额（元）',
       children: [{
         title: '含税',
-        dataIndex:'realAmountTax',
+        dataIndex: 'realAmountTax',
         key: 'realAmountTax',
       }, {
         title: '不含税',
-        dataIndex:'realAmount',
+        dataIndex: 'realAmount',
         key: 'realAmount',
       }]
     },
@@ -292,16 +306,16 @@ class MeterUp extends Component {
       title: '资金拨付情况（元）',
       children: [{
         title: '已支付金额',
-        dataIndex:'alreadyPaidAmount',
+        dataIndex: 'alreadyPaidAmount',
         key: 'alreadyPaidAmount'
       },
         {
           title: '未支付金额',
-          dataIndex:'unpaidAmount',
+          dataIndex: 'unpaidAmount',
           key: 'unpaidAmount',
         }, {
           title: '拨付率',
-          dataIndex:'payProportion',
+          dataIndex: 'payProportion',
           key: 'payProportion'
         }]
     },
@@ -309,41 +323,39 @@ class MeterUp extends Component {
       title: '其他计价（元）',
       children: [{
         title: '超计价',
-        dataIndex:'extraAmount',
+        dataIndex: 'extraAmount',
         key: 'extraAmount',
       },
         {
           title: '已完未计',
-          dataIndex:'notCalculatedAmount',
+          dataIndex: 'notCalculatedAmount',
           key: 'notCalculatedAmount',
         }]
     },
     {
       title: '产值计价率',
-      dataIndex:'realAmount',
-      render(val) {
-        return <span>2213</span>;
-      },
+      dataIndex: 'productionValue',
     },
     {
       title: '备注',
-      dataIndex:'remark'
+      dataIndex: 'remark'
     },
     {
       title: '操作',
       render: (val, record) => {
         const user = this.props.app.user
-        if(!user.token){
+        if (!user.token) {
           return null
         }
         const button = user.permissionsMap.button
         return (
           <Fragment>
-            {getButtons(button,pageButtons[1])?<a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>:null}
+            {getButtons(button, pageButtons[1]) ?
+              <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a> : null}
             <Divider type="vertical"/>
-            {getButtons(button,pageButtons[2])?<a onClick={() => this.handleCheckDetail(true, record)}>查看</a>:null}
+            {getButtons(button, pageButtons[2]) ? <a onClick={() => this.handleCheckDetail(true, record)}>查看</a> : null}
             <Divider type="vertical"/>
-            <a href={record.annexUrl} download="附件">下载附件</a>
+            <a href={record.annexUrl} download="fujian">下载附件</a>
           </Fragment>
         )
       }
@@ -386,15 +398,12 @@ class MeterUp extends Component {
   };
 
   handleFormReset = () => {
-    const {form, dispatch} = this.props;
+    const {form} = this.props;
     form.resetFields();
     this.setState({
       formValues: {},
     });
-    dispatch({
-      type: 'rule/fetch',
-      payload: {},
-    });
+    this.getList()
   };
 
   handleMenuClick = e => {
@@ -424,30 +433,6 @@ class MeterUp extends Component {
   handleSelectRows = rows => {
     this.setState({
       selectedRows: rows,
-    });
-  };
-
-  handleSearch = e => {
-    e.preventDefault();
-
-    const {dispatch, form} = this.props;
-
-    form.validateFields((err, fieldsValue) => {
-      if (err) return;
-
-      const values = {
-        ...fieldsValue,
-        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
-      };
-
-      this.setState({
-        formValues: values,
-      });
-
-      dispatch({
-        type: 'rule/fetch',
-        payload: values,
-      });
     });
   };
 
@@ -484,28 +469,17 @@ class MeterUp extends Component {
     const {dispatch, app: {user}} = this.props;
     const payload = {
       projectId: fields.projectId,
-      address: fields.address,
-      orgAddress: fields.orgAddress,
-      status: fields.status,
-      mileageNumber: fields.mileageNumber,
-      totalPrice: fields.totalPrice,
-      contractNumber: fields.contractNumber,
-      contractDay: fields.contractDay,
-      contractStartTime: fields.contractStartTime,
-      contractEndTime: fields.contractEndTime,
-      realContractDay: fields.realContractDay,
-      realContractStartTime: fields.realContractStartTime,
-      realContractEndTime: fields.realContractEndTime,
-      proprietorCompany: fields.proprietorCompany,
-      proprietorAddress: fields.proprietorAddress,
-      proprietorPhone: fields.proprietorPhone,
-      supervisionCompany: fields.supervisionCompany,
-      supervisionAddress: fields.supervisionAddress,
-      supervisionPhone: fields.supervisionPhone,
-      inputPerson: fields.inputPerson,
-      formalEmployee: fields.formalEmployee,
-      externalEmployee: fields.externalEmployee,
-      description: fields.description,
+      meteringNum: fields.meteringNum,
+      meteringTime: fields.meteringTime,
+      prepaymentAmount: fields.prepaymentAmount,
+      valuationAmountTax: fields.valuationAmountTax,
+      tax: fields.tax,
+      realAmountTax: fields.realAmountTax,
+      alreadyPaidAmount: fields.alreadyPaidAmount,
+      extraAmount: fields.extraAmount,
+      notCalculatedAmount: fields.notCalculatedAmount,
+      remark: fields.remark,
+      annexUrl: fields.annexUrl
     }
     if (updateModalVisible) {
       dispatch({
@@ -532,56 +506,53 @@ class MeterUp extends Component {
     }
   };
 
-  handleUpdate = fields => {
-    const {dispatch} = this.props;
-    dispatch({
-      type: 'rule/update',
-      payload: {
-        name: fields.name,
-        desc: fields.desc,
-        key: fields.key,
-      },
-    });
-
-    message.success('配置成功');
-    this.handleUpdateModalVisible();
-  };
-
   renderAdvancedForm() {
     const {
       form: {getFieldDecorator},
     } = this.props;
     return (
-      <Form onSubmit={this.handleSearch} layout="inline">
+      <Form onSubmit={this.searchList} layout="inline">
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={6} sm={24}>
             <FormItem label="项目名称">
-              {getFieldDecorator('projectName')(<Input placeholder="请输入"/>)}
+              {getFieldDecorator('projectName',{
+                initialValue:null
+              })(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="计量日期">
-              {getFieldDecorator('date')(
+              {getFieldDecorator('meteringTime',{
+                initialValue:null
+              })(
                 <DatePicker style={{width: '100%'}} placeholder="请选择日期"/>
               )}
             </FormItem>
           </Col>
           <Col style={{flexDirection: 'row', display: 'flex'}} md={12} sm={24}>
             <FormItem label="拨付率">
-              {getFieldDecorator('give')(<Input placeholder="请输入" addonAfter={'%'}/>)}
+              {getFieldDecorator('minPayProportion',{
+                initialValue:null
+              })(<Input placeholder="请输入" addonAfter={'%'}/>)}
             </FormItem>
             <FormItem style={{marginLeft: 15 + 'px'}} label="至">
-              {getFieldDecorator('give')(<Input placeholder="请输入" addonAfter={'%'}/>)}
+              {getFieldDecorator('maxPayProportion',{
+                initialValue:null
+              })(<Input placeholder="请输入" addonAfter={'%'}/>)}
             </FormItem>
           </Col>
         </Row>
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col style={{flexDirection: 'row', display: 'flex'}} md={12} sm={24}>
             <FormItem label="产值计价率">
-              {getFieldDecorator('give')(<Input placeholder="请输入" addonAfter={'%'}/>)}
+              {getFieldDecorator('minProductionValue',{
+                initialValue:null
+              })(<Input placeholder="请输入" addonAfter={'%'}/>)}
             </FormItem>
             <FormItem style={{marginLeft: 15 + 'px'}} label="至">
-              {getFieldDecorator('give')(<Input placeholder="请输入" addonAfter={'%'}/>)}
+              {getFieldDecorator('maxProductionValue',{
+                initialValue:null
+              })(<Input placeholder="请输入" addonAfter={'%'}/>)}
             </FormItem>
           </Col>
           <Col md={12} sm={24}>
@@ -617,7 +588,7 @@ class MeterUp extends Component {
     const {
       meterUp: {data, proNames},
       loading,
-      app:{user}
+      app: {user}
     } = this.props;
     const {selectedRows, modalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail} = this.state;
 
@@ -642,13 +613,15 @@ class MeterUp extends Component {
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
               <div className={styles.tableListOperator}>
-                {user.token&&getButtons(user.permissionsMap.button,pageButtons[0])?  <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
-                  新增
-                </Button>:null}
-                {user.token&&getButtons(user.permissionsMap.button,pageButtons[3])?  <Button icon="plus" type="primary">
-                  导出
-                </Button>:null}
-               {/* {selectedRows.length > 0 && (
+                {user.token && getButtons(user.permissionsMap.button, pageButtons[0]) ?
+                  <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+                    新增
+                  </Button> : null}
+                {user.token && getButtons(user.permissionsMap.button, pageButtons[3]) ?
+                  <Button icon="plus" type="primary">
+                    导出
+                  </Button> : null}
+                {/* {selectedRows.length > 0 && (
                   <span>
                   <Dropdown overlay={menu}>
                     <Button>
@@ -663,6 +636,7 @@ class MeterUp extends Component {
                 loading={loading.effects['meterUp/fetch']}
                 bordered
                 data={data}
+                rowKey={'id'}
                 scroll={{x: '200%'}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
@@ -680,9 +654,9 @@ class MeterUp extends Component {
     if (proName.length < 1) {
       this.props.dispatch(
         {
-          type: 'pro_proInfo/queryProNames',
+          type: 'meterUp/queryProNames',
           payload: {page: 1, pageSize: 10},
-          token:this.props.app.user.token
+          token: this.props.app.user.token
         }
       )
     }
@@ -692,31 +666,31 @@ class MeterUp extends Component {
     this.props.dispatch({
       type: 'meterUp/fetch',
       payload: {page: page, pageSize: pageSize},
-      token:this.props.app.user.token
+      token: this.props.app.user.token
     });
   }
 
-  searchList = (page = 1, pageSize = 10) => {
+  searchList = (e,page = 1, pageSize = 10) => {
+    e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
+      let time = fieldsValue.meteringTime?fieldsValue.meteringTime.format('YYYY-MM-DD'):null
+      let payload = {
+        page: page,
+        pageSize: pageSize,
+        projectName: fieldsValue.projectName,
+        minPayProportion: fieldsValue.minPayProportion,
+        maxPayProportion: fieldsValue.maxPayProportion,
+        minProductionValue: fieldsValue.minProductionValue,
+        maxProductionValue: fieldsValue.maxProductionValue,
+        meteringTime: time
+      }
+      cleanObject(payload)
       //  form.resetFields();
       this.props.dispatch({
         type: 'meterUp/fetch',
-        payload: {
-          page: page,
-          pageSize: pageSize,
-          projectName: fieldsValue.projectName,
-          mileageNumber: fieldsValue.mileageNumber,
-          totalPrice: fieldsValue.totalPrice,
-          contractStartTime: fieldsValue.contractStartTime,
-          contractEndTime: fieldsValue.contractEndTime,
-          realContractStartTime: fieldsValue.realContractStartTime,
-          realContractEndTime: fieldsValue.realContractEndTime,
-          status: fieldsValue.status,
-          projectManager: fieldsValue.projectManager,
-          chiefEngineer: fieldsValue.chiefEngineer,
-          projectSecretary: fieldsValue.status,
-        }
+        payload: payload,
+        token:this.props.app.user.token
       });
     });
   }

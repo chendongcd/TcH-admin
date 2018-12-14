@@ -114,3 +114,12 @@ export function getMenus(menus) {
 export function getButtons(pageButtons=[], button) {
   return pageButtons.includes(button)
 }
+
+/*删除对象中的空对象*/
+export function cleanObject(obj) {
+  for(let o in obj){
+    if(!obj[o]){
+      delete obj[o]
+    }
+  }
+}
