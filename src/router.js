@@ -106,7 +106,7 @@ function RouterConfig({history, app}) {
   })
   const Sub_Resume = dynamic({
     app,
-    models:[appModel],
+    models:()=>[import('./routes/sub/resume/model')],
     component:()=> import('./routes/sub/resume/index')
   })
   const Down_MeterDown = dynamic({
@@ -121,7 +121,7 @@ function RouterConfig({history, app}) {
   })
   const Evaluate_Pro = dynamic({
     app,
-    models:[appModel],
+    models:()=>[import('./routes/evaluation/proEvaluate/model')],
     component:()=> import('./routes/evaluation/proEvaluate/index')
   })
   const People_Info = dynamic({
@@ -131,12 +131,12 @@ function RouterConfig({history, app}) {
   })
   const Document_fileRead = dynamic({
     app,
-    models:[appModel],
+    models:()=>[import('./routes/document/fileRead/model')],
     component:()=> import('./routes/document/fileRead/index')
   })
   const Document_fileReference = dynamic({
     app,
-    models:[appModel],
+    models:()=>[import('./routes/document/fileReference/model')],
     component:()=> import('./routes/document/fileReference/index')
   })
   const NotFound = dynamic({

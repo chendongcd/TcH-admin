@@ -19,7 +19,7 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-import {_setTimeOut, getButtons} from 'utils'
+import {_setTimeOut, getButtons,cleanObject} from 'utils'
 import {menuData} from 'common/menu'
 import {professionType, subType, taxpayerType} from 'common/types'
 import moment from 'moment'
@@ -434,7 +434,7 @@ const CreateReview = Form.create()(props => {
       </Row>
     </div>)
 
-    if(type==1){
+    if (type == 1) {
       content = (<div className={styles.modalContent}>
         <Row gutter={8}>
           <Col md={12} sm={24}>
@@ -463,7 +463,7 @@ const CreateReview = Form.create()(props => {
       </div>)
     }
 
-    if(type==2){
+    if (type == 2) {
       content = (<div className={styles.modalContent}>
         <Row gutter={8}>
           <Col md={8} sm={24}>
@@ -811,7 +811,7 @@ class Qualification extends Component {
     } = this.props;
     const {expandForm} = this.state;
     return (
-      <Form layout="inline">
+      <Form onSubmit={this.searchList} layout="inline">
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={6} sm={24}>
             <FormItem label="分包商全称">
@@ -970,23 +970,26 @@ class Qualification extends Component {
     });
   }
 
-  searchList = (page = 1, pageSize = 10) => {
+  searchList = (e, page = 1, pageSize = 10) => {
+    e.preventDefault()
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
+      let payload = {
+        page: page,
+        pageSize: pageSize,
+        name: fieldsValue.name,
+        typeId: fieldsValue.typeId,
+        professionType: fieldsValue.professionType,
+        registeredCapital: fieldsValue.registeredCapital,
+        companyGroupEvaluation: fieldsValue.companyGroupEvaluation,
+        companyEvaluation: fieldsValue.companyEvaluation,
+        groupEvaluation: fieldsValue.groupEvaluation
+      }
+      cleanObject(payload)
       //  form.resetFields();
       this.props.dispatch({
         type: 'sub_qua/fetch',
-        payload: {
-          page: page,
-          pageSize: pageSize,
-          name: fieldsValue.name,
-          typeId: fieldsValue.typeId,
-          professionType: fieldsValue.professionType,
-          registeredCapital: fieldsValue.registeredCapital,
-          companyGroupEvaluation: fieldsValue.companyGroupEvaluation,
-          companyEvaluation: fieldsValue.companyEvaluation,
-          groupEvaluation: fieldsValue.groupEvaluation
-        }
+        payload:payload
       });
     });
   }

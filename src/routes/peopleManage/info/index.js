@@ -12,12 +12,11 @@ import {
   Button,
   DatePicker,
   Modal,
-  message,
   Divider,
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-import {_setTimeOut,getButtons} from 'utils'
+import {_setTimeOut,getButtons,cleanObject} from 'utils'
 import {menuData} from "../../../common/menu";
 
 const FormItem = Form.Item;
@@ -29,7 +28,7 @@ const getValue = obj =>
     .join(',');
 const pageButtons = menuData[16].buttons.map(a => a.permission)
 const testValue = '123'
-
+const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
 const CreateForm = Form.create()(props => {
   const {modalVisible, form, handleAdd, handleModalVisible,handleUpdateModalVisible,updateModalVisible,handleCheckDetail,selectedValues,checkDetail} = props;
 
@@ -37,6 +36,15 @@ const CreateForm = Form.create()(props => {
     form.validateFields((err, fieldsValue) => {
       console.log(fieldsValue)
       if (err) return;
+      for (let prop in fieldsValue) {
+        if (fieldsValue[prop] instanceof moment) {
+          // console.log(fieldsValue[prop].format())
+          fieldsValue[prop] = fieldsValue[prop].format('YYYY-MM-DD')
+          //  console.log(fieldsValue[prop])
+        }
+        // console.log(typeof fieldsValue[prop])
+      }
+      fieldsValue.headUrl = testPDF
       // form.resetFields();
       handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
@@ -77,7 +85,7 @@ const CreateForm = Form.create()(props => {
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="出生日期">
               {form.getFieldDecorator('brithday', {
                 rules: [{required: true}],
-                initialValue: selectedValues.brithday ? selectedValues.brithday : testValue,
+                initialValue: selectedValues.brithday ? moment(selectedValues.brithday) : null,
               })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择出生日期"/>)}
             </FormItem>
           </Col>
@@ -170,7 +178,7 @@ const CreateForm = Form.create()(props => {
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="入党时间">
               {form.getFieldDecorator('joinAssociationTime', {
-                rules: [{required: true}],
+                rules: [{required: true,message:'请选择入党时间'}],
                 initialValue: selectedValues.joinAssociationTime ? moment(selectedValues.joinAssociationTime) : null,
               })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择入党时间"/>)}
             </FormItem>
@@ -255,7 +263,7 @@ const CreateForm = Form.create()(props => {
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="专业">
               {form.getFieldDecorator('firstDegreeProfession', {
                 rules: [{required: true, message: '请输入专业'}],
-                initialValue: selectedValues.firstDegreeProfession ? selectedValues.pfirstDegreeProfession : testValue,
+                initialValue: selectedValues.firstDegreeProfession ? selectedValues.firstDegreeProfession : testValue,
               })(<Input disabled={checkDetail} placeholder="请输入专业"/>)}
             </FormItem>
           </Col>
@@ -263,7 +271,7 @@ const CreateForm = Form.create()(props => {
             <FormItem labelCol={{span:7}} wrapperCol={{span: 15}} label="毕业时间">
               {form.getFieldDecorator('firstDegreeTime', {
                 rules: [{required: true, message: '请输入毕业时间'}],
-                initialValue: selectedValues.firstDegreeTime? moment(selectedValues.firstDegreeTime) : testValue,
+                initialValue: selectedValues.firstDegreeTime? moment(selectedValues.firstDegreeTime) :null,
               })(<DatePicker style={{width: '100%'}} placeholder="请选择毕业时间"/>)}
             </FormItem>
           </Col>
@@ -307,7 +315,7 @@ const CreateForm = Form.create()(props => {
             <FormItem labelCol={{span:7}} wrapperCol={{span: 15}} label="毕业时间">
               {form.getFieldDecorator('secondDegreeTime', {
                 rules: [{required: false}],
-                initialValue: selectedValues.secondDegreeTime? selectedValues.secondDegreeTime : testValue,
+                initialValue: selectedValues.secondDegreeTime? moment(selectedValues.secondDegreeTime) : null,
               })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择毕业时间"/>)}
             </FormItem>
           </Col>
@@ -465,10 +473,7 @@ class PeopleInfo extends Component {
     },
     {
       title: '邮箱',
-      dataIndex: 'email',
-      render(val) {
-        return <span>没有</span>;
-      },
+      dataIndex: 'email'
     },
     {
       title: '身份证号码',
@@ -491,10 +496,7 @@ class PeopleInfo extends Component {
     },
     {
       title: '备注',
-      dataIndex: 'remark',
-      render(val) {
-        return <span>100万啊实打实的</span>;
-      },
+      dataIndex: 'remark'
     },
     {
       title: '操作',
@@ -600,6 +602,7 @@ class PeopleInfo extends Component {
   };
 
   handleUpdateModalVisible = (flag, record) => {
+    console.log(record)
     this.setState({
       updateModalVisible: !!flag,
       modalVisible:!!flag,
@@ -627,7 +630,7 @@ class PeopleInfo extends Component {
     const payload = {
       name: fieldsValue.name,
       sex: fieldsValue.sex,
-      birthday: fieldsValue.birthday,
+      brithday: fieldsValue.brithday,
       famousFamily: fieldsValue.famousFamily,
       jiguan: fieldsValue.jiguan,
       jobTitle: fieldsValue.jobTitle,
@@ -642,6 +645,7 @@ class PeopleInfo extends Component {
       projectName: fieldsValue.projectName,
       status: fieldsValue.status,
       firstDegreeSchool: fieldsValue.firstDegreeSchool,
+      firstDegreeTime: fieldsValue.firstDegreeTime,
       firstDegreeProfession: fieldsValue.firstDegreeProfession,
       firstDegreeLevel: fieldsValue.firstDegreeLevel,
       secondDegreeSchool: fieldsValue.secondDegreeSchool,
@@ -649,9 +653,12 @@ class PeopleInfo extends Component {
       secondDegreeTime: fieldsValue.secondDegreeTime,
       secondDegreeProfession: fieldsValue.secondDegreeProfession,
       workExperience: fieldsValue.workExperience,
+      joinAssociationTime:fieldsValue.joinAssociationTime,
       training: fieldsValue.training,
+      certificate:fieldsValue.certificate,
       award: fieldsValue.award,
-      remark:fieldsValue.remark
+      remark:fieldsValue.remark,
+      headUrl:fieldsValue.headUrl
     }
     if (updateModalVisible) {
       dispatch({
@@ -683,7 +690,7 @@ class PeopleInfo extends Component {
       form: {getFieldDecorator},
     } = this.props;
     return (
-      <Form layout="inline">
+      <Form onSubmit={this.searchList} layout="inline">
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={6} sm={24}>
             <FormItem label="姓名">
@@ -731,7 +738,7 @@ class PeopleInfo extends Component {
           <Col push={6} md={12} sm={24}>
             <div style={{overflow: 'hidden'}}>
               <div style={{float: 'right', marginBottom: 24}}>
-                <Button onClick={this.searchList} type="primary" htmlType="submit">
+                <Button type="primary" htmlType="submit">
                   查询
                 </Button>
                 <Button style={{marginLeft: 8}} onClick={this.handleFormReset}>
@@ -820,21 +827,25 @@ class PeopleInfo extends Component {
     });
   }
 
-  searchList = (page = 1, pageSize = 10) => {
+  searchList = (e,page = 1, pageSize = 10) => {
+    e.preventDefault()
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
       //  form.resetFields();
+      let payload = {
+        page: page,
+        pageSize: pageSize,
+        name: fieldsValue.name,
+        projectName: fieldsValue.projectName,
+        jobTitle: fieldsValue.jobTitle,
+        workTime: fieldsValue.workTime,
+        firstDegreeLevel: fieldsValue.firstDegreeLevel
+      }
+      cleanObject(payload)
       this.props.dispatch({
         type: 'peopleManage/fetch',
-        payload: {
-          page: page,
-          pageSize: pageSize,
-          name: fieldsValue.name,
-          projectName: fieldsValue.projectName,
-          jobTitle: fieldsValue.jobTitle,
-          workTime: fieldsValue.workTime,
-          firstDegreeLevel: fieldsValue.firstDegreeLevel
-        }
+        payload: payload,
+        token: this.props.app.user.token
       });
     });
   }

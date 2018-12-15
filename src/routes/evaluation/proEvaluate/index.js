@@ -1,4 +1,4 @@
-import React, {Component,Fragment} from 'react'
+import React, {Component, Fragment} from 'react'
 import {connect} from 'dva'
 import moment from 'moment';
 
@@ -11,17 +11,15 @@ import {
   Select,
   Icon,
   Button,
-  Dropdown,
-  Menu,
   DatePicker,
   Modal,
-  message,
   Upload,
   Divider,
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-import {_setTimeOut} from 'utils'
+import {_setTimeOut, cleanObject, getButtons} from 'utils'
+import {menuData} from "../../../common/menu";
 
 const FormItem = Form.Item;
 const {Option} = Select;
@@ -29,317 +27,380 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const statusMap = ['default', 'processing', 'success', 'error'];
-const status = ['关闭', '运行中', '已上线', '异常'];
-let uuid = 0;
-const info_css={
-  color:'#fa541c'
+const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
+const testValue = '123'
+const reStatus = ["未评估", "初评", "复评(二次)", "复评(三次)", "复评(四次)", "定评"]
+const info_css = {
+  color: '#fa541c'
 }
-const CreateForm = Form.create()(props => {
-  const {modalVisible, form, handleAdd, handleModalVisible, normFile,handleUpdateModalVisible,updateModalVisible,handleCheckDetail,selectedValues,checkDetail} = props;
+const pageButtons = menuData[18].buttons.map(a => a.permission)
 
-  const okHandle = () => {
+@Form.create()
+class CreateForm extends Component {
+
+  constructor(props) {
+    super(props)
+    this.selectProject = {}
+  }
+
+  okHandle = () => {
+    const {form, handleAdd, updateModalVisible, selectedValues} = this.props;
+
     form.validateFields((err, fieldsValue) => {
       console.log(fieldsValue)
       if (err) return;
+      for (let prop in fieldsValue) {
+        if (fieldsValue[prop] instanceof moment) {
+          // console.log(fieldsValue[prop].format())
+          fieldsValue[prop] = fieldsValue[prop].format('YYYY-MM-DD')
+          //  console.log(fieldsValue[prop])
+        }
+        // console.log(typeof fieldsValue[prop])
+      }
+      fieldsValue.jointHearingAnnex = testPDF
+      fieldsValue.responsibilityAnnex = testPDF
+      fieldsValue.evaluationAnnex = testPDF
       // form.resetFields();
-      handleAdd(fieldsValue);
+      handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
   };
-  return (
-    <Modal
-      destroyOnClose
-      title={checkDetail?'项目评估':updateModalVisible?"编辑项目评估":"新增项目评估"}
-      bodyStyle={{padding: 0 + 'px'}}
-      visible={modalVisible}
-      width={992}
-      maskClosable={false}
-      onOk={okHandle}
-      onCancel={() => checkDetail?handleCheckDetail():updateModalVisible?handleUpdateModalVisible():handleModalVisible()}
-    >
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="项目名称">
-              {form.getFieldDecorator('proName', {
-                rules: [{required: true, message: '请选择项目'}],
-              })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">项目1</Option>
-                <Option value="1">项目2</Option>
-              </Select>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="工程类别">
-              {form.getFieldDecorator('proName', {
-                rules: [{required: true}],
-              })(<Input disabled={checkDetail} placehloder='自动带出'/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="出生日期">
-              {form.getFieldDecorator('proName', {
-                rules: [{required: true}],
-              })(<DatePicker disabled={checkDetail} width={'100%'} placehloder='请选择出生日期'/>)}
-            </FormItem>
-          </Col>
+
+  onChange = (value, option) => {
+    this.selectProject = option.props.item
+    console.log(option)
+    this.props.form.setFieldsValue({
+      engineeringType: this.selectProject.projectType,
+      projectStatus: this.selectProject.statusStr,
+      contractEndTime:moment(this.selectProject.contractEndTime).format('YYYY-MM-DD'),
+      contractStartTime:moment(this.selectProject.contractStartTime).format('YYYY-MM-DD'),
+      duration:this.selectProject.distanceTime
+    });
+  }
+
+  render() {
+    const {modalVisible, proNames, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
+
+    return (
+      <Modal
+        destroyOnClose
+        title={checkDetail ? '项目评估' : updateModalVisible ? "编辑项目评估" : "新增项目评估"}
+        bodyStyle={{padding: 0 + 'px'}}
+        visible={modalVisible}
+        width={992}
+        maskClosable={false}
+        onOk={this.okHandle}
+        onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
+      >
+        <div className={styles.modalContent}>
+          <Row gutter={8}>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="项目名称">
+                {form.getFieldDecorator('projectId', {
+                  rules: [{required: true, message: '请选择项目'}],
+                  initialValue: selectedValues.projectId ? selectedValues.projectId : '',
+                })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'}
+                           onChange={this.onChange} disabled={checkDetail}
+                           placeholder="请选择" style={{width: '100%'}}>
+                  {proNames.map((item, index) => {
+                    return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
+                  })}
+                </Select>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="工程类别">
+                {form.getFieldDecorator('engineeringType', {
+                  rules: [{required: true}],
+                  initialValue: selectedValues.engineeringType ? selectedValues.engineeringType : '',
+                })(<Input disabled={checkDetail||updateModalVisible} placeholder="自动带出"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="评估状态">
+                {form.getFieldDecorator('evaluationStatus', {
+                  rules: [{required: true, message: '请选择评估状态'}],
+                  initialValue: selectedValues.evaluationStatus ? selectedValues.evaluationStatus : ''
+                })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择评估状态" style={{width: '100%'}}>
+                  {reStatus.map((a, index) => <Option key={index} value={a}>{a}</Option>)}
+                </Select>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="项目状态">
+                {form.getFieldDecorator('projectStatus', {
+                  rules: [{required: true}],
+                  initialValue: selectedValues.projectStatus ? selectedValues.projectStatus : ''
+                })(<Input disabled={checkDetail||updateModalVisible} placehloder='自动带出'/>)}
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+        <Row align={'middle'} gutter={0} className={styles.titleView}>
+          <div className={styles.title}>合同价</div>
         </Row>
-        <Row gutter={8}>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="评估状态">
-              {form.getFieldDecorator('proName', {
-                rules: [{required: true}],
-              })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">未评估</Option>
-                <Option value="1">初评</Option>
-                <Option value="2">复评(二次)</Option>
-                <Option value="3">复评(三次)</Option>
-                <Option value="4">复评(四次)</Option>
-                <Option value="5">定评</Option>
-              </Select>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="项目状态">
-              {form.getFieldDecorator('proName', {
-                rules: [{required: true}],
-              })(<Input disabled={checkDetail} placehloder='自动带出'/>)}
-            </FormItem>
-          </Col>
+        <div className={styles.modalContent}>
+          <Row gutter={8}>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="中标">
+                {form.getFieldDecorator('winningBid', {
+                  rules: [{required: true, message: '请输入预付款'}],
+                  initialValue: selectedValues.winningBid ? selectedValues.winningBid : testValue
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入中标金额" addonAfter="万元"/>)}
+              </FormItem>
+            </Col>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="有效收入">
+                {form.getFieldDecorator('effectiveIncome', {
+                  rules: [{required: true, message: '请输入预付款'}],
+                  initialValue: selectedValues.effectiveIncome ? selectedValues.effectiveIncome : testValue
+
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入有效金额" addonAfter="万元"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+        <Row align={'middle'} gutter={0} className={styles.titleView}>
+          <div className={styles.title}>合同</div>
         </Row>
-      </div>
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>合同价</div>
-      </Row>
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="中标">
-              {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true, message: '请输入预付款'}],
-              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入中标金额" addonAfter="万元"/>)}
-            </FormItem>
-          </Col>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="有效收入">
-              {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true, message: '请输入预付款'}],
-              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入有效金额" addonAfter="万元"/>)}
-            </FormItem>
-          </Col>
+        <div className={styles.modalContent}>
+          <Row gutter={8}>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="是否签订">
+                {form.getFieldDecorator('isSign', {
+                  rules: [{required: true, message: '请选择是否签订'}],
+                  initialValue: selectedValues.isSign ? selectedValues.isSign : ''
+
+                })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
+                  <Option value="是">是</Option>
+                  <Option value="否">否</Option>
+                </Select>)}
+              </FormItem>
+            </Col>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="签订日期">
+                {form.getFieldDecorator('signTime', {
+                  rules: [{required: true,message:'请选择签订时间'}],
+                  initialValue: selectedValues.signTime ? moment(selectedValues.signTime) : null
+
+                })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder='请选择日期'/>)}
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+        <Row align={'middle'} gutter={0} className={styles.titleView}>
+          <div className={styles.title}>合同工期</div>
         </Row>
-      </div>
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>合同</div>
-      </Row>
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="是否签订">
-              {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true, message: '请输入预付款'}],
-              })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">是</Option>
-                <Option value="1">否</Option>
-              </Select>)}
-            </FormItem>
-          </Col>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="签订日期">
-              {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true}],
-              })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder='请选择日期'/>)}
-            </FormItem>
-          </Col>
+        <div className={styles.modalContent}>
+          <Row gutter={8}>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="合同开工日期">
+                {form.getFieldDecorator('contractStartTime', {
+                  rules: [{required: true}],
+                  initialValue: selectedValues.contractStartTime ? moment(selectedValues.contractStartTime).format('YYYY-MM-DD') : ''
+                })(<Input disabled={checkDetail||updateModalVisible} placeholder='自动带出'/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="合同竣工日期">
+                {form.getFieldDecorator('contractEndTime', {
+                  rules: [{required: true}],
+                  initialValue: selectedValues.contractEndTime ? moment(selectedValues.contractEndTime).format('YYYY-MM-DD') : ''
+                })(<Input disabled={checkDetail||updateModalVisible} placeholder='自动带出'/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="工期(月)">
+                {form.getFieldDecorator('duration', {
+                  rules: [{required: true}],
+                  initialValue: selectedValues.duration ? selectedValues.duration : ''
+                })(<Input disabled={checkDetail||updateModalVisible} placeholder='自动计算'/>)}
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+        <Row align={'middle'} gutter={0} className={styles.titleView}>
+          <div className={styles.title}>经管部评价</div>
         </Row>
-      </div>
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>合同工期</div>
-      </Row>
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="合同开工日期">
-              {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true}],
-              })(<Input disabled={checkDetail} placeholder='自动带出'/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="合同竣工日期">
-              {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true}],
-              })(<Input disabled={checkDetail} placeholder='自动带出'/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="工期(月)">
-              {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true}],
-              })(<Input disabled={checkDetail} placeholder='自动计算'/>)}
-            </FormItem>
-          </Col>
+        <div className={styles.modalContent} style={{paddingRight: 0}}>
+          <Row gutter={8}>
+            <Col md={7} sm={24}>
+              <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="评估时间">
+                {form.getFieldDecorator('evaluationTime', {
+                  rules: [{required: true,message:'请选择评估时间'}],
+                  initialValue: selectedValues.evaluationTime ? moment(selectedValues.evaluationTime) : null
+
+                })(<DatePicker disabled={checkDetail} width={'100%'} placeholder='请选择'/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="评估效益点(%)">
+                {form.getFieldDecorator('evaluationBenefit', {
+                  rules: [{required: true,message:'请输入评估效益点(%)'}],
+                  initialValue: selectedValues.evaluationBenefit ? selectedValues.evaluationBenefit : testValue
+
+                })(<Input disabled={checkDetail} placeholder='请输入(小数点后两位)'/>)}
+              </FormItem>
+            </Col>
+            <Col md={9} sm={24}>
+              <FormItem labelCol={{span: 10}} wrapperCol={{span: 13}} label="含分包差及经营费(%)">
+                {form.getFieldDecorator('evaluationCost', {
+                  rules: [{required: true,message:'请输入含分包差及经营费(%)'}],
+                  initialValue: selectedValues.evaluationCost ? selectedValues.evaluationCost : testValue
+
+                })(<Input disabled={checkDetail} placeholder='请输入(小数点后两位)'/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={0}>
+            <Col md={12} sm={24}>
+              <FormItem style={{marginLeft: 14 + 'px'}} labelCol={{span: 4}} wrapperCol={{span: 12}} label="评估编号">
+                {form.getFieldDecorator('evaluationCode', {
+                  rules: [{required: true,message:'请输入评估编号'}],
+                  initialValue: selectedValues.evaluationCode ? selectedValues.evaluationCode : testValue
+
+                })(<Input disabled={checkDetail} placeholder="请输入评估编号"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={24} sm={24}>
+              <FormItem style={{marginLeft: 11 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="附件">
+                {form.getFieldDecorator('evaluationAnnex', {
+                  valuePropName: 'fileList',
+                  getValueFromEvent: normFile,
+                })(
+                  <Upload.Dragger name="files" action="/upload.do">
+                    <p className="ant-upload-drag-icon">
+                      <Icon type="inbox"/>
+                    </p>
+                    <p className="ant-upload-text">点击或拖动附件进入</p>
+                  </Upload.Dragger>
+                )}
+                <span style={info_css}>备注：请以一份压缩包格式文件上传</span>
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+        <Row align={'middle'} gutter={0} className={styles.titleView}>
+          <div className={styles.title}>会审情况</div>
         </Row>
-      </div>
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>经管部评价</div>
-      </Row>
-      <div className={styles.modalContent} style={{paddingRight:0}}>
-        <Row gutter={8}>
-          <Col md={7} sm={24}>
-            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="评估时间">
-              {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true}],
-              })(<DatePicker disabled={checkDetail} width={'100%'} placeholder='请选择'/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="评估效益点(%)">
-              {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true}],
-              })(<Input disabled={checkDetail} placeholder='请输入(小数点后两位)'/>)}
-            </FormItem>
-          </Col>
-          <Col md={9} sm={24}>
-            <FormItem labelCol={{span: 10}} wrapperCol={{span: 13}} label="含分包差及经营费(%)">
-              {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true}],
-              })(<Input disabled={checkDetail} placeholder='请输入(小数点后两位)'/>)}
-            </FormItem>
-          </Col>
+        <div className={styles.modalContent}>
+          <Row gutter={8}>
+            <Col md={7} sm={24}>
+              <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="效益点">
+                {form.getFieldDecorator('jointHearingBenefit', {
+                  rules: [{required: true,message:'请输入效益点'}],
+                  initialValue: selectedValues.jointHearingBenefit ? selectedValues.jointHearingBenefit : testValue
+
+                })(<Input disabled={checkDetail} placeholder='请输入(小数点后两位)'/>)}
+              </FormItem>
+            </Col>
+            <Col md={10} sm={24}>
+              <FormItem labelCol={{span: 10}} wrapperCol={{span: 14}} label="是否含分包差及经营费">
+                {form.getFieldDecorator('jointHearingCost', {
+                  rules: [{required: true,message:'请输入是否含分包差及经营费'}],
+                  initialValue: selectedValues.jointHearingCost ? selectedValues.jointHearingCost : testValue
+
+                })(<Input disabled={checkDetail} placeholder='请输入(小数点后两位)'/>)}
+              </FormItem>
+            </Col>
+            <Col md={7} sm={24}>
+              <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="上会时间">
+                {form.getFieldDecorator('jointHearingTime', {
+                  rules: [{required: true,message:'请选择上会时间'}],
+                  initialValue: selectedValues.jointHearingTime ? moment(selectedValues.jointHearingTime) : null
+                })(<DatePicker disabled={checkDetail} placeholder='请选择时间)'/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={24} sm={24}>
+              <FormItem style={{marginLeft: 11 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="附件">
+                {form.getFieldDecorator('jointHearingAnnex', {
+                  valuePropName: 'fileList',
+                  getValueFromEvent: normFile,
+                })(
+                  <Upload.Dragger name="files" action="/upload.do">
+                    <p className="ant-upload-drag-icon">
+                      <Icon type="inbox"/>
+                    </p>
+                    <p className="ant-upload-text">点击或拖动附件进入</p>
+                  </Upload.Dragger>
+                )}
+                <span style={info_css}>备注：请以一份压缩包格式文件上传</span>
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+        <Row align={'middle'} gutter={0} className={styles.titleView}>
+          <div className={styles.title}>责任状签订</div>
         </Row>
-        <Row gutter={0}>
-          <Col md={12} sm={24}>
-            <FormItem style={{marginLeft:14+'px'}} labelCol={{span: 4}} wrapperCol={{span: 12}} label="评估编号">
-              {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true}],
-              })(<Input disabled={checkDetail} placeholder="请输入评估编号" />)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={24} sm={24}>
-            <FormItem style={{marginLeft:11+'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="附件">
-              {form.getFieldDecorator('dragger', {
-                valuePropName: 'fileList',
-                getValueFromEvent: normFile,
-              })(
-                <Upload.Dragger name="files" action="/upload.do">
-                  <p className="ant-upload-drag-icon">
-                    <Icon type="inbox"/>
-                  </p>
-                  <p className="ant-upload-text">点击或拖动附件进入</p>
-                </Upload.Dragger>
-              )}
-              <span style={info_css}>备注：请以一份压缩包格式文件上传</span>
-            </FormItem>
-          </Col>
-        </Row>
-      </div>
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>会审情况</div>
-      </Row>
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={7} sm={24}>
-            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="效益点">
-              {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true}],
-              })(<Input disabled={checkDetail} placeholder='请输入(小数点后两位)'/>)}
-            </FormItem>
-          </Col>
-          <Col md={10} sm={24}>
-            <FormItem labelCol={{span: 10}} wrapperCol={{span: 14}} label="是否含分包差及经营费">
-              {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true}],
-              })(<Input disabled={checkDetail} placeholder='请输入(小数点后两位)'/>)}
-            </FormItem>
-          </Col>
-          <Col md={7} sm={24}>
-            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="上会时间">
-              {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true}],
-              })(<DatePicker disabled={checkDetail} placeholder='请选择时间)'/>)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={24} sm={24}>
-            <FormItem style={{marginLeft:11+'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="附件">
-              {form.getFieldDecorator('dragger', {
-                valuePropName: 'fileList',
-                getValueFromEvent: normFile,
-              })(
-                <Upload.Dragger name="files" action="/upload.do">
-                  <p className="ant-upload-drag-icon">
-                    <Icon type="inbox"/>
-                  </p>
-                  <p className="ant-upload-text">点击或拖动附件进入</p>
-                </Upload.Dragger>
-              )}
-              <span style={info_css}>备注：请以一份压缩包格式文件上传</span>
-            </FormItem>
-          </Col>
-        </Row>
-      </div>
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>责任状签订</div>
-      </Row>
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="效益点">
-              {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true}],
-              })(<Input disabled={checkDetail} placeholder='请输入(小数点后两位)'/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="签订时间">
-              {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true}],
-              })(<DatePicker disabled={checkDetail} width={'100%'} placeholder='请选择'/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="项目经理">
-              {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true}],
-              })(<Input disabled={checkDetail} placeholder='请输入项目经理'/>)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="项目书记">
-              {form.getFieldDecorator('proActualDays', {
-                rules: [{required: true}],
-              })(<Input disabled={checkDetail} placeholder="项目书记" />)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={24} sm={24}>
-            <FormItem style={{marginLeft:25+'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="附件">
-              {form.getFieldDecorator('dragger', {
-                valuePropName: 'fileList',
-                getValueFromEvent: normFile,
-              })(
-                <Upload.Dragger name="files" action="/upload.do">
-                  <p className="ant-upload-drag-icon">
-                    <Icon type="inbox"/>
-                  </p>
-                  <p className="ant-upload-text">点击或拖动附件进入</p>
-                </Upload.Dragger>
-              )}
-              <span style={info_css}>备注：请以一份PDF格式文件上传</span>
-            </FormItem>
-          </Col>
-        </Row>
-      </div>
-    </Modal>
-  );
-});
+        <div className={styles.modalContent}>
+          <Row gutter={8}>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="效益点">
+                {form.getFieldDecorator('responsibilityBenefiy', {
+                  rules: [{required: true,message:'请输入效益点'}],
+                  initialValue: selectedValues.responsibilityBenefiy ? selectedValues.responsibilityBenefiy : testValue
+
+                })(<Input disabled={checkDetail} placeholder='请输入(小数点后两位)'/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="签订时间">
+                {form.getFieldDecorator('responsibilityTime', {
+                  rules: [{required: true,message:'请选择签订时间'}],
+                  initialValue: selectedValues.responsibilityTime ? moment(selectedValues.responsibilityTime) : null
+
+                })(<DatePicker disabled={checkDetail} width={'100%'} placeholder='请选择'/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="项目经理">
+                {form.getFieldDecorator('responsibilityPeople', {
+                  rules: [{required: true,message:'请输入项目经理'}],
+                  initialValue: selectedValues.responsibilityPeople ? selectedValues.responsibilityPeople : testValue
+
+                })(<Input disabled={checkDetail} placeholder='请输入项目经理'/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="项目书记">
+                {form.getFieldDecorator('responsibilitySecretary', {
+                  rules: [{required: true,message:'请输入项目书记'}],
+                  initialValue: selectedValues.responsibilitySecretary ? selectedValues.responsibilitySecretary : testValue
+
+                })(<Input disabled={checkDetail} placeholder="项目书记"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={24} sm={24}>
+              <FormItem style={{marginLeft: 25 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="附件">
+                {form.getFieldDecorator('responsibilityAnnex', {
+                  valuePropName: 'fileList',
+                  getValueFromEvent: normFile,
+                })(
+                  <Upload.Dragger name="files" action="/upload.do">
+                    <p className="ant-upload-drag-icon">
+                      <Icon type="inbox"/>
+                    </p>
+                    <p className="ant-upload-text">点击或拖动附件进入</p>
+                  </Upload.Dragger>
+                )}
+                <span style={info_css}>备注：请以一份PDF格式文件上传</span>
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+      </Modal>
+    );
+  }
+}
 
 @Form.create()
 class ProEvaluate extends Component {
@@ -352,8 +413,8 @@ class ProEvaluate extends Component {
       selectedRows: [],
       formValues: {},
       pageLoading: true,
-      selectedValues:{},
-      checkDetail:false
+      selectedValues: {},
+      checkDetail: false
     }
   }
 
@@ -364,49 +425,40 @@ class ProEvaluate extends Component {
     },
     {
       title: '项目名称',
-      dataIndex: 'name',
+      dataIndex: 'projectName',
     },
     {
       title: '工程类别',
-      render(val) {
-        return <span>123</span>;
-      },
+      dataIndex: 'engineeringType',
     },
     {
       title: '项目状态',
-      render(val) {
-        return <span>123</span>;
-      },
+      dataIndex: 'projectStatus',
     },
     {
       title: '合同额',
       children: [{
         title: '中标',
-        key: 'contract',
-        render(val) {
-          return <span>123</span>;
-        },
+        key: 'winningBid',
+        dataIndex: 'winningBid',
       }, {
         title: '有效收入',
-        key: 'use_bill',
-        render(val) {
-          return <span>123</span>;
-        },
+        key: 'effectiveIncome',
+        dataIndex: 'effectiveIncome',
       },]
     },
     {
       title: '合同',
       children: [{
         title: '是否签订',
-        key: 'sign_is',
-        render(val) {
-          return <span>123</span>;
-        },
+        key: 'isSign',
+        dataIndex: 'isSign'
       }, {
         title: '签订日期',
-        key: 'sign_date',
+        dataIndex: 'signTime',
+        key: 'signTime',
         render(val) {
-          return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
+          return <span>{moment(val).format('YYYY/MM/DD')}</span>;
         },
       },]
     },
@@ -414,55 +466,51 @@ class ProEvaluate extends Component {
       title: '合同工期',
       children: [{
         title: '合同开工时间',
-        key: 'start_date',
+        key: 'contractStartTime',
+        dataIndex: 'contractStartTime',
         render(val) {
-          return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
+          return <span>{moment(val).format('YYYY/MM/DD')}</span>;
         },
       }, {
         title: '合同竣工时间',
-        key: 'end_date',
+        key: 'contractEndTime',
+        dataIndex: 'contractEndTime',
         render(val) {
-          return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
+          return <span>{moment(val).format('YYYY/MM/DD')}</span>;
         },
-      },{
+      }, {
         title: '工期(月)',
-        key: 'days',
-        render(val) {
-          return <span>1</span>;
-        },
+        key: 'duration',
+        dataIndex: 'duration',
       }]
     },
     {
       title: '经管部评估',
       children: [{
         title: '评估时间',
-        key: 'review_date',
+        key: 'evaluationTime',
+        dataIndex: 'evaluationTime',
         render(val) {
-          return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
+          return <span>{moment(val).format('YYYY/MM/DD')}</span>;
         },
       }, {
         title: '评估效益点(%)',
-        key: 'review_point',
-        render(val) {
-          return <span>1</span>;
-        },
-      },{
+        key: 'evaluationBenefit',
+        dataIndex: 'evaluationBenefit',
+      }, {
         title: '含分包差及经营费(%)',
-        key: 'split_bill',
-        render(val) {
-          return <span>1</span>;
-        },
-      },{
+        key: 'evaluationCost',
+        dataIndex: 'evaluationCost',
+      }, {
         title: '评估编号',
-        key: 'review_code',
-        render(val) {
-          return <span>1123</span>;
-        },
-      },{
+        key: 'evaluationCode',
+        dataIndex: 'evaluationCode'
+      }, {
         title: '附件',
-        key: 'files',
+        key: 'evaluationAnnex',
+        dataIndex: 'evaluationAnnex',
         render(val) {
-          return <a href="#">下载</a>;
+          return <a href={val} download={'附件'}>下载</a>;
         },
       }]
     },
@@ -470,25 +518,23 @@ class ProEvaluate extends Component {
       title: '会审情况',
       children: [{
         title: '效益点',
-        key: 'benefit',
-        render(val) {
-          return <span>123</span>;
-        },
+        key: 'jointHearingBenefit',
+        dataIndex: 'jointHearingBenefit'
       }, {
         title: '是否含分包差及经营费',
-        key: 'is_wrapper',
-        render(val) {
-          return <span>是</span>;
-        },
-      },{
+        key: 'jointHearingCost',
+        dataIndex: 'jointHearingCost'
+      }, {
         title: '上会时间',
-        key: 'meet_time',
+        key: 'jointHearingTime',
+        dataIndex: 'jointHearingTime',
         render(val) {
-          return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
+          return <span>{moment(val).format('YYYY/MM/DD')}</span>;
         },
-      },{
+      }, {
         title: '附件',
-        key: 'files_1',
+        key: 'jointHearingAnnex',
+        dataIndex: 'jointHearingAnnex',
         render(val) {
           return <a href="#">下载</a>;
         },
@@ -498,63 +544,63 @@ class ProEvaluate extends Component {
       title: '责任状签订',
       children: [{
         title: '效益点',
-        key: 'benefit_1',
-        render(val) {
-          return <span>123</span>;
-        },
+        key: 'responsibilityBenefiy',
+        dataIndex: 'responsibilityBenefiy'
       }, {
         title: '签订时间',
-        key: 'sign_date1',
+        key: 'responsibilityTime',
+        dataIndex: 'responsibilityTime',
         render(val) {
-          return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
+          return <span>{moment(val).format('YYYY/MM/DD')}</span>;
         },
-      },{
+      }, {
         title: '项目经理',
-        key: 'pro_manager',
-        render(val) {
-          return <span>李蛋蛋</span>;
-        },
-      },{
+        key: 'responsibilityPeople',
+        dataIndex: 'responsibilityPeople',
+      }, {
         title: '项目书记',
-        key: 'pro_secretary',
-        render(val) {
-          return <span>李蛋蛋</span>;
-        },
-      },{
+        key: 'responsibilitySecretary',
+        dataIndex: 'responsibilitySecretary',
+      }, {
         title: '附件',
-        key: 'files_2',
+        key: 'responsibilityAnnex',
+        dataIndex: 'responsibilityAnnex',
         render(val) {
-          return <a href="#">下载</a>;
+          return <a href={val} download={'附件'}>下载</a>;
         },
       }]
     },
     {
       title: '备注',
-      render(val) {
-        return <span>100万啊实打实的</span>;
-      },
+      dataIndex: 'remark',
     },
     {
       title: '操作',
-      render: (val, record) => (
+      render: (val, record) => {
+        const user = this.props.app.user
+        if(!user.token){
+          return null
+        }
+        const button = user.permissionsMap.button
+        return (
         <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
-          <Divider type="vertical"/>
-          <a onClick={()=>this.handleCheckDetail(true,record)}>查看</a>
+          {getButtons(button, pageButtons[1]) ?
+            <Fragment>
+              <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
+              <Divider type="vertical"/>
+            </Fragment>: null}
+          {getButtons(button, pageButtons[2]) ?
+              <a onClick={() => this.handleCheckDetail(true, record)}>查看</a>
+           : null}
         </Fragment>
-      ),
+      )}
     },
   ];
 
   componentDidMount() {
-    const {dispatch} = this.props;
+    this.getProNames()
     _setTimeOut(() => this.setState({pageLoading: false}), 1000)
-    // setTimeout(() => {
-    //   this.setState({pageLoading:false})
-    // },1000)
-    dispatch({
-      type: 'rule/fetch', payload: {pageSize: 5}
-    });
+    this.getList()
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
@@ -658,20 +704,20 @@ class ProEvaluate extends Component {
   handleUpdateModalVisible = (flag, record) => {
     this.setState({
       updateModalVisible: !!flag,
-      modalVisible:!!flag,
+      modalVisible: !!flag,
       selectedValues: record || {},
     });
   };
 
-  handleCheckDetail=(flag, record) => {
+  handleCheckDetail = (flag, record) => {
     this.setState({
       checkDetail: !!flag,
-      modalVisible:!!flag,
+      modalVisible: !!flag,
       selectedValues: record || {},
     });
   };
 
-  handleAdd = fields => {
+  handleAdd = (fields, updateModalVisible, selectedValues) => {
     // const {dispatch} = this.props;
     // dispatch({
     //   type: 'rule/add',
@@ -679,23 +725,59 @@ class ProEvaluate extends Component {
     //     desc: fields.desc,
     //   },
     // });
-    message.success('添加成功');
-    this.handleModalVisible();
-  };
-
-  handleUpdate = fields => {
-    const {dispatch} = this.props;
-    dispatch({
-      type: 'rule/update',
-      payload: {
-        name: fields.name,
-        desc: fields.desc,
-        key: fields.key,
-      },
-    });
-
-    message.success('配置成功');
-    this.handleUpdateModalVisible();
+    const {dispatch, app: {user}} = this.props;
+    const payload = {
+      projectId: fields.projectId,
+      engineeringType: fields.engineeringType,
+      signTime: fields.signTime,
+      evaluationStatus: fields.evaluationStatus,
+      projectStatus: fields.projectStatus,
+      winningBid: fields.winningBid,
+      effectiveIncome: fields.effectiveIncome,
+      isSign: fields.isSign,
+      duration: fields.duration,
+      contractStartTime: fields.contractStartTime,
+      contractEndTime: fields.contractEndTime,
+      evaluationTime: fields.evaluationTime,
+      evaluationBenefit: fields.evaluationBenefit,
+      evaluationCost: fields.evaluationCost,
+      evaluationCode: fields.evaluationCode,
+      evaluationAnnex: fields.evaluationAnnex,
+      jointHearingBenefit: fields.jointHearingBenefit,
+      jointHearingCost: fields.jointHearingCost,
+      jointHearingTime: fields.jointHearingTime,
+      jointHearingAnnex: fields.jointHearingAnnex,
+      responsibilityBenefiy: fields.responsibilityBenefiy,
+      responsibilityTime: fields.responsibilityTime,
+      responsibilityPeople: fields.responsibilityPeople,
+      responsibilitySecretary: fields.responsibilitySecretary,
+      responsibilityAnnex: fields.responsibilityAnnex,
+    }
+    // return console.log(updateModalVisible)
+    if (updateModalVisible) {
+      //  return console.log(selectedValues.id)
+      dispatch({
+        type: 'proEvaluate/update',
+        payload: {...payload, ...{id: selectedValues.id}},
+        token: user.token
+      }).then(res => {
+        if (res) {
+          this.handleUpdateModalVisible()
+          this.getList()
+        }
+      })
+    } else {
+      dispatch({
+        type: 'proEvaluate/add',
+        payload: payload,
+        token: user.token
+      }).then(res => {
+        if (res) {
+          this.handleModalVisible()
+          this.getList()
+        }
+      })
+    }
   };
 
   renderAdvancedForm() {
@@ -707,27 +789,22 @@ class ProEvaluate extends Component {
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={8} sm={24}>
             <FormItem label="项目名称">
-              {getFieldDecorator('name')(<Input placeholder="请输入"/>)}
+              {getFieldDecorator('projectName')(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="评估状态">
-              {getFieldDecorator('date')(
+              {getFieldDecorator('evaluationStatus')(
                 <Select placeholder="请选择" style={{width: '100%'}}>
-                  <Option value="0">未评估</Option>
-                  <Option value="1">初评</Option>
-                  <Option value="2">复评(二次)</Option>
-                  <Option value="3">复评(三次)</Option>
-                  <Option value="4">复评(四次)</Option>
-                  <Option value="5">定评</Option>
+                  {reStatus.map((a, index) => <Option key={index} value={a}>{a}</Option>)}
                 </Select>
               )}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="项目状态">
-              {getFieldDecorator('date')(
-                <Input placeholder="自动带出"/>
+              {getFieldDecorator('projectStatus')(
+                <Input />
               )}
             </FormItem>
           </Col>
@@ -735,9 +812,9 @@ class ProEvaluate extends Component {
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={8} sm={24}>
             <FormItem label="合同是否签订">
-              {getFieldDecorator('give')(<Select placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">是</Option>
-                <Option value="1">否</Option>
+              {getFieldDecorator('siSign')(<Select placeholder="请选择" style={{width: '100%'}}>
+                <Option value="是">是</Option>
+                <Option value="否">否</Option>
               </Select>)}
             </FormItem>
           </Col>
@@ -780,29 +857,24 @@ class ProEvaluate extends Component {
 
   render() {
     const {
-      rule: {data},
+      proEvaluate: {data, proNames},
       loading,
+      app:{user}
     } = this.props;
-    const {selectedRows, modalVisible, updateModalVisible, pageLoading,selectedValues,checkDetail} = this.state;
-    const menu = (
-      <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
-        <Menu.Item key="edit">编辑</Menu.Item>
-        <Menu.Item key="export">导出</Menu.Item>
-      </Menu>
-    );
-
+    const {selectedRows, modalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail} = this.state;
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
       normFile: this.normFile,
-      handleUpdateModalVisible:this.handleUpdateModalVisible,
-      handleCheckDetail:this.handleCheckDetail
+      handleUpdateModalVisible: this.handleUpdateModalVisible,
+      handleCheckDetail: this.handleCheckDetail
     };
     const parentState = {
-      updateModalVisible:updateModalVisible,
-      modalVisible:modalVisible,
-      selectedValues:selectedValues,
-      checkDetail:checkDetail
+      updateModalVisible: updateModalVisible,
+      modalVisible: modalVisible,
+      selectedValues: selectedValues,
+      checkDetail: checkDetail,
+      proNames: proNames
     }
     return (
       <Page inner={true} loading={pageLoading}>
@@ -811,24 +883,21 @@ class ProEvaluate extends Component {
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
               <div className={styles.tableListOperator}>
-                <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
-                  新增
-                </Button>
-                {selectedRows.length > 0 && (
-                  <span>
-                  <Dropdown overlay={menu}>
-                    <Button>
-                     操作 <Icon type="down"/>
-                    </Button>
-                  </Dropdown>
-                </span>
-                )}
+                {user.token&&getButtons(user.permissionsMap.button,pageButtons[0]) ?
+                  <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+                    新增
+                  </Button> : null}
+                {user.token&&getButtons(user.permissionsMap.button,pageButtons[3]) ?
+                  <Button icon="plus" type="primary">
+                    导出
+                  </Button> : null}
               </div>
               <StandardTable
                 selectedRows={selectedRows}
-                loading={loading.effects['rule/fetch']}
+                loading={loading.effects['proEvaluate/fetch']}
                 bordered
                 data={data}
+                rowKey={'id'}
                 scroll={{x: '250%'}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
@@ -841,8 +910,53 @@ class ProEvaluate extends Component {
       </Page>
     )
   }
+
+  getProNames = (proName = []) => {
+    if (proName.length < 1) {
+      this.props.dispatch(
+        {
+          type: 'proEvaluate/queryProNames',
+          payload: {page: 1, pageSize: 10},
+          token: this.props.app.user.token
+        }
+      )
+    }
+  }
+
+  getList = (page = 1, pageSize = 10) => {
+    this.props.dispatch({
+      type: 'proEvaluate/fetch',
+      payload: {page: page, pageSize: pageSize},
+      token: this.props.app.user.token
+    });
+  }
+
+  searchList = (e, page = 1, pageSize = 10) => {
+    e.preventDefault();
+    this.props.form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      let time = fieldsValue.meteringTime ? fieldsValue.meteringTime.format('YYYY-MM-DD') : null
+      let payload = {
+        page: page,
+        pageSize: pageSize,
+        projectName: fieldsValue.projectName,
+        minPayProportion: fieldsValue.minPayProportion,
+        maxPayProportion: fieldsValue.maxPayProportion,
+        minProductionValue: fieldsValue.minProductionValue,
+        maxProductionValue: fieldsValue.maxProductionValue,
+        meteringTime: time
+      }
+      cleanObject(payload)
+      //  form.resetFields();
+      this.props.dispatch({
+        type: 'proEvaluate/fetch',
+        payload: payload,
+        token: this.props.app.user.token
+      });
+    });
+  }
 }
 
 ProEvaluate.propTypes = {}
 
-export default connect(({app, rule, loading}) => ({app, rule, loading}))(ProEvaluate)
+export default connect(({app, rule, loading, proEvaluate}) => ({app, rule, loading, proEvaluate}))(ProEvaluate)

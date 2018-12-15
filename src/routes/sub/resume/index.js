@@ -20,7 +20,7 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-import {_setTimeOut, getButtons} from "utils";
+import {_setTimeOut, getButtons, cleanObject} from "utils";
 import {proTypes, menuData} from 'common/menu'
 
 
@@ -30,19 +30,27 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const statusMap = ['default', 'processing', 'success', 'error'];
-const status = ['关闭', '运行中', '已上线', '异常'];
+const testValue = '123'
+
 const pageButtons = menuData[11].buttons.map(a => a.permission)
 
 const CreateForm = Form.create()(props => {
-  const {modalVisible, form, handleAdd, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = props;
+  const {modalVisible, form, handleAdd, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail, subNames, teamList, proNames} = props;
 
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       console.log(fieldsValue)
       if (err) return;
+      for (let prop in fieldsValue) {
+        if (fieldsValue[prop] instanceof moment) {
+          // console.log(fieldsValue[prop].format())
+          fieldsValue[prop] = fieldsValue[prop].format('YYYY-MM-DD')
+          //  console.log(fieldsValue[prop])
+        }
+        // console.log(typeof fieldsValue[prop])
+      }
       // form.resetFields();
-      handleAdd(fieldsValue);
+      handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
   };
   return (
@@ -60,11 +68,15 @@ const CreateForm = Form.create()(props => {
         <Row gutter={8}>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="分包商名称">
-              {form.getFieldDecorator('proName', {
-                rules: [{required: true, message: '请选择名称'}],
-              })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">项目1</Option>
-                <Option value="1">项目2</Option>
+              {form.getFieldDecorator('subcontractorId', {
+                rules: [{required: true, message: '请选择项目'}],
+                initialValue: selectedValues.subcontractorId ? selectedValues.subcontractorId : '',
+              })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'}
+                         disabled={checkDetail} placeholder="请选择"
+                         style={{width: '100%'}}>
+                {subNames.map((item, index) => {
+                  return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
+                })}
               </Select>)}
             </FormItem>
           </Col>
@@ -72,15 +84,17 @@ const CreateForm = Form.create()(props => {
         <Row gutter={8}>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="开始日期">
-              {form.getFieldDecorator('proName', {
-                rules: [{required: true}],
+              {form.getFieldDecorator('startTime', {
+                rules: [{required: true, message: '请选择开始日期'}],
+                initialValue: selectedValues.startTime ? moment(selectedValues.startTime) : null
               })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
             </FormItem>
           </Col>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="结束日期">
-              {form.getFieldDecorator('proType', {
-                rules: [{required: true}],
+              {form.getFieldDecorator('endTime', {
+                rules: [{required: true, message: '请选择结束日期'}],
+                initialValue: selectedValues.endTime ? moment(selectedValues.endTime) : null
               })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
             </FormItem>
           </Col>
@@ -88,21 +102,29 @@ const CreateForm = Form.create()(props => {
         <Row gutter={8}>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 12}} label="该时间段所属项目部">
-              {form.getFieldDecorator('proName', {
-                rules: [{required: true}],
-              })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">项目1</Option>
-                <Option value="1">项目2</Option>
+              {form.getFieldDecorator('projectId', {
+                rules: [{required: true, message: '请选择项目'}],
+                initialValue: selectedValues.projectId ? selectedValues.projectId : '',
+              })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'}
+                         onChange={this.onChange} disabled={checkDetail}
+                         placeholder="请选择" style={{width: '100%'}}>
+                {proNames.map((item, index) => {
+                  return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
+                })}
               </Select>)}
             </FormItem>
           </Col>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="项目部队伍名称">
-              {form.getFieldDecorator('proType', {
-                rules: [{required: true}],
-              })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">项目1</Option>
-                <Option value="1">项目2</Option>
+              {form.getFieldDecorator('laborAccountId', {
+                rules: [{required: true, message: '请输入项目部队伍名称'}],
+                initialValue: selectedValues.laborAccountId ? selectedValues.laborAccountId : ''
+              })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'}
+                         onChange={this.onChange} disabled={checkDetail}
+                         placeholder="请选择" style={{width: '100%'}}>
+                {teamList.map((item, index) => {
+                  return <Option key={item.id} item={item} name={item.teamName} value={item.id}>{item.teamName}</Option>
+                })}
               </Select>)}
             </FormItem>
           </Col>
@@ -110,11 +132,12 @@ const CreateForm = Form.create()(props => {
         <Row gutter={8}>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="施工规模">
-              {form.getFieldDecorator('proName', {
+              {form.getFieldDecorator('constructionScale', {
                 rules: [{required: true, message: '请选择施工规模'}],
-              })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">项目1</Option>
-                <Option value="1">项目2</Option>
+                initialValue: selectedValues.constructionScale ? selectedValues.constructionScale : testValue
+              })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
+                <Option value="项目1">项目1</Option>
+                <Option value="项目2">项目2</Option>
               </Select>)}
             </FormItem>
           </Col>
@@ -125,13 +148,13 @@ const CreateForm = Form.create()(props => {
 });
 
 const CreateReview = Form.create()(props => {
-  const {modalVisible, form, handleAdd, handleReviewModal} = props;
+  const {modalVisible, form, handleReview, handleReviewModal,selectedValues} = props;
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       console.log(fieldsValue)
       if (err) return;
       // form.resetFields();
-      handleAdd(fieldsValue);
+      handleReview(fieldsValue,selectedValues);
     });
   };
   return (
@@ -149,12 +172,13 @@ const CreateReview = Form.create()(props => {
         <Row gutter={8}>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 10}} label="信誉评价">
-              {form.getFieldDecorator('proName100', {
+              {form.getFieldDecorator('projectEvaluation', {
                 rules: [{required: true, message: '请选择'}],
+                initialValue:selectedValues.projectEvaluation?selectedValues.projectEvaluation:''
               })(<Select placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">优秀</Option>
-                <Option value="1">合格</Option>
-                <Option value="2">不合格</Option>
+                <Option value="优秀">优秀</Option>
+                <Option value="合格">合格</Option>
+                <Option value="不合格">不合格</Option>
               </Select>)}
             </FormItem>
           </Col>
@@ -162,20 +186,22 @@ const CreateReview = Form.create()(props => {
         <Row gutter={8}>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 10}} label="集团公司信誉评价">
-              {form.getFieldDecorator('proName100', {
+              {form.getFieldDecorator('groupEvaluation', {
                 rules: [{required: true, message: '请选择'}],
+                initialValue:selectedValues.groupEvaluation?selectedValues.groupEvaluation:''
               })(<Select placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">合格</Option>
-                <Option value="1">不合格</Option>
+                <Option value="合格">合格</Option>
+                <Option value="不合格">不合格</Option>
               </Select>)}
             </FormItem>
           </Col>
         </Row>
         <Row gutter={8}>
           <Col md={24} sm={24}>
-            <FormItem style={{marginLeft: 21 + 'px'}} labelCol={{span: 3}} wrapperCol={{span: 15}} label="备注">
-              {form.getFieldDecorator('proSummary', {
-                rules: [{required: true}],
+            <FormItem style={{marginLeft: 21 + 'px'}} labelCol={{span: 3}} wrapperCol={{span: 15}} label="文字评价">
+              {form.getFieldDecorator('projectDescription', {
+                rules: [{required: true,message: '请输入文字评价'}],
+                initialValue:selectedValues.projectDescription?selectedValues.projectDescription:''
               })(<Input.TextArea width={'100%'} placeholder="请输入" rows={4}/>)}
             </FormItem>
           </Col>
@@ -209,81 +235,65 @@ class Resume extends Component {
     },
     {
       title: '分包商全称',
-      dataIndex: 'name',
+      dataIndex: 'subcontractorName',
     },
     {
       title: '队伍名称',
-      render(val) {
-        return <span>四大队</span>;
-      },
+      dataIndex: 'teamName',
     },
     {
       title: '施工规模',
-      render(val) {
-        return <span>大</span>;
-      },
+      dataIndex: 'constructionScale'
     },
     {
       title: '开始日期',
+      dataIndex: 'startTime',
       render(val) {
-        return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
+        return <span>{moment(val).format('YYYY/MM/DD')}</span>;
       },
     },
     {
       title: '结束日期',
+      dataIndex: 'endTime',
       render(val) {
-        return <span>{moment(val.createdAt).format('YYYY/MM/DD')}</span>;
+        return <span>{moment(val).format('YYYY/MM/DD')}</span>;
       },
     },
     {
       title: '该时间段所属项目部',
-      render(val) {
-        return <span>大</span>;
-      },
+      dataIndex: 'projectName'
     },
     {
       title: '合同签订人',
-      render(val) {
-        return <span>大</span>;
-      },
+      dataIndex: 'contractPerson',
     },
     {
       title: '合同签订人联系方式',
-      render(val) {
-        return <span>大</span>;
-      },
+      dataIndex: 'phone'
     },
     {
       title: '合同金额',
-      render(val) {
-        return <span>10万</span>;
-      },
+      dataIndex: 'contractAmount',
     },
     {
-      title: '结束金额',
-      render(val) {
-        return <span>10万</span>;
-      },
+      title: '结算金额',
+      dataIndex: 'settlementAmount',
     },
     {
       title: '项目部评价',
-      render(val) {
-        return <span>优秀</span>;
-      },
+      dataIndex: 'projectEvaluation',
     },
     {
       title: '文字评价',
-      render(val) {
-        return <span>很好很奈斯</span>;
-      },
+      dataIndex: 'projectDescription',
     },
     {
       title: '操作',
       fixed: 'right',
-      width: 175,
+      width: 185,
       render: (val, record) => {
         const user = this.props.app.user
-        if(!user.token){
+        if (!user.token) {
           return null
         }
         const button = user.permissionsMap.button
@@ -296,7 +306,7 @@ class Resume extends Component {
               <a onClick={() => this.handleCheckDetail(true, record)}>查看</a> : null}
             {getButtons(button, pageButtons[4]) ? <Fragment>
               <Divider type="vertical"/>
-              <a onClick={() => this.handleReviewModal(true)}>项目部评价</a>
+              <a onClick={() => this.handleReviewModal(true,record)}>项目部评价</a>
             </Fragment> : null}
             {/* {getButtons(button,pageButtons[3])? <a>导出</a>:null}*/}
           </Fragment>
@@ -306,14 +316,11 @@ class Resume extends Component {
   ];
 
   componentDidMount() {
-    const {dispatch} = this.props;
+    this.getSubNames()
+    this.getTeamNames()
+    this.getProNames()
     _setTimeOut(() => this.setState({pageLoading: false}), 1000)
-    // setTimeout(() => {
-    //   this.setState({pageLoading:false})
-    // },1000)
-    dispatch({
-      type: 'rule/fetch', payload: {pageSize: 5}
-    });
+    this.getList()
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
@@ -343,15 +350,12 @@ class Resume extends Component {
   };
 
   handleFormReset = () => {
-    const {form, dispatch} = this.props;
+    const {form} = this.props;
     form.resetFields();
     this.setState({
       formValues: {},
     });
-    dispatch({
-      type: 'rule/fetch',
-      payload: {},
-    });
+    this.getList()
   };
 
   handleMenuClick = e => {
@@ -384,39 +388,16 @@ class Resume extends Component {
     });
   };
 
-  handleSearch = e => {
-    e.preventDefault();
-
-    const {dispatch, form} = this.props;
-
-    form.validateFields((err, fieldsValue) => {
-      if (err) return;
-
-      const values = {
-        ...fieldsValue,
-        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
-      };
-
-      this.setState({
-        formValues: values,
-      });
-
-      dispatch({
-        type: 'rule/fetch',
-        payload: values,
-      });
-    });
-  };
-
   handleModalVisible = flag => {
     this.setState({
       modalVisible: !!flag,
     });
   };
 
-  handleReviewModal = flag => {
+  handleReviewModal = (flag,record={}) => {
     this.setState({
-      reviewType: !!flag
+      reviewType: !!flag,
+      selectedValues:record
     })
   }
 
@@ -436,7 +417,7 @@ class Resume extends Component {
     });
   };
 
-  handleAdd = fields => {
+  handleAdd = (fields, updateModalVisible, selectedValues) => {
     // const {dispatch} = this.props;
     // dispatch({
     //   type: 'rule/add',
@@ -444,23 +425,68 @@ class Resume extends Component {
     //     desc: fields.desc,
     //   },
     // });
-    message.success('添加成功');
-    this.handleModalVisible();
+    const {dispatch, app: {user}} = this.props;
+    const payload = {
+      projectId: fields.projectId,
+      subcontractorId: fields.subcontractorId,
+      startTime: fields.startTime,
+      endTime: fields.endTime,
+      laborAccountId: fields.laborAccountId,
+      constructionScale: fields.constructionScale,
+    }
+    // return console.log(updateModalVisible)
+    if (updateModalVisible) {
+      //  return console.log(selectedValues.id)
+      dispatch({
+        type: 'sub_resume/update',
+        payload: {...payload, ...{id: selectedValues.id}},
+        token: user.token
+      }).then(res => {
+        if (res) {
+          this.handleUpdateModalVisible()
+          this.getList()
+        }
+      })
+    } else {
+      dispatch({
+        type: 'sub_resume/add',
+        payload: payload,
+        token: user.token
+      }).then(res => {
+        if (res) {
+          this.handleModalVisible()
+          this.getList()
+        }
+      })
+    }
   };
 
-  handleUpdate = fields => {
-    const {dispatch} = this.props;
-    dispatch({
-      type: 'rule/update',
-      payload: {
-        name: fields.name,
-        desc: fields.desc,
-        key: fields.key,
-      },
-    });
-
-    message.success('配置成功');
-    this.handleUpdateModalVisible();
+  handleReview=(fields, selectedValues) => {
+    // const {dispatch} = this.props;
+    // dispatch({
+    //   type: 'rule/add',
+    //   payload: {
+    //     desc: fields.desc,
+    //   },
+    // });
+    const {dispatch, app: {user}} = this.props;
+    const payload = {
+      groupEvaluation: fields.groupEvaluation,
+      projectEvaluation: fields.projectEvaluation,
+      projectDescription: fields.projectDescription
+    }
+    // return console.log(updateModalVisible)
+      //  return console.log(selectedValues.id)
+      dispatch({
+        type: 'sub_resume/update',
+        payload: {...payload, ...{id: selectedValues.id}},
+        token: user.token
+      }).then(res => {
+        if (res) {
+          this.handleReviewModal()
+          this.getList()
+        }
+      })
   };
 
   renderAdvancedForm() {
@@ -468,27 +494,27 @@ class Resume extends Component {
       form: {getFieldDecorator},
     } = this.props;
     return (
-      <Form onSubmit={this.handleSearch} layout="inline">
+      <Form onSubmit={this.searchList} layout="inline">
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={8} sm={24}>
             <FormItem label="分包商全称">
-              {getFieldDecorator('name')(<Input placeholder="请输入"/>)}
+              {getFieldDecorator('subcontractorName')(<Input/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="项目部信誉评价">
-              {getFieldDecorator('date')(
+              {getFieldDecorator('projectEvaluation')(
                 <Select placeholder="请选择" style={{width: '100%'}}>
-                  <Option value="0">优秀</Option>
-                  <Option value="1">合格</Option>
-                  <Option value="1">不合格</Option>
+                  <Option value="优秀">优秀</Option>
+                  <Option value="合格">合格</Option>
+                  <Option value="不合格">不合格</Option>
                 </Select>
               )}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="施工规模">
-              {getFieldDecorator('give')(<Select placeholder="请选择施工规模" style={{width: '100%'}}>
+              {getFieldDecorator('constructionScale')(<Select placeholder="请选择施工规模" style={{width: '100%'}}>
                 <Option value="0">优秀</Option>
                 <Option value="1">合格</Option>
                 <Option value="1">不合格</Option>
@@ -516,7 +542,7 @@ class Resume extends Component {
 
   render() {
     const {
-      rule: {data},
+      sub_resume: {data, subNames, teamList, proNames},
       loading,
       app: {user}
     } = this.props;
@@ -527,13 +553,17 @@ class Resume extends Component {
       handleModalVisible: this.handleModalVisible,
       handleReviewModal: this.handleReviewModal,
       handleUpdateModalVisible: this.handleUpdateModalVisible,
-      handleCheckDetail: this.handleCheckDetail
+      handleCheckDetail: this.handleCheckDetail,
+      handleReview:this.handleReview
     };
     const parentState = {
       updateModalVisible: updateModalVisible,
       modalVisible: modalVisible,
       selectedValues: selectedValues,
-      checkDetail: checkDetail
+      checkDetail: checkDetail,
+      subNames: subNames,
+      teamList: teamList,
+      proNames: proNames
     }
     return (
       <Page inner={true} loading={pageLoading}>
@@ -553,9 +583,10 @@ class Resume extends Component {
               </div>
               <StandardTable
                 selectedRows={selectedRows}
-                loading={loading.effects['rule/fetch']}
+                loading={loading.effects['sub_resume/fetch']}
                 bordered
                 filterMultiple={false}
+                rowKey={'id'}
                 data={data}
                 scroll={{x: '150%'}}
                 columns={this.columns}
@@ -565,13 +596,78 @@ class Resume extends Component {
             </div>
           </Card>
           <CreateForm {...parentMethods} {...parentState}/>
-          <CreateReview {...parentMethods} modalVisible={reviewType}/>
+          <CreateReview {...parentMethods} selectedValues={selectedValues} modalVisible={reviewType}/>
         </PageHeaderWrapper>
       </Page>
     )
+  }
+
+  getProNames = (proName = []) => {
+    if (proName.length < 1) {
+      this.props.dispatch(
+        {
+          type: 'sub_resume/queryProNames',
+          payload: {page: 1, pageSize: 10},
+          token: this.props.app.user.token
+        }
+      )
+    }
+  }
+
+  getSubNames = (subName = []) => {
+    if (subName.length < 1) {
+      this.props.dispatch(
+        {
+          type: 'sub_resume/querySubNames',
+          payload: {page: 1, pageSize: 10},
+          token: this.props.app.user.token
+        }
+      )
+    }
+  }
+
+  getTeamNames = (teamList = []) => {
+    if (teamList.length < 1) {
+      this.props.dispatch(
+        {
+          type: 'sub_resume/queryTeamNames',
+          payload: {page: 1, pageSize: 10},
+          token: this.props.app.user.token
+        }
+      )
+    }
+  }
+
+  getList = (page = 1, pageSize = 10) => {
+    this.props.dispatch({
+      type: 'sub_resume/fetch',
+      payload: {page: page, pageSize: pageSize},
+      token: this.props.app.user.token
+    });
+  }
+
+  searchList = (e, page = 1, pageSize = 10) => {
+    e.preventDefault()
+    this.props.form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      let payload = {
+        page: page,
+        pageSize: pageSize,
+        subcontractorName: fieldsValue.subcontractorName,
+        constructionScale: fieldsValue.constructionScale,
+        projectEvaluation: fieldsValue.projectEvaluation,
+      }
+      cleanObject(payload)
+      //  form.resetFields();
+      this.props.dispatch({
+        type: 'sub_resume/fetch',
+        payload: payload,
+        token: this.props.app.user.token
+      });
+    });
   }
 }
 
 Resume.propTypes = {}
 
-export default connect(({app, rule, loading}) => ({app, rule, loading}))(Resume)
+export default connect(({app, rule, loading, sub_resume}) => ({app, rule, loading, sub_resume}))(Resume)

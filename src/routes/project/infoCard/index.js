@@ -329,7 +329,7 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="项目类别">
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="工程类别">
                 {form.getFieldDecorator('projectType', {
                   rules: [{required: true}],
                   initialValue: selectedValues.projectType ? selectedValues.projectType : '',
@@ -1054,7 +1054,7 @@ class InfoCard extends Component {
     )
   }
 
-  getProNames = (proName) => {
+  getProNames = (proName=[]) => {
     if (proName.length < 1) {
       this.props.dispatch(
         {

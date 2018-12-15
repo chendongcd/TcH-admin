@@ -10,12 +10,12 @@ export async function queryTeamList(params,token) {
   },token);
 }
 
-export async function queryTeamDetail(params) {
-  console.log('请求所属对队伍详情',`${api}/detail/v1.1`)
-  return request(`${api}/detail/v1.1`,{
+export async function queryPerTeamList(params,token) {
+  console.log('请求所属队伍列表',`${api}/only_list/v1.1`)
+  return request(`${api}/only_list/v1.1`,{
     method: 'GET',
     body: params
-  });
+  },token);
 }
 export async function addTeam(params,token) {
   console.log('请求新增所属对队伍',`${api}/add/v1.1`)
