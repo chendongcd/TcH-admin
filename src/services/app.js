@@ -1,10 +1,11 @@
 import Store from 'store';
-import {requestDev,request,config} from 'utils';
+import {requestDev, request, config} from 'utils';
 // 用户登录
-const {apiPrefix,apiDev} = config
+const {apiPrefix, apiDev} = config
+
 export async function signIn(params) {
-  console.log('请求服务了',`${apiDev}/user/login/v1.1`)
-  return request(`${apiDev}/user/login/v1.1`,{
+  console.log('请求服务了', `${apiDev}/user/login/v1.1`)
+  return request(`${apiDev}/user/login/v1.1`, {
     method: 'POST',
     body: params
   });
@@ -17,4 +18,10 @@ export async function signOut() {
   return true;
 }
 
-
+//获取文件上传token
+export async function upLoad() {
+  //console.log(`${apiDev}/file/qiniu_auth/v1.1`)
+  return request(`${apiDev}/file/qiniu_auth/v1.1`, {
+    method: 'GET'
+  })
+}

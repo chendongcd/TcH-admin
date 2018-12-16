@@ -13,7 +13,6 @@ import {
   Button,
   DatePicker,
   Modal,
-  message,
   Badge,
   Divider
 } from 'antd';

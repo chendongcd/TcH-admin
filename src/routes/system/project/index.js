@@ -15,7 +15,7 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-import {_setTimeOut,getButtons} from "utils";
+import {_setTimeOut,getButtons,cleanObject} from "utils";
 import {proTypes,menuData} from 'common/menu'
 
 const FormItem = Form.Item;
@@ -74,7 +74,7 @@ class Project extends Component {
       modalVisible: false,
       updateModalVisible: false,
       selectedRows: [],
-      pageLoading: true,
+      pageLoading: false,
       selectedValues: {}
     }
   }
@@ -156,7 +156,7 @@ class Project extends Component {
   ];
 
   componentDidMount() {
-    _setTimeOut(() => this.setState({pageLoading: false}), 1000)
+   // _setTimeOut(() => this.setState({pageLoading: false}), 1000)
     this.getList()
   }
 
@@ -417,16 +417,19 @@ class Project extends Component {
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
       //  form.resetFields();
+      let payload = {
+        page: page,
+        pageSize: pageSize,
+        projectName: fieldsValue.projectName,
+        code:fieldsValue.code,
+        status:fieldsValue.status
+      }
+      cleanObject(payload)
       this.props.dispatch({
         type: 'sys_pro/queryProList',
-        payload: {
-          page: page,
-          pageSize: pageSize,
-          projectName: fieldsValue.projectName,
-          code:fieldsValue.code,
-          status:fieldsValue.status
-        }
+        payload: payload
       });
+
     });
   }
 }

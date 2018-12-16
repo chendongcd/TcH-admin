@@ -16,7 +16,7 @@ import {
   Collapse,
   Spin
 } from 'antd';
-import {arrayToTree, _setTimeOut, getButtons} from 'utils'
+import {arrayToTree, _setTimeOut, getButtons,cleanObject} from 'utils'
 import {menuData} from '../../../common/menu'
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
@@ -235,7 +235,7 @@ class Permission extends Component {
       selectedRows: [],
       formValues: {},
       drawVisible: false,
-      pageLoading: true,
+      pageLoading: false,
       selectedValues: {}
     }
   }
@@ -282,7 +282,7 @@ class Permission extends Component {
   ];
 
   componentDidMount() {
-    _setTimeOut(() => this.setState({pageLoading: false}), 1000)
+   // _setTimeOut(() => this.setState({pageLoading: false}), 1000)
     this.getList()
     /*dispatch({
       type: 'rule/fetch',
@@ -511,10 +511,13 @@ class Permission extends Component {
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
       //  form.resetFields();
+      let payload = {page: page, pageSize: pageSize, name: fieldsValue.searchName}
+      cleanObject(payload)
       this.props.dispatch({
         type: 'sys_per/query',
-        payload: {page: page, pageSize: pageSize, name: fieldsValue.searchName}
+        payload: payload
       });
+
     });
   }
 }

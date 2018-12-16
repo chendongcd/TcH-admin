@@ -9,17 +9,14 @@ import {
   Form,
   Input,
   Select,
-  Icon,
   Button,
-  Dropdown,
-  Menu,
   Modal,
   Badge,
   Divider,
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-import {_setTimeOut,getButtons} from "utils";
+import {_setTimeOut,getButtons,cleanObject} from "utils";
 import {menuData} from 'common/menu'
 
 const FormItem = Form.Item;
@@ -146,6 +143,7 @@ class User extends Component {
       selectedRows: [],
       formValues: {},
       selectedValues: {},
+      pageLoading: false,
       checkDetail: false
     }
   }
@@ -240,7 +238,7 @@ class User extends Component {
       type:'sys_user/queryUserInfo',
       payload:{userId:1}
     })*/
-    _setTimeOut(() => this.setState({pageLoading: false}), 1000)
+    //_setTimeOut(() => this.setState({pageLoading: false}), 1000)
     this.getList()
     // dispatch({
     //   type: 'rule/fetch',
@@ -311,7 +309,7 @@ class User extends Component {
     const payload = fields.type == "1" ? {
       account: fields.account,
       password: fields.password,
-      projects: fields.proName.map(a => JSON.parse(`{"id":${a}}`)),
+      projects: fields.proName,//fields.proName.map(a => JSON.parse(`{"id":${a}}`))
       type: 1,
       roleId:fields.roleId
     } : {
@@ -492,15 +490,17 @@ class User extends Component {
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
       //  form.resetFields();
+      let payload = {
+        page: page,
+        pageSize: pageSize,
+        name: fieldsValue.name,
+        code:fieldsValue.code,
+        disable:fieldsValue.status
+      }
+      cleanObject(payload)
       this.props.dispatch({
         type: 'sys_user/queryUserList',
-        payload: {
-          page: page,
-          pageSize: pageSize,
-          name: fieldsValue.name,
-          code:fieldsValue.code,
-          disable:fieldsValue.status
-        }
+        payload: payload
       });
     });
   }

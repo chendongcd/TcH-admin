@@ -13,13 +13,12 @@ import {
   Button,
   DatePicker,
   Modal,
-  message,
   Upload,
   Divider
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-import {_setTimeOut, getButtons,cleanObject} from 'utils'
+import {_setTimeOut, getButtons, cleanObject, QiNiuOss,ImageUrl} from 'utils'
 import {menuData} from 'common/menu'
 
 const FormItem = Form.Item;
@@ -35,10 +34,27 @@ const info_css = {
 }
 const testValue = '123'
 const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
-const CreateForm = Form.create()(props => {
-  const {proNames, modalVisible, form, handleAdd, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = props;
+// {
+//   uid: '-1',
+//     name: 'xxx.png',
+//   status: 'done',
+//   url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+// }
+@Form.create()
+class CreateForm extends Component {
 
-  const okHandle = () => {
+  constructor(props) {
+    super(props)
+    this.state = {
+      previewVisible: false,
+      previewImage: '',
+      fileList: [],
+    };
+  }
+
+  okHandle = () => {
+    const {form, handleAdd, updateModalVisible, selectedValues} = this.props;
+
     form.validateFields((err, fieldsValue) => {
       //return
       if (err) return;
@@ -50,188 +66,245 @@ const CreateForm = Form.create()(props => {
       handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
   };
-  //console.log(proNames)
-  return (
-    <Modal
-      destroyOnClose
-      title={checkDetail ? '对上计量台账' : updateModalVisible ? "编辑对上计量台账" : "新增对上计量台账"}
-      bodyStyle={{padding: 0 + 'px'}}
-      visible={modalVisible}
-      width={992}
-      maskClosable={false}
-      onOk={okHandle}
-      onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
-    >
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="项目名称">
-              {form.getFieldDecorator('projectId', {
-                rules: [{required: true, message: '请选择项目'}],
-                initialValue: selectedValues.projectId ? selectedValues.projectId : '',
-              })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'} disabled={checkDetail} placeholder="请选择"
-                         style={{width: '100%'}}>
-                {proNames.map((item, index) => {
-                  return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
-                })}
-              </Select>)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="计量期数">
-              {form.getFieldDecorator('meteringNum', {
-                rules: [{required: true, message: '请输入期数'}],
-                initialValue: selectedValues.meteringNum ? selectedValues.meteringNum : testValue,
-              })(<Input disabled={checkDetail} placeholder="请输入期数"/>)}
-            </FormItem>
-          </Col>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="计量日期">
-              {form.getFieldDecorator('meteringTime', {
-                rules: [{required: true}],
-                initialValue: selectedValues.meteringTime ? moment(selectedValues.meteringTime) : null,
-              })(<DatePicker className={styles.customSelect} disabled={checkDetail} style={{width: '100%'}} placeholder="请选择量日期"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-      </div>
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>预付款金额</div>
-      </Row>
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="预付款">
-              {form.getFieldDecorator('prepaymentAmount', {
-                rules: [{required: true, message: '请输入预付款'}],
-                initialValue: selectedValues.prepaymentAmount ? selectedValues.prepaymentAmount : testValue,
-              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入预付款" addonAfter="元"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-      </div>
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>计价金额</div>
-      </Row>
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="含税金额">
-              {form.getFieldDecorator('valuationAmountTax', {
-                rules: [{required: true, message: '请输入含税金额'}],
-                initialValue: selectedValues.valuationAmountTax ? selectedValues.valuationAmountTax : testValue,
-              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入含税金额" addonAfter="元"/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="税率">
-              {form.getFieldDecorator('tax', {
-                rules: [{required: true, message: '请输入税率'}],
-                initialValue: selectedValues.tax ? selectedValues.tax : testValue,
-              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入税率"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-      </div>
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>实际应支付金额</div>
-      </Row>
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="含税金额">
-              {form.getFieldDecorator('realAmountTax', {
-                rules: [{required: true, message: '请输入含税金额'}],
-                initialValue: selectedValues.realAmountTax ? selectedValues.realAmountTax : testValue,
-              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入含税金额" addonAfter="元"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-      </div>
 
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>资金拨付情况</div>
-      </Row>
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="已支付金额">
-              {form.getFieldDecorator('alreadyPaidAmount', {
-                rules: [{required: true, message: '请输入已支付金额'}],
-                initialValue: selectedValues.alreadyPaidAmount ? selectedValues.alreadyPaidAmount : testValue,
-              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入已支付金额" addonAfter="元"/>)}
-            </FormItem>
-          </Col>
-          <Col style={{paddingTop: 11 + 'px'}} md={8} sm={24}>
-            <span style={info_css}>备注：不含预付款金额</span>
-          </Col>
-        </Row>
-      </div>
+  handleCancel = () => this.setState({previewVisible: false})
 
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>其他计价</div>
-      </Row>
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="超计价金额">
-              {form.getFieldDecorator('extraAmount', {
-                rules: [{required: true, message: '请输入超计价金额'}],
-                initialValue: selectedValues.extraAmount ? selectedValues.extraAmount : testValue,
-              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入超计价金额" addonAfter="元"/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="已完未计价金额">
-              {form.getFieldDecorator('notCalculatedAmount', {
-                rules: [{required: true, message: '请输入已完未计价金额'}],
-                initialValue: selectedValues.notCalculatedAmount ? selectedValues.notCalculatedAmount : testValue,
-              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入已完未计价金额" addonAfter="元"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-      </div>
+  handlePreview = (file) => {
+    this.setState({
+      previewImage: file.url || file.thumbUrl,
+      previewVisible: true,
+    });
+  }
 
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>其他</div>
-      </Row>
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={24} sm={24}>
-            <FormItem style={{marginLeft: 14 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="备注">
-              {form.getFieldDecorator('remark', {
-                rules: [{required: true}],
-                initialValue: selectedValues.remark ? selectedValues.remark : testValue,
-              })(<Input.TextArea className={styles.customSelect} disabled={checkDetail} width={'100%'} placeholder="请输入" rows={4}/>)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={24} sm={24}>
-            <FormItem style={{marginLeft: 14 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="附件">
-              {form.getFieldDecorator('annexUrl', {
-                valuePropName: 'fileList',
-                getValueFromEvent: normFile,
-                //initialValue: selectedValues.annexUrl ? selectedValues.annexUrl : 'https://images.unsplash.com/photo-1543364195-bfe6e4932397?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
-              })(
-                <Upload.Dragger name="files" action="/upload.do">
-                  <p className="ant-upload-drag-icon">
-                    <Icon type="inbox"/>
-                  </p>
-                  <p className="ant-upload-text">点击或拖动附件进入</p>
-                </Upload.Dragger>
-              )}
-              <span style={info_css}>备注：请以一份PDF格式文件上传封面和汇总表</span>
-            </FormItem>
-          </Col>
-        </Row>
-      </div>
+  handleChange = ({fileList}) => {
+    console.log(fileList)
+   // this.setState({ fileList })
+  }
 
-    </Modal>
-  );
-});
+  render() {
+    const {proNames, modalVisible, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
+    let {previewVisible, previewImage, fileList} = this.state
+    //console.log(proNames)
+    return (
+      <Modal
+        destroyOnClose
+        title={checkDetail ? '对上计量台账' : updateModalVisible ? "编辑对上计量台账" : "新增对上计量台账"}
+        bodyStyle={{padding: 0 + 'px'}}
+        visible={modalVisible}
+        width={992}
+        maskClosable={false}
+        onOk={this.okHandle}
+        onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
+      >
+        <div className={styles.modalContent}>
+          <Row gutter={8}>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="项目名称">
+                {form.getFieldDecorator('projectId', {
+                  rules: [{required: true, message: '请选择项目'}],
+                  initialValue: selectedValues.projectId ? selectedValues.projectId : '',
+                })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'}
+                           disabled={checkDetail} placeholder="请选择"
+                           style={{width: '100%'}}>
+                  {proNames.map((item, index) => {
+                    return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
+                  })}
+                </Select>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="计量期数">
+                {form.getFieldDecorator('meteringNum', {
+                  rules: [{required: true, message: '请输入期数'}],
+                  initialValue: selectedValues.meteringNum ? selectedValues.meteringNum : testValue,
+                })(<Input disabled={checkDetail} placeholder="请输入期数"/>)}
+              </FormItem>
+            </Col>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="计量日期">
+                {form.getFieldDecorator('meteringTime', {
+                  rules: [{required: true}],
+                  initialValue: selectedValues.meteringTime ? moment(selectedValues.meteringTime) : null,
+                })(<DatePicker className={styles.customSelect} disabled={checkDetail} style={{width: '100%'}}
+                               placeholder="请选择量日期"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+        <Row align={'middle'} gutter={0} className={styles.titleView}>
+          <div className={styles.title}>预付款金额</div>
+        </Row>
+        <div className={styles.modalContent}>
+          <Row gutter={8}>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="预付款">
+                {form.getFieldDecorator('prepaymentAmount', {
+                  rules: [{required: true, message: '请输入预付款'}],
+                  initialValue: selectedValues.prepaymentAmount ? selectedValues.prepaymentAmount : testValue,
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入预付款" addonAfter="元"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+        <Row align={'middle'} gutter={0} className={styles.titleView}>
+          <div className={styles.title}>计价金额</div>
+        </Row>
+        <div className={styles.modalContent}>
+          <Row gutter={8}>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="含税金额">
+                {form.getFieldDecorator('valuationAmountTax', {
+                  rules: [{required: true, message: '请输入含税金额'}],
+                  initialValue: selectedValues.valuationAmountTax ? selectedValues.valuationAmountTax : testValue,
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入含税金额" addonAfter="元"/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="税率">
+                {form.getFieldDecorator('tax', {
+                  rules: [{required: true, message: '请输入税率'}],
+                  initialValue: selectedValues.tax ? selectedValues.tax : testValue,
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入税率"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+        <Row align={'middle'} gutter={0} className={styles.titleView}>
+          <div className={styles.title}>实际应支付金额</div>
+        </Row>
+        <div className={styles.modalContent}>
+          <Row gutter={8}>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="含税金额">
+                {form.getFieldDecorator('realAmountTax', {
+                  rules: [{required: true, message: '请输入含税金额'}],
+                  initialValue: selectedValues.realAmountTax ? selectedValues.realAmountTax : testValue,
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入含税金额" addonAfter="元"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+
+        <Row align={'middle'} gutter={0} className={styles.titleView}>
+          <div className={styles.title}>资金拨付情况</div>
+        </Row>
+        <div className={styles.modalContent}>
+          <Row gutter={8}>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="已支付金额">
+                {form.getFieldDecorator('alreadyPaidAmount', {
+                  rules: [{required: true, message: '请输入已支付金额'}],
+                  initialValue: selectedValues.alreadyPaidAmount ? selectedValues.alreadyPaidAmount : testValue,
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入已支付金额" addonAfter="元"/>)}
+              </FormItem>
+            </Col>
+            <Col style={{paddingTop: 11 + 'px'}} md={8} sm={24}>
+              <span style={info_css}>备注：不含预付款金额</span>
+            </Col>
+          </Row>
+        </div>
+
+        <Row align={'middle'} gutter={0} className={styles.titleView}>
+          <div className={styles.title}>其他计价</div>
+        </Row>
+        <div className={styles.modalContent}>
+          <Row gutter={8}>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="超计价金额">
+                {form.getFieldDecorator('extraAmount', {
+                  rules: [{required: true, message: '请输入超计价金额'}],
+                  initialValue: selectedValues.extraAmount ? selectedValues.extraAmount : testValue,
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入超计价金额" addonAfter="元"/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="已完未计价金额">
+                {form.getFieldDecorator('notCalculatedAmount', {
+                  rules: [{required: true, message: '请输入已完未计价金额'}],
+                  initialValue: selectedValues.notCalculatedAmount ? selectedValues.notCalculatedAmount : testValue,
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入已完未计价金额" addonAfter="元"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+
+        <Row align={'middle'} gutter={0} className={styles.titleView}>
+          <div className={styles.title}>其他</div>
+        </Row>
+        <div className={styles.modalContent}>
+          <Row gutter={8}>
+            <Col md={24} sm={24}>
+              <FormItem style={{marginLeft: 12 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="备注">
+                {form.getFieldDecorator('remark', {
+                  rules: [{required: true}],
+                  initialValue: selectedValues.remark ? selectedValues.remark : testValue,
+                })(<Input.TextArea className={styles.customSelect} disabled={checkDetail} width={'100%'}
+                                   placeholder="请输入" rows={4}/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={12} sm={24}>
+              <FormItem className="clearfix" style={{marginLeft: 13 + 'px'}} labelCol={{span: 4}}
+                        wrapperCol={{span: 15}} label="附件">
+                {form.getFieldDecorator('annexUrl', {
+                  valuePropName: 'fileList',
+                  getValueFromEvent: normFile,
+                  fileList: fileList
+                  //initialValue: selectedValues.annexUrl ? selectedValues.annexUrl : 'https://images.unsplash.com/photo-1543364195-bfe6e4932397?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
+                })(
+                  <Upload.Dragger onPreview={this.handlePreview}
+                                  onChange={this.handleChange}
+                                 // fileList= {fileList}
+                                  listType="picture-card"
+                                  name="files"
+                                  disabled={fileList.length>0}
+                                  onSuccess={this.onSuccess}
+                                  onError={this.onError}
+                                  onProgress={this.onProgress}
+                                  customRequest={QiNiuOss}>
+                    <p className="ant-upload-drag-icon">
+                      <Icon type="inbox"/>
+                    </p>
+                    <p className="ant-upload-text">点击或拖动附件进入</p>
+                  </Upload.Dragger>
+                )}
+                <span style={info_css}>备注：请以一份PDF格式文件上传封面和汇总表</span>
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+        <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+          <img alt="example" style={{width: '100%'}} src={previewImage}/>
+        </Modal>
+      </Modal>
+    );
+  }
+
+  onProgress = (e) => {
+    console.log('上传进度', e)
+  }
+
+  onError = (error) => {
+    console.log('上传失败', error)
+  }
+
+  onSuccess = (res) => {
+    console.log('上传成功', res)
+    //this.state.fileList.push(ImageUrl+res.key)
+    let file = {
+      uid: '-1',
+      name: 'xxx.png',
+      status: 'done',
+      url: ImageUrl+res.key,
+    }
+    console.log(ImageUrl+res.key)
+    //this.setState({fileList:[file]})
+    this.props.form.setFieldsValue({annexUrl: [file]});
+  }
+}
 
 @Form.create()
 class MeterUp extends Component {
@@ -243,7 +316,7 @@ class MeterUp extends Component {
       updateModalVisible: false,
       selectedRows: [],
       formValues: {},
-      pageLoading: true,
+      pageLoading: false,
       selectedValues: {},
       checkDetail: false
     }
@@ -364,7 +437,6 @@ class MeterUp extends Component {
 
   componentDidMount() {
     this.getProNames([])
-    _setTimeOut(() => this.setState({pageLoading: false}), 1000)
     this.getList()
     /*dispatch({
       type: 'rule/fetch',payload:{pageSize:5}
@@ -515,15 +587,15 @@ class MeterUp extends Component {
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={6} sm={24}>
             <FormItem label="项目名称">
-              {getFieldDecorator('projectName',{
-                initialValue:null
+              {getFieldDecorator('projectName', {
+                initialValue: null
               })(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="计量日期">
-              {getFieldDecorator('meteringTime',{
-                initialValue:null
+              {getFieldDecorator('meteringTime', {
+                initialValue: null
               })(
                 <DatePicker style={{width: '100%'}} placeholder="请选择日期"/>
               )}
@@ -531,13 +603,13 @@ class MeterUp extends Component {
           </Col>
           <Col style={{flexDirection: 'row', display: 'flex'}} md={12} sm={24}>
             <FormItem label="拨付率">
-              {getFieldDecorator('minPayProportion',{
-                initialValue:null
+              {getFieldDecorator('minPayProportion', {
+                initialValue: null
               })(<Input placeholder="请输入" addonAfter={'%'}/>)}
             </FormItem>
             <FormItem style={{marginLeft: 15 + 'px'}} label="至">
-              {getFieldDecorator('maxPayProportion',{
-                initialValue:null
+              {getFieldDecorator('maxPayProportion', {
+                initialValue: null
               })(<Input placeholder="请输入" addonAfter={'%'}/>)}
             </FormItem>
           </Col>
@@ -545,13 +617,13 @@ class MeterUp extends Component {
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col style={{flexDirection: 'row', display: 'flex'}} md={12} sm={24}>
             <FormItem label="产值计价率">
-              {getFieldDecorator('minProductionValue',{
-                initialValue:null
+              {getFieldDecorator('minProductionValue', {
+                initialValue: null
               })(<Input placeholder="请输入" addonAfter={'%'}/>)}
             </FormItem>
             <FormItem style={{marginLeft: 15 + 'px'}} label="至">
-              {getFieldDecorator('maxProductionValue',{
-                initialValue:null
+              {getFieldDecorator('maxProductionValue', {
+                initialValue: null
               })(<Input placeholder="请输入" addonAfter={'%'}/>)}
             </FormItem>
           </Col>
@@ -670,11 +742,11 @@ class MeterUp extends Component {
     });
   }
 
-  searchList = (e,page = 1, pageSize = 10) => {
+  searchList = (e, page = 1, pageSize = 10) => {
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
-      let time = fieldsValue.meteringTime?fieldsValue.meteringTime.format('YYYY-MM-DD'):null
+      let time = fieldsValue.meteringTime ? fieldsValue.meteringTime.format('YYYY-MM-DD') : null
       let payload = {
         page: page,
         pageSize: pageSize,
@@ -690,7 +762,7 @@ class MeterUp extends Component {
       this.props.dispatch({
         type: 'meterUp/fetch',
         payload: payload,
-        token:this.props.app.user.token
+        token: this.props.app.user.token
       });
     });
   }

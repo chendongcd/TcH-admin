@@ -1,7 +1,8 @@
 /* global window */
 import cloneDeep from 'lodash.clonedeep'
 import {menuData} from "../common/menu";
-
+import {upLoad} from '../services/app'
+import * as QiNiu from 'qiniu-js'
 export classnames from 'classnames'
 export config from './config'
 export request from './request'
@@ -122,4 +123,36 @@ export function cleanObject(obj) {
       delete obj[o]
     }
   }
+}
+
+export function uuid(name){
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    let r = Math.random()*16|0, v = c === 'x' ? r : (r&0x3|0x8);
+    return name+v.toString(16);
+  });
+}
+
+export const ImageUrl = 'http://pjno2bd7f.bkt.clouddn.com/'
+
+export async function QiNiuOss(params) {
+ // console.log(params)
+  upLoad().then(res=>{
+   // console.log(res)
+    if(res.code=='200'){
+      let token = res.entity.token
+      let {file,onProgress, onError, onSuccess} = params
+      let putExtra = {
+        fname: file.name,
+        params: {},
+        mimeType: null
+      };
+      let config = {
+        useCdnDomain: true,
+        region: QiNiu.region.z2
+      };
+      let observable = QiNiu.upload(file,file.uid, token, putExtra,config)
+
+      let subscription = observable.subscribe(onProgress, onError, onSuccess) // 这样传参形式也可以
+    }
+  })
 }
