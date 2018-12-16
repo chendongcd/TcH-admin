@@ -68,6 +68,7 @@ export default function request(url, options, token) {
     if (options.method === 'GET') {
       let _url = createURL(url, options.body)
       req.open(options.method, _url)
+      console.log(_url)
     } else {
       req.open(options.method, url)
     }

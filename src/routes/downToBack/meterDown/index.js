@@ -264,7 +264,7 @@ class MeterDown extends Component {
       updateModalVisible: false,
       selectedRows: [],
       formValues: {},
-      pageLoading: true,
+      pageLoading: false,
       selectedValues: {},
       checkDetail: false
     }
@@ -403,7 +403,6 @@ class MeterDown extends Component {
   ];
 
   componentDidMount() {
-    _setTimeOut(() => this.setState({pageLoading: false}), 1000)
     this.getProNames()
     this.getList()
   }

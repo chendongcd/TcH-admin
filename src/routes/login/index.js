@@ -54,6 +54,7 @@ class Login extends Component {
               rules: [
                 {
                   required: true,
+                  message:'请输入用户名'
                 },
               ],
             })(<Input onPressEnter={()=>this.handleOk(validateFieldsAndScroll)} placeholder="Username"/>)}
@@ -63,6 +64,7 @@ class Login extends Component {
               rules: [
                 {
                   required: true,
+                  message:'请输入密码'
                 },
               ],
             })(<Input type="password" onPressEnter={()=>this.handleOk(validateFieldsAndScroll)} placeholder="Password"/>)}
@@ -72,8 +74,8 @@ class Login extends Component {
               登录
             </Button>
             <p>
-              <span>Username：guest</span>
-              <span>Password：guest</span>
+              <span>用户名：admin</span>
+              <span>密码：admin</span>
             </p>
           </Row>
         </form>

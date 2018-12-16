@@ -417,7 +417,7 @@ class PeopleInfo extends Component {
       updateModalVisible: false,
       selectedRows: [],
       formValues: {},
-      pageLoading: true,
+      pageLoading: false,
       selectedValues:{},
       checkDetail:false
     }
@@ -526,7 +526,6 @@ class PeopleInfo extends Component {
 
   componentDidMount() {
    // const {dispatch} = this.props;
-    _setTimeOut(() => this.setState({pageLoading: false}), 1000)
     this.getList()
   }
 

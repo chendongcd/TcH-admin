@@ -524,7 +524,7 @@ class Qualification extends Component {
       updateModalVisible: false,
       selectedRows: [],
       formValues: {},
-      pageLoading: true,
+      pageLoading: false,
       expandForm: false,
       reviewType: -1,
       selectedValues: {},
@@ -650,7 +650,6 @@ class Qualification extends Component {
   ];
 
   componentDidMount() {
-    _setTimeOut(() => this.setState({pageLoading: false}), 1000)
     this.getList()
     // setTimeout(() => {
     //   this.setState({pageLoading:false})
@@ -661,7 +660,6 @@ class Qualification extends Component {
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    const {dispatch} = this.props;
     const {formValues} = this.state;
 
     const filters = Object.keys(filtersArg).reduce((obj, key) => {

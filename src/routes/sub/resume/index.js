@@ -221,7 +221,7 @@ class Resume extends Component {
       updateModalVisible: false,
       selectedRows: [],
       formValues: {},
-      pageLoading: true,
+      pageLoading: false,
       reviewType: false,
       selectedValues: {},
       checkDetail: false
@@ -319,7 +319,6 @@ class Resume extends Component {
     this.getSubNames()
     this.getTeamNames()
     this.getProNames()
-    _setTimeOut(() => this.setState({pageLoading: false}), 1000)
     this.getList()
   }
 

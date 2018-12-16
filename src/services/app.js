@@ -25,3 +25,10 @@ export async function upLoad() {
     method: 'GET'
   })
 }
+
+export function createURL(path, param/*链接和参数*/) {
+  let i, url = ''
+  for (i in param) url += '&' + i + '=' + param[i]
+  return apiDev+path + url.replace(/./, '?')
+}
+

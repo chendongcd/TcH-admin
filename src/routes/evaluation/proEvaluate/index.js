@@ -412,7 +412,7 @@ class ProEvaluate extends Component {
       updateModalVisible: false,
       selectedRows: [],
       formValues: {},
-      pageLoading: true,
+      pageLoading: false,
       selectedValues: {},
       checkDetail: false
     }
@@ -599,7 +599,6 @@ class ProEvaluate extends Component {
 
   componentDidMount() {
     this.getProNames()
-    _setTimeOut(() => this.setState({pageLoading: false}), 1000)
     this.getList()
   }
 

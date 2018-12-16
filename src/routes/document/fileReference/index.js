@@ -99,7 +99,7 @@ class FileReference extends Component {
       updateModalVisible: false,
       selectedRows: [],
       formValues: {},
-      pageLoading: true,
+      pageLoading: false,
       selectedValues:{},
       checkDetail:false
     }
@@ -141,7 +141,6 @@ class FileReference extends Component {
   ];
 
   componentDidMount() {
-    _setTimeOut(() => this.setState({pageLoading: false}), 1000)
     this.getList()
   }
 

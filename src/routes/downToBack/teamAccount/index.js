@@ -338,7 +338,7 @@ class TeamAccount extends Component {
       updateModalVisible: false,
       selectedRows: [],
       formValues: {},
-      pageLoading: true,
+      pageLoading:false,
       comModal: false,
       selectedValues: {},
       checkDetail: false
@@ -503,7 +503,6 @@ class TeamAccount extends Component {
   ];
 
   componentDidMount() {
-    _setTimeOut(() => this.setState({pageLoading: false}), 1000)
     // setTimeout(() => {
     //   this.setState({pageLoading:false})
     // },1000)

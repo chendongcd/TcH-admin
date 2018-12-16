@@ -18,9 +18,10 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-import {_setTimeOut, getButtons} from 'utils'
+import {_setTimeOut, getButtons, cleanObject} from 'utils'
+import {apiDev} from 'utils/config'
 import {menuData} from 'common/menu'
-
+import {createURL} from 'services/app'
 const FormItem = Form.Item;
 const {Option} = Select;
 const getValue = obj =>
@@ -588,9 +589,13 @@ class InfoCard extends Component {
       expandForm: false,
       selectedRows: [],
       formValues: {},
-      pageLoading: true,
+      pageLoading: false,
       selectedValues: {},
       checkDetail: false
+    }
+    this.exportParams = {
+      page:1,
+      pageSize:10
     }
   }
 
@@ -687,6 +692,13 @@ class InfoCard extends Component {
       },
     },
     {
+      title: '下载信息卡',
+      dataIndex: 'id',
+      render(val) {
+        return <a href={`${apiDev}/project/pdf/v1.1?projectInfoId=${val}`} download={'信息卡'}>下载</a>;
+      },
+    },
+    {
       title: '操作',
       fixed: 'right',
       width: 150,
@@ -711,7 +723,6 @@ class InfoCard extends Component {
 
   componentDidMount() {
     this.getProNames([])
-    _setTimeOut(() => this.setState({pageLoading: false}), 1000)
     this.getList()
   }
 
@@ -953,22 +964,22 @@ class InfoCard extends Component {
         </Row> : null}
         <Row>
           <Col md={6} sm={24}>
-          <FormItem label="工程状态">
-            {getFieldDecorator('status', {
-              initialValue: null
-            })(
-              <Select placeholder="请选择" style={{width: '84%'}}>
-                <Option value="0">在建</Option>
-                <Option value="1">完工未结算</Option>
-                <Option value="2">完工已结算</Option>
-                <Option value="3">停工</Option>
-              </Select>
-            )}
-          </FormItem>
-        </Col>
+            <FormItem label="工程状态">
+              {getFieldDecorator('status', {
+                initialValue: null
+              })(
+                <Select placeholder="请选择" style={{width: '84%'}}>
+                  <Option value="0">在建</Option>
+                  <Option value="1">完工未结算</Option>
+                  <Option value="2">完工已结算</Option>
+                  <Option value="3">停工</Option>
+                </Select>
+              )}
+            </FormItem>
+          </Col>
           <div style={{overflow: 'hidden'}}>
             <div style={{float: 'right', marginBottom: 24}}>
-              <Button onClick={()=>this.searchList()} type="primary" htmlType="submit">
+              <Button onClick={() => this.searchList()} type="primary" htmlType="submit">
                 查询
               </Button>
               <Button style={{marginLeft: 8}} onClick={this.handleFormReset}>
@@ -1009,6 +1020,7 @@ class InfoCard extends Component {
       checkDetail: checkDetail,
       proNames: proNames
     }
+    const exportUrl = createURL(`/project/export/v1.1`,this.exportParams)
     return (
       <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="工程项目信息卡">
@@ -1021,7 +1033,7 @@ class InfoCard extends Component {
                     新增
                   </Button> : null}
                 {user.token && getButtons(user.permissionsMap.button, pageButtons[3]) ?
-                  <Button icon="plus" type="primary">
+                  <Button href={exportUrl}  icon="plus" type="primary">
                     导出
                   </Button> : null}
                 {/* {selectedRows.length > 0 && (
@@ -1053,7 +1065,7 @@ class InfoCard extends Component {
     )
   }
 
-  getProNames = (proName=[]) => {
+  getProNames = (proName = []) => {
     if (proName.length < 1) {
       this.props.dispatch(
         {
@@ -1073,20 +1085,23 @@ class InfoCard extends Component {
     });
   }
 
-  searchList = (page = 1,pageSize = 10) => {
+  searchList = (page = 1, pageSize = 10) => {
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
       //  form.resetFields();
+      let payload = {
+        page: page,
+        pageSize: pageSize,
+        projectName: fieldsValue.projectName,
+        projectManager: fieldsValue.manager,
+        projectSecretary: fieldsValue.secretary,
+        projectEngineer: fieldsValue.engineer,
+      }
+      cleanObject(payload)
+      this.exportParams = payload
       this.props.dispatch({
         type: 'pro_proInfo/fetch',
-        payload: {
-          page: page,
-          pageSize: pageSize,
-          projectName: fieldsValue.projectName,
-          projectManager: fieldsValue.manager,
-          projectSecretary: fieldsValue.secretary,
-          projectEngineer: fieldsValue.engineer,
-        },
+        payload: payload,
         token: this.props.app.user.token
       });
     });
