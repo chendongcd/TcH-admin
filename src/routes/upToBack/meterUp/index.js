@@ -438,9 +438,6 @@ class MeterUp extends Component {
   componentDidMount() {
     this.getProNames([])
     this.getList()
-    /*dispatch({
-      type: 'rule/fetch',payload:{pageSize:5}
-    });*/
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {

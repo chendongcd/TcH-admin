@@ -309,7 +309,7 @@ class User extends Component {
     const payload = fields.type == "1" ? {
       account: fields.account,
       password: fields.password,
-      projects: fields.proName,//fields.proName.map(a => JSON.parse(`{"id":${a}}`))
+      projects: [{id:fields.proName}],//fields.proName.map(a => JSON.parse(`{"id":${a}}`))
       type: 1,
       roleId:fields.roleId
     } : {
