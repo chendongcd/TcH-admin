@@ -33,10 +33,10 @@ const info_css = {
   color: '#fa541c'
 }
 const vType = ['过程计价', '中期结算', '末次结算'];
-const testValue = '123'
+const testValue = ''
 const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
 const CreateForm = Form.create()(props => {
-  const {modalVisible, proNames, form, handleAdd, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = props;
+  const {modalVisible, proNames,subNames, form, handleAdd, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = props;
 
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
@@ -83,10 +83,16 @@ const CreateForm = Form.create()(props => {
           </Col>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="分包商名称">
-              {form.getFieldDecorator('subcontractorName', {
-                rules: [{required: true}],
-                initialValue: selectedValues.subcontractorName ? selectedValues.subcontractorName : '',
-              })(<Input disabled={checkDetail} placehloder='请输入分包商名称'/>)}
+              {form.getFieldDecorator('subcontractorId', {
+                rules: [{required: true, message: '请选择项目'}],
+                initialValue: selectedValues.subcontractorId ? selectedValues.subcontractorId : '',
+              })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'}
+                         disabled={checkDetail} placeholder="请选择"
+                         style={{width: '100%'}}>
+                {subNames.map((item, index) => {
+                  return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
+                })}
+              </Select>)}
             </FormItem>
           </Col>
         </Row>
@@ -405,6 +411,7 @@ class MeterDown extends Component {
   componentDidMount() {
     this.getProNames()
     this.getList()
+    this.getSubNames()
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
@@ -512,7 +519,8 @@ class MeterDown extends Component {
       valuationPerson: fields.valuationPerson,
       valuationPeriod: fields.valuationPeriod,
       teamName: fields.teamName,
-      subcontractorName: fields.subcontractorName,
+      subcontractorId: fields.subcontractorId,
+      subcontractorName: selectedValues.subcontractorName,
       shouldAmount: fields.shouldAmount,
       remark: fields.remark,
       annexUrl: fields.annexUrl,
@@ -626,7 +634,7 @@ class MeterDown extends Component {
 
   render() {
     const {
-      meterDown: {data, proNames},
+      meterDown: {data, proNames,subNames},
       loading,
       app: {user}
     } = this.props;
@@ -644,7 +652,8 @@ class MeterDown extends Component {
       modalVisible: modalVisible,
       selectedValues: selectedValues,
       checkDetail: checkDetail,
-      proNames: proNames
+      proNames: proNames,
+      subNames:subNames
     }
     return (
       <Page inner={true} loading={pageLoading}>
@@ -725,6 +734,18 @@ class MeterDown extends Component {
         token: this.props.app.user.token
       });
     });
+  }
+
+  getSubNames = (subName = []) => {
+    if (subName.length < 1) {
+      this.props.dispatch(
+        {
+          type: 'meterDown/querySubNames',
+          payload: {page: 1, pageSize: 10},
+          token: this.props.app.user.token
+        }
+      )
+    }
   }
 }
 

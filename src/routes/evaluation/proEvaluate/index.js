@@ -28,7 +28,7 @@ const getValue = obj =>
     .map(key => obj[key])
     .join(',');
 const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
-const testValue = '123'
+const testValue = ''
 const reStatus = ["未评估", "初评", "复评(二次)", "复评(三次)", "复评(四次)", "定评"]
 const info_css = {
   color: '#fa541c'

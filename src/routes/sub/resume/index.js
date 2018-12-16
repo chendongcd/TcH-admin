@@ -30,7 +30,7 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const testValue = '123'
+const testValue = ''
 
 const pageButtons = menuData[11].buttons.map(a => a.permission)
 
@@ -69,15 +69,15 @@ const CreateForm = Form.create()(props => {
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="分包商名称">
               {form.getFieldDecorator('subcontractorId', {
-                rules: [{required: true, message: '请选择项目'}],
-                initialValue: selectedValues.subcontractorId ? selectedValues.subcontractorId : '',
-              })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'}
-                         disabled={checkDetail} placeholder="请选择"
-                         style={{width: '100%'}}>
-                {subNames.map((item, index) => {
-                  return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
-                })}
-              </Select>)}
+              rules: [{required: true, message: '请选择项目'}],
+              initialValue: selectedValues.subcontractorId ? selectedValues.subcontractorId : '',
+            })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'}
+                       disabled={checkDetail} placeholder="请选择"
+                       style={{width: '100%'}}>
+              {subNames.map((item, index) => {
+                return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
+              })}
+            </Select>)}
             </FormItem>
           </Col>
         </Row>

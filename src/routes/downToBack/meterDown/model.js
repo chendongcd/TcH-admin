@@ -1,5 +1,6 @@
 import {addDown, queryDownList, updateDown} from "../../../services/downToBack/meterDown";
 import {queryProPerList} from "../../../services/system/sys_project";
+import {querySubList} from "../../../services/sub/resume";
 export default {
   namespace: 'meterDown',
 
@@ -9,6 +10,7 @@ export default {
       pagination: {},
     },
     proNames:[],
+    subNames: [],
   },
 
   effects: {
@@ -48,6 +50,16 @@ export default {
         })
       }
     },
+    * querySubNames({payload, token}, {call, put}) {
+      const response = yield call(querySubList, payload, token);
+      console.log(response)
+      if (response.code == '200') {
+        yield put({
+          type: 'saveSubName',
+          payload: response.entity
+        })
+      }
+    },
   },
 
   reducers: {
@@ -61,6 +73,12 @@ export default {
       return{
         ...state,
         proNames:action.payload
+      }
+    },
+    saveSubName(state, action) {
+      return {
+        ...state,
+        subNames: action.payload
       }
     },
   },
