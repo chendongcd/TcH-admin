@@ -21,6 +21,7 @@ import styles from './index.less'
 import {_setTimeOut, getButtons, cleanObject} from 'utils'
 import {apiDev} from 'utils/config'
 import {menuData} from 'common/menu'
+import {PRO_PDF,PRO_EXPORT} from 'common/urls'
 import {createURL} from 'services/app'
 const FormItem = Form.Item;
 const {Option} = Select;
@@ -695,7 +696,7 @@ class InfoCard extends Component {
       title: '下载信息卡',
       dataIndex: 'id',
       render(val) {
-        return <a href={`${apiDev}/project/pdf/v1.1?projectInfoId=${val}`} download={'信息卡'}>下载</a>;
+        return <a href={apiDev+PRO_PDF+val} download={'信息卡'}>下载</a>;
       },
     },
     {
@@ -1020,7 +1021,7 @@ class InfoCard extends Component {
       checkDetail: checkDetail,
       proNames: proNames
     }
-    const exportUrl = createURL(`/project/export/v1.1`,this.exportParams)
+    const exportUrl = createURL(PRO_PDF,this.exportParams)
     return (
       <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="工程项目信息卡">

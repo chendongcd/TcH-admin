@@ -15,7 +15,7 @@ export const UP_EXPORT = '/inspection/export/v1.1 '
 export const PEOPLE_EXPORT = '/people/export/v1.1'
 
 //PDF下载URL
-export const PRO_PDF = '/project/pdf/v1.1'
+export const PRO_PDF = '/project/pdf/v1.1?projectInfoId='
 
 export const SUB_QUA_PDF = '/subcontractor/pdf/v1.1'
 
