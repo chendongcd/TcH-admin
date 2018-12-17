@@ -135,24 +135,28 @@ export function uuid(name){
 export const ImageUrl = 'http://pjno2bd7f.bkt.clouddn.com/'
 
 export async function QiNiuOss(params) {
- // console.log(params)
-  upLoad().then(res=>{
-   // console.log(res)
-    if(res.code=='200'){
-      let token = res.entity.token
-      let {file,onProgress, onError, onSuccess} = params
-      let putExtra = {
-        fname: file.name,
-        params: {},
-        mimeType: null
-      };
-      let config = {
-        useCdnDomain: true,
-        region: QiNiu.region.z2
-      };
-      let observable = QiNiu.upload(file,file.uid, token, putExtra,config)
+  return new Promise(function (resolve, reject) {
+    upLoad().then(res => {
+      // console.log(res)
+      if (res.code == '200') {
+        let token = res.entity.token
+        let {file, onProgress, onError, onSuccess} = params
+        let putExtra = {
+          fname: file.name,
+          params: {},
+          mimeType: null
+        };
+        let config = {
+          useCdnDomain: true,
+          region: QiNiu.region.z2
+        };
+        let observable = QiNiu.upload(file, file.uid, token, putExtra, config)
 
-      let subscription = observable.subscribe(onProgress, onError, onSuccess) // 这样传参形式也可以
-    }
+        let subscription = observable.subscribe(onProgress, onError, onSuccess) // 这样传参形式也可以
+
+        resolve(subscription)
+      }
+      reject(false)
+    })
   })
 }

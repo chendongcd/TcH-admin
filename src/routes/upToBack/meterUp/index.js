@@ -16,10 +16,12 @@ import {
   Upload,
   Divider
 } from 'antd';
-import {Page, PageHeaderWrapper, StandardTable} from 'components'
+import {Page, PageHeaderWrapper, StandardTable, PreFile} from 'components'
 import styles from './index.less'
-import {_setTimeOut, getButtons, cleanObject, QiNiuOss,ImageUrl} from 'utils'
+import {getButtons, cleanObject, QiNiuOss, ImageUrl} from 'utils'
 import {menuData} from 'common/menu'
+import {METER_EXPORT} from 'common/urls'
+import {createURL} from 'services/app'
 
 const FormItem = Form.Item;
 const {Option} = Select;
@@ -48,8 +50,21 @@ class CreateForm extends Component {
     this.state = {
       previewVisible: false,
       previewImage: '',
-      fileList: [],
+      fileList: [
+//         {
+//   uid: '-1',
+//     name: 'xxx.png',
+//   status: 'done',
+//   url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+// }
+      ],
+      progress: 0
     };
+    this.upload = null
+  }
+
+  componentDidMount() {
+    // console.log(this.upload)
   }
 
   okHandle = () => {
@@ -76,16 +91,17 @@ class CreateForm extends Component {
     });
   }
 
+  componentWillUnmount() {
+    this.upload = null
+  }
+
   handleChange = ({fileList}) => {
-    console.log(fileList)
-   // this.setState({ fileList })
+    this.setState({fileList})
   }
 
   render() {
     const {proNames, modalVisible, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
-    let {previewVisible, previewImage, fileList} = this.state
-    console.log(proNames)
-
+    let {previewVisible, previewImage, fileList, progress} = this.state
     return (
       <Modal
         destroyOnClose
@@ -247,32 +263,35 @@ class CreateForm extends Component {
             </Col>
           </Row>
           <Row gutter={8}>
-            <Col md={12} sm={24}>
-              <FormItem className="clearfix" style={{marginLeft: 13 + 'px'}} labelCol={{span: 4}}
+            <Col md={24} sm={24}>
+              <FormItem style={{marginLeft: 15 + 'px'}} labelCol={{span: 2}}
                         wrapperCol={{span: 15}} label="附件">
                 {form.getFieldDecorator('annexUrl', {
                   valuePropName: 'fileList',
                   getValueFromEvent: normFile,
-                  fileList: fileList
-                  //initialValue: selectedValues.annexUrl ? selectedValues.annexUrl : 'https://images.unsplash.com/photo-1543364195-bfe6e4932397?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
+                  initialValue: selectedValues.annexUrl ? selectedValues.annexUrl : [],
                 })(
-                  <Upload.Dragger onPreview={this.handlePreview}
-                                  onChange={this.handleChange}
-                                 // fileList= {fileList}
-                                  listType="picture-card"
-                                  name="files"
-                                  disabled={fileList.length>0}
-                                  onSuccess={this.onSuccess}
-                                  onError={this.onError}
-                                  onProgress={this.onProgress}
-                                  customRequest={QiNiuOss}>
+                  <Upload.Dragger
+                    onChange={this.handleChange}
+                    accept={'image/*'}
+                    showUploadList={false}
+                    // fileList={fileList}
+                    listType="picture"
+                    name="files"
+                    disabled={fileList.length > 0}
+                    onSuccess={this.onSuccess}
+                    handleManualRemove={this.remove}
+                    onError={this.onError}
+                    onProgress={this.onProgress}
+                    customRequest={this.onUpload}>
                     <p className="ant-upload-drag-icon">
                       <Icon type="inbox"/>
                     </p>
                     <p className="ant-upload-text">点击或拖动附件进入</p>
                   </Upload.Dragger>
                 )}
-                <span style={info_css}>备注：请以一份PDF格式文件上传封面和汇总表</span>
+                <PreFile onClose={this.remove} onPreview={this.handlePreview} progress={progress} file={fileList[0]}/>
+                <span style={info_css}>备注：请以一份图片格式文件上传封面和汇总表</span>
               </FormItem>
             </Col>
           </Row>
@@ -284,8 +303,16 @@ class CreateForm extends Component {
     );
   }
 
+  onUpload = (params) => {
+     QiNiuOss(params).then(res=>{
+       this.upload = res
+     })
+  }
+
   onProgress = (e) => {
-    console.log('上传进度', e)
+    //  console.log(Upload.autoUpdateProgress)
+    this.setState({progress: parseInt(e.total.percent)})
+    // console.log('上传进度', e)
   }
 
   onError = (error) => {
@@ -297,13 +324,22 @@ class CreateForm extends Component {
     //this.state.fileList.push(ImageUrl+res.key)
     let file = {
       uid: '-1',
-      name: 'xxx.png',
+      name: this.state.fileList[0].name,
       status: 'done',
-      url: ImageUrl+res.key,
+      url: ImageUrl + res.key,
     }
-    console.log(ImageUrl+res.key)
-    //this.setState({fileList:[file]})
+    console.log(ImageUrl + res.key)
+    this.setState({fileList: [file]})
     this.props.form.setFieldsValue({annexUrl: [file]});
+  }
+
+  remove = (res) => {
+    if (res.status == 'done') {
+      this.props.form.setFieldsValue({annexUrl: []});
+    } else {
+      this.upload.unsubscribe()
+    }
+    this.setState({fileList:[]})
   }
 }
 
@@ -320,6 +356,10 @@ class MeterUp extends Component {
       pageLoading: false,
       selectedValues: {},
       checkDetail: false
+    }
+    this.exportParams = {
+      page:1,
+      pageSize:10
     }
   }
 
@@ -676,6 +716,7 @@ class MeterUp extends Component {
       checkDetail: checkDetail,
       proNames: proNames
     }
+    const exportUrl = createURL(METER_EXPORT,this.exportParams)
     return (
       <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="对上计量台账">
@@ -688,7 +729,7 @@ class MeterUp extends Component {
                     新增
                   </Button> : null}
                 {user.token && getButtons(user.permissionsMap.button, pageButtons[3]) ?
-                  <Button icon="plus" type="primary">
+                  <Button href={exportUrl} icon="plus" type="primary">
                     导出
                   </Button> : null}
                 {/* {selectedRows.length > 0 && (
@@ -757,6 +798,7 @@ class MeterUp extends Component {
       }
       cleanObject(payload)
       //  form.resetFields();
+      this.exportParams = payload
       this.props.dispatch({
         type: 'meterUp/fetch',
         payload: payload,

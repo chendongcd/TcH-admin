@@ -6,6 +6,7 @@ import * as MyLayout from './Layout/index.js'
 import PageHeader from './PageHeader'
 import PageHeaderWrapper from './PageHeaderWrapper'
 import StandardTable from './StandardTable'
+import PreFile from './preFile'
 export {
   MyLayout,
   Iconfont,
@@ -13,5 +14,6 @@ export {
   Page,
   PageHeader,
   PageHeaderWrapper,
-  StandardTable
+  StandardTable,
+  PreFile
 }
