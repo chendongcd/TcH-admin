@@ -1021,7 +1021,7 @@ class InfoCard extends Component {
       checkDetail: checkDetail,
       proNames: proNames
     }
-    const exportUrl = createURL(PRO_PDF,this.exportParams)
+    const exportUrl = createURL(PRO_EXPORT,this.exportParams)
     return (
       <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="工程项目信息卡">

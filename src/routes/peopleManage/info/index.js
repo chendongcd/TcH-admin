@@ -13,12 +13,17 @@ import {
   DatePicker,
   Modal,
   Divider,
+  Icon,
+  Upload
 } from 'antd';
-import {Page, PageHeaderWrapper, StandardTable} from 'components'
+import {Page, PageHeaderWrapper, StandardTable,PreFile} from 'components'
 import styles from './index.less'
-import {_setTimeOut,getButtons,cleanObject} from 'utils'
+import {getButtons,cleanObject,QiNiuOss, ImageUrl} from 'utils'
 import {menuData} from "../../../common/menu";
-
+import {PEOPLE_EXPORT,PEOPLE_PDF} from 'common/urls'
+import {apiDev} from 'utils/config'
+import {exportExc} from 'services/app'
+import {createURL} from 'services/app'
 const FormItem = Form.Item;
 
 const {Option} = Select;
@@ -29,10 +34,30 @@ const getValue = obj =>
 const pageButtons = menuData[16].buttons.map(a => a.permission)
 const testValue = ''
 const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
-const CreateForm = Form.create()(props => {
-  const {modalVisible, form, handleAdd, handleModalVisible,handleUpdateModalVisible,updateModalVisible,handleCheckDetail,selectedValues,checkDetail} = props;
+const info_css = {
+  color: '#fa541c',
+  textAlign:'center',
+  marginLeft:18
+}
 
-  const okHandle = () => {
+
+@Form.create()
+class CreateForm extends Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      previewVisible: false,
+      previewImage: '',
+      fileList: [],
+      progress: 0
+    };
+    this.upload = null
+  }
+
+  okHandle = () => {
+    const {form, handleAdd, updateModalVisible, selectedValues} = this.props;
+
     form.validateFields((err, fieldsValue) => {
       console.log(fieldsValue)
       if (err) return;
@@ -49,6 +74,28 @@ const CreateForm = Form.create()(props => {
       handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
   };
+
+  handleCancel = () => this.setState({previewVisible: false})
+
+  handlePreview = (file) => {
+    this.setState({
+      previewImage: file.url || file.thumbUrl,
+      previewVisible: true,
+    });
+  }
+
+  componentWillUnmount() {
+    this.upload = null
+  }
+
+  handleChange = ({fileList}) => {
+    this.setState({fileList})
+  }
+
+  render(){
+  const {modalVisible, form, handleModalVisible,handleUpdateModalVisible,updateModalVisible,handleCheckDetail,selectedValues,checkDetail,normFile} = this.props;
+    let {previewVisible, previewImage, fileList, progress} = this.state
+
   return (
     <Modal
       destroyOnClose
@@ -57,7 +104,7 @@ const CreateForm = Form.create()(props => {
       visible={modalVisible}
       width={992}
       maskClosable={false}
-      onOk={okHandle}
+      onOk={this.okHandle}
       onCancel={() => checkDetail?handleCheckDetail():updateModalVisible?handleUpdateModalVisible():handleModalVisible()}
     >
       <div className={styles.modalContent}>
@@ -377,6 +424,37 @@ const CreateForm = Form.create()(props => {
         </Row>
         <Row gutter={8}>
           <Col md={24} sm={24}>
+            <FormItem style={{marginLeft:0}} labelCol={{span: 3}} wrapperCol={{span: 15}} label="附件">
+              {form.getFieldDecorator('headUrl', {
+                valuePropName: 'fileList',
+                getValueFromEvent: normFile,
+                initialValue: selectedValues.annexUrl ? selectedValues.annexUrl : [],
+              })(
+                <Upload.Dragger onChange={this.handleChange}
+                                accept={'image/*'}
+                                showUploadList={false}
+                  // fileList={fileList}
+                                listType="picture"
+                                name="files"
+                                disabled={fileList.length > 0}
+                                onSuccess={this.onSuccess}
+                                handleManualRemove={this.remove}
+                                onError={this.onError}
+                                onProgress={this.onProgress}
+                                customRequest={this.onUpload}>
+                  <p className="ant-upload-drag-icon">
+                    <Icon type="inbox"/>
+                  </p>
+                  <p className="ant-upload-text">点击或拖动附件进入</p>
+                </Upload.Dragger>
+              )}
+              <PreFile onClose={this.remove} onPreview={this.handlePreview} progress={progress} file={fileList[0]}/>
+              <span style={info_css}>上传本人头像</span>
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={8}>
+          <Col md={24} sm={24}>
             <FormItem labelCol={{span: 3}} wrapperCol={{span: 15}} label="备注">
               {form.getFieldDecorator('remark', {
                 rules: [{required: false}],
@@ -403,9 +481,49 @@ const CreateForm = Form.create()(props => {
           </Col>
         </Row>*/}
       </div>
+      <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+        <img alt="example" style={{width: '100%'}} src={previewImage}/>
+      </Modal>
     </Modal>
-  );
-});
+  )}
+
+  onUpload = (params) => {
+    QiNiuOss(params).then(res=>{
+      this.upload = res
+    })
+  }
+
+  onProgress = (e) => {
+    //  console.log(Upload.autoUpdateProgress)
+    this.setState({progress: parseInt(e.total.percent)})
+    // console.log('上传进度', e)
+  }
+
+  onError = (error) => {
+    console.log('上传失败', error)
+  }
+
+  onSuccess = (res) => {
+    //this.state.fileList.push(ImageUrl+res.key)
+    let file = {
+      uid: '-1',
+      name: this.state.fileList[0].name,
+      status: 'done',
+      url: ImageUrl + res.key,
+    }
+    this.setState({fileList: [file]})
+    this.props.form.setFieldsValue({headUrl: [file]});
+  }
+
+  remove = (res) => {
+    if (res.status == 'done') {
+      this.props.form.setFieldsValue({headUrl: []});
+    } else {
+      this.upload.unsubscribe()
+    }
+    this.setState({fileList:[]})
+  }
+}
 
 @Form.create()
 class PeopleInfo extends Component {
@@ -420,6 +538,10 @@ class PeopleInfo extends Component {
       pageLoading: false,
       selectedValues:{},
       checkDetail:false
+    }
+    this.exportParams = {
+      page:1,
+      pageSize:10
     }
   }
 
@@ -499,6 +621,14 @@ class PeopleInfo extends Component {
       dataIndex: 'remark'
     },
     {
+      title: '简历下载',
+      dataIndex: 'id',
+      render: (val, record) => {
+        return (
+            <a href={apiDev+PEOPLE_PDF+val} download={'信息卡'}>下载</a>
+        )}
+    },
+    {
       title: '操作',
       render: (val, record) => {
         const user = this.props.app.user
@@ -518,7 +648,6 @@ class PeopleInfo extends Component {
               <a onClick={()=>this.handleCheckDetail(true,record)}>查看</a>
               <Divider type="vertical"/>
             </Fragment>: null}
-          <a>下载简历</a>
         </Fragment>
       )}
     },
@@ -776,7 +905,8 @@ class PeopleInfo extends Component {
       handleModalVisible: this.handleModalVisible,
       normFile: this.normFile,
       handleUpdateModalVisible:this.handleUpdateModalVisible,
-      handleCheckDetail:this.handleCheckDetail
+      handleCheckDetail:this.handleCheckDetail,
+
     };
     const parentState = {
       updateModalVisible:updateModalVisible,
@@ -784,6 +914,7 @@ class PeopleInfo extends Component {
       selectedValues:selectedValues,
       checkDetail:checkDetail
     }
+    const exportUrl = createURL(PEOPLE_EXPORT,this.exportParams)
     return (
       <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="人员信息">
@@ -796,7 +927,7 @@ class PeopleInfo extends Component {
                     新增
                   </Button> : null}
                 {user.token&&getButtons(user.permissionsMap.button,pageButtons[3]) ?
-                  <Button icon="plus" type="primary">
+                  <Button href={exportUrl} icon="plus" type="primary">
                     导出
                   </Button> : null}
               </div>
@@ -841,6 +972,7 @@ class PeopleInfo extends Component {
         firstDegreeLevel: fieldsValue.firstDegreeLevel
       }
       cleanObject(payload)
+      this.exportParams = payload
       this.props.dispatch({
         type: 'peopleManage/fetch',
         payload: payload,

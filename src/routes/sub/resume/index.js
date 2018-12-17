@@ -9,21 +9,18 @@ import {
   Form,
   Input,
   Select,
-  Icon,
   Button,
-  Dropdown,
-  Menu,
   DatePicker,
   Modal,
-  message,
   Divider,
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-import {_setTimeOut, getButtons, cleanObject} from "utils";
-import {proTypes, menuData} from 'common/menu'
+import {getButtons, cleanObject} from "utils";
+import { menuData} from 'common/menu'
 
-
+import {SUB_RES_EXPORT} from 'common/urls'
+import {createURL} from 'services/app'
 const FormItem = Form.Item;
 const {Option} = Select;
 const getValue = obj =>
@@ -225,6 +222,10 @@ class Resume extends Component {
       reviewType: false,
       selectedValues: {},
       checkDetail: false
+    }
+    this.exportParams = {
+      page:1,
+      pageSize:10
     }
   }
 
@@ -564,6 +565,7 @@ class Resume extends Component {
       teamList: teamList,
       proNames: proNames
     }
+    const exportUrl = createURL(SUB_RES_EXPORT,this.exportParams)
     return (
       <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="分包商履历">
@@ -576,7 +578,7 @@ class Resume extends Component {
                     新增
                   </Button> : null}
                 {user.token && getButtons(user.permissionsMap.button, pageButtons[3]) ?
-                  <Button icon="plus" type="primary">
+                  <Button href={exportUrl} icon="plus" type="primary">
                     导出
                   </Button> : null}
               </div>

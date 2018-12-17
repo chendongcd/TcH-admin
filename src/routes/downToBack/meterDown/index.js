@@ -13,15 +13,15 @@ import {
   Button,
   DatePicker,
   Modal,
-  message,
   Upload,
   Divider,
 } from 'antd';
-import {Page, PageHeaderWrapper, StandardTable} from 'components'
+import {Page, PageHeaderWrapper, StandardTable,PreFile} from 'components'
 import styles from './index.less'
-import {_setTimeOut, getButtons, cleanObject} from 'utils'
+import { getButtons, cleanObject,QiNiuOss, ImageUrl} from 'utils'
 import {menuData} from 'common/menu'
-
+import {DOWN_EXPORT} from 'common/urls'
+import {exportExc} from 'services/app'
 const pageButtons = menuData[14].buttons.map(a => a.permission)
 const FormItem = Form.Item;
 const {Option} = Select;
@@ -35,230 +35,317 @@ const info_css = {
 const vType = ['过程计价', '中期结算', '末次结算'];
 const testValue = ''
 const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
-const CreateForm = Form.create()(props => {
-  const {modalVisible, proNames,subNames, form, handleAdd, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = props;
 
-  const okHandle = () => {
+
+@Form.create()
+class CreateForm extends Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      previewVisible: false,
+      previewImage: '',
+      fileList: [],
+      progress: 0
+    };
+    this.upload = null
+  }
+
+  okHandle = () => {
+    const {form, handleAdd, updateModalVisible, selectedValues} = this.props;
     form.validateFields((err, fieldsValue) => {
       console.log(fieldsValue)
       if (err) return;
       for (let prop in fieldsValue) {
         if (fieldsValue[prop] instanceof moment) {
-          // console.log(fieldsValue[prop].format())
           fieldsValue[prop] = fieldsValue[prop].format('YYYY-MM-DD')
-          //  console.log(fieldsValue[prop])
         }
         // console.log(typeof fieldsValue[prop])
       }
-      fieldsValue.annexUrl = testPDF
       // form.resetFields();
       handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
   };
-  return (
-    <Modal
-      destroyOnClose
-      title={checkDetail ? '对下验工计价台账' : updateModalVisible ? "编辑对下验工计价台账" : "新增对下验工计价台账"}
-      bodyStyle={{padding: 0 + 'px'}}
-      visible={modalVisible}
-      width={992}
-      maskClosable={false}
-      onOk={okHandle}
-      onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
-    >
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="项目名称">
-              {form.getFieldDecorator('projectId', {
-                rules: [{required: true, message: '请选择项目'}],
-                initialValue: selectedValues.projectId ? selectedValues.projectId : '',
-              })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'}
-                         disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
-                {proNames.map((item, index) => {
-                  return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
-                })}
-              </Select>)}
-            </FormItem>
-          </Col>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="分包商名称">
-              {form.getFieldDecorator('subcontractorId', {
-                rules: [{required: true, message: '请选择项目'}],
-                initialValue: selectedValues.subcontractorId ? selectedValues.subcontractorId : '',
-              })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'}
-                         disabled={checkDetail} placeholder="请选择"
-                         style={{width: '100%'}}>
-                {subNames.map((item, index) => {
-                  return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
-                })}
-              </Select>)}
-            </FormItem>
-          </Col>
+
+  handleCancel = () => this.setState({previewVisible: false})
+
+  handlePreview = (file) => {
+    this.setState({
+      previewImage: file.url || file.thumbUrl,
+      previewVisible: true,
+    });
+  }
+
+  componentWillUnmount() {
+    this.upload = null
+  }
+
+  handleChange = ({fileList}) => {
+    this.setState({fileList})
+  }
+
+  render() {
+    const {modalVisible, proNames, subNames, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
+    let {previewVisible, previewImage, fileList, progress} = this.state
+
+    return (
+      <Modal
+        destroyOnClose
+        title={checkDetail ? '对下验工计价台账' : updateModalVisible ? "编辑对下验工计价台账" : "新增对下验工计价台账"}
+        bodyStyle={{padding: 0 + 'px'}}
+        visible={modalVisible}
+        width={992}
+        maskClosable={false}
+        onOk={this.okHandle}
+        onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
+      >
+        <div className={styles.modalContent}>
+          <Row gutter={8}>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="项目名称">
+                {form.getFieldDecorator('projectId', {
+                  rules: [{required: true, message: '请选择项目'}],
+                  initialValue: selectedValues.projectId ? selectedValues.projectId : '',
+                })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'}
+                           disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
+                  {proNames.map((item, index) => {
+                    return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
+                  })}
+                </Select>)}
+              </FormItem>
+            </Col>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="分包商名称">
+                {form.getFieldDecorator('subcontractorId', {
+                  rules: [{required: true, message: '请选择项目'}],
+                  initialValue: selectedValues.subcontractorId ? selectedValues.subcontractorId : '',
+                })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'}
+                           disabled={checkDetail} placeholder="请选择"
+                           style={{width: '100%'}}>
+                  {subNames.map((item, index) => {
+                    return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
+                  })}
+                </Select>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="队伍名称">
+                {form.getFieldDecorator('teamName', {
+                  rules: [{required: true}],
+                  initialValue: selectedValues.teamName ? selectedValues.teamName : testValue,
+                })(<Input disabled={checkDetail} placehloder='请输入队伍名称'/>)}
+              </FormItem>
+            </Col>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="合同金额">
+                {form.getFieldDecorator('contractPrice', {
+                  rules: [{required: true}],
+                  initialValue: selectedValues.contractPrice ? selectedValues.contractPrice : testValue,
+                })(<Input disabled={checkDetail} placehloder='请输入合同金额'/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="计价期数">
+                {form.getFieldDecorator('valuationPeriod', {
+                  rules: [{required: true, message: '请输入期数'}],
+                  initialValue: selectedValues.valuationPeriod ? selectedValues.valuationPeriod : testValue,
+                })(<Input disabled={checkDetail} placeholder="请输入期数"/>)}
+              </FormItem>
+            </Col>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="计价日期">
+                {form.getFieldDecorator('valuationTime', {
+                  rules: [{required: true}],
+                  initialValue: selectedValues.valuationTime ? moment(selectedValues.valuationPeriod) : null,
+                })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="计价类型">
+                {form.getFieldDecorator('valuationType', {
+                  rules: [{required: true, message: '请选择计价类型'}],
+                  initialValue: selectedValues.valuationType ? selectedValues.valuationType : testValue,
+                })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择"
+                           style={{width: '100%'}}>
+                  <Option value="0">过程结算</Option>
+                  <Option value="1">中期结算</Option>
+                  <Option value="2">末次结算</Option>
+                </Select>)}
+              </FormItem>
+            </Col>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="计价负责人">
+                {form.getFieldDecorator('valuationPerson', {
+                  rules: [{required: true}],
+                  initialValue: selectedValues.valuationPerson ? selectedValues.valuationPerson : testValue,
+                })(<Input disabled={checkDetail} placehloder='请输入计价负责人'/>)}
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+        <Row align={'middle'} gutter={0} className={styles.titleView}>
+          <div className={styles.title}>计价金额</div>
         </Row>
-        <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="队伍名称">
-              {form.getFieldDecorator('teamName', {
-                rules: [{required: true}],
-                initialValue: selectedValues.teamName ? selectedValues.teamName : testValue,
-              })(<Input disabled={checkDetail} placehloder='请输入队伍名称'/>)}
-            </FormItem>
-          </Col>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="合同金额">
-              {form.getFieldDecorator('contractPrice', {
-                rules: [{required: true}],
-                initialValue: selectedValues.contractPrice ? selectedValues.contractPrice : testValue,
-              })(<Input disabled={checkDetail} placehloder='请输入合同金额'/>)}
-            </FormItem>
-          </Col>
+        <div className={styles.modalContent}>
+          <Row gutter={8}>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="计价总金额">
+                {form.getFieldDecorator('valuationPrice', {
+                  rules: [{required: true, message: '请输入计价总金额'}],
+                  initialValue: selectedValues.valuationPrice ? selectedValues.valuationPrice : testValue,
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入计价总金额" addonAfter="元"/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="扣款">
+                {form.getFieldDecorator('valuationPriceReduce', {
+                  rules: [{required: true, message: '请输入扣款金额'}],
+                  initialValue: selectedValues.valuationPriceReduce ? selectedValues.valuationPriceReduce : testValue,
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入扣款金额" addonAfter="元"/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="扣除保质金">
+                {form.getFieldDecorator('warranty', {
+                  rules: [{required: true, message: '请输入扣除保质金'}],
+                  initialValue: selectedValues.warranty ? selectedValues.warranty : testValue,
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入扣除保质金" addonAfter="元"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="扣除覆约保质金">
+                {form.getFieldDecorator('performanceBond', {
+                  rules: [{required: true, message: '请输入预付款'}],
+                  initialValue: selectedValues.performanceBond ? selectedValues.performanceBond : testValue,
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入扣除覆约保质金" addonAfter="元"/>)}
+              </FormItem>
+            </Col>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="计日工及补偿费用">
+                {form.getFieldDecorator('compensation', {
+                  rules: [{required: true, message: '请输入预付款'}],
+                  initialValue: selectedValues.compensation ? selectedValues.compensation : testValue,
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入计日工及补偿费用" addonAfter="元"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="应支付金额">
+                {form.getFieldDecorator('shouldAmount', {
+                  rules: [{required: true, message: '请输入应支付金额'}],
+                  initialValue: selectedValues.shouldAmount ? selectedValues.shouldAmount : testValue,
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入应支付金额" addonAfter="元"/>)}
+              </FormItem>
+            </Col>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="已完未计">
+                {form.getFieldDecorator('endedPrice', {
+                  rules: [{required: true, message: '请输入已完未计'}],
+                  initialValue: selectedValues.endedPrice ? selectedValues.endedPrice : testValue,
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入已完未计" addonAfter="元"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+        <Row align={'middle'} gutter={0} className={styles.titleView}>
+          <div className={styles.title}>其他</div>
         </Row>
-        <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="计价期数">
-              {form.getFieldDecorator('valuationPeriod', {
-                rules: [{required: true, message: '请输入期数'}],
-                initialValue: selectedValues.valuationPeriod ? selectedValues.valuationPeriod : testValue,
-              })(<Input disabled={checkDetail} placeholder="请输入期数"/>)}
-            </FormItem>
-          </Col>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="计价日期">
-              {form.getFieldDecorator('valuationTime', {
-                rules: [{required: true}],
-                initialValue: selectedValues.valuationTime ? moment(selectedValues.valuationPeriod) : null,
-              })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="计价类型">
-              {form.getFieldDecorator('valuationType', {
-                rules: [{required: true, message: '请选择计价类型'}],
-                initialValue: selectedValues.valuationType ? selectedValues.valuationType : testValue,
-              })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择"
-                         style={{width: '100%'}}>
-                <Option value="0">过程结算</Option>
-                <Option value="1">中期结算</Option>
-                <Option value="2">末次结算</Option>
-              </Select>)}
-            </FormItem>
-          </Col>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="计价负责人">
-              {form.getFieldDecorator('valuationPerson', {
-                rules: [{required: true}],
-                initialValue: selectedValues.valuationPerson ? selectedValues.valuationPerson : testValue,
-              })(<Input disabled={checkDetail} placehloder='请输入计价负责人'/>)}
-            </FormItem>
-          </Col>
-        </Row>
-      </div>
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>计价金额</div>
-      </Row>
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="计价总金额">
-              {form.getFieldDecorator('valuationPrice', {
-                rules: [{required: true, message: '请输入计价总金额'}],
-                initialValue: selectedValues.valuationPrice ? selectedValues.valuationPrice : testValue,
-              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入计价总金额" addonAfter="元"/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="扣款">
-              {form.getFieldDecorator('valuationPriceReduce', {
-                rules: [{required: true, message: '请输入扣款金额'}],
-                initialValue: selectedValues.valuationPriceReduce ? selectedValues.valuationPriceReduce : testValue,
-              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入扣款金额" addonAfter="元"/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="扣除保质金">
-              {form.getFieldDecorator('warranty', {
-                rules: [{required: true, message: '请输入扣除保质金'}],
-                initialValue: selectedValues.warranty ? selectedValues.warranty : testValue,
-              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入扣除保质金" addonAfter="元"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="扣除覆约保质金">
-              {form.getFieldDecorator('performanceBond', {
-                rules: [{required: true, message: '请输入预付款'}],
-                initialValue: selectedValues.performanceBond ? selectedValues.performanceBond : testValue,
-              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入扣除覆约保质金" addonAfter="元"/>)}
-            </FormItem>
-          </Col>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="计日工及补偿费用">
-              {form.getFieldDecorator('compensation', {
-                rules: [{required: true, message: '请输入预付款'}],
-                initialValue: selectedValues.compensation ? selectedValues.compensation : testValue,
-              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入计日工及补偿费用" addonAfter="元"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="应支付金额">
-              {form.getFieldDecorator('shouldAmount', {
-                rules: [{required: true, message: '请输入应支付金额'}],
-                initialValue: selectedValues.shouldAmount ? selectedValues.shouldAmount : testValue,
-              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入应支付金额" addonAfter="元"/>)}
-            </FormItem>
-          </Col>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="已完未计">
-              {form.getFieldDecorator('endedPrice', {
-                rules: [{required: true, message: '请输入已完未计'}],
-                initialValue: selectedValues.endedPrice ? selectedValues.endedPrice : testValue,
-              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入已完未计" addonAfter="元"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-      </div>
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>其他</div>
-      </Row>
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={24} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="备注">
-              {form.getFieldDecorator('remark', {
-                rules: [{required: false}],
-                initialValue: selectedValues.remark ? selectedValues.remark : testValue,
-              })(<Input.TextArea disabled={checkDetail} width={'100%'} placeholder="请输入" rows={4}/>)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={24} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="附件">
-              {form.getFieldDecorator('dragger', {
-                valuePropName: 'fileList',
-                getValueFromEvent: normFile,
-              })(
-                <Upload.Dragger name="files" action="/upload.do">
-                  <p className="ant-upload-drag-icon">
-                    <Icon type="inbox"/>
-                  </p>
-                  <p className="ant-upload-text">点击或拖动附件进入</p>
-                </Upload.Dragger>
-              )}
-              <span style={info_css}>备注：中期计价附件（封面、验工计价批复表、汇总表；末次计价附件（公司批复的《劳务结算审批》、结算资料），请以一份PDF格式文件上传</span>
-            </FormItem>
-          </Col>
-        </Row>
-      </div>
-    </Modal>
-  );
-});
+        <div className={styles.modalContent}>
+          <Row gutter={8}>
+            <Col md={24} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="备注">
+                {form.getFieldDecorator('remark', {
+                  rules: [{required: false}],
+                  initialValue: selectedValues.remark ? selectedValues.remark : testValue,
+                })(<Input.TextArea disabled={checkDetail} width={'100%'} placeholder="请输入" rows={4}/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={24} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="附件">
+                {form.getFieldDecorator('annexUrl', {
+                  valuePropName: 'fileList',
+                  getValueFromEvent: normFile,
+                  initialValue: selectedValues.annexUrl ? selectedValues.annexUrl : [],
+                })(
+                  <Upload.Dragger onChange={this.handleChange}
+                                  accept={'image/*'}
+                                  showUploadList={false}
+                    // fileList={fileList}
+                                  listType="picture"
+                                  name="files"
+                                  disabled={fileList.length > 0}
+                                  onSuccess={this.onSuccess}
+                                  handleManualRemove={this.remove}
+                                  onError={this.onError}
+                                  onProgress={this.onProgress}
+                                  customRequest={this.onUpload}>
+                    <p className="ant-upload-drag-icon">
+                      <Icon type="inbox"/>
+                    </p>
+                    <p className="ant-upload-text">点击或拖动附件进入</p>
+                  </Upload.Dragger>
+                )}
+                <PreFile onClose={this.remove} onPreview={this.handlePreview} progress={progress} file={fileList[0]}/>
+                <span style={info_css}>备注：中期计价附件（封面、验工计价批复表、汇总表；末次计价附件（公司批复的《劳务结算审批》、结算资料），请以一份PDF格式文件上传</span>
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+        <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+        <img alt="example" style={{width: '100%'}} src={previewImage}/>
+      </Modal>
+      </Modal>
+    )
+  }
+
+  onUpload = (params) => {
+    QiNiuOss(params).then(res=>{
+      this.upload = res
+    })
+  }
+
+  onProgress = (e) => {
+    //  console.log(Upload.autoUpdateProgress)
+    this.setState({progress: parseInt(e.total.percent)})
+    // console.log('上传进度', e)
+  }
+
+  onError = (error) => {
+    console.log('上传失败', error)
+  }
+
+  onSuccess = (res) => {
+    //this.state.fileList.push(ImageUrl+res.key)
+    let file = {
+      uid: '-1',
+      name: this.state.fileList[0].name,
+      status: 'done',
+      url: ImageUrl + res.key,
+    }
+    this.setState({fileList: [file]})
+    this.props.form.setFieldsValue({annexUrl: [file]});
+  }
+
+  remove = (res) => {
+    if (res.status == 'done') {
+      this.props.form.setFieldsValue({annexUrl: []});
+    } else {
+      this.upload.unsubscribe()
+    }
+    this.setState({fileList:[]})
+  }
+}
 
 @Form.create()
 class MeterDown extends Component {
@@ -273,6 +360,10 @@ class MeterDown extends Component {
       pageLoading: false,
       selectedValues: {},
       checkDetail: false
+    }
+    this.exportParams = {
+      page:1,
+      pageSize:10
     }
   }
 
@@ -634,7 +725,7 @@ class MeterDown extends Component {
 
   render() {
     const {
-      meterDown: {data, proNames,subNames},
+      meterDown: {data, proNames, subNames},
       loading,
       app: {user}
     } = this.props;
@@ -653,7 +744,7 @@ class MeterDown extends Component {
       selectedValues: selectedValues,
       checkDetail: checkDetail,
       proNames: proNames,
-      subNames:subNames
+      subNames: subNames
     }
     return (
       <Page inner={true} loading={pageLoading}>
@@ -667,7 +758,7 @@ class MeterDown extends Component {
                     新增
                   </Button> : null}
                 {user.token && getButtons(user.permissionsMap.button, pageButtons[3]) ?
-                  <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+                  <Button onClick={()=>exportExc(DOWN_EXPORT,this.exportParams,user.token)} icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                     导出
                   </Button> : null}
               </div>
@@ -728,6 +819,7 @@ class MeterDown extends Component {
       }
 
       cleanObject(payload)
+      this.exportParams = payload
       this.props.dispatch({
         type: 'meterDown/fetch',
         payload: payload,

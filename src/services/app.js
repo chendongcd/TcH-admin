@@ -1,7 +1,7 @@
 import Store from 'store';
-import {requestDev, request, config} from 'utils';
+import {request, config} from 'utils';
 // 用户登录
-const {apiPrefix, apiDev} = config
+const { apiDev} = config
 
 export async function signIn(params) {
   console.log('请求服务了', `${apiDev}/user/login/v1.1`)
@@ -26,9 +26,18 @@ export async function upLoad() {
   })
 }
 
-export function createURL(path, param/*链接和参数*/) {
+/*链接和参数*/
+export function createURL(path, param) {
   let i, url = ''
   for (i in param) url += '&' + i + '=' + param[i]
   return apiDev+path + url.replace(/./, '?')
+}
+
+/*带TOKEN的导出*/
+export function exportExc(path, params,token) {
+  return request(apiDev+path, {
+    method: 'GET',
+    body: params
+  },token,true);
 }
 

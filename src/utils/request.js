@@ -62,30 +62,31 @@ function createURL(path, param/*链接和参数*/) {
   return path + url.replace(/./, '?')
 }
 
-export default function request(url, options, token) {
+export default function request(url, options, token,isExport=false) {
   return new Promise(function (resolve, reject) {
     var req = new XMLHttpRequest()
     if (options.method === 'GET') {
       let _url = createURL(url, options.body)
       req.open(options.method, _url)
-      console.log(_url)
     } else {
       req.open(options.method, url)
     }
     req.setRequestHeader('Content-Type', 'application/json')
     if (token) {
-      // console.log(token)
+       console.log(token)
       // console.log(url)
       req.setRequestHeader('Authorization', `${token}`)
     }
 
     req.onload = function () {
-    //  console.log(req)
-      if (req.readyState === 4 && req.status == 200) {
+      console.log(req)
+      if(!isExport) {
+        if (req.readyState === 4 && req.status == 200) {
           checkStatus(JSON.parse(req.response))
-        resolve(JSON.parse(req.response))
-      } else {
-        reject(Error(req.statusText))
+          resolve(JSON.parse(req.response))
+        } else {
+          reject(Error(req.statusText))
+        }
       }
     }
     req.onerror = function () {

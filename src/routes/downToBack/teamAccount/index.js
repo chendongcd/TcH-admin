@@ -13,15 +13,15 @@ import {
   Button,
   DatePicker,
   Modal,
-  message,
   Upload,
   Divider,
 } from 'antd';
-import {Page, PageHeaderWrapper, StandardTable} from 'components'
+import {Page, PageHeaderWrapper, StandardTable,PreFile} from 'components'
 import styles from './index.less'
-import {_setTimeOut, getButtons,cleanObject} from 'utils'
+import { getButtons,cleanObject,QiNiuOss, ImageUrl} from 'utils'
 import {menuData} from 'common/menu'
-
+import {TEAM_EXPORT} from 'common/urls'
+import {exportExc} from 'services/app'
 const pageButtons = menuData[13].buttons.map(a => a.permission)
 const FormItem = Form.Item;
 const {Option} = Select;
@@ -35,15 +35,29 @@ const info_css = {
 const teamStatus = ['正在施工', '完工待结算', '已结算']
 const testValue = ''
 const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
-const CreateForm = Form.create()(props => {
-  const {modalVisible, proNames,subNames, form, handleAdd, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = props;
 
-  const okHandle = () => {
+
+@Form.create()
+class CreateForm extends Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      previewVisible: false,
+      previewImage: '',
+      fileList: [],
+      progress: 0
+    };
+    this.upload = null
+  }
+
+  okHandle = () => {
+    const {form, handleAdd, updateModalVisible, selectedValues} = this.props;
+
     form.validateFields((err, fieldsValue) => {
       console.log(fieldsValue)
       if (err) return;
       // form.resetFields();
-      fieldsValue.annexUrl = testPDF
       for (let prop in fieldsValue) {
         if (fieldsValue[prop] instanceof moment) {
           // console.log(fieldsValue[prop].format())
@@ -53,195 +67,273 @@ const CreateForm = Form.create()(props => {
       handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
   };
-  return (
-    <Modal
-      destroyOnClose
-      title={checkDetail ? '队伍台账' : updateModalVisible ? "编辑台账" : "新增台账"}
-      bodyStyle={{padding: 0 + 'px'}}
-      visible={modalVisible}
-      width={992}
-      maskClosable={false}
-      onOk={okHandle}
-      onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
-    >
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="项目名称">
-              {form.getFieldDecorator('projectId', {
-                rules: [{required: true, message: '请选择项目'}],
-                initialValue: selectedValues.projectId ? selectedValues.projectId : '',
-              })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'}
-                         disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
-                {proNames.map((item, index) => {
-                  return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
-                })}
-              </Select>)}
-            </FormItem>
-          </Col>
+
+  handleCancel = () => this.setState({previewVisible: false})
+
+  handlePreview = (file) => {
+    this.setState({
+      previewImage: file.url || file.thumbUrl,
+      previewVisible: true,
+    });
+  }
+
+  componentWillUnmount() {
+    this.upload = null
+  }
+
+  handleChange = ({fileList}) => {
+    this.setState({fileList})
+  }
+
+  render() {
+    const {modalVisible, proNames, subNames, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
+    let {previewVisible, previewImage, fileList, progress} = this.state
+
+    return (
+      <Modal
+        destroyOnClose
+        title={checkDetail ? '队伍台账' : updateModalVisible ? "编辑台账" : "新增台账"}
+        bodyStyle={{padding: 0 + 'px'}}
+        visible={modalVisible}
+        width={992}
+        maskClosable={false}
+        onOk={this.okHandle}
+        onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
+      >
+        <div className={styles.modalContent}>
+          <Row gutter={8}>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="项目名称">
+                {form.getFieldDecorator('projectId', {
+                  rules: [{required: true, message: '请选择项目'}],
+                  initialValue: selectedValues.projectId ? selectedValues.projectId : '',
+                })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'}
+                           disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
+                  {proNames.map((item, index) => {
+                    return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
+                  })}
+                </Select>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同类型">
+                {form.getFieldDecorator('contractType', {
+                  rules: [{required: true, message: '请选择合同类型'}],
+                  initialValue: selectedValues.contractType ? selectedValues.contractType : '',
+                })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择"
+                           style={{width: '100%'}}>
+                  <Option value="0">主合同</Option>
+                  <Option value="1">补充合同</Option>
+                </Select>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={0}>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="分包商名称">
+                {form.getFieldDecorator('subcontractorId', {
+                  rules: [{required: true, message: '请选择项目'}],
+                  initialValue: selectedValues.subcontractorId ? selectedValues.subcontractorId : '',
+                })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'}
+                           disabled={checkDetail} placeholder="请选择"
+                           style={{width: '100%'}}>
+                  {subNames.map((item, index) => {
+                    return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
+                  })}
+                </Select>)}
+              </FormItem>
+            </Col>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="队伍名称">
+                {form.getFieldDecorator('teamName', {
+                  rules: [{required: true, message: '请输入队伍名称'}],
+                  initialValue: selectedValues.teamName ? selectedValues.teamName : testValue,
+                })(<Input disabled={checkDetail} placeholder="请输入队伍名称"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={0}>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同签订日期">
+                {form.getFieldDecorator('contractTime', {
+                  rules: [{required: true, message: '请选择合同签订日期'}],
+                  initialValue: selectedValues.contractTime ? moment(selectedValues.contractTime) : null,
+                })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
+              </FormItem>
+            </Col>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="预计合同金额">
+                {form.getFieldDecorator('estimatedContractAmount', {
+                  rules: [{required: true, message: '请输入预计合同金额'}],
+                  initialValue: selectedValues.estimatedContractAmount ? selectedValues.estimatedContractAmount : testValue
+                })(<Input disabled={checkDetail} placeholder="请输入预计合同金额" addonAfter='元'/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={0}>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="施工范围">
+                {form.getFieldDecorator('constructionScope', {
+                  rules: [{required: true, message: '请输入施工范围'}],
+                  initialValue: selectedValues.constructionScope ? selectedValues.constructionScope : testValue
+                })(<Input disabled={checkDetail} placeholder="请输入施工范围"/>)}
+              </FormItem>
+            </Col>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="队伍状态">
+                {form.getFieldDecorator('status', {
+                  rules: [{required: true, message: '请选择队伍状态'}],
+                  initialValue: selectedValues.status ? selectedValues.status : ''
+                })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择队伍状态"
+                           style={{width: '100%'}}>
+                  <Option value="0">正在施工</Option>
+                  <Option value="1">完工待结算</Option>
+                  <Option value="2">已完结</Option>
+                </Select>)}
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+        <Row align={'middle'} gutter={0} className={styles.titleView}>
+          <div className={styles.title}>覆约保证金</div>
         </Row>
-        <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同类型">
-              {form.getFieldDecorator('contractType', {
-                rules: [{required: true, message: '请选择合同类型'}],
-                initialValue: selectedValues.contractType ? selectedValues.contractType : '',
-              })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择"
-                         style={{width: '100%'}}>
-                <Option value="0">主合同</Option>
-                <Option value="1">补充合同</Option>
-              </Select>)}
-            </FormItem>
-          </Col>
+        <div className={styles.modalContent}>
+          <Row gutter={8}>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="应缴金额">
+                {form.getFieldDecorator('shouldAmount', {
+                  rules: [{required: true, message: '请输入应缴金额'}],
+                  initialValue: selectedValues.shouldAmount ? selectedValues.shouldAmount : testValue
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入应缴金额" addonAfter="万元"/>)}
+              </FormItem>
+            </Col>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="实缴金额">
+                {form.getFieldDecorator('realAmount', {
+                  rules: [{required: true, message: '请输入实缴金额'}],
+                  initialValue: selectedValues.realAmount ? selectedValues.realAmount : testValue
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入实缴金额" addonAfter="万元"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+        <Row align={'middle'} gutter={0} className={styles.titleView}>
+          <div className={styles.title}>负责人</div>
         </Row>
-        <Row gutter={0}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="分包商名称">
-              {form.getFieldDecorator('subcontractorId', {
-                rules: [{required: true, message: '请选择项目'}],
-                initialValue: selectedValues.subcontractorId ? selectedValues.subcontractorId : '',
-              })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'}
-                         disabled={checkDetail} placeholder="请选择"
-                         style={{width: '100%'}}>
-                {subNames.map((item, index) => {
-                  return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
-                })}
-              </Select>)}
-            </FormItem>
-          </Col>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="队伍名称">
-              {form.getFieldDecorator('teamName', {
-                rules: [{required: true,message:'请输入队伍名称'}],
-                initialValue: selectedValues.teamName ? selectedValues.teamName : testValue,
-              })(<Input disabled={checkDetail} placeholder="请输入队伍名称"/>)}
-            </FormItem>
-          </Col>
+        <div className={styles.modalContent}>
+          <Row gutter={8}>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同签订人">
+                {form.getFieldDecorator('contractPerson', {
+                  rules: [{required: true, message: '请输入合同签订人'}],
+                  initialValue: selectedValues.contractPerson ? selectedValues.contractPerson : testValue
+                })(<Input disabled={checkDetail} placeholder="请输入合同签订人"/>)}
+              </FormItem>
+            </Col>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 12}} label="合同签订人联系电话">
+                {form.getFieldDecorator('phone', {
+                  rules: [{required: true, message: '请输入合同签订人联系电话'}],
+                  initialValue: selectedValues.phone ? selectedValues.phone : testValue
+                })(<Input disabled={checkDetail} placeholder="请输入合同签订人联系电话"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+        <Row align={'middle'} gutter={0} className={styles.titleView}>
+          <div className={styles.title}>其他</div>
         </Row>
-        <Row gutter={0}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同签订日期">
-              {form.getFieldDecorator('contractTime', {
-                rules: [{required: true,message:'请选择合同签订日期'}],
-                initialValue: selectedValues.contractTime ? moment(selectedValues.contractTime) : null,
-              })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
-            </FormItem>
-          </Col>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="预计合同金额">
-              {form.getFieldDecorator('estimatedContractAmount', {
-                rules: [{required: true,message:'请输入预计合同金额'}],
-                initialValue: selectedValues.estimatedContractAmount ? selectedValues.estimatedContractAmount : testValue
-              })(<Input disabled={checkDetail} placeholder="请输入预计合同金额" addonAfter='元'/>)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={0}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="施工范围">
-              {form.getFieldDecorator('constructionScope', {
-                rules: [{required: true,message:'请输入施工范围'}],
-                initialValue: selectedValues.constructionScope ? selectedValues.constructionScope : testValue
-              })(<Input disabled={checkDetail} placeholder="请输入施工范围"/>)}
-            </FormItem>
-          </Col>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="队伍状态">
-              {form.getFieldDecorator('status', {
-                rules: [{required: true,message:'请选择队伍状态'}],
-                initialValue: selectedValues.status ? selectedValues.status : ''
-              })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择队伍状态"
-                         style={{width: '100%'}}>
-                <Option value="0">正在施工</Option>
-                <Option value="1">完工待结算</Option>
-                <Option value="2">已完结</Option>
-              </Select>)}
-            </FormItem>
-          </Col>
-        </Row>
-      </div>
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>覆约保证金</div>
-      </Row>
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="应缴金额">
-              {form.getFieldDecorator('shouldAmount', {
-                rules: [{required: true, message: '请输入应缴金额'}],
-                initialValue: selectedValues.shouldAmount ? selectedValues.shouldAmount : testValue
-              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入应缴金额" addonAfter="万元"/>)}
-            </FormItem>
-          </Col>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="实缴金额">
-              {form.getFieldDecorator('realAmount', {
-                rules: [{required: true, message: '请输入实缴金额'}],
-                initialValue: selectedValues.realAmount ? selectedValues.realAmount : testValue
-              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入实缴金额" addonAfter="万元"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-      </div>
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>负责人</div>
-      </Row>
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同签订人">
-              {form.getFieldDecorator('contractPerson', {
-                rules: [{required: true, message: '请输入合同签订人'}],
-                initialValue: selectedValues.contractPerson ? selectedValues.contractPerson : testValue
-              })(<Input disabled={checkDetail} placeholder="请输入合同签订人"/>)}
-            </FormItem>
-          </Col>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 12}} label="合同签订人联系电话">
-              {form.getFieldDecorator('phone', {
-                rules: [{required: true, message: '请输入合同签订人联系电话'}],
-                initialValue: selectedValues.phone ? selectedValues.phone : testValue
-              })(<Input disabled={checkDetail} placeholder="请输入合同签订人联系电话"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-      </div>
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>其他</div>
-      </Row>
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={24} sm={24}>
-            <FormItem style={{marginLeft: 18 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="附件">
-              {form.getFieldDecorator('annexUrl', {
-                valuePropName: 'fileList',
-                getValueFromEvent: normFile,
-              })(
-                <Upload.Dragger name="files" action="/upload.do">
-                  <p className="ant-upload-drag-icon">
-                    <Icon type="inbox"/>
-                  </p>
-                  <p className="ant-upload-text">点击或拖动附件进入</p>
-                </Upload.Dragger>
-              )}
-              <span style={info_css}>备注：请以一份PDF格式文件上传。</span>
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={24} sm={24}>
-            <FormItem style={{marginLeft: 18 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="备注">
-              {form.getFieldDecorator('remark', {
-                rules: [{required: false}],
-                initialValue: selectedValues.remark ? selectedValues.remark : testValue
-              })(<Input.TextArea disabled={checkDetail} width={'100%'} placeholder="请输入" rows={4}/>)}
-            </FormItem>
-          </Col>
-        </Row>
-      </div>
-    </Modal>
-  );
-});
+        <div className={styles.modalContent}>
+          <Row gutter={8}>
+            <Col md={24} sm={24}>
+              <FormItem style={{marginLeft: 18 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="附件">
+                {form.getFieldDecorator('annexUrl', {
+                  valuePropName: 'fileList',
+                  getValueFromEvent: normFile,
+                  initialValue: selectedValues.annexUrl ? selectedValues.annexUrl : [],
+                })(
+                  <Upload.Dragger onChange={this.handleChange}
+                                  accept={'image/*'}
+                                  showUploadList={false}
+                    // fileList={fileList}
+                                  listType="picture"
+                                  name="files"
+                                  disabled={fileList.length > 0}
+                                  onSuccess={this.onSuccess}
+                                  handleManualRemove={this.remove}
+                                  onError={this.onError}
+                                  onProgress={this.onProgress}
+                                  customRequest={this.onUpload}>
+                    <p className="ant-upload-drag-icon">
+                      <Icon type="inbox"/>
+                    </p>
+                    <p className="ant-upload-text">点击或拖动附件进入</p>
+                  </Upload.Dragger>
+                )}
+                <PreFile onClose={this.remove} onPreview={this.handlePreview} progress={progress} file={fileList[0]}/>
+                <span style={info_css}>备注：请以一份PDF格式文件上传。</span>
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={24} sm={24}>
+              <FormItem style={{marginLeft: 18 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="备注">
+                {form.getFieldDecorator('remark', {
+                  rules: [{required: false}],
+                  initialValue: selectedValues.remark ? selectedValues.remark : testValue
+                })(<Input.TextArea disabled={checkDetail} width={'100%'} placeholder="请输入" rows={4}/>)}
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+        <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+          <img alt="example" style={{width: '100%'}} src={previewImage}/>
+        </Modal>
+      </Modal>
+    )
+  }
+
+  onUpload = (params) => {
+    QiNiuOss(params).then(res=>{
+      this.upload = res
+    })
+  }
+
+  onProgress = (e) => {
+    //  console.log(Upload.autoUpdateProgress)
+    this.setState({progress: parseInt(e.total.percent)})
+    // console.log('上传进度', e)
+  }
+
+  onError = (error) => {
+    console.log('上传失败', error)
+  }
+
+  onSuccess = (res) => {
+    //this.state.fileList.push(ImageUrl+res.key)
+    let file = {
+      uid: '-1',
+      name: this.state.fileList[0].name,
+      status: 'done',
+      url: ImageUrl + res.key,
+    }
+    this.setState({fileList: [file]})
+    this.props.form.setFieldsValue({annexUrl: [file]});
+  }
+
+  remove = (res) => {
+    if (res.status == 'done') {
+      this.props.form.setFieldsValue({annexUrl: []});
+    } else {
+      this.upload.unsubscribe()
+    }
+    this.setState({fileList:[]})
+  }
+}
+
+
 const CreateCompForm = Form.create()(props => {
   const {modalVisible, form, companyUpdate, handleComModalVisible, selectedValues} = props;
 
@@ -348,6 +440,10 @@ class TeamAccount extends Component {
       comModal: false,
       selectedValues: {},
       checkDetail: false
+    }
+    this.exportParams = {
+      page:1,
+      pageSize:10
     }
   }
 
@@ -736,7 +832,6 @@ class TeamAccount extends Component {
   }
 
   normFile = (e) => {
-    console.log('Upload event:', e);
     if (Array.isArray(e)) {
       return e;
     }
@@ -768,6 +863,7 @@ class TeamAccount extends Component {
       proNames: proNames,
       subNames:subNames
     }
+
     return (
       <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="所属劳务队伍台账">
@@ -780,7 +876,7 @@ class TeamAccount extends Component {
                     新增
                   </Button> : null}
                 {user.token && getButtons(user.permissionsMap.button, pageButtons[4]) ?
-                  <Button icon="plus" type="primary">
+                  <Button onClick={()=>exportExc(TEAM_EXPORT,this.exportParams,user.token)} icon="plus" type="primary">
                     导出
                   </Button> : null}
               </div>
@@ -838,6 +934,7 @@ class TeamAccount extends Component {
           approvalFiling:fieldsValue.approvalFiling
         }
       cleanObject(payload)
+      this.exportParams = payload
       this.props.dispatch({
         type: 'teamAccount/fetch',
         payload: payload,

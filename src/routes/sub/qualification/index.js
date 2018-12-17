@@ -17,12 +17,15 @@ import {
   Upload,
   Divider,
 } from 'antd';
-import {Page, PageHeaderWrapper, StandardTable} from 'components'
+import {Page, PageHeaderWrapper, StandardTable, PreFile} from 'components'
 import styles from './index.less'
-import {_setTimeOut, getButtons,cleanObject} from 'utils'
+import {getButtons, cleanObject, QiNiuOss, ImageUrl} from 'utils'
 import {menuData} from 'common/menu'
 import {professionType, subType, taxpayerType} from 'common/types'
 import moment from 'moment'
+import {createURL} from 'services/app'
+import {SUB_QUA_PDF,SUB_QUA_EXPORT} from 'common/urls'
+import {apiDev} from 'utils/config'
 
 const pageButtons = menuData[10].buttons.map(a => a.permission)
 
@@ -37,10 +40,24 @@ const info_css = {
 }
 const testValue = ''
 const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
-const CreateForm = Form.create()(props => {
-  const {modalVisible, form, handleAdd, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = props;
 
-  const okHandle = () => {
+
+@Form.create()
+class CreateForm extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      previewVisible: false,
+      previewImage: '',
+      fileList: [],
+      progress: 0
+    };
+    this.upload = null
+  }
+
+  okHandle = () => {
+    const {form, handleAdd, updateModalVisible, selectedValues} = this.props;
+
     form.validateFields((err, fieldsValue) => {
       console.log(fieldsValue)
       if (err) return;
@@ -57,317 +74,392 @@ const CreateForm = Form.create()(props => {
       handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
   };
-  return (
-    <Modal
-      destroyOnClose
-      title={checkDetail ? '分包商资质信息卡' : updateModalVisible ? "编辑分包商资质信息卡" : "新增分包商资质信息卡"}
-      bodyStyle={{padding: 0 + 'px'}}
-      visible={modalVisible}
-      width={992}
-      maskClosable={false}
-      onOk={okHandle}
-      onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
-    >
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="分包商全称">
-              {form.getFieldDecorator('name', {
-                rules: [{required: true, message: '请输入分包商全称'}],
-                initialValue: selectedValues.name ? selectedValues.name : testValue
-              })(<Input disabled={checkDetail} placeholder="请输入分包商全称"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="成立日期">
-              {form.getFieldDecorator('setUpTime', {
-                rules: [{required: true, message: '请选择成立日期'}],
-                initialValue: selectedValues.setUpTime ? moment(selectedValues.setUpTime) : null
-              })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="纳税人类型">
-              {form.getFieldDecorator('taxpayerType', {
-                rules: [{required: true}],
-                initialValue: selectedValues.taxpayerType ? selectedValues.taxpayerType : ''
-              })(<Select disabled={checkDetail} placeholder="请选择纳税人类型" style={{width: '100%'}}>
-                {taxpayerType.map((a, index) => <Option key={index} value={a}>{a}</Option>)}
-              </Select>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="注册资本金">
-              {form.getFieldDecorator('registeredCapital', {
-                rules: [{required: true}],
-                initialValue: selectedValues.registeredCapital ? selectedValues.registeredCapital : testValue
-              })(<Input disabled={checkDetail} placeholder="请输入注册资本金" addonAfter="万元"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="分包商类型">
-              {form.getFieldDecorator('type', {
-                rules: [{required: true, message: '请选择分包商类型'}],
-                initialValue: selectedValues.type ? selectedValues.type : ''
-              })(<Select disabled={checkDetail} placeholder="请选择分包商类型" style={{width: '100%'}}>
-                {subType.map((a, index) => <Option key={index} value={a}>{a}</Option>)}
-              </Select>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="电话">
-              {form.getFieldDecorator('phone', {
-                rules: [{required: true}],
-                initialValue: selectedValues.phone ? selectedValues.phone : testValue
-              })(<Input disabled={checkDetail} placeholder="请输入电话"/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="电子邮箱">
-              {form.getFieldDecorator('email', {
-                rules: [{required: true}],
-                initialValue: selectedValues.email ? selectedValues.email : testValue
-              })(<Input disabled={checkDetail} placeholder="请输入电子邮箱"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={0}>
-          <Col md={16} sm={24}>
-            <FormItem style={{marginLeft: 14 + 'px'}} labelCol={{span: 3}} wrapperCol={{span: 15}} label="注册地址">
-              {form.getFieldDecorator('address', {
-                rules: [{required: true}],
-                initialValue: selectedValues.address ? selectedValues.address : testValue
-              })(<Input disabled={checkDetail} placeholder="请输入注册地址"/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="邮编">
-              {form.getFieldDecorator('zipCode', {
-                rules: [{required: true}],
-                initialValue: selectedValues.zipCode ? selectedValues.zipCode : testValue
-              })(<Input disabled={checkDetail} placeholder="请输入邮编"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="专业类型">
-              {form.getFieldDecorator('professionType', {
-                rules: [{required: true, message: '请选择专业类型'}],
-                initialValue: selectedValues.professionType ? selectedValues.professionType : ''
-              })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
-                {professionType.map((a, index) => <Option key={index} value={a}>{a}</Option>)}
-              </Select>)}
-            </FormItem>
-          </Col>
-        </Row>
-      </div>
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>法定代表人</div>
-      </Row>
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="姓名">
-              {form.getFieldDecorator('legalPersonName', {
-                rules: [{required: true, message: '请输入姓名'}],
-                initialValue: selectedValues.legalPersonName ? selectedValues.legalPersonName : testValue
-              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入姓名"/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="职务">
-              {form.getFieldDecorator('legalPersonPosition', {
-                rules: [{required: true, message: '请输入职务'}],
-                initialValue: selectedValues.legalPersonPosition ? selectedValues.legalPersonPosition : testValue
-              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入职务"/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="身份证号码">
-              {form.getFieldDecorator('legalPersonCard', {
-                rules: [{required: true, message: '请输入身份证号码'}],
-                initialValue: selectedValues.legalPersonCard ? selectedValues.legalPersonCard : testValue
-              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入身份证"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系方式">
-              {form.getFieldDecorator('legalPersonPhone', {
-                rules: [{required: true, message: '请输入联系方式'}],
-                initialValue: selectedValues.legalPersonPhone ? selectedValues.legalPersonPhone : testValue
-              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入联系方式"/>)}
-            </FormItem>
-          </Col>
-          <Col md={16} sm={24}>
-            <FormItem labelCol={{span: 3}} style={{marginLeft: 14 + 'px'}} wrapperCol={{span: 15}} label="家庭住址">
-              {form.getFieldDecorator('legalPersonAddress', {
-                rules: [{required: true, message: '请输入家庭住址'}],
-                initialValue: selectedValues.legalPersonAddress ? selectedValues.legalPersonAddress : testValue
-              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入家庭住址"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-      </div>
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>营业执照</div>
-      </Row>
-      <div className={styles.modalContent} style={{paddingLeft: 0}}>
-        <Row gutter={2}>
-          <Col md={10} sm={24}>
-            <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="统一社会信誉代码">
-              {form.getFieldDecorator('businessLicenseCode', {
-                rules: [{required: true, message: '请输入统一社会信誉代码'}],
-                initialValue: selectedValues.businessLicenseCode ? selectedValues.businessLicenseCode : testValue
-              })(<Input disabled={checkDetail} placeholder="请输入统一社会信誉代码"/>)}
-            </FormItem>
-          </Col>
-          <Col md={6} sm={24}>
-            <FormItem style={{paddingLeft: 5 + 'px'}} labelCol={{span: 8}} wrapperCol={{span: 15}} label="有效期限">
-              {form.getFieldDecorator('businessLicenseValidityPeriod', {
-                rules: [{required: true, message: '请选择期限'}],
-                initialValue: selectedValues.businessLicenseValidityPeriod ? moment(selectedValues.businessLicenseValidityPeriod) : null
-              })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="发证机关">
-              {form.getFieldDecorator('businessLicenseFrom', {
-                rules: [{required: true, message: '请输入发证机关'}],
-                initialValue: selectedValues.businessLicenseFrom ? selectedValues.businessLicenseFrom : testValue
-              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入发证机关"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-      </div>
 
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>资质证书</div>
-      </Row>
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="证书编号">
-              {form.getFieldDecorator('qualificationCode', {
-                rules: [{required: true, message: '请输入证书编号'}],
-                initialValue: selectedValues.qualificationCode ? selectedValues.qualificationCode : testValue
-              })(<Input disabled={checkDetail} placeholder="请输入证书编号"/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="有效期限">
-              {form.getFieldDecorator('qualificationValidityPeriod', {
-                rules: [{required: true, message: '请选择期限'}],
-                initialValue: selectedValues.qualificationValidityPeriod ? moment(selectedValues.qualificationValidityPeriod) : null
-              })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="发证机关">
-              {form.getFieldDecorator('qualificationFrom', {
-                rules: [{required: true, message: '请输入发证机关'}],
-                initialValue: selectedValues.qualificationFrom ? selectedValues.qualificationFrom : testValue
-              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入发证机关"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-      </div>
+  handleCancel = () => this.setState({previewVisible: false})
 
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>安全生产许可证</div>
-      </Row>
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="编号">
-              {form.getFieldDecorator('safetyCode', {
-                rules: [{required: true, message: '请输入编号'}],
-                initialValue: selectedValues.safetyCode ? selectedValues.safetyCode : testValue
-              })(<Input placeholder="请输入编号"/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="有效期限">
-              {form.getFieldDecorator('safetyValidityPeriod', {
-                rules: [{required: true, message: '请选择期限'}],
-                initialValue: selectedValues.safetyValidityPeriod ? moment(selectedValues.safetyValidityPeriod) : null
-              })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="发证机关">
-              {form.getFieldDecorator('safetyFrom', {
-                rules: [{required: true, message: '请输入发证机关'}],
-                initialValue: selectedValues.safetyFrom ? selectedValues.safetyFrom : testValue
-              })(<Input style={{marginTop: 4}} placeholder="请输入发证机关"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-      </div>
+  handlePreview = (file) => {
+    this.setState({
+      previewImage: file.url || file.thumbUrl,
+      previewVisible: true,
+    });
+  }
 
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>开户银行许可证</div>
-      </Row>
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="开户银行">
-              {form.getFieldDecorator('bank', {
-                rules: [{required: true, message: '请输入开户银行'}],
-                initialValue: selectedValues.bank ? selectedValues.bank : testValue
-              })(<Input disabled={checkDetail} placeholder="请输入开户银行"/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="银行账号">
-              {form.getFieldDecorator('bankAccount', {
-                rules: [{required: true, message: '请输入银行账号'}],
-                initialValue: selectedValues.bankAccount ? selectedValues.bankAccount : testValue
-              })(<Input disabled={checkDetail} placeholder="请输入银行账号"/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="发证机关">
-              {form.getFieldDecorator('bankFrom', {
-                rules: [{required: true, message: '请输入发证机关'}],
-                initialValue: selectedValues.bankFrom ? selectedValues.bankFrom : testValue
-              })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入发证机关"/>)}
-            </FormItem>
-          </Col>
+  componentWillUnmount() {
+    this.upload = null
+  }
+
+  handleChange = ({fileList}) => {
+    this.setState({fileList})
+  }
+
+  render() {
+    const {modalVisible, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
+    let {previewVisible, previewImage, fileList, progress} = this.state
+    return (
+      <Modal
+        destroyOnClose
+        title={checkDetail ? '分包商资质信息卡' : updateModalVisible ? "编辑分包商资质信息卡" : "新增分包商资质信息卡"}
+        bodyStyle={{padding: 0 + 'px'}}
+        visible={modalVisible}
+        width={992}
+        maskClosable={false}
+        onOk={this.okHandle}
+        onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
+      >
+        <div className={styles.modalContent}>
+          <Row gutter={8}>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="分包商全称">
+                {form.getFieldDecorator('name', {
+                  rules: [{required: true, message: '请输入分包商全称'}],
+                  initialValue: selectedValues.name ? selectedValues.name : testValue
+                })(<Input disabled={checkDetail} placeholder="请输入分包商全称"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="成立日期">
+                {form.getFieldDecorator('setUpTime', {
+                  rules: [{required: true, message: '请选择成立日期'}],
+                  initialValue: selectedValues.setUpTime ? moment(selectedValues.setUpTime) : null
+                })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="纳税人类型">
+                {form.getFieldDecorator('taxpayerType', {
+                  rules: [{required: true}],
+                  initialValue: selectedValues.taxpayerType ? selectedValues.taxpayerType : ''
+                })(<Select disabled={checkDetail} placeholder="请选择纳税人类型" style={{width: '100%'}}>
+                  {taxpayerType.map((a, index) => <Option key={index} value={a}>{a}</Option>)}
+                </Select>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="注册资本金">
+                {form.getFieldDecorator('registeredCapital', {
+                  rules: [{required: true}],
+                  initialValue: selectedValues.registeredCapital ? selectedValues.registeredCapital : testValue
+                })(<Input disabled={checkDetail} placeholder="请输入注册资本金" addonAfter="万元"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="分包商类型">
+                {form.getFieldDecorator('type', {
+                  rules: [{required: true, message: '请选择分包商类型'}],
+                  initialValue: selectedValues.type ? selectedValues.type : ''
+                })(<Select disabled={checkDetail} placeholder="请选择分包商类型" style={{width: '100%'}}>
+                  {subType.map((a, index) => <Option key={index} value={a}>{a}</Option>)}
+                </Select>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="电话">
+                {form.getFieldDecorator('phone', {
+                  rules: [{required: true}],
+                  initialValue: selectedValues.phone ? selectedValues.phone : testValue
+                })(<Input disabled={checkDetail} placeholder="请输入电话"/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="电子邮箱">
+                {form.getFieldDecorator('email', {
+                  rules: [{required: true}],
+                  initialValue: selectedValues.email ? selectedValues.email : testValue
+                })(<Input disabled={checkDetail} placeholder="请输入电子邮箱"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={0}>
+            <Col md={16} sm={24}>
+              <FormItem style={{marginLeft: 14 + 'px'}} labelCol={{span: 3}} wrapperCol={{span: 15}} label="注册地址">
+                {form.getFieldDecorator('address', {
+                  rules: [{required: true}],
+                  initialValue: selectedValues.address ? selectedValues.address : testValue
+                })(<Input disabled={checkDetail} placeholder="请输入注册地址"/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="邮编">
+                {form.getFieldDecorator('zipCode', {
+                  rules: [{required: true}],
+                  initialValue: selectedValues.zipCode ? selectedValues.zipCode : testValue
+                })(<Input disabled={checkDetail} placeholder="请输入邮编"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="专业类型">
+                {form.getFieldDecorator('professionType', {
+                  rules: [{required: true, message: '请选择专业类型'}],
+                  initialValue: selectedValues.professionType ? selectedValues.professionType : ''
+                })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
+                  {professionType.map((a, index) => <Option key={index} value={a}>{a}</Option>)}
+                </Select>)}
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+        <Row align={'middle'} gutter={0} className={styles.titleView}>
+          <div className={styles.title}>法定代表人</div>
         </Row>
-      </div>
-      <Row align={'middle'} gutter={0} className={styles.titleView}>
-        <div className={styles.title}>附件</div>
-      </Row>
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={24} sm={24}>
-            <FormItem style={{marginLeft: 14 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="附件">
-              {form.getFieldDecorator('annex', {
-                valuePropName: 'fileList',
-                getValueFromEvent: normFile,
-              })(
-                <Upload.Dragger name="files" action="/upload.do">
-                  <p className="ant-upload-drag-icon">
-                    <Icon type="inbox"/>
-                  </p>
-                  <p className="ant-upload-text">点击或拖动附件进入</p>
-                </Upload.Dragger>
-              )}
-              <span style={info_css}>备注：包含营业执照、资质证书、安全生产许可证、开户银行许可证、法人身份证等相关资质资料(盖鲜章),请以一份PDF格式文件上传。</span>
-            </FormItem>
-          </Col>
+        <div className={styles.modalContent}>
+          <Row gutter={8}>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="姓名">
+                {form.getFieldDecorator('legalPersonName', {
+                  rules: [{required: true, message: '请输入姓名'}],
+                  initialValue: selectedValues.legalPersonName ? selectedValues.legalPersonName : testValue
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入姓名"/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="职务">
+                {form.getFieldDecorator('legalPersonPosition', {
+                  rules: [{required: true, message: '请输入职务'}],
+                  initialValue: selectedValues.legalPersonPosition ? selectedValues.legalPersonPosition : testValue
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入职务"/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="身份证号码">
+                {form.getFieldDecorator('legalPersonCard', {
+                  rules: [{required: true, message: '请输入身份证号码'}],
+                  initialValue: selectedValues.legalPersonCard ? selectedValues.legalPersonCard : testValue
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入身份证"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系方式">
+                {form.getFieldDecorator('legalPersonPhone', {
+                  rules: [{required: true, message: '请输入联系方式'}],
+                  initialValue: selectedValues.legalPersonPhone ? selectedValues.legalPersonPhone : testValue
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入联系方式"/>)}
+              </FormItem>
+            </Col>
+            <Col md={16} sm={24}>
+              <FormItem labelCol={{span: 3}} style={{marginLeft: 14 + 'px'}} wrapperCol={{span: 15}} label="家庭住址">
+                {form.getFieldDecorator('legalPersonAddress', {
+                  rules: [{required: true, message: '请输入家庭住址'}],
+                  initialValue: selectedValues.legalPersonAddress ? selectedValues.legalPersonAddress : testValue
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入家庭住址"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+        <Row align={'middle'} gutter={0} className={styles.titleView}>
+          <div className={styles.title}>营业执照</div>
         </Row>
-      </div>
-    </Modal>
-  );
-});
+        <div className={styles.modalContent} style={{paddingLeft: 0}}>
+          <Row gutter={2}>
+            <Col md={10} sm={24}>
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="统一社会信誉代码">
+                {form.getFieldDecorator('businessLicenseCode', {
+                  rules: [{required: true, message: '请输入统一社会信誉代码'}],
+                  initialValue: selectedValues.businessLicenseCode ? selectedValues.businessLicenseCode : testValue
+                })(<Input disabled={checkDetail} placeholder="请输入统一社会信誉代码"/>)}
+              </FormItem>
+            </Col>
+            <Col md={6} sm={24}>
+              <FormItem style={{paddingLeft: 5 + 'px'}} labelCol={{span: 8}} wrapperCol={{span: 15}} label="有效期限">
+                {form.getFieldDecorator('businessLicenseValidityPeriod', {
+                  rules: [{required: true, message: '请选择期限'}],
+                  initialValue: selectedValues.businessLicenseValidityPeriod ? moment(selectedValues.businessLicenseValidityPeriod) : null
+                })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="发证机关">
+                {form.getFieldDecorator('businessLicenseFrom', {
+                  rules: [{required: true, message: '请输入发证机关'}],
+                  initialValue: selectedValues.businessLicenseFrom ? selectedValues.businessLicenseFrom : testValue
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入发证机关"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+
+        <Row align={'middle'} gutter={0} className={styles.titleView}>
+          <div className={styles.title}>资质证书</div>
+        </Row>
+        <div className={styles.modalContent}>
+          <Row gutter={8}>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="证书编号">
+                {form.getFieldDecorator('qualificationCode', {
+                  rules: [{required: true, message: '请输入证书编号'}],
+                  initialValue: selectedValues.qualificationCode ? selectedValues.qualificationCode : testValue
+                })(<Input disabled={checkDetail} placeholder="请输入证书编号"/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="有效期限">
+                {form.getFieldDecorator('qualificationValidityPeriod', {
+                  rules: [{required: true, message: '请选择期限'}],
+                  initialValue: selectedValues.qualificationValidityPeriod ? moment(selectedValues.qualificationValidityPeriod) : null
+                })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="发证机关">
+                {form.getFieldDecorator('qualificationFrom', {
+                  rules: [{required: true, message: '请输入发证机关'}],
+                  initialValue: selectedValues.qualificationFrom ? selectedValues.qualificationFrom : testValue
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入发证机关"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+
+        <Row align={'middle'} gutter={0} className={styles.titleView}>
+          <div className={styles.title}>安全生产许可证</div>
+        </Row>
+        <div className={styles.modalContent}>
+          <Row gutter={8}>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="编号">
+                {form.getFieldDecorator('safetyCode', {
+                  rules: [{required: true, message: '请输入编号'}],
+                  initialValue: selectedValues.safetyCode ? selectedValues.safetyCode : testValue
+                })(<Input placeholder="请输入编号"/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="有效期限">
+                {form.getFieldDecorator('safetyValidityPeriod', {
+                  rules: [{required: true, message: '请选择期限'}],
+                  initialValue: selectedValues.safetyValidityPeriod ? moment(selectedValues.safetyValidityPeriod) : null
+                })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="发证机关">
+                {form.getFieldDecorator('safetyFrom', {
+                  rules: [{required: true, message: '请输入发证机关'}],
+                  initialValue: selectedValues.safetyFrom ? selectedValues.safetyFrom : testValue
+                })(<Input style={{marginTop: 4}} placeholder="请输入发证机关"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+
+        <Row align={'middle'} gutter={0} className={styles.titleView}>
+          <div className={styles.title}>开户银行许可证</div>
+        </Row>
+        <div className={styles.modalContent}>
+          <Row gutter={8}>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="开户银行">
+                {form.getFieldDecorator('bank', {
+                  rules: [{required: true, message: '请输入开户银行'}],
+                  initialValue: selectedValues.bank ? selectedValues.bank : testValue
+                })(<Input disabled={checkDetail} placeholder="请输入开户银行"/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="银行账号">
+                {form.getFieldDecorator('bankAccount', {
+                  rules: [{required: true, message: '请输入银行账号'}],
+                  initialValue: selectedValues.bankAccount ? selectedValues.bankAccount : testValue
+                })(<Input disabled={checkDetail} placeholder="请输入银行账号"/>)}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="发证机关">
+                {form.getFieldDecorator('bankFrom', {
+                  rules: [{required: true, message: '请输入发证机关'}],
+                  initialValue: selectedValues.bankFrom ? selectedValues.bankFrom : testValue
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入发证机关"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+        <Row align={'middle'} gutter={0} className={styles.titleView}>
+          <div className={styles.title}>附件</div>
+        </Row>
+        <div className={styles.modalContent}>
+          <Row gutter={8}>
+            <Col md={24} sm={24}>
+              <FormItem style={{marginLeft: 14 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="附件">
+                {form.getFieldDecorator('annex', {
+                  valuePropName: 'fileList',
+                  getValueFromEvent: normFile,
+                  initialValue: selectedValues.annex ? selectedValues.annex : [],
+                })(
+                  <Upload.Dragger  onChange={this.handleChange}
+                                   accept={'image/*'}
+                                   showUploadList={false}
+                    // fileList={fileList}
+                                   listType="picture"
+                                   name="files"
+                                   disabled={fileList.length > 0}
+                                   onSuccess={this.onSuccess}
+                                   handleManualRemove={this.remove}
+                                   onError={this.onError}
+                                   onProgress={this.onProgress}
+                                   customRequest={this.onUpload}>
+                    <p className="ant-upload-drag-icon">
+                      <Icon type="inbox"/>
+                    </p>
+                    <p className="ant-upload-text">点击或拖动附件进入</p>
+                  </Upload.Dragger>
+                )}
+                <PreFile onClose={this.remove} onPreview={this.handlePreview} progress={progress} file={fileList[0]}/>
+                <span style={info_css}>备注：包含营业执照、资质证书、安全生产许可证、开户银行许可证、法人身份证等相关资质资料(盖鲜章),请以一份PDF格式文件上传。</span>
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+        <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+          <img alt="example" style={{width: '100%'}} src={previewImage}/>
+        </Modal>
+      </Modal>
+    )
+  }
+
+  onUpload = (params) => {
+    QiNiuOss(params).then(res=>{
+      this.upload = res
+    })
+  }
+
+  onProgress = (e) => {
+    //  console.log(Upload.autoUpdateProgress)
+    this.setState({progress: parseInt(e.total.percent)})
+    // console.log('上传进度', e)
+  }
+
+  onError = (error) => {
+    console.log('上传失败', error)
+  }
+
+  onSuccess = (res) => {
+    //this.state.fileList.push(ImageUrl+res.key)
+    let file = {
+      uid: '-1',
+      name: this.state.fileList[0].name,
+      status: 'done',
+      url: ImageUrl + res.key,
+    }
+    this.setState({fileList: [file]})
+    this.props.form.setFieldsValue({annex: [file]});
+  }
+
+  remove = (res) => {
+    if (res.status == 'done') {
+      this.props.form.setFieldsValue({annex: []});
+    } else {
+      this.upload.unsubscribe()
+    }
+    this.setState({fileList:[]})
+  }
+}
 
 const CreateReview = Form.create()(props => {
   let {modalVisible, form, handleReview, handleReviewModal, selectedValues} = props;
@@ -530,6 +622,10 @@ class Qualification extends Component {
       selectedValues: {},
       checkDetail: false
     }
+    this.exportParams = {
+      page:1,
+      pageSize:10
+    }
   }
 
   columns = [
@@ -587,18 +683,10 @@ class Qualification extends Component {
     },
     {
       title: '下载分包商资质信息卡',
+      dataIndex:'id',
       render: (val, record) => {
-        const button = this.props.app.user.permissionsMap.button
         return (
-          <Fragment>
-            <a>下载附件</a>
-            {/* <Divider type="horizontal"/>
-          <a onClick={() => this.handleReviewModal(0,record)}> 股份公司综合信誉评价</a>
-          <Divider type="horizontal"/>
-          <a onClick={() => this.handleReviewModal(1,record)}>集团公司综合信誉评价</a>
-          <Divider type="horizontal"/>
-          <a onClick={() => this.handleReviewModal(2,record)}>公司本级综合信誉评价</a>*/}
-          </Fragment>
+            <a href={apiDev+SUB_QUA_PDF+val} download={'分包商资质信息卡'}>下载附件</a>
         )
       }
     },
@@ -925,6 +1013,7 @@ class Qualification extends Component {
       checkDetail: checkDetail,
       selectedRows: selectedRows
     }
+    const exportUrl = createURL(SUB_QUA_EXPORT,this.exportParams)
     return (
       <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="分包商资质信息">
@@ -937,7 +1026,7 @@ class Qualification extends Component {
                     新增
                   </Button> : null}
                 {user.token && getButtons(user.permissionsMap.button, pageButtons[3]) ?
-                  <Button icon="plus" type="primary">
+                  <Button href={exportUrl} icon="plus" type="primary">
                     导出
                   </Button> : null}
               </div>
@@ -987,7 +1076,7 @@ class Qualification extends Component {
       //  form.resetFields();
       this.props.dispatch({
         type: 'sub_qua/fetch',
-        payload:payload
+        payload: payload
       });
     });
   }
@@ -1006,6 +1095,7 @@ class Qualification extends Component {
       companyEvaluation: fieldsValue.companyEvaluation,
       companyGroupEvaluation: fieldsValue.companyGroupEvaluation
     }
+    this.exportParams = payload
     dispatch({
       type: 'sub_qua/update',
       payload: {...payload, ...{id: selectedValues.id,}},

@@ -50,14 +50,7 @@ class CreateForm extends Component {
     this.state = {
       previewVisible: false,
       previewImage: '',
-      fileList: [
-//         {
-//   uid: '-1',
-//     name: 'xxx.png',
-//   status: 'done',
-//   url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-// }
-      ],
+      fileList: [],
       progress: 0
     };
     this.upload = null
@@ -73,7 +66,6 @@ class CreateForm extends Component {
     form.validateFields((err, fieldsValue) => {
       //return
       if (err) return;
-      fieldsValue.annexUrl = testPDF
       fieldsValue.meteringTime = fieldsValue.meteringTime.format('YYYY-MM-DD')
       console.log(fieldsValue)
       //return
@@ -320,7 +312,6 @@ class CreateForm extends Component {
   }
 
   onSuccess = (res) => {
-    console.log('上传成功', res)
     //this.state.fileList.push(ImageUrl+res.key)
     let file = {
       uid: '-1',
@@ -328,7 +319,6 @@ class CreateForm extends Component {
       status: 'done',
       url: ImageUrl + res.key,
     }
-    console.log(ImageUrl + res.key)
     this.setState({fileList: [file]})
     this.props.form.setFieldsValue({annexUrl: [file]});
   }

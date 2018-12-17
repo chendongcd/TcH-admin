@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import {Progress,Icon} from 'antd'
+import {Progress, Icon} from 'antd'
 import classnames from 'classnames'
 
 const containerClass = classnames('ant-upload-list', 'ant-upload-list-picture')
@@ -18,18 +18,18 @@ class PreFile extends Component {
   }
 
   render() {
-    let {file,progress,onPreview,onClose} = this.props
+    let {file, progress, onPreview, onClose} = this.props
     if (file) {
       return (
         <div className={containerClass}>
           <div className={listItem}>
             <div className={item}>
-              {file.status=='done'? <span onClick={()=>onPreview(file)} style={{cursor:'pointer'}}>
+              {file.status == 'done' ? <span onClick={() => onPreview(file)} style={{cursor: 'pointer'}}>
              <img className={imgClass} src={file.url}/>
-                <span style={{marginLeft:60}}>{file.name}</span>
-            </span>:<Progress style={{marginTop:15}} percent={progress} status="active"/>}
+                <span style={{marginLeft: 60}}>{file.name}</span>
+            </span> : <Progress style={{marginTop: 15}} percent={progress} status="active"/>}
             </div>
-            <Icon onClick={()=>onClose(file)} type="close" />
+            <Icon onClick={() => onClose(file)} type="close"/>
           </div>
         </div>
       )
