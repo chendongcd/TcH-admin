@@ -303,7 +303,7 @@ class CreateForm extends Component {
           </Row>
         </div>
         <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-        <img alt="example" style={{width: '100%'}} src={previewImage}/>
+        <img alt="中期计价附件" style={{width: '100%'}} src={previewImage}/>
       </Modal>
       </Modal>
     )

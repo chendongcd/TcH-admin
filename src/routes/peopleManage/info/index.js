@@ -69,7 +69,6 @@ class CreateForm extends Component {
         }
         // console.log(typeof fieldsValue[prop])
       }
-      fieldsValue.headUrl = testPDF
       // form.resetFields();
       handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });

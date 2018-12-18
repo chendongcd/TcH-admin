@@ -15,9 +15,9 @@ import {
   Upload,
   Divider,
 } from 'antd';
-import {Page, PageHeaderWrapper, StandardTable} from 'components'
+import {Page, PageHeaderWrapper, StandardTable, PreFile} from 'components'
 import styles from './index.less'
-import {_setTimeOut, getButtons, cleanObject} from "utils";
+import { getButtons, cleanObject,QiNiuOss, ImageUrl} from "utils";
 import {menuData} from "../../../common/menu";
 
 const FormItem = Form.Item;
@@ -30,79 +30,157 @@ const pageButtons = menuData[21].buttons.map(a => a.permission)
 const testValue = ''
 const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
 
-const CreateForm = Form.create()(props => {
-  const {modalVisible, form, handleAdd, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, selectedValues,} = props;
-  const okHandle = () => {
+@Form.create()
+class CreateForm extends Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      fileList: [],
+      progress: 0
+    };
+    this.upload = null
+  }
+
+  okHandle = () => {
+    const {form, handleAdd, updateModalVisible, selectedValues} = this.props;
+
     form.validateFields((err, fieldsValue) => {
       if (err) return;
       //form.resetFields();
-      fieldsValue.annexUrl = testPDF
+      //   fieldsValue.annexUrl = testPDF
       handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
   };
-  return (
-    <Modal
-      destroyOnClose
-      title={updateModalVisible ? "编辑文档" : "新增文档"}
-      visible={modalVisible}
-      onOk={okHandle}
-      onCancel={() => updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
-    >
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={24} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="文档名称">
-              {form.getFieldDecorator('name', {
-                rules: [{required: true, message: '项目名不能为空',}],
-                initialValue: selectedValues.name ? selectedValues.name : testValue
-              })(<Input placeholder="请输入"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={24} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="文件类型">
-              {form.getFieldDecorator('fileType', {
-                rules: [{required: true, message: '请选择文件类型'}],
-                initialValue: selectedValues.fileType ? selectedValues.fileType : ''
-              })(<Select placeholder="请选择" style={{width: '100%'}}>
-                <Option value="管理办法">管理办法</Option>
-                <Option value="通知">通知</Option>
-              </Select>)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={24} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="附件">
-              {form.getFieldDecorator('annexUrl', {
-                valuePropName: 'fileList',
-                getValueFromEvent: normFile,
-              })(
-                <Upload.Dragger name="files" action="/upload.do">
-                  <p className="ant-upload-drag-icon">
-                    <Icon type="inbox"/>
-                  </p>
-                  <p className="ant-upload-text">点击或拖动附件进入</p>
-                </Upload.Dragger>
-              )}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={24} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="备注">
-              {form.getFieldDecorator('remark', {
-                rules: [{required: false}],
-                initialValue:selectedValues.remark?selectedValues.remark:testValue
-              })(<Input.TextArea width={'100%'} placeholder="请输入" rows={4}/>)}
-            </FormItem>
-          </Col>
-        </Row>
-      </div>
-    </Modal>
-  );
-});
+
+  componentWillUnmount() {
+    this.upload = null
+  }
+
+  handleChange = ({fileList}) => {
+    this.setState({fileList})
+  }
+
+  render() {
+    const {modalVisible, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, selectedValues,} = this.props;
+
+    let { fileList, progress} = this.state
+
+    return (
+      <Modal
+        destroyOnClose
+        title={updateModalVisible ? "编辑文档" : "新增文档"}
+        visible={modalVisible}
+        onOk={this.okHandle}
+        onCancel={() => updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
+      >
+        <div className={styles.modalContent}>
+          <Row gutter={8}>
+            <Col md={24} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="文档名称">
+                {form.getFieldDecorator('name', {
+                  rules: [{required: true, message: '项目名不能为空',}],
+                  initialValue: selectedValues.name ? selectedValues.name : testValue
+                })(<Input placeholder="请输入"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={24} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="文件类型">
+                {form.getFieldDecorator('fileType', {
+                  rules: [{required: true, message: '请选择文件类型'}],
+                  initialValue: selectedValues.fileType ? selectedValues.fileType : ''
+                })(<Select placeholder="请选择" style={{width: '100%'}}>
+                  <Option value="管理办法">管理办法</Option>
+                  <Option value="通知">通知</Option>
+                </Select>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={24} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="附件">
+                {form.getFieldDecorator('annexUrl', {
+                  valuePropName: 'fileList',
+                  getValueFromEvent: normFile,
+                  initialValue: selectedValues.annexUrl ? selectedValues.annexUrl : [],
+                })(
+                  <Upload.Dragger
+                    onChange={this.handleChange}
+                    showUploadList={false}
+                    // fileList={fileList}
+                    listType="picture"
+                    name="files"
+                    disabled={fileList.length > 0}
+                    onSuccess={this.onSuccess}
+                    handleManualRemove={this.remove}
+                    onError={this.onError}
+                    onProgress={this.onProgress}
+                    customRequest={this.onUpload}>
+                    <p className="ant-upload-drag-icon">
+                      <Icon type="inbox"/>
+                    </p>
+                    <p className="ant-upload-text">点击或拖动附件进入</p>
+                  </Upload.Dragger>
+                )}
+                <PreFile noImage={true} onClose={this.remove} progress={progress} file={fileList[0]}/>
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={24} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="备注">
+                {form.getFieldDecorator('remark', {
+                  rules: [{required: false}],
+                  initialValue: selectedValues.remark ? selectedValues.remark : testValue
+                })(<Input.TextArea width={'100%'} placeholder="请输入" rows={4}/>)}
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+      </Modal>
+    );
+  }
+
+  onUpload = (params) => {
+    QiNiuOss(params).then(res=>{
+      this.upload = res
+    })
+  }
+
+  onProgress = (e) => {
+    //  console.log(Upload.autoUpdateProgress)
+    this.setState({progress: parseInt(e.total.percent)})
+    // console.log('上传进度', e)
+  }
+
+  onError = (error) => {
+    console.log('上传失败', error)
+  }
+
+  onSuccess = (res) => {
+    //this.state.fileList.push(ImageUrl+res.key)
+    let file = {
+      uid: '-1',
+      name: this.state.fileList[0].name,
+      status: 'done',
+      url: ImageUrl + res.key,
+      type:this.state.fileList[0].type
+    }
+    this.setState({fileList: [file]})
+    this.props.form.setFieldsValue({annexUrl: [file]});
+  }
+
+  remove = (res) => {
+    if (res.status == 'done') {
+      this.props.form.setFieldsValue({annexUrl: []});
+    } else {
+      this.upload.unsubscribe()
+    }
+    this.setState({fileList:[]})
+  }
+}
 
 @Form.create()
 class FileRead extends Component {
@@ -162,10 +240,6 @@ class FileRead extends Component {
 
   componentDidMount() {
    this.getList()
-  }
-
-  componentWillUnmount() {
-    clearTimeout(_setTimeOut)
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
@@ -326,6 +400,14 @@ class FileRead extends Component {
     return this.renderSimpleForm();
   }
 
+  normFile = (e) => {
+    console.log('Upload event:', e);
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e && e.fileList;
+  }
+
   render() {
     const {
       fileRead: {data},
@@ -338,6 +420,7 @@ class FileRead extends Component {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
       handleUpdateModalVisible: this.handleUpdateModalVisible,
+      normFile:this.normFile
     };
     const parentState = {
       updateModalVisible: updateModalVisible,

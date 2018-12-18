@@ -18,18 +18,19 @@ class PreFile extends Component {
   }
 
   render() {
-    let {file, progress, onPreview, onClose} = this.props
+    let {file, progress, onPreview, onClose, index,noImage} = this.props
     if (file) {
+      console.log(file.name)
       return (
         <div className={containerClass}>
           <div className={listItem}>
             <div className={item}>
-              {file.status == 'done' ? <span onClick={() => onPreview(file)} style={{cursor: 'pointer'}}>
+              {file.status == 'done' ?( noImage?<a href={file.url} download={file.name}>{file.name}</a>:<span onClick={() => onPreview(file)} style={{cursor: 'pointer'}}>
              <img className={imgClass} src={file.url}/>
                 <span style={{marginLeft: 60}}>{file.name}</span>
-            </span> : <Progress style={{marginTop: 15}} percent={progress} status="active"/>}
+            </span>) : <Progress style={{marginTop: 15}} percent={progress} status="active"/>}
             </div>
-            <Icon onClick={() => onClose(file)} type="close"/>
+            <Icon onClick={() => onClose(file, index)} type="close"/>
           </div>
         </div>
       )
