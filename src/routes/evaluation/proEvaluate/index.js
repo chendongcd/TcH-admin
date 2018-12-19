@@ -21,7 +21,7 @@ import styles from './index.less'
 import {QiNiuOss, ImageUrl, cleanObject, getButtons} from 'utils'
 import {menuData} from "../../../common/menu";
 import {EVAL_EXPORT} from 'common/urls'
-import {exportExc} from 'services/app'
+import {createURL} from 'services/app'
 const FormItem = Form.Item;
 const {Option} = Select;
 const getValue = obj =>
@@ -1049,6 +1049,8 @@ class ProEvaluate extends Component {
       checkDetail: checkDetail,
       proNames: proNames
     }
+    const exportUrl = createURL(EVAL_EXPORT,{...this.exportParams,...{token:user.token}})
+
     return (
       <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="项目评估">
@@ -1061,7 +1063,7 @@ class ProEvaluate extends Component {
                     新增
                   </Button> : null}
                 {user.token && getButtons(user.permissionsMap.button, pageButtons[3]) ?
-                  <Button onClick={()=>exportExc(EVAL_EXPORT,this.exportParams,user.token)} icon="plus" type="primary">
+                  <Button href={exportUrl} icon="plus" type="primary">
                     导出
                   </Button> : null}
               </div>

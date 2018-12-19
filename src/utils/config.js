@@ -1,6 +1,6 @@
-const path ='public'// true?'static/public':'public'
+const path =process.env.NODE_ENV=='production'?'static/public':'public'
 module.exports = {
-  name: 'TcH-Admin',
+  name: '成本管理系统',
   prefix: 'TcH-Admin',
   footerText: 'TyC Design Admin  © 2018 melon',
   logo:  `${path}/logo.svg`,

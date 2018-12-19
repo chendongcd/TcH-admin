@@ -7,7 +7,6 @@ import {setStorage, getStorage} from 'utils/localStorage'
 
 const delay = timeout => new Promise(resolve => setTimeout(resolve, timeout));
 const {prefix} = config
-const routers = menuData.map(a=>a.route)
 function getMenu(user) {
   if (user && user.id) {
     return getMenus([...user.permissionsMap.menu, ...[menuData[0].permission]])
@@ -55,7 +54,7 @@ export default {
 
   effects: {
     * showLoading({payload}, {call, put}) {
-      yield call(delay, 500)
+      //yield call(delay, 500)
       yield put({type: 'updateState', payload: payload})
     },
     * login({payload}, {call, put}) {
@@ -75,6 +74,7 @@ export default {
     },
 
     * logout(_, {call, put}) {
+      console.log(123)
       yield put({type: 'updateState', payload: {loading: true, user: {}}})
       yield call(delay, 500)
       const response = yield call(signOut);

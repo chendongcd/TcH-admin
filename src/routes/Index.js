@@ -23,11 +23,9 @@ class IndexPage extends Component{
 
     let {app,history} = this.props
     if(!app.user.token){
-      console.log(app.user)
       history.push('/login')
     }
   }
-
 
   render() {
     const {children,  app ,dispatch} = this.props
@@ -65,7 +63,6 @@ class IndexPage extends Component{
         dispatch({ type: 'app/handleNavOpenKeys', payload: { navOpenKeys: openKeys } })
       },
     }
-
     const {iconFontJS, iconFontCSS, logo} = config
     return (
       <div>
@@ -98,7 +95,7 @@ class IndexPage extends Component{
         </Layout>
           :
           <div>
-          {children}
+          {children.props.children.filter(r=>r.props.path&&r.props.path=='/login')}
         </div>}
       </div>
     );

@@ -1,12 +1,14 @@
 import {message} from 'antd';
 
+
+
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
   202: '一个请求已经进入后台排队（异步任务）。',
   204: '删除数据成功。',
   400: '发出的请求有错误，服务器没有进行新建或修改数据的操作。',
-  401: '用户没有权限（令牌、用户名、密码错误）。',
+  401: '用户信息认证失效，请重新登陆',
   403: '用户得到授权，但是访问是被禁止的。',
   404: '发出的请求针对的是不存在的记录，服务器没有进行操作。',
   406: '请求的格式不可得。',
@@ -20,12 +22,18 @@ const codeMessage = {
 };
 
 const checkStatus = response => {
-  console.log(response)
+ console.log(response)
+ //  console.log(appModal)
+ //  if(response.code == 200){
+ //    message.error('用户信息认证失效，请重新登陆',5);
+ //    appModal.effects.logout({})
+ //    return
+ //  }
   if (response.code >= 200 && response.code < 300) {
     return
   }
   const errortext = codeMessage[response.code] || response.message;
-  console.log(codeMessage[response.code])
+ // console.log(codeMessage[response.code])
   message.error(errortext);
   return
 };
@@ -62,7 +70,7 @@ function createURL(path, param/*链接和参数*/) {
   return path + url.replace(/./, '?')
 }
 
-export default function request(url, options, token,isExport=false) {
+export default function request(url, options, token) {
   return new Promise(function (resolve, reject) {
     var req = new XMLHttpRequest()
     if (options.method === 'GET') {
@@ -80,14 +88,14 @@ export default function request(url, options, token,isExport=false) {
 
     req.onload = function () {
       console.log(req)
-      if(!isExport) {
+      //if (!isExport) {
         if (req.readyState === 4 && req.status == 200) {
           checkStatus(JSON.parse(req.response))
           resolve(JSON.parse(req.response))
         } else {
           reject(Error(req.statusText))
         }
-      }
+     // }
     }
     req.onerror = function () {
       reject(Error('Network Error'))

@@ -21,7 +21,7 @@ import styles from './index.less'
 import {getButtons, cleanObject, QiNiuOss, ImageUrl} from 'utils'
 import {menuData} from 'common/menu'
 import {METER_EXPORT} from 'common/urls'
-import {exportExc} from 'services/app'
+import { createURL} from 'services/app'
 
 const FormItem = Form.Item;
 const {Option} = Select;
@@ -467,8 +467,10 @@ class MeterUp extends Component {
   ];
 
   componentDidMount() {
-    this.getProNames([])
-    this.getList()
+    if(this.props.app.user.token) {
+      this.getProNames([])
+      this.getList()
+    }
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
@@ -706,6 +708,7 @@ class MeterUp extends Component {
       checkDetail: checkDetail,
       proNames: proNames
     }
+    const exportUrl = createURL(METER_EXPORT,{...this.exportParams,...{token:user.token}})
     return (
       <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="对上计量台账">
@@ -718,7 +721,7 @@ class MeterUp extends Component {
                     新增
                   </Button> : null}
                 {user.token && getButtons(user.permissionsMap.button, pageButtons[3]) ?
-                  <Button onClick={()=>exportExc(METER_EXPORT,this.exportParams,user.token)} icon="plus" type="primary">
+                  <Button href={exportUrl} icon="plus" type="primary">
                     导出
                   </Button> : null}
                 {/* {selectedRows.length > 0 && (

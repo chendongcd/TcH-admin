@@ -15,7 +15,7 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-import {_setTimeOut,getButtons,cleanObject} from "utils";
+import {getButtons,cleanObject} from "utils";
 import {proTypes,menuData} from 'common/menu'
 
 const FormItem = Form.Item;
@@ -157,11 +157,7 @@ class Project extends Component {
 
   componentDidMount() {
    // _setTimeOut(() => this.setState({pageLoading: false}), 1000)
-    this.getList()
-  }
-
-  componentWillUnmount() {
-    clearTimeout(_setTimeOut)
+      this.getList()
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {

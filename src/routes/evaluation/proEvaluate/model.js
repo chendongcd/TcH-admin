@@ -21,6 +21,10 @@ export default {
         });
         return true
       }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
+      }
       return false
     },
     *add({ payload, token }, { call, put }) {
@@ -28,12 +32,20 @@ export default {
       if(response.code=='200') {
         return true
       }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
+      }
       return false
     },
     *update({ payload, token }, { call, put }) {
       const response = yield call(updateEva, payload,token);
       if(response.code=='200') {
         return true
+      }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
       }
       return false
     },
@@ -45,6 +57,10 @@ export default {
           type:'saveProName',
           payload:response.entity
         })
+      }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
       }
     },
 

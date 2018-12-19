@@ -281,9 +281,11 @@ class Permission extends Component {
     },
   ];
 
-  componentDidMount() {
+   componentDidMount() {
    // _setTimeOut(() => this.setState({pageLoading: false}), 1000)
-    this.getList()
+     if(this.props.app.user.token) {
+       this.getList()
+     }
     /*dispatch({
       type: 'rule/fetch',
     });*/

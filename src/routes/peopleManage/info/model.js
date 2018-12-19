@@ -20,6 +20,10 @@ export default {
           payload: response,
         });
       }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
+      }
     },
     * add({payload,token}, {call, put}) {
       const response = yield call(addPeople, payload,token);
@@ -27,12 +31,20 @@ export default {
         message.success('新增成功');
         return true
       }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
+      }
       return false
     },
     * update({payload,token}, {call, put}) {
       const response = yield call(updatePeople, payload,token);
       if (response.code == '200') {
         return true
+      }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
       }
       return false
     },

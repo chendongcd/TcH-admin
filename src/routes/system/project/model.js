@@ -13,18 +13,16 @@ export default {
   },
 
   effects: {
-    * fetch({payload}, {call, put}) {
-      const response = yield call(queryRule, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-    },
+
     * addPro({payload, token}, {call, put}) {
       const response = yield call(addPro, payload, token);
       if (response.code == '200') {
         message.success('新增成功');
        return true
+      }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
       }
       return false
     },
@@ -34,28 +32,37 @@ export default {
         message.success('修改成功');
         return true
       }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
+      }
       return false
     },
     * queryProList({payload}, {call, put}) {
-      console.log(payload)
       const response = yield call(queryProList, payload);
-      console.log(response)
       if (response.code == '200') {
         yield put({
           type: 'save',
           payload: response,
         });
       }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
+      }
     },
     * queryProDetail({payload}, {call, put}) {
       const response = yield call(queryProDetail, payload);
-      console.log(response)
     },
     * updateProStatus({payload, token}, {call, put}) {
       const response = yield call(updateProStatus, payload, token);
       console.log(response)
       if (response.code == '200') {
         return true
+      }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
       }
       return false
     },

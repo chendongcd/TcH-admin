@@ -24,12 +24,20 @@ export default {
           payload: response,
         });
       }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
+      }
     },
     * add({payload, token}, {call, put}) {
       const response = yield call(addTeam, payload, token);
       if (response.code == '200') {
 
         return true
+      }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
       }
       return false
     },
@@ -39,6 +47,10 @@ export default {
 
         return true
       }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
+      }
       return false
     },
     * updateCompany({payload, token}, {call, put}) {
@@ -46,6 +58,10 @@ export default {
       if (response.code == '200') {
 
         return true
+      }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
       }
       return false
     },
@@ -58,6 +74,10 @@ export default {
           payload:response.entity
         })
       }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
+      }
     },
     * querySubNames({payload, token}, {call, put}) {
       const response = yield call(querySubList, payload, token);
@@ -67,6 +87,10 @@ export default {
           type: 'saveSubName',
           payload: response.entity
         })
+      }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
       }
     },
   },

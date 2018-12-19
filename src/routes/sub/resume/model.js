@@ -24,12 +24,20 @@ export default {
           payload: response,
         });
       }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
+      }
     },
     * add({payload,token}, {call, put}) {
       const response = yield call(addRes, payload,token);
       if (response.code == '200') {
         message.success('新增成功');
         return true
+      }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
       }
       return false
     },
@@ -38,6 +46,10 @@ export default {
       const response = yield call(updateRes, payload);
       if (response.code == '200') {
         return true
+      }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
       }
       return false
     },
@@ -50,6 +62,10 @@ export default {
           payload: response.entity
         })
       }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
+      }
     },
     * queryTeamNames({payload, token}, {call, put}) {
       const response = yield call(queryPerTeamList, payload, token);
@@ -60,6 +76,10 @@ export default {
           payload: response.entity
         })
       }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
+      }
     },
     * queryProNames({payload, token}, {call, put}) {
       const response = yield call(queryProPerList, payload, token);
@@ -69,6 +89,10 @@ export default {
           type: 'saveProName',
           payload: response.entity
         })
+      }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
       }
     },
   },

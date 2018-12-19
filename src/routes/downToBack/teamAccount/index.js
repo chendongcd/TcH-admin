@@ -21,7 +21,7 @@ import styles from './index.less'
 import { getButtons,cleanObject,QiNiuOss, ImageUrl} from 'utils'
 import {menuData} from 'common/menu'
 import {TEAM_EXPORT} from 'common/urls'
-import {exportExc} from 'services/app'
+import {createURL} from 'services/app'
 const pageButtons = menuData[13].buttons.map(a => a.permission)
 const FormItem = Form.Item;
 const {Option} = Select;
@@ -863,6 +863,7 @@ class TeamAccount extends Component {
       proNames: proNames,
       subNames:subNames
     }
+    const exportUrl = createURL(TEAM_EXPORT,{...this.exportParams,...{token:user.token}})
 
     return (
       <Page inner={true} loading={pageLoading}>
@@ -876,7 +877,7 @@ class TeamAccount extends Component {
                     新增
                   </Button> : null}
                 {user.token && getButtons(user.permissionsMap.button, pageButtons[4]) ?
-                  <Button onClick={()=>exportExc(TEAM_EXPORT,this.exportParams,user.token)} icon="plus" type="primary">
+                  <Button href={exportUrl} icon="plus" type="primary">
                     导出
                   </Button> : null}
               </div>

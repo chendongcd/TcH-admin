@@ -18,7 +18,7 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-import {_setTimeOut, getButtons, cleanObject} from 'utils'
+import {getButtons, cleanObject} from 'utils'
 import {apiDev} from 'utils/config'
 import {menuData} from 'common/menu'
 import {PRO_PDF,PRO_EXPORT} from 'common/urls'
@@ -723,12 +723,11 @@ class InfoCard extends Component {
   ];
 
   componentDidMount() {
-    this.getProNames([])
-    this.getList()
-  }
-
-  componentWillUnmount() {
-    clearTimeout(_setTimeOut)
+    console.log('didMount',123)
+    if(this.props.app.user.token) {
+      this.getProNames([])
+      this.getList()
+    }
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {

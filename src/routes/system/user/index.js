@@ -16,7 +16,7 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-import {_setTimeOut,getButtons,cleanObject} from "utils";
+import {getButtons,cleanObject} from "utils";
 import {menuData} from 'common/menu'
 
 const FormItem = Form.Item;
@@ -231,22 +231,12 @@ class User extends Component {
     },
   ];
 
-  componentDidMount() {
-    this.getProNames([])
-    this.getRoleNames([])
-    /*this.props.dispatch({
-      type:'sys_user/queryUserInfo',
-      payload:{userId:1}
-    })*/
-    //_setTimeOut(() => this.setState({pageLoading: false}), 1000)
-    this.getList()
-    // dispatch({
-    //   type: 'rule/fetch',
-    // });
-  }
-
-  componentWillUnmount() {
-    clearTimeout(_setTimeOut)
+   componentDidMount() {
+     if(this.props.app.user.token) {
+       this.getProNames([])
+       this.getRoleNames([])
+       this.getList()
+     }
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {

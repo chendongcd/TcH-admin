@@ -22,6 +22,10 @@ export default {
           payload: response,
         });
       }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
+      }
     },
     *fetchDetail({ payload, callback }, { call, put }) {
       const response = yield call(queryUpDetail, payload);
@@ -33,6 +37,10 @@ export default {
         message.success('新增成功');
         return true
       }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
+      }
       return false
     },
     *update({ payload}, { call, put }) {
@@ -40,6 +48,10 @@ export default {
       if(response.code=='200'){
         message.success('修改成功');
         return true
+      }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
       }
       return false
     },
@@ -51,6 +63,10 @@ export default {
           type:'saveProName',
           payload:response.entity
         })
+      }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
       }
     },
   },

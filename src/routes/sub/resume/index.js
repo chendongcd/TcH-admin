@@ -317,10 +317,12 @@ class Resume extends Component {
   ];
 
   componentDidMount() {
-    this.getSubNames()
-    this.getTeamNames()
-    this.getProNames()
-    this.getList()
+    if(this.props.app.user.token) {
+      this.getSubNames()
+      this.getTeamNames()
+      this.getProNames()
+      this.getList()
+    }
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {

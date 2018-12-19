@@ -23,6 +23,10 @@ export default {
           payload: response,
         });
       }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
+      }
     },
     *addUser({payload,token,callback,callback2},{call,put}){
       const response = yield call(addUser, payload,token);
@@ -32,6 +36,10 @@ export default {
         callback()
         callback2()
       }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
+      }
     },
     *updateUser({payload,token,callback,callback2},{call,put}){
       const response = yield call(updateUser, payload,token);
@@ -39,6 +47,10 @@ export default {
         message.success('用户信息修改成功')
         callback()
         callback2()
+      }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
       }
     },
     *queryUserInfo({payload},{call,put}){
@@ -50,6 +62,10 @@ export default {
       if(response.code=='200'){
         message.success(`该用户已被${payload.disable == 0 ? '启用' : '禁用'}`)
         return true
+      }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
       }
       return false
     },
@@ -63,6 +79,10 @@ export default {
           payload:response.list
         })
       }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
+      }
     },
 
     *queryRoleNames({payload},{call,put}){
@@ -73,6 +93,10 @@ export default {
           type:'saveRoleName',
           payload:response.list
         })
+      }
+      if(response.code=='401'){
+        yield put({type:'app/logout'})
+        return false
       }
     },
   },

@@ -21,7 +21,7 @@ import styles from './index.less'
 import { getButtons, cleanObject,QiNiuOss, ImageUrl} from 'utils'
 import {menuData} from 'common/menu'
 import {DOWN_EXPORT} from 'common/urls'
-import {exportExc} from 'services/app'
+import {createURL} from 'services/app'
 const pageButtons = menuData[14].buttons.map(a => a.permission)
 const FormItem = Form.Item;
 const {Option} = Select;
@@ -746,6 +746,8 @@ class MeterDown extends Component {
       proNames: proNames,
       subNames: subNames
     }
+    const exportUrl = createURL(DOWN_EXPORT,{...this.exportParams,...{token:user.token}})
+
     return (
       <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="对下验工计价台账">
@@ -758,7 +760,7 @@ class MeterDown extends Component {
                     新增
                   </Button> : null}
                 {user.token && getButtons(user.permissionsMap.button, pageButtons[3]) ?
-                  <Button onClick={()=>exportExc(DOWN_EXPORT,this.exportParams,user.token)} icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+                  <Button href={exportUrl} icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                     导出
                   </Button> : null}
               </div>
