@@ -219,11 +219,11 @@ class User extends Component {
             <Divider type="vertical"/>
             {getButtons(button,pageButtons[3])&&record.disable == 1? <a onClick={() => this.updateStatus({
               id: record.id,
-              disable: 1
+              disable: 0
             })}>启用</a>:null}
             {getButtons(button,pageButtons[4])&&record.disable == 0? <a onClick={() => this.updateStatus({
               id: record.id,
-              disable: 0
+              disable: 1
             })}>禁用</a>:null}
           </Fragment>
         )

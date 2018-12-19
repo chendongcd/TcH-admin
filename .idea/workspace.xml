@@ -9,6 +9,7 @@
       <change beforePath="$PROJECT_DIR$/src/routes/system/permission/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/system/permission/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/system/permission/model.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/system/permission/model.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/system/project/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/system/project/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/system/user/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/system/user/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/upToBack/meterUp/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/upToBack/meterUp/index.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -25,8 +26,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/routes/system/permission/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="197">
-              <caret line="373" column="20" lean-forward="true" selection-start-line="373" selection-start-column="20" selection-end-line="373" selection-end-column="20" />
+            <state relative-caret-position="254">
+              <caret line="271" column="20" lean-forward="true" selection-start-line="271" selection-start-column="20" selection-end-line="271" selection-end-column="20" />
               <folding>
                 <element signature="e#649#1561#0" />
                 <element signature="e#807#987#0" />
@@ -75,15 +76,11 @@
                 <element signature="e#6319#6403#0" />
                 <element signature="n#!!block;n#constructor#0;n#Permission#0" />
                 <element signature="e#6558#6748#0" />
-                <element signature="e#6766#7785#0" />
                 <element signature="e#6772#6823#0" />
                 <element signature="e#6829#6882#0" />
                 <element signature="e#6888#7018#0" />
                 <element signature="e#7024#7122#0" />
                 <element signature="e#7128#7227#0" />
-                <element signature="e#7233#7780#0" />
-                <element signature="e#7285#7774#0" />
-                <element signature="e#7355#7756#0" />
                 <element signature="n#!!block;n#componentDidMount#0;n#Permission#0" />
                 <element signature="e#7915#7945#0" />
                 <element signature="e#7950#7998#0" />
@@ -146,14 +143,41 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/routes/system/user/index.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="374">
+              <caret line="225" column="24" lean-forward="true" selection-start-line="225" selection-start-column="24" selection-end-line="225" selection-end-column="24" />
+              <folding>
+                <element signature="e#0#48#0" expanded="true" />
+                <element signature="n#CreateForm#0" />
+                <element signature="n#!!block;n#constructor#0;n#CreateForm#0" />
+                <element signature="n#!!block;n#componentDidUpdate#0;n#CreateForm#0" />
+                <element signature="n#!!block;n#render#0;n#CreateForm#0" />
+                <element signature="n#!!block;n#constructor#0;n#User#0" />
+                <element signature="n#!!block;n#renderSimpleForm#0;n#User#0" />
+                <element signature="n#!!block;n#renderForm#0;n#User#0" />
+                <element signature="n#!!block;n#render#0;n#User#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/routes/system/permission/model.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="138">
-              <caret line="46" column="31" lean-forward="true" selection-start-line="46" selection-start-column="31" selection-end-line="46" selection-end-column="31" />
+            <state relative-caret-position="123">
+              <caret line="45" column="27" lean-forward="true" selection-start-line="45" selection-start-column="27" selection-end-line="45" selection-end-column="27" />
               <folding>
                 <element signature="e#0#111#0" expanded="true" />
               </folding>
             </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/services/system/sys_per.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1" />
           </provider>
         </entry>
       </file>
@@ -233,7 +257,6 @@
         <option value="$PROJECT_DIR$/src/routes/peopleManage/info/index.js" />
         <option value="$PROJECT_DIR$/src/common/urls.js" />
         <option value="$PROJECT_DIR$/src/routes/project/infoCard/index.js" />
-        <option value="$PROJECT_DIR$/src/routes/system/user/index.js" />
         <option value="$PROJECT_DIR$/src/routes/sub/resume/index.js" />
         <option value="$PROJECT_DIR$/src/services/app.js" />
         <option value="$PROJECT_DIR$/src/routes/downToBack/meterDown/index.js" />
@@ -266,6 +289,7 @@
         <option value="$PROJECT_DIR$/src/routes/system/project/index.js" />
         <option value="$PROJECT_DIR$/src/routes/system/permission/model.js" />
         <option value="$PROJECT_DIR$/src/routes/system/permission/index.js" />
+        <option value="$PROJECT_DIR$/src/routes/system/user/index.js" />
       </list>
     </option>
   </component>
@@ -276,8 +300,8 @@
     <auto-save>true</auto-save>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="73" />
-    <option name="y" value="121" />
+    <option name="x" value="202" />
+    <option name="y" value="23" />
     <option name="width" value="1423" />
     <option name="height" value="820" />
   </component>
@@ -309,75 +333,14 @@
               <item name="TcH-admin" type="b2602c69:ProjectViewProjectNode" />
               <item name="TcH-admin" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="routes" type="462c0819:PsiDirectoryNode" />
-              <item name="project" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TcH-admin" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TcH-admin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="routes" type="462c0819:PsiDirectoryNode" />
-              <item name="project" type="462c0819:PsiDirectoryNode" />
-              <item name="infoCard" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TcH-admin" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TcH-admin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="routes" type="462c0819:PsiDirectoryNode" />
-              <item name="sub" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TcH-admin" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TcH-admin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="routes" type="462c0819:PsiDirectoryNode" />
-              <item name="system" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TcH-admin" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TcH-admin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="routes" type="462c0819:PsiDirectoryNode" />
-              <item name="system" type="462c0819:PsiDirectoryNode" />
-              <item name="permission" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TcH-admin" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TcH-admin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="routes" type="462c0819:PsiDirectoryNode" />
-              <item name="system" type="462c0819:PsiDirectoryNode" />
-              <item name="project" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TcH-admin" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TcH-admin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="routes" type="462c0819:PsiDirectoryNode" />
-              <item name="system" type="462c0819:PsiDirectoryNode" />
-              <item name="user" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TcH-admin" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TcH-admin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="routes" type="462c0819:PsiDirectoryNode" />
-              <item name="upToBack" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TcH-admin" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TcH-admin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="routes" type="462c0819:PsiDirectoryNode" />
-              <item name="upToBack" type="462c0819:PsiDirectoryNode" />
-              <item name="meterUp" type="462c0819:PsiDirectoryNode" />
+              <item name="services" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="TcH-admin" type="b2602c69:ProjectViewProjectNode" />
               <item name="TcH-admin" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="services" type="462c0819:PsiDirectoryNode" />
+              <item name="system" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -510,15 +473,15 @@
       <workItem from="1544936335730" duration="17426000" />
       <workItem from="1545016184509" duration="7070000" />
       <workItem from="1545031387133" duration="21326000" />
-      <workItem from="1545097107238" duration="21321000" />
+      <workItem from="1545097107238" duration="21588000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="636141000" />
+    <option name="totallyTimeSpent" value="636408000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="230" y="162" width="1423" height="820" extended-state="0" />
+    <frame x="202" y="23" width="1423" height="820" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49046323" visible="true" weight="0.22681883" />
@@ -579,54 +542,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/common/menu.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="24" selection-start-column="24" selection-end-column="24" />
-          <folding>
-            <element signature="e#24#7525#0" />
-            <element signature="e#28#134#0" />
-            <element signature="e#138#277#0" />
-            <element signature="e#281#705#0" />
-            <element signature="e#432#701#0" />
-            <element signature="e#709#1112#0" />
-            <element signature="e#859#1108#0" />
-            <element signature="e#1116#1583#0" />
-            <element signature="e#1261#1579#0" />
-            <element signature="e#2195#2330#0" />
-            <element signature="e#2334#2773#0" />
-            <element signature="e#2487#2769#0" />
-            <element signature="e#2777#2914#0" />
-            <element signature="e#2918#3612#0" />
-            <element signature="e#3077#3608#0" />
-            <element signature="e#3616#4139#0" />
-            <element signature="e#3768#4135#0" />
-            <element signature="e#4143#4284#0" />
-            <element signature="e#4288#4796#0" />
-            <element signature="e#4442#4792#0" />
-            <element signature="e#4800#5243#0" />
-            <element signature="e#4957#5239#0" />
-            <element signature="e#5247#5387#0" />
-            <element signature="e#5391#5834#0" />
-            <element signature="e#5838#5983#0" />
-            <element signature="e#5987#6473#0" />
-            <element signature="e#6155#6469#0" />
-            <element signature="e#6477#6621#0" />
-            <element signature="e#6625#6763#0" />
-            <element signature="e#6920#7132#0" />
-            <element signature="e#7300#7518#0" />
-            <element signature="e#7551#8230#0" />
-            <element signature="e#7555#7648#0" />
-            <element signature="e#7652#7745#0" />
-            <element signature="e#7749#7842#0" />
-            <element signature="e#7846#7939#0" />
-            <element signature="e#7943#8036#0" />
-            <element signature="e#8040#8133#0" />
-            <element signature="e#8137#8228#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/services/sub/qualification.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
@@ -679,69 +594,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
           <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/routes/system/user/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="148" column="3" lean-forward="true" selection-start-line="148" selection-start-column="3" selection-end-line="148" selection-end-column="3" />
-          <folding>
-            <element signature="e#0#48#0" expanded="true" />
-            <element signature="n#CreateForm#0" />
-            <element signature="n#!!block;n#constructor#0;n#CreateForm#0" />
-            <element signature="e#793#815#0" />
-            <element signature="n#!!block;n#componentDidUpdate#0;n#CreateForm#0" />
-            <element signature="e#996#1034#0" />
-            <element signature="e#1110#1397#0" />
-            <element signature="e#1158#1391#0" />
-            <element signature="e#1246#1319#0" />
-            <element signature="e#1424#1462#0" />
-            <element signature="e#1502#1576#0" />
-            <element signature="n#!!block;n#render#0;n#CreateForm#0" />
-            <element signature="e#1828#5067#0" />
-            <element signature="e#2306#2897#0" />
-            <element signature="e#2417#2606#0" />
-            <element signature="e#2608#2875#0" />
-            <element signature="e#2930#3658#0" />
-            <element signature="e#3044#3201#0" />
-            <element signature="e#3203#3636#0" />
-            <element signature="e#3519#3614#0" />
-            <element signature="e#3675#4355#0" />
-            <element signature="e#3788#3860#0" />
-            <element signature="e#3875#4333#0" />
-            <element signature="e#4212#4309#0" />
-            <element signature="e#4364#4702#0" />
-            <element signature="e#4478#4629#0" />
-            <element signature="e#4711#5052#0" />
-            <element signature="e#4826#4979#0" />
-            <element signature="n#!!block;n#constructor#0;n#User#0" />
-            <element signature="e#5186#5376#0" />
-            <element signature="e#5394#7467#0" />
-            <element signature="e#5400#5453#0" />
-            <element signature="e#5459#5573#0" />
-            <element signature="e#5579#5635#0" />
-            <element signature="e#5641#5701#0" />
-            <element signature="e#5707#5764#0" />
-            <element signature="e#5770#5827#0" />
-            <element signature="e#5833#5984#0" />
-            <element signature="e#5900#5977#0" />
-            <element signature="e#5990#6051#0" />
-            <element signature="e#6057#6206#0" />
-            <element signature="e#6212#6274#0" />
-            <element signature="e#6280#6431#0" />
-            <element signature="e#6437#7462#0" />
-            <element signature="e#6528#7455#0" />
-            <element signature="e#6594#6627#0" />
-            <element signature="e#6705#7437#0" />
-            <element signature="e#7105#7219#0" />
-            <element signature="e#7141#7210#0" />
-            <element signature="e#7295#7409#0" />
-            <element signature="e#7331#7400#0" />
-            <element signature="n#!!block;n#renderSimpleForm#0;n#User#0" />
-            <element signature="n#!!block;n#renderForm#0;n#User#0" />
-            <element signature="n#!!block;n#render#0;n#User#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -3103,18 +2955,41 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/routes/system/permission/model.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="138">
-          <caret line="46" column="31" lean-forward="true" selection-start-line="46" selection-start-column="31" selection-end-line="46" selection-end-column="31" />
+        <state relative-caret-position="123">
+          <caret line="45" column="27" lean-forward="true" selection-start-line="45" selection-start-column="27" selection-end-line="45" selection-end-column="27" />
           <folding>
             <element signature="e#0#111#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/services/system/sys_per.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/routes/system/user/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="225" column="24" lean-forward="true" selection-start-line="225" selection-start-column="24" selection-end-line="225" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#48#0" expanded="true" />
+            <element signature="n#CreateForm#0" />
+            <element signature="n#!!block;n#constructor#0;n#CreateForm#0" />
+            <element signature="n#!!block;n#componentDidUpdate#0;n#CreateForm#0" />
+            <element signature="n#!!block;n#render#0;n#CreateForm#0" />
+            <element signature="n#!!block;n#constructor#0;n#User#0" />
+            <element signature="n#!!block;n#renderSimpleForm#0;n#User#0" />
+            <element signature="n#!!block;n#renderForm#0;n#User#0" />
+            <element signature="n#!!block;n#render#0;n#User#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/routes/system/permission/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="373" column="20" lean-forward="true" selection-start-line="373" selection-start-column="20" selection-end-line="373" selection-end-column="20" />
+        <state relative-caret-position="254">
+          <caret line="271" column="20" lean-forward="true" selection-start-line="271" selection-start-column="20" selection-end-line="271" selection-end-column="20" />
           <folding>
             <element signature="e#649#1561#0" />
             <element signature="e#807#987#0" />
@@ -3163,15 +3038,11 @@
             <element signature="e#6319#6403#0" />
             <element signature="n#!!block;n#constructor#0;n#Permission#0" />
             <element signature="e#6558#6748#0" />
-            <element signature="e#6766#7785#0" />
             <element signature="e#6772#6823#0" />
             <element signature="e#6829#6882#0" />
             <element signature="e#6888#7018#0" />
             <element signature="e#7024#7122#0" />
             <element signature="e#7128#7227#0" />
-            <element signature="e#7233#7780#0" />
-            <element signature="e#7285#7774#0" />
-            <element signature="e#7355#7756#0" />
             <element signature="n#!!block;n#componentDidMount#0;n#Permission#0" />
             <element signature="e#7915#7945#0" />
             <element signature="e#7950#7998#0" />
