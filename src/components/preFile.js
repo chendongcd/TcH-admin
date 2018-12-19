@@ -12,20 +12,16 @@ class PreFile extends Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      progress: 0
-    }
   }
 
   render() {
     let {file, progress, onPreview, onClose, index,noImage} = this.props
     if (file) {
-      console.log(file.name)
       return (
         <div className={containerClass}>
           <div className={listItem}>
             <div className={item}>
-              {file.status == 'done' ?( noImage?<a href={file.url} download={file.name}>{file.name}</a>:<span onClick={() => onPreview(file)} style={{cursor: 'pointer'}}>
+              {file.status == 'done' ?( noImage?<a href={file.url+'?attname='+file.name} download={file.name}>{file.name}</a>:<span onClick={() => onPreview(file)} style={{cursor: 'pointer'}}>
              <img className={imgClass} src={file.url}/>
                 <span style={{marginLeft: 60}}>{file.name}</span>
             </span>) : <Progress style={{marginTop: 15}} percent={progress} status="active"/>}

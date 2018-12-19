@@ -509,6 +509,7 @@ class CreateForm extends Component {
 
   onSuccess = (res, index) => {
     //this.state.fileList.push(ImageUrl+res.key)
+    console.log(res)
     if (index == 2) {
       let file = {
         uid: '-1',
