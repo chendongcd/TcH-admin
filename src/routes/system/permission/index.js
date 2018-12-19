@@ -370,8 +370,12 @@ class Permission extends Component {
           name: fields.roleName,
           description: '用于公司管理项目角色'
         },
-        token: user.token,
-        callback: this.handleModalVisible
+        token: user.token
+      }).then(res=>{
+        if(res){
+          this.handleModalVisible()
+          this.getList()
+        }
       })
     }
     //

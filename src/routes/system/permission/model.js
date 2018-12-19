@@ -41,17 +41,18 @@ export default {
       // });
     },
 
-    *addRole({ payload ,token,callback}, { call, put }){
+    *addRole({ payload ,token}, { call, put }){
       const response = yield call(addRole, payload,token);
       console.log(response)
       if(response.code=='200'){
         message.success('新增角色成功')
-        if (callback) callback();
+       return true
       }
       if(response.code=='401'){
         yield put({type:'app/logout'})
         return false
       }
+      return false
     },
     *updateRole({ payload,token }, { call, put }){
       const response = yield call(updateRole, payload,token);

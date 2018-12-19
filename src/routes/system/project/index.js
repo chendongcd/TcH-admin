@@ -95,42 +95,32 @@ class Project extends Component {
     {
       title: '状态',
       dataIndex: 'status',
-      filters: [
-        {
-          text: status[0],
-          value: 0,
-        },
-        {
-          text: status[1],
-          value: 1,
-        }
-      ],
       render(val) {
         return <Badge status={statusMap[val]} text={status[val]}/>;
       },
     },
     {
       title: '创建人',
-      dataIndex: 'owner',
+      dataIndex: 'createUserStr',
     },
     {
       title: '创建时间',
-      dataIndex: 'createdAt',
-      sorter: true,
+      dataIndex: 'createdTime',
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm')}</span>,
     },
     {
       title: '最新修改人',
-      dataIndex: 'updateUser'
+      dataIndex: 'updateUserStr'
     },
     {
       title: '最新修改时间',
-      dataIndex: 'updatedAt',
-      sorter: true,
+      dataIndex: 'updateTime',
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm')}</span>,
     },
     {
       title: '操作',
+      fixed: 'right',
+      width: 120,
       render: (val, record) => {
         const user = this.props.app.user
         if(!user.token){
@@ -143,11 +133,11 @@ class Project extends Component {
             <Divider type="vertical"/>
             {getButtons(button,pageButtons[2])&&record.status == 1? <a onClick={() => this.updateStatus({
               id: record.id,
-              status: record.status
+              status: 0
             })}>启用</a>:null}
             {getButtons(button,pageButtons[3])&&record.status == 0? <a onClick={() => this.updateStatus({
               id: record.id,
-              status: record.status
+              status: 1
             })}>禁用</a>:null}
           </Fragment>
         )
@@ -390,6 +380,7 @@ class Project extends Component {
                 loading={loading.effects['sys_pro/queryProList']}
                 data={data}
                 rowKey="id"
+                scroll={{x: '120%'}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

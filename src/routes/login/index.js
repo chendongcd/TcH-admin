@@ -73,10 +73,10 @@ class Login extends Component {
             <Button type="primary" onClick={()=>this.handleOk(validateFieldsAndScroll)} loading={loginLoading}>
               登录
             </Button>
-            <p>
+            {/*<p>
               <span>用户名：admin</span>
               <span>密码：admin</span>
-            </p>
+            </p>*/}
           </Row>
         </form>
       </div>
