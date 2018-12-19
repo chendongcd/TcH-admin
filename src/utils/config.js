@@ -1,4 +1,4 @@
-const path =process.env.NODE_ENV=='production'?'static/public':'public'
+const path =process.env.NODE_ENV=='production'?'.':'public'
 module.exports = {
   name: '成本管理系统',
   prefix: 'TcH-Admin',
