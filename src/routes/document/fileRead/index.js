@@ -53,6 +53,10 @@ class CreateForm extends Component {
     });
   };
 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+
+  }
+
   componentWillUnmount() {
     this.upload = null
   }
@@ -104,7 +108,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('annexUrl', {
                   valuePropName: 'fileList',
                   getValueFromEvent: normFile,
-                  initialValue: selectedValues.annexUrl ? selectedValues.annexUrl : [],
+                  initialValue: selectedValues.annexUrl ? [selectedValues.annexUrl] : [],
                 })(
                   <Upload.Dragger
                     onChange={this.handleChange}
@@ -231,7 +235,7 @@ class FileRead extends Component {
                 <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
                 <Divider type="vertical"/>
               </Fragment>: null}
-            <a>下载附件</a>
+            <a href={record.annexUrl+'?attname=附件'} download={'附件'}>下载附件</a>
           </Fragment>
         )
       }

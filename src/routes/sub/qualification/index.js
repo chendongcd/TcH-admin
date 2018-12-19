@@ -61,7 +61,7 @@ class CreateForm extends Component {
     form.validateFields((err, fieldsValue) => {
       console.log(fieldsValue)
       if (err) return;
-      fieldsValue.annex = testPDF
+     // fieldsValue.annex = testPDF
       for (let prop in fieldsValue) {
         if (fieldsValue[prop] instanceof moment) {
           // console.log(fieldsValue[prop].format())
@@ -390,7 +390,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('annex', {
                   valuePropName: 'fileList',
                   getValueFromEvent: normFile,
-                  initialValue: selectedValues.annex ? selectedValues.annex : [],
+                  initialValue: selectedValues.annex ? [selectedValues.annex] : [],
                 })(
                   <Upload.Dragger  onChange={this.handleChange}
                                    accept={'image/*'}

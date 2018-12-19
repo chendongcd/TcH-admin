@@ -298,7 +298,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('evaluationAnnex', {
                   valuePropName: 'fileList',
                   getValueFromEvent: normFile,
-                  initialValue: selectedValues.evaluationAnnex ? selectedValues.evaluationAnnex : [],
+                  initialValue: selectedValues.evaluationAnnex ? [selectedValues.evaluationAnnex] : [],
                 })(
                   <Upload.Dragger onChange={(e) => this.handleChange(e, 0)}
                                   accept={'.zip,.rar'}
@@ -362,7 +362,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('jointHearingAnnex', {
                   valuePropName: 'fileList',
                   getValueFromEvent: normFile,
-                  initialValue: selectedValues.jointHearingAnnex ? selectedValues.jointHearingAnnex : [],
+                  initialValue: selectedValues.jointHearingAnnex ? [selectedValues.jointHearingAnnex] : [],
                 })(
                   <Upload.Dragger onChange={(e) => this.handleChange(e, 1)}
                                   accept={'.zip,.rar'}
@@ -438,7 +438,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('responsibilityAnnex', {
                   valuePropName: 'fileList',
                   getValueFromEvent: normFile,
-                  initialValue: selectedValues.responsibilityAnnex ? selectedValues.responsibilityAnnex : [],
+                  initialValue: selectedValues.responsibilityAnnex ? [selectedValues.responsibilityAnnex] : [],
                 })(
                   <Upload.Dragger onChange={(e) => this.handleChange(e, 2)}
                                   accept={'image/*'}

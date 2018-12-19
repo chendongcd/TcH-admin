@@ -261,7 +261,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('annexUrl', {
                   valuePropName: 'fileList',
                   getValueFromEvent: normFile,
-                  initialValue: selectedValues.annexUrl ? selectedValues.annexUrl : [],
+                  initialValue: selectedValues.annexUrl ? [selectedValues.annexUrl] : [],
                 })(
                   <Upload.Dragger
                     onChange={this.handleChange}
