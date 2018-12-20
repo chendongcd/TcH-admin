@@ -15,8 +15,24 @@ export default {
   effects: {
     *fetch({ payload ,token}, { call, put }) {
       const response = yield call(queryUpList, payload,token);
-      console.log(response)
+     // console.log(response)
       if(response.code == '200'){
+        if(response.code=='200') {
+          let x = 0, y = 0, z = 0, a5 = 0, a14 = 0, a13 = 0, a15 = 0
+          response.list.forEach(a => {
+            x += a.realAmountTax//8
+            y += a.alreadyPaidAmount//10
+            a5 += a.valuationAmountTax
+            a14 += a.notCalculatedAmount
+            a13 += a.extraAmount
+          })
+
+          z = Math.floor(y / x * 100) / 100
+          a15 = Math.floor(a5 / (a5 + a14 + a13) * 100) / 100
+          let sum = {id: 'sum', payProportion: z, productionValue: a15, code: '合计:'}
+          response.list = [...response.list, sum]
+        }
+        //console.log(response)
         yield put({
           type: 'save',
           payload: response,

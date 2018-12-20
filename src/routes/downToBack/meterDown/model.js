@@ -18,6 +18,17 @@ export default {
       const response = yield call(queryDownList, payload, token);
       console.log(response)
       if(response.code=='200') {
+        if(response.list.length>0) {
+          let x = 0, y = 0, z = 0
+          response.list.forEach(a => {
+            x += a.valuationPrice
+            y += a.endedPrice
+          })
+
+          z = Math.floor(x / (x + y) * 100) / 100
+          let sum = {id: 'sum', underRate: z, code: '合计:'}
+          response.list = [...response.list, sum]
+        }
         yield put({
           type: 'save',
           payload: response,
@@ -68,6 +79,7 @@ export default {
       const response = yield call(querySubList, payload, token);
       console.log(response)
       if (response.code == '200') {
+
         yield put({
           type: 'saveSubName',
           payload: response.entity

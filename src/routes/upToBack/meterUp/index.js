@@ -370,7 +370,7 @@ class MeterUp extends Component {
       title: '计量日期',
       dataIndex: 'meteringTime',
       render(val) {
-        return <span>{moment(val).format('YYYY/MM/DD')}</span>;
+        return <span>{val?moment(val).format('YYYY/MM/DD'):''}</span>;
       },
     },
     {
@@ -446,9 +446,12 @@ class MeterUp extends Component {
     },
     {
       title: '操作',
-      fixed: 'right',
-      width: 150,
+      // fixed: 'right',
+      // width: 180,
       render: (val, record) => {
+        if(record.id=='sum'){
+         return null
+        }
         const user = this.props.app.user
         if (!user.token) {
           return null

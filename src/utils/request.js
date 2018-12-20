@@ -22,7 +22,6 @@ const codeMessage = {
 };
 
 const checkStatus = response => {
- console.log(response)
  //  console.log(appModal)
  //  if(response.code == 200){
  //    message.error('用户信息认证失效，请重新登陆',5);
@@ -33,7 +32,6 @@ const checkStatus = response => {
     return
   }
   const errortext = codeMessage[response.code] || response.message;
- // console.log(codeMessage[response.code])
   message.error(errortext);
   return
 };
@@ -87,7 +85,7 @@ export default function request(url, options, token) {
     }
 
     req.onload = function () {
-      console.log(req)
+     // console.log(req)
       //if (!isExport) {
         if (req.readyState === 4 && req.status == 200) {
           checkStatus(JSON.parse(req.response))
@@ -108,7 +106,6 @@ export default function request(url, options, token) {
       // reject(new Error('请求超时'))
     }
     if (options.method !== 'GET') {
-      console.log(options)
       req.send(JSON.stringify(options.body))
     } else {
       req.send()

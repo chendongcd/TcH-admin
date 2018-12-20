@@ -399,7 +399,7 @@ class MeterDown extends Component {
       title: '计价日期',
       dataIndex: 'valuationTime',
       render(val) {
-        return <span>{moment(val).format('YYYY/MM/DD')}</span>;
+        return <span>{val?moment(val).format('YYYY/MM/DD'):''}</span>;
       },
     },
     {
@@ -440,10 +440,7 @@ class MeterDown extends Component {
         {
           title: '计日工及补偿费用',
           dataIndex: 'compensation',
-          key: 'compensation',
-          render(val) {
-            return <span>没有</span>;
-          },
+          key: 'compensation'
         },
         {
           title: '应支付金额',
@@ -459,10 +456,7 @@ class MeterDown extends Component {
     },
     {
       title: '对下计价率',
-      //dataIndex: 'projectName',
-      render(val) {
-        return <span>没有</span>;
-      },
+      dataIndex: 'underRate',
     },
     {
       title: '计价负责人',
@@ -475,6 +469,9 @@ class MeterDown extends Component {
     {
       title: '操作',
       render: (val, record) => {
+        if(record.id=='sum'){
+          return null
+        }
         const user = this.props.app.user
         if (!user.token) {
           return null
