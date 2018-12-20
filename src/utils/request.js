@@ -85,9 +85,8 @@ export default function request(url, options, token) {
     }
 
     req.onload = function () {
-     // console.log(req)
       //if (!isExport) {
-        if (req.readyState === 4 && req.status == 200) {
+        if (req.readyState === 4 && (req.status == 200||req.status == 401)) {
           checkStatus(JSON.parse(req.response))
           resolve(JSON.parse(req.response))
         } else {

@@ -172,7 +172,7 @@ class User extends Component {
     },
     {
       title: '角色权限',
-      dataIndex: 'roleType',
+      dataIndex: 'roleName',
     },
     {
       title: '状态',
