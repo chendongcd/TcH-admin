@@ -21,7 +21,8 @@ import styles from './index.less'
 import {getButtons, cleanObject, QiNiuOss, ImageUrl} from 'utils'
 import {menuData} from 'common/menu'
 import {METER_EXPORT} from 'common/urls'
-import { createURL} from 'services/app'
+import {createURL} from 'services/app'
+
 const FormItem = Form.Item;
 const {Option} = Select;
 const getValue = obj =>
@@ -33,7 +34,7 @@ const pageButtons = menuData[8].buttons.map(a => a.permission)
 const info_css = {
   color: '#fa541c'
 }
-const testValue = ''
+const testValue = '123'
 const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
 // {
 //   uid: '-1',
@@ -59,6 +60,19 @@ class CreateForm extends Component {
     // console.log(this.upload)
   }
 
+  componentDidUpdate(preProp, preState) {
+    if (!preProp.selectedValues.annexUrl && this.props.selectedValues.annexUrl && this.state.fileList.length == 0) {
+      let pdf = JSON.parse(this.props.selectedValues.annexUrl)
+      let file = {
+        uid: '-1',
+        name: pdf.fileName,
+        status: 'done',
+        url: pdf.url,
+      }
+      this.setState({fileList: [file]})
+    }
+  }
+
   okHandle = () => {
     const {form, handleAdd, updateModalVisible, selectedValues} = this.props;
 
@@ -66,7 +80,8 @@ class CreateForm extends Component {
       //return
       if (err) return;
       fieldsValue.meteringTime = fieldsValue.meteringTime.format('YYYY-MM-DD')
-      console.log(fieldsValue)
+      fieldsValue.annexUrl = `{"url":"${this.state.fileList[0].url}","fileName":"${this.state.fileList[0].name}"}`
+      // console.log(fieldsValue)
       //return
       // form.resetFields();
       handleAdd(fieldsValue, updateModalVisible, selectedValues);
@@ -133,10 +148,11 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="计量日期">
                 {form.getFieldDecorator('meteringTime', {
-                  rules: [{required: true,message:'请选择计量日期'}],
+                  rules: [{required: true, message: '请选择计量日期'}],
                   initialValue: selectedValues.meteringTime ? moment(selectedValues.meteringTime) : null,
-                })(<DatePicker.MonthPicker className={styles.customSelect} disabled={checkDetail} style={{width: '100%'}}
-                               placeholder="请选择计量日期"/>)}
+                })(<DatePicker.MonthPicker className={styles.customSelect} disabled={checkDetail}
+                                           style={{width: '100%'}}
+                                           placeholder="请选择计量日期"/>)}
               </FormItem>
             </Col>
           </Row>
@@ -246,7 +262,7 @@ class CreateForm extends Component {
             <Col md={24} sm={24}>
               <FormItem style={{marginLeft: 12 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="备注">
                 {form.getFieldDecorator('remark', {
-                  rules: [{required: true}],
+                  rules: [{required: true, message: '请输入备注'}],
                   initialValue: selectedValues.remark ? selectedValues.remark : testValue,
                 })(<Input.TextArea className={styles.customSelect} disabled={checkDetail} width={'100%'}
                                    placeholder="请输入" rows={4}/>)}
@@ -269,7 +285,7 @@ class CreateForm extends Component {
                     // fileList={fileList}
                     listType="picture"
                     name="files"
-                    disabled={fileList.length > 0}
+                    disabled={fileList.length > 0 || checkDetail}
                     onSuccess={this.onSuccess}
                     handleManualRemove={this.remove}
                     onError={this.onError}
@@ -281,23 +297,25 @@ class CreateForm extends Component {
                     <p className="ant-upload-text">点击或拖动附件进入</p>
                   </Upload.Dragger>
                 )}
-                <PreFile onClose={this.remove} onPreview={this.handlePreview} progress={progress} file={fileList[0]}/>
+                <PreFile disabled={checkDetail} onClose={this.remove} onPreview={this.handlePreview} progress={progress}
+                         file={fileList[0]}/>
                 <span style={info_css}>备注：请以一份PDF格式文件上传封面和汇总表</span>
               </FormItem>
             </Col>
           </Row>
         </div>
-        <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-          <img alt="example" style={{width: '100%'}} src={previewImage}/>
+        <Modal width={643} style={{width: 643, height: 940}} bodyStyle={{width: 643, height: 940}}
+               visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+          <iframe style={{width: 595, height: 892}} frameBorder={0} src={previewImage}/>
         </Modal>
       </Modal>
     );
   }
 
   onUpload = (params) => {
-     QiNiuOss(params).then(res=>{
-       this.upload = res
-     })
+    QiNiuOss(params).then(res => {
+      this.upload = res
+    })
   }
 
   onProgress = (e) => {
@@ -328,7 +346,7 @@ class CreateForm extends Component {
     } else {
       this.upload.unsubscribe()
     }
-    this.setState({fileList:[]})
+    this.setState({fileList: []})
   }
 }
 
@@ -347,8 +365,8 @@ class MeterUp extends Component {
       checkDetail: false
     }
     this.exportParams = {
-      page:1,
-      pageSize:10
+      page: 1,
+      pageSize: 10
     }
   }
 
@@ -369,7 +387,7 @@ class MeterUp extends Component {
       title: '计量日期',
       dataIndex: 'meteringTime',
       render(val) {
-        return <span>{val?moment(val).format('YYYY/MM'):''}</span>;
+        return <span>{val ? moment(val).format('YYYY/MM') : ''}</span>;
       },
     },
     {
@@ -420,8 +438,8 @@ class MeterUp extends Component {
           title: '拨付率',
           dataIndex: 'payProportion',
           key: 'payProportion',
-          render(val){
-            return <span>{val*100+'%'}</span>;
+          render(val) {
+            return <span>{val * 100 + '%'}</span>;
           }
         }]
     },
@@ -441,8 +459,8 @@ class MeterUp extends Component {
     {
       title: '产值计价率',
       dataIndex: 'productionValue',
-      render(val){
-        return <span>{val*100+'%'}</span>;
+      render(val) {
+        return <span>{val * 100 + '%'}</span>;
       }
     },
     {
@@ -454,14 +472,40 @@ class MeterUp extends Component {
       // fixed: 'right',
       // width: 180,
       render: (val, record) => {
-        if(record.id=='sum'){
-         return null
+        if (record.id == 'sum') {
+          return null
         }
         const user = this.props.app.user
         if (!user.token) {
           return null
         }
         const button = user.permissionsMap.button
+
+        //if(JSON.parse(record.annexUrl))
+        function isJSON(str) {
+          if (typeof str == 'string') {
+            try {
+              var obj = JSON.parse(str);
+              if (str.indexOf('{') > -1) {
+                return true;
+              } else {
+                return false;
+              }
+            } catch (e) {
+              return false;
+            }
+          }
+          return false;
+        }
+
+        let href = ''
+        if (isJSON(record.annexUrl)) {
+          let annex = JSON.parse(record.annexUrl)
+          href = annex.url + '?attname=' + annex.fileName
+          //console.log(href)
+        } else {
+          href = record.annexUrl
+        }
         return (
           <Fragment>
             {getButtons(button, pageButtons[1]) ?
@@ -469,7 +513,7 @@ class MeterUp extends Component {
             <Divider type="vertical"/>
             {getButtons(button, pageButtons[2]) ? <a onClick={() => this.handleCheckDetail(true, record)}>查看</a> : null}
             <Divider type="vertical"/>
-            <a href={record.annexUrl} download="fujian">下载附件</a>
+            <a href={href} download="附件">下载附件</a>
           </Fragment>
         )
       }
@@ -477,7 +521,7 @@ class MeterUp extends Component {
   ];
 
   componentDidMount() {
-    if(this.props.app.user.token) {
+    if (this.props.app.user.token) {
       this.getProNames([])
       this.getList()
     }
@@ -718,10 +762,12 @@ class MeterUp extends Component {
       checkDetail: checkDetail,
       proNames: proNames
     }
-    const exportUrl = createURL(METER_EXPORT,{...this.exportParams,...{token:user.token}})
+    const exportUrl = createURL(METER_EXPORT, {...this.exportParams, ...{token: user.token}})
     return (
       <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="对上计量台账">
+{/*          <iframe width={50} style={{height: 50, zoom: '70%'}} scrolling={'no'} frameBorder={0}
+                  src={'http://pjno2bd7f.bkt.clouddn.com/rc-upload-1545408599943-2'}/>*/}
           <Card bordered={false}>
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>

@@ -15,7 +15,7 @@ export default {
   effects: {
     *fetch({ payload ,token}, { call, put }) {
       const response = yield call(queryUpList, payload,token);
-     // console.log(response)
+      console.log(response)
       if(response.code == '200'){
         if(response.code=='200') {
           let x = 0, y = 0, z = 0, a5 = 0, a14 = 0, a13 = 0, a15 = 0
@@ -67,8 +67,8 @@ export default {
       const response = yield call(queryUpDetail, payload);
       if (callback) callback();
     },
-    *add({ payload}, { call, put }) {
-      const response = yield call(addUp, payload);
+    *add({ payload,token}, { call, put }) {
+      const response = yield call(addUp, payload,token);
       if(response.code=='200'){
         message.success('新增成功');
         return true
@@ -79,8 +79,8 @@ export default {
       }
       return false
     },
-    *update({ payload}, { call, put }) {
-      const response = yield call(updateUp, payload);
+    *update({ payload,token}, { call, put }) {
+      const response = yield call(updateUp, payload,token);
       if(response.code=='200'){
         message.success('修改成功');
         return true

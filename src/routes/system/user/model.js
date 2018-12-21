@@ -1,5 +1,5 @@
 import {queryUserList,addUser,queryUserInfo,updateUser,updateStatusUser} from '../../../services/system/sys_user'
-import {queryProList} from '../../../services/system/sys_project'
+import {queryProPerList} from '../../../services/system/sys_project'
 import {queryRoleList} from '../../../services/system/sys_per'
 import {message} from 'antd'
 export default {
@@ -71,8 +71,10 @@ export default {
     },
 
     *queryProNames({payload},{call,put}){
-      const response = yield call(queryProList, payload);
+      const response = yield call(queryProPerList, payload);
       //console.log(response)
+      console.log(123)
+      console.log(response)
       if(response.code=='200'){
         yield put({
           type:'saveProName',

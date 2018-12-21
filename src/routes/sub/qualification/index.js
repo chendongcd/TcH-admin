@@ -59,7 +59,6 @@ class CreateForm extends Component {
     const {form, handleAdd, updateModalVisible, selectedValues} = this.props;
 
     form.validateFields((err, fieldsValue) => {
-      console.log(fieldsValue)
       if (err) return;
      // fieldsValue.annex = testPDF
       for (let prop in fieldsValue) {
@@ -70,6 +69,7 @@ class CreateForm extends Component {
         }
         // console.log(typeof fieldsValue[prop])
       }
+      fieldsValue.annex = {url:this.state.fileList[0].url,fileName:this.state.fileList[0].name}
       // form.resetFields();
       handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
@@ -393,7 +393,7 @@ class CreateForm extends Component {
                   initialValue: selectedValues.annex ? [selectedValues.annex] : [],
                 })(
                   <Upload.Dragger  onChange={this.handleChange}
-                                   accept={'image/*'}
+                                   accept={'.pdf'}
                                    showUploadList={false}
                     // fileList={fileList}
                                    listType="picture"
@@ -1013,7 +1013,7 @@ class Qualification extends Component {
       checkDetail: checkDetail,
       selectedRows: selectedRows
     }
-    const exportUrl = createURL(SUB_QUA_EXPORT,this.exportParams)
+    const exportUrl = createURL(SUB_QUA_EXPORT,{...this.exportParams,...{token:user.token}})
     return (
       <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="分包商资质信息">

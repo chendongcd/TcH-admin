@@ -567,7 +567,7 @@ class Resume extends Component {
       teamList: teamList,
       proNames: proNames
     }
-    const exportUrl = createURL(SUB_RES_EXPORT,this.exportParams)
+    const exportUrl = createURL(SUB_RES_EXPORT,{...this.exportParams,...{token:user.token}})
     return (
       <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="分包商履历">

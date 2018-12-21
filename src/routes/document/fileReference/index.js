@@ -378,7 +378,6 @@ class FileReference extends Component {
       loading,
       app: {user}
     } = this.props;
-    //console.log(loading)
     const {selectedRows, modalVisible, updateModalVisible, selectedValues, pageLoading} = this.state;
 
     const parentMethods = {

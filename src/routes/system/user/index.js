@@ -16,10 +16,11 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-import {getButtons,cleanObject} from "utils";
+import {getButtons, cleanObject} from "utils";
 import {menuData} from 'common/menu'
 import {SYS_USER_EXPORT} from 'common/urls'
-import { createURL} from 'services/app'
+import {createURL} from 'services/app'
+
 const FormItem = Form.Item;
 const {Option} = Select;
 const getValue = obj =>
@@ -28,7 +29,7 @@ const getValue = obj =>
     .join(',');
 const statusMap = ['success', 'error'];
 const status = ['启用', '禁用'];
-const pageButtons = menuData[4].buttons.map(a=>a.permission)
+const pageButtons = menuData[4].buttons.map(a => a.permission)
 
 @Form.create()
 class CreateForm extends Component {
@@ -69,8 +70,7 @@ class CreateForm extends Component {
 
   render() {
     const {modalVisible, form, handleAdd, getProNames, getRoleNames, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail, proNames, roleNames} = this.props;
-    console.log(selectedValues.roleId)
-    console.log(roleNames)
+
     return (
       <Modal
         destroyOnClose
@@ -85,7 +85,8 @@ class CreateForm extends Component {
           {form.getFieldDecorator('type', {
             rules: [{required: true, message: '请选择账号类型',}],
             initialValue: (selectedValues.type == 0 || selectedValues.type == 1) ? String(selectedValues.type) : ''
-          })(<Select className={styles.customSelect} onSelect={(e) => this._onSelect(e)} disabled={checkDetail} placeholder="请选择"
+          })(<Select className={styles.customSelect} onSelect={(e) => this._onSelect(e)} disabled={checkDetail}
+                     placeholder="请选择"
                      style={{width: '100%'}}>
             <Option value="0">公司</Option>
             <Option value="1">项目部</Option>
@@ -97,7 +98,7 @@ class CreateForm extends Component {
             initialValue: selectedValues.projectId ? [selectedValues.projectId] : []
           })(<Select className={styles.customSelect} onFocus={() => this.getOptions(getProNames, proNames)}
                      notFoundContent={this.isLoad ? '暂无数据' : '正在加载'}
-                      disabled={checkDetail}
+                     disabled={checkDetail}
                      placeholder="请选择" style={{width: '100%'}}>
             {proNames.map((item, index) => {
               return <Option key={item.id} value={item.id}>{item.name}</Option>
@@ -107,7 +108,7 @@ class CreateForm extends Component {
         <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="角色权限">
           {form.getFieldDecorator('roleId', {
             rules: [{required: true, message: '请选择角色权限'}],
-            initialValue:selectedValues.roleId?selectedValues.roleId:''
+            initialValue: selectedValues.roleId ? selectedValues.roleId : ''
           })(
             <Select className={styles.customSelect} onFocus={() => this.getOptions(getRoleNames, roleNames)}
                     disabled={checkDetail}
@@ -151,8 +152,8 @@ class User extends Component {
       checkDetail: false
     }
     this.exportParams = {
-      page:1,
-      pageSize:10
+      page: 1,
+      pageSize: 10
     }
   }
 
@@ -212,39 +213,40 @@ class User extends Component {
     {
       title: '操作',
       fixed: 'right',
-      width:160,
+      width: 160,
       render: (val, record) => {
         const user = this.props.app.user
-        if(!user.token){
+        if (!user.token) {
           return null
         }
         const button = user.permissionsMap.button
         return (
           <Fragment>
-            {getButtons(button,pageButtons[1])? <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>:null}
+            {getButtons(button, pageButtons[1]) ?
+              <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a> : null}
             <Divider type="vertical"/>
-            {getButtons(button,pageButtons[2])?  <a onClick={() => this.handleCheckDetail(true, record)}>查看</a>:null}
+            {getButtons(button, pageButtons[2]) ? <a onClick={() => this.handleCheckDetail(true, record)}>查看</a> : null}
             <Divider type="vertical"/>
-            {getButtons(button,pageButtons[3])&&record.disable == 1? <a onClick={() => this.updateStatus({
+            {getButtons(button, pageButtons[3]) && record.disable == 1 ? <a onClick={() => this.updateStatus({
               id: record.id,
               disable: 0
-            })}>启用</a>:null}
-            {getButtons(button,pageButtons[4])&&record.disable == 0? <a onClick={() => this.updateStatus({
+            })}>启用</a> : null}
+            {getButtons(button, pageButtons[4]) && record.disable == 0 ? <a onClick={() => this.updateStatus({
               id: record.id,
               disable: 1
-            })}>禁用</a>:null}
+            })}>禁用</a> : null}
           </Fragment>
         )
       },
     },
   ];
 
-   componentDidMount() {
-     if(this.props.app.user.token) {
-       this.getProNames([])
-       this.getRoleNames([])
-       this.getList()
-     }
+  componentDidMount() {
+    if (this.props.app.user.token) {
+      this.getProNames([])
+      this.getRoleNames([])
+      this.getList()
+    }
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
@@ -274,6 +276,7 @@ class User extends Component {
     form.resetFields();
     this.getList()
   };
+
   handleSelectRows = rows => {
     this.setState({
       selectedRows: rows,
@@ -307,14 +310,14 @@ class User extends Component {
     const payload = fields.type == "1" ? {
       account: fields.account,
       password: fields.password,
-      projects: [{id:fields.proName}],//fields.proName.map(a => JSON.parse(`{"id":${a}}`))
+      projects: [{id: fields.proName}],//fields.proName.map(a => JSON.parse(`{"id":${a}}`))
       type: 1,
-      roleId:fields.roleId
+      roleId: fields.roleId
     } : {
       account: fields.account,
       password: fields.password,
       type: 0,
-      roleId:fields.roleId
+      roleId: fields.roleId
     }
     if (updateModalVisible) {
       dispatch({
@@ -405,7 +408,7 @@ class User extends Component {
     const {
       loading,
       sys_user: {proNames, roleNames, data},
-      app:{user}
+      app: {user}
     } = this.props;
     const {selectedRows, modalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail} = this.state;
 
@@ -426,7 +429,7 @@ class User extends Component {
       roleNames: roleNames,
       loading: loading
     }
-    const exportUrl = createURL(SYS_USER_EXPORT,{...this.exportParams,...{token:user.token}})
+    const exportUrl = createURL(SYS_USER_EXPORT, {...this.exportParams, ...{token: user.token}})
 
     return (
       <Page inner={true} loading={pageLoading}>
@@ -435,12 +438,14 @@ class User extends Component {
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
               <div className={styles.tableListOperator}>
-                {user.token&&getButtons(user.permissionsMap.button,pageButtons[0])? <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
-                  新增
-                </Button>:null}
-                {user.token&&getButtons(user.permissionsMap.button,pageButtons[5])? <Button href={exportUrl} icon="plus" type="primary">
-                  导出
-                </Button>:null}
+                {user.token && getButtons(user.permissionsMap.button, pageButtons[0]) ?
+                  <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+                    新增
+                  </Button> : null}
+                {user.token && getButtons(user.permissionsMap.button, pageButtons[5]) ?
+                  <Button href={exportUrl} icon="plus" type="primary">
+                    导出
+                  </Button> : null}
               </div>
               <StandardTable
                 selectedRows={selectedRows}
@@ -497,8 +502,8 @@ class User extends Component {
         page: page,
         pageSize: pageSize,
         name: fieldsValue.name,
-        code:fieldsValue.code,
-        disable:fieldsValue.status
+        code: fieldsValue.code,
+        disable: fieldsValue.status
       }
       cleanObject(payload)
       this.exportParams = payload

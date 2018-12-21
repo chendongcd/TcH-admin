@@ -913,7 +913,7 @@ class PeopleInfo extends Component {
       selectedValues:selectedValues,
       checkDetail:checkDetail
     }
-    const exportUrl = createURL(PEOPLE_EXPORT,this.exportParams)
+    const exportUrl = createURL(PEOPLE_EXPORT,{...this.exportParams,...{token:user.token}})
     return (
       <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="人员信息">

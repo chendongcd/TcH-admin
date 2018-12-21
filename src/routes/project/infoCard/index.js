@@ -1029,7 +1029,7 @@ class InfoCard extends Component {
       checkDetail: checkDetail,
       proNames: proNames
     }
-    const exportUrl = createURL(PRO_EXPORT, this.exportParams)
+    const exportUrl = createURL(PRO_EXPORT, {...this.exportParams,...{token:user.token}})
     return (
       <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="工程项目信息卡">
