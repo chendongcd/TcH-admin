@@ -22,7 +22,6 @@ import {getButtons, cleanObject, QiNiuOss, ImageUrl} from 'utils'
 import {menuData} from 'common/menu'
 import {METER_EXPORT} from 'common/urls'
 import { createURL} from 'services/app'
-
 const FormItem = Form.Item;
 const {Option} = Select;
 const getValue = obj =>
@@ -134,10 +133,10 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="计量日期">
                 {form.getFieldDecorator('meteringTime', {
-                  rules: [{required: true}],
+                  rules: [{required: true,message:'请选择计量日期'}],
                   initialValue: selectedValues.meteringTime ? moment(selectedValues.meteringTime) : null,
-                })(<DatePicker className={styles.customSelect} disabled={checkDetail} style={{width: '100%'}}
-                               placeholder="请选择量日期"/>)}
+                })(<DatePicker.MonthPicker className={styles.customSelect} disabled={checkDetail} style={{width: '100%'}}
+                               placeholder="请选择计量日期"/>)}
               </FormItem>
             </Col>
           </Row>
@@ -175,7 +174,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('tax', {
                   rules: [{required: true, message: '请输入税率'}],
                   initialValue: selectedValues.tax ? selectedValues.tax : testValue,
-                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入税率"/>)}
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入税率" addonAfter={'%'}/>)}
               </FormItem>
             </Col>
           </Row>
@@ -265,7 +264,7 @@ class CreateForm extends Component {
                 })(
                   <Upload.Dragger
                     onChange={this.handleChange}
-                    accept={'image/*'}
+                    accept={'.pdf'}
                     showUploadList={false}
                     // fileList={fileList}
                     listType="picture"
@@ -283,7 +282,7 @@ class CreateForm extends Component {
                   </Upload.Dragger>
                 )}
                 <PreFile onClose={this.remove} onPreview={this.handlePreview} progress={progress} file={fileList[0]}/>
-                <span style={info_css}>备注：请以一份图片格式文件上传封面和汇总表</span>
+                <span style={info_css}>备注：请以一份PDF格式文件上传封面和汇总表</span>
               </FormItem>
             </Col>
           </Row>
@@ -370,7 +369,7 @@ class MeterUp extends Component {
       title: '计量日期',
       dataIndex: 'meteringTime',
       render(val) {
-        return <span>{val?moment(val).format('YYYY/MM/DD'):''}</span>;
+        return <span>{val?moment(val).format('YYYY/MM'):''}</span>;
       },
     },
     {
@@ -420,7 +419,10 @@ class MeterUp extends Component {
         }, {
           title: '拨付率',
           dataIndex: 'payProportion',
-          key: 'payProportion'
+          key: 'payProportion',
+          render(val){
+            return <span>{val*100+'%'}</span>;
+          }
         }]
     },
     {
@@ -439,6 +441,9 @@ class MeterUp extends Component {
     {
       title: '产值计价率',
       dataIndex: 'productionValue',
+      render(val){
+        return <span>{val*100+'%'}</span>;
+      }
     },
     {
       title: '备注',
@@ -632,7 +637,7 @@ class MeterUp extends Component {
               {getFieldDecorator('meteringTime', {
                 initialValue: null
               })(
-                <DatePicker style={{width: '100%'}} placeholder="请选择日期"/>
+                <DatePicker.MonthPicker style={{width: '100%'}}/>
               )}
             </FormItem>
           </Col>

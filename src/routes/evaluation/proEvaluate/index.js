@@ -16,12 +16,13 @@ import {
   Upload,
   Divider,
 } from 'antd';
-import {Page, PageHeaderWrapper, StandardTable,PreFile} from 'components'
+import {Page, PageHeaderWrapper, StandardTable, PreFile} from 'components'
 import styles from './index.less'
 import {QiNiuOss, ImageUrl, cleanObject, getButtons} from 'utils'
 import {menuData} from "../../../common/menu";
 import {EVAL_EXPORT} from 'common/urls'
 import {createURL} from 'services/app'
+
 const FormItem = Form.Item;
 const {Option} = Select;
 const getValue = obj =>
@@ -43,13 +44,14 @@ class CreateForm extends Component {
     super(props)
     this.state = {
       responsibilityAnnex: [],
-      jointHearingAnnex:[],
-      evaluationAnnex:[],
-      evaProgress:0,
+      jointHearingAnnex: [],
+      evaluationAnnex: [],
+      evaProgress: 0,
       joinProgress: 0,
       resProgress: 0,
       previewVisible: false,
-      previewImage: ''
+      previewImage: '',
+      isSignRes: ''
     };
     this.selectProject = {}
     this.upload = []
@@ -79,7 +81,6 @@ class CreateForm extends Component {
 
   onChange = (value, option) => {
     this.selectProject = option.props.item
-    console.log(option)
     this.props.form.setFieldsValue({
       engineeringType: this.selectProject.projectType,
       projectStatus: this.selectProject.statusStr,
@@ -102,9 +103,13 @@ class CreateForm extends Component {
     this.upload = null
   }
 
+  _onSelect = (param) => {
+    this.setState({isSignRes:param})
+  }
+
   render() {
     const {modalVisible, proNames, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
-    let {previewVisible,evaluationAnnex, previewImage,responsibilityAnnex, resProgress,evaProgress,jointHearingAnnex,joinProgress} = this.state
+    let {previewVisible, evaluationAnnex, previewImage, responsibilityAnnex, resProgress, evaProgress, jointHearingAnnex, joinProgress,isSignRes} = this.state
 
     return (
       <Modal
@@ -138,7 +143,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('engineeringType', {
                   rules: [{required: true}],
                   initialValue: selectedValues.engineeringType ? selectedValues.engineeringType : '',
-                })(<Input disabled={checkDetail || updateModalVisible} placeholder="自动带出"/>)}
+                })(<Input disabled={true} placeholder="自动带出"/>)}
               </FormItem>
             </Col>
           </Row>
@@ -159,7 +164,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('projectStatus', {
                   rules: [{required: true}],
                   initialValue: selectedValues.projectStatus ? selectedValues.projectStatus : ''
-                })(<Input disabled={checkDetail || updateModalVisible} placehloder='自动带出'/>)}
+                })(<Input disabled={true} placehloder='自动带出'/>)}
               </FormItem>
             </Col>
           </Row>
@@ -172,7 +177,7 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="中标">
                 {form.getFieldDecorator('winningBid', {
-                  rules: [{required: true, message: '请输入预付款'}],
+                  rules: [{required: true, message: '请输入中标金额'}],
                   initialValue: selectedValues.winningBid ? selectedValues.winningBid : testValue
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入中标金额" addonAfter="万元"/>)}
               </FormItem>
@@ -180,7 +185,7 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="有效收入">
                 {form.getFieldDecorator('effectiveIncome', {
-                  rules: [{required: true, message: '请输入预付款'}],
+                  rules: [{required: true, message: '请输入有效金额'}],
                   initialValue: selectedValues.effectiveIncome ? selectedValues.effectiveIncome : testValue
 
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入有效金额" addonAfter="万元"/>)}
@@ -198,7 +203,6 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('isSign', {
                   rules: [{required: true, message: '请选择是否签订'}],
                   initialValue: selectedValues.isSign ? selectedValues.isSign : ''
-
                 })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择"
                            style={{width: '100%'}}>
                   <Option value="是">是</Option>
@@ -209,10 +213,10 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="签订日期">
                 {form.getFieldDecorator('signTime', {
-                  rules: [{required: true, message: '请选择签订时间'}],
+                  rules: [{required: true, message: '请选择签订日期'}],
                   initialValue: selectedValues.signTime ? moment(selectedValues.signTime) : null
 
-                })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder='请选择日期'/>)}
+                })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder='请选择签订日期'/>)}
               </FormItem>
             </Col>
           </Row>
@@ -227,7 +231,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('contractStartTime', {
                   rules: [{required: true}],
                   initialValue: selectedValues.contractStartTime ? moment(selectedValues.contractStartTime).format('YYYY-MM-DD') : ''
-                })(<Input disabled={checkDetail || updateModalVisible} placeholder='自动带出'/>)}
+                })(<Input disabled={true} placeholder='自动带出'/>)}
               </FormItem>
             </Col>
             <Col md={8} sm={24}>
@@ -235,7 +239,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('contractEndTime', {
                   rules: [{required: true}],
                   initialValue: selectedValues.contractEndTime ? moment(selectedValues.contractEndTime).format('YYYY-MM-DD') : ''
-                })(<Input disabled={checkDetail || updateModalVisible} placeholder='自动带出'/>)}
+                })(<Input disabled={true} placeholder='自动带出'/>)}
               </FormItem>
             </Col>
             <Col md={8} sm={24}>
@@ -259,7 +263,7 @@ class CreateForm extends Component {
                   rules: [{required: true, message: '请选择评估时间'}],
                   initialValue: selectedValues.evaluationTime ? moment(selectedValues.evaluationTime) : null
 
-                })(<DatePicker disabled={checkDetail} width={'100%'} placeholder='请选择'/>)}
+                })(<DatePicker disabled={checkDetail} width={'100%'} placeholder='请选择评估时间'/>)}
               </FormItem>
             </Col>
             <Col md={8} sm={24}>
@@ -268,7 +272,7 @@ class CreateForm extends Component {
                   rules: [{required: true, message: '请输入评估效益点(%)'}],
                   initialValue: selectedValues.evaluationBenefit ? selectedValues.evaluationBenefit : testValue
 
-                })(<Input disabled={checkDetail} placeholder='请输入(小数点后两位)'/>)}
+                })(<Input disabled={checkDetail} placeholder='请输入(保留小数点后两位)' addonAfter={'%'}/>)}
               </FormItem>
             </Col>
             <Col md={9} sm={24}>
@@ -277,7 +281,7 @@ class CreateForm extends Component {
                   rules: [{required: true, message: '请输入含分包差及经营费(%)'}],
                   initialValue: selectedValues.evaluationCost ? selectedValues.evaluationCost : testValue
 
-                })(<Input disabled={checkDetail} placeholder='请输入(小数点后两位)'/>)}
+                })(<Input disabled={checkDetail} placeholder='请输入(保留小数点后两位)' addonAfter={'%'}/>)}
               </FormItem>
             </Col>
           </Row>
@@ -318,7 +322,8 @@ class CreateForm extends Component {
                     <p className="ant-upload-text">点击或拖动附件进入</p>
                   </Upload.Dragger>
                 )}
-                <PreFile index={0} noImage={true} onClose={this.remove} onPreview={this.handlePreview} progress={evaProgress} file={evaluationAnnex[0]}/>
+                <PreFile index={0} noImage={true} onClose={this.remove} onPreview={this.handlePreview}
+                         progress={evaProgress} file={evaluationAnnex[0]}/>
                 <span style={info_css}>备注：请以一份压缩包格式文件上传</span>
               </FormItem>
             </Col>
@@ -335,7 +340,7 @@ class CreateForm extends Component {
                   rules: [{required: true, message: '请输入效益点'}],
                   initialValue: selectedValues.jointHearingBenefit ? selectedValues.jointHearingBenefit : testValue
 
-                })(<Input disabled={checkDetail} placeholder='请输入(小数点后两位)'/>)}
+                })(<Input disabled={checkDetail} placeholder='请输入(保留小数点后两位)'/>)}
               </FormItem>
             </Col>
             <Col md={10} sm={24}>
@@ -344,7 +349,7 @@ class CreateForm extends Component {
                   rules: [{required: true, message: '请输入是否含分包差及经营费'}],
                   initialValue: selectedValues.jointHearingCost ? selectedValues.jointHearingCost : testValue
 
-                })(<Input disabled={checkDetail} placeholder='请输入(小数点后两位)'/>)}
+                })(<Input disabled={checkDetail} placeholder='请输入(保留小数点后两位)'/>)}
               </FormItem>
             </Col>
             <Col md={7} sm={24}>
@@ -352,7 +357,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('jointHearingTime', {
                   rules: [{required: true, message: '请选择上会时间'}],
                   initialValue: selectedValues.jointHearingTime ? moment(selectedValues.jointHearingTime) : null
-                })(<DatePicker disabled={checkDetail} placeholder='请选择时间)'/>)}
+                })(<DatePicker disabled={checkDetail} placeholder='请选择上会时间)'/>)}
               </FormItem>
             </Col>
           </Row>
@@ -382,7 +387,8 @@ class CreateForm extends Component {
                     <p className="ant-upload-text">点击或拖动附件进入</p>
                   </Upload.Dragger>
                 )}
-                <PreFile index={1} noImage={true} onClose={this.remove} onPreview={this.handlePreview} progress={joinProgress} file={jointHearingAnnex[0]}/>
+                <PreFile index={1} noImage={true} onClose={this.remove} onPreview={this.handlePreview}
+                         progress={joinProgress} file={jointHearingAnnex[0]}/>
                 <span style={info_css}>备注：请以一份压缩包格式文件上传</span>
               </FormItem>
             </Col>
@@ -392,77 +398,94 @@ class CreateForm extends Component {
           <div className={styles.title}>责任状签订</div>
         </Row>
         <div className={styles.modalContent}>
-          <Row gutter={8}>
-            <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="效益点">
-                {form.getFieldDecorator('responsibilityBenefiy', {
-                  rules: [{required: true, message: '请输入效益点'}],
-                  initialValue: selectedValues.responsibilityBenefiy ? selectedValues.responsibilityBenefiy : testValue
-
-                })(<Input disabled={checkDetail} placeholder='请输入(小数点后两位)'/>)}
-              </FormItem>
-            </Col>
-            <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="签订时间">
-                {form.getFieldDecorator('responsibilityTime', {
-                  rules: [{required: true, message: '请选择签订时间'}],
-                  initialValue: selectedValues.responsibilityTime ? moment(selectedValues.responsibilityTime) : null
-
-                })(<DatePicker disabled={checkDetail} width={'100%'} placeholder='请选择'/>)}
-              </FormItem>
-            </Col>
-            <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="项目经理">
-                {form.getFieldDecorator('responsibilityPeople', {
-                  rules: [{required: true, message: '请输入项目经理'}],
-                  initialValue: selectedValues.responsibilityPeople ? selectedValues.responsibilityPeople : testValue
-
-                })(<Input disabled={checkDetail} placeholder='请输入项目经理'/>)}
-              </FormItem>
-            </Col>
+          <Row>
+            <Col md={12} sm={24}>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 8}} label="责任状是否签订">
+              {form.getFieldDecorator('isSignRes', {
+                rules: [{required: true, message: '请选择责任状是否签订'}],
+                initialValue: selectedValues.responsibilityBenefiy ? '0' : '1'
+              })(<Select onSelect={this._onSelect} className={styles.customSelect} disabled={checkDetail}
+                         placeholder="请选择"
+                         style={{width: '100%'}}>
+                <Option value="0">是</Option>
+                <Option value="1">否</Option>
+              </Select>)}
+            </FormItem>
+          </Col>
           </Row>
-          <Row gutter={8}>
-            <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="项目书记">
-                {form.getFieldDecorator('responsibilitySecretary', {
-                  rules: [{required: true, message: '请输入项目书记'}],
-                  initialValue: selectedValues.responsibilitySecretary ? selectedValues.responsibilitySecretary : testValue
+          {isSignRes=='0'? <Fragment>
+            <Row gutter={8}>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="效益点">
+                  {form.getFieldDecorator('responsibilityBenefiy', {
+                    rules: [{required: true, message: '请输入效益点'}],
+                    initialValue: selectedValues.responsibilityBenefiy ? selectedValues.responsibilityBenefiy : testValue
 
-                })(<Input disabled={checkDetail} placeholder="项目书记"/>)}
-              </FormItem>
-            </Col>
-          </Row>
-          <Row gutter={8}>
-            <Col md={24} sm={24}>
-              <FormItem style={{marginLeft: 25 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="附件">
-                {form.getFieldDecorator('responsibilityAnnex', {
-                  valuePropName: 'fileList',
-                  getValueFromEvent: normFile,
-                  initialValue: selectedValues.responsibilityAnnex ? [selectedValues.responsibilityAnnex] : [],
-                })(
-                  <Upload.Dragger onChange={(e) => this.handleChange(e, 2)}
-                                  accept={'image/*'}
-                                  showUploadList={false}
-                    // fileList={fileList}
-                                  listType="picture"
-                                  name="files"
-                                  disabled={responsibilityAnnex.length > 0}
-                                  onSuccess={(e) => this.onSuccess(e, 2)}
-                                  handleManualRemove={(e) => this.remove(e, 2)}
-                                  onError={this.onError}
-                                  onProgress={(e) => this.onProgress(e, 2)}
-                                  customRequest={(e) => this.onUpload(e, 2)}>
-                    <p className="ant-upload-drag-icon">
-                      <Icon type="inbox"/>
-                    </p>
-                    <p className="ant-upload-text">点击或拖动附件进入</p>
-                  </Upload.Dragger>
-                )}
-                <PreFile index={2} onClose={this.remove} onPreview={this.handlePreview} progress={resProgress} file={responsibilityAnnex[0]}/>
-                <span style={info_css}>备注：请以一份图片格式文件上传</span>
-              </FormItem>
-            </Col>
-          </Row>
+                  })(<Input disabled={checkDetail} placeholder='请输入(保留小数点后两位)'/>)}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="签订时间">
+                  {form.getFieldDecorator('responsibilityTime', {
+                    rules: [{required: true, message: '请选择签订时间'}],
+                    initialValue: selectedValues.responsibilityTime ? moment(selectedValues.responsibilityTime) : null
+
+                  })(<DatePicker disabled={checkDetail} width={'100%'} placeholder='请选择签订时间'/>)}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="项目经理">
+                  {form.getFieldDecorator('responsibilityPeople', {
+                    rules: [{required: true, message: '请输入项目经理'}],
+                    initialValue: selectedValues.responsibilityPeople ? selectedValues.responsibilityPeople : testValue
+                  })(<Input disabled={checkDetail} placeholder='请输入项目经理'/>)}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={8}>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="项目书记">
+                  {form.getFieldDecorator('responsibilitySecretary', {
+                    rules: [{required: true, message: '请输入项目书记'}],
+                    initialValue: selectedValues.responsibilitySecretary ? selectedValues.responsibilitySecretary : testValue
+
+                  })(<Input disabled={checkDetail} placeholder="项目书记"/>)}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={8}>
+              <Col md={24} sm={24}>
+                <FormItem style={{marginLeft: 25 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="附件">
+                  {form.getFieldDecorator('responsibilityAnnex', {
+                    valuePropName: 'fileList',
+                    getValueFromEvent: normFile,
+                    initialValue: selectedValues.responsibilityAnnex ? [selectedValues.responsibilityAnnex] : [],
+                  })(
+                    <Upload.Dragger onChange={(e) => this.handleChange(e, 2)}
+                                    accept={'image/*'}
+                                    showUploadList={false}
+                      // fileList={fileList}
+                                    listType="picture"
+                                    name="files"
+                                    disabled={responsibilityAnnex.length > 0}
+                                    onSuccess={(e) => this.onSuccess(e, 2)}
+                                    handleManualRemove={(e) => this.remove(e, 2)}
+                                    onError={this.onError}
+                                    onProgress={(e) => this.onProgress(e, 2)}
+                                    customRequest={(e) => this.onUpload(e, 2)}>
+                      <p className="ant-upload-drag-icon">
+                        <Icon type="inbox"/>
+                      </p>
+                      <p className="ant-upload-text">点击或拖动附件进入</p>
+                    </Upload.Dragger>
+                  )}
+                  <PreFile index={2} onClose={this.remove} onPreview={this.handlePreview} progress={resProgress}
+                           file={responsibilityAnnex[0]}/>
+                  <span style={info_css}>备注：请以一份图片格式文件上传</span>
+                </FormItem>
+              </Col>
+            </Row>
+          </Fragment>:null}
         </div>
         <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
           <img alt="中期计价附件" style={{width: '100%'}} src={previewImage}/>
@@ -483,7 +506,7 @@ class CreateForm extends Component {
     }
   }
 
-  onUpload = (params,index) => {
+  onUpload = (params, index) => {
     QiNiuOss(params).then(res => {
       this.upload[index] = res
     })
@@ -526,7 +549,7 @@ class CreateForm extends Component {
         name: this.state.jointHearingAnnex[0].name,
         status: 'done',
         url: ImageUrl + res.key,
-        type:this.state.jointHearingAnnex[0].type.split('/')[1]
+        type: this.state.jointHearingAnnex[0].type.split('/')[1]
       }
       this.setState({jointHearingAnnex: [file]})
       this.props.form.setFieldsValue({jointHearingAnnex: [file]});
@@ -537,7 +560,7 @@ class CreateForm extends Component {
         name: this.state.evaluationAnnex[0].name,
         status: 'done',
         url: ImageUrl + res.key,
-        type:this.state.evaluationAnnex[0].type.split('/')[1]
+        type: this.state.evaluationAnnex[0].type.split('/')[1]
       }
       this.setState({evaluationAnnex: [file]})
       this.props.form.setFieldsValue({evaluationAnnex: [file]});
@@ -587,8 +610,8 @@ class ProEvaluate extends Component {
       checkDetail: false
     }
     this.exportParams = {
-      page:1,
-      pageSize:10
+      page: 1,
+      pageSize: 10
     }
   }
 
@@ -1050,7 +1073,7 @@ class ProEvaluate extends Component {
       checkDetail: checkDetail,
       proNames: proNames
     }
-    const exportUrl = createURL(EVAL_EXPORT,{...this.exportParams,...{token:user.token}})
+    const exportUrl = createURL(EVAL_EXPORT, {...this.exportParams, ...{token: user.token}})
 
     return (
       <Page inner={true} loading={pageLoading}>

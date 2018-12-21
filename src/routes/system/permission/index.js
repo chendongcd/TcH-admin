@@ -273,7 +273,7 @@ class Permission extends Component {
             {user.token&&getButtons(user.permissionsMap.button, pageButtons[1]) ?
               <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a> : null}
             <Divider type="vertical"/>
-            {user.token&&getButtons(user.permissionsMap.button, pageButtons[3]) ?
+            {user.token&&getButtons(user.permissionsMap.button, pageButtons[2]) ?
               <a onClick={() => this.showDrawer(record)}>权限设置</a> : null}
           </Fragment>
         )

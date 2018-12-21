@@ -16,6 +16,7 @@ export default {
   effects: {
     *queryUserList({ payload }, { call, put }) {
       const response = yield call(queryUserList, payload);
+      console.log(response)
       if(response.code=='200'){
         yield put({
           type: 'save',

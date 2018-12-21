@@ -159,7 +159,7 @@ class CreateForm extends Component {
             <Col md={8} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="电话">
                 {form.getFieldDecorator('phone', {
-                  rules: [{required: true}],
+                  rules: [{required: true,message:'请输入电话'}],
                   initialValue: selectedValues.phone ? selectedValues.phone : testValue
                 })(<Input disabled={checkDetail} placeholder="请输入电话"/>)}
               </FormItem>
@@ -167,7 +167,7 @@ class CreateForm extends Component {
             <Col md={8} sm={24}>
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="电子邮箱">
                 {form.getFieldDecorator('email', {
-                  rules: [{required: true}],
+                  rules: [{required: true,message:'请输入电子邮箱'}],
                   initialValue: selectedValues.email ? selectedValues.email : testValue
                 })(<Input disabled={checkDetail} placeholder="请输入电子邮箱"/>)}
               </FormItem>
@@ -177,7 +177,7 @@ class CreateForm extends Component {
             <Col md={16} sm={24}>
               <FormItem style={{marginLeft: 14 + 'px'}} labelCol={{span: 3}} wrapperCol={{span: 15}} label="注册地址">
                 {form.getFieldDecorator('address', {
-                  rules: [{required: true}],
+                  rules: [{required: true,message:'请输入注册地址'}],
                   initialValue: selectedValues.address ? selectedValues.address : testValue
                 })(<Input disabled={checkDetail} placeholder="请输入注册地址"/>)}
               </FormItem>
@@ -185,7 +185,7 @@ class CreateForm extends Component {
             <Col md={8} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="邮编">
                 {form.getFieldDecorator('zipCode', {
-                  rules: [{required: true}],
+                  rules: [{required: true,message:'请输入邮编'}],
                   initialValue: selectedValues.zipCode ? selectedValues.zipCode : testValue
                 })(<Input disabled={checkDetail} placeholder="请输入邮编"/>)}
               </FormItem>

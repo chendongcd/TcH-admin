@@ -26,6 +26,7 @@ export const menuData = [
       {name:'编辑',permission:'PERMISSIONS_SYSTEM_PROJECT_UPDATE'},
       {name:'启用',permission:'PERMISSIONS_SYSTEM_PROJECT_ENABLE'},
       {name:'禁用',permission:'PERMISSIONS_SYSTEM_PROJECT_DISABLE'},
+      {name:'导出',permission:'PERMISSIONS_SYSTEM_PROJECT_EXPORT'},
     ]
   },
   {
@@ -38,7 +39,6 @@ export const menuData = [
     buttons:[
       {name:'新增',permission:'PERMISSIONS_SYSTEM_PER_ADD'},
       {name:'编辑',permission:'PERMISSIONS_SYSTEM_PER_UPDATE'},
-      {name:'查看',permission:'PERMISSIONS_SYSTEM_PER_LOOK'},
       {name:'权限设置',permission:'PERMISSIONS_SYSTEM_PER_SET'},
     ]
   },
@@ -55,6 +55,7 @@ export const menuData = [
       {name:'查看',permission:'PERMISSIONS_SYSTEM_USER_LOOK'},
       {name:'启用',permission:'PERMISSIONS_SYSTEM_USER_ENABLE'},
       {name:'禁用',permission:'PERMISSIONS_SYSTEM_USER_DISABLE'},
+      {name:'导出',permission:'PERMISSIONS_SYSTEM_USER_EXPORT'},
     ]
   },
   {

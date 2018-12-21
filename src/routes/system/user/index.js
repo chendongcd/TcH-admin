@@ -18,7 +18,8 @@ import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
 import {getButtons,cleanObject} from "utils";
 import {menuData} from 'common/menu'
-
+import {SYS_USER_EXPORT} from 'common/urls'
+import { createURL} from 'services/app'
 const FormItem = Form.Item;
 const {Option} = Select;
 const getValue = obj =>
@@ -68,6 +69,8 @@ class CreateForm extends Component {
 
   render() {
     const {modalVisible, form, handleAdd, getProNames, getRoleNames, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail, proNames, roleNames} = this.props;
+    console.log(selectedValues.roleId)
+    console.log(roleNames)
     return (
       <Modal
         destroyOnClose
@@ -104,6 +107,7 @@ class CreateForm extends Component {
         <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="角色权限">
           {form.getFieldDecorator('roleId', {
             rules: [{required: true, message: '请选择角色权限'}],
+            initialValue:selectedValues.roleId?selectedValues.roleId:''
           })(
             <Select className={styles.customSelect} onFocus={() => this.getOptions(getRoleNames, roleNames)}
                     disabled={checkDetail}
@@ -145,6 +149,10 @@ class User extends Component {
       selectedValues: {},
       pageLoading: false,
       checkDetail: false
+    }
+    this.exportParams = {
+      page:1,
+      pageSize:10
     }
   }
 
@@ -418,6 +426,8 @@ class User extends Component {
       roleNames: roleNames,
       loading: loading
     }
+    const exportUrl = createURL(SYS_USER_EXPORT,{...this.exportParams,...{token:user.token}})
+
     return (
       <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="用户管理">
@@ -427,6 +437,9 @@ class User extends Component {
               <div className={styles.tableListOperator}>
                 {user.token&&getButtons(user.permissionsMap.button,pageButtons[0])? <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                   新增
+                </Button>:null}
+                {user.token&&getButtons(user.permissionsMap.button,pageButtons[5])? <Button href={exportUrl} icon="plus" type="primary">
+                  导出
                 </Button>:null}
               </div>
               <StandardTable
@@ -488,6 +501,7 @@ class User extends Component {
         disable:fieldsValue.status
       }
       cleanObject(payload)
+      this.exportParams = payload
       this.props.dispatch({
         type: 'sys_user/queryUserList',
         payload: payload

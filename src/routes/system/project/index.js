@@ -17,7 +17,8 @@ import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
 import {getButtons,cleanObject} from "utils";
 import {proTypes,menuData} from 'common/menu'
-
+import {SYS_PRO_EXPORT} from 'common/urls'
+import { createURL} from 'services/app'
 const FormItem = Form.Item;
 const {Option} = Select;
 const getValue = obj =>
@@ -76,6 +77,10 @@ class Project extends Component {
       selectedRows: [],
       pageLoading: false,
       selectedValues: {}
+    }
+    this.exportParams = {
+      page:1,
+      pageSize:10
     }
   }
 
@@ -364,6 +369,8 @@ class Project extends Component {
       modalVisible: modalVisible,
       selectedValues: selectedValues
     }
+    const exportUrl = createURL(SYS_PRO_EXPORT,{...this.exportParams,...{token:user.token}})
+
     return (
       <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="项目管理">
@@ -373,6 +380,9 @@ class Project extends Component {
               <div className={styles.tableListOperator}>
                 {user.token&&getButtons(user.permissionsMap.button,pageButtons[0])? <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                   新增
+                </Button>:null}
+                {user.token&&getButtons(user.permissionsMap.button,pageButtons[4])? <Button href={exportUrl} icon="plus" type="primary">
+                  导出
                 </Button>:null}
               </div>
               <StandardTable
@@ -412,6 +422,7 @@ class Project extends Component {
         status:fieldsValue.status
       }
       cleanObject(payload)
+      this.exportParams = payload
       this.props.dispatch({
         type: 'sys_pro/queryProList',
         payload: payload

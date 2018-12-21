@@ -2,7 +2,7 @@ const path =process.env.NODE_ENV=='production'?'.':'public'
 module.exports = {
   name: '成本管理系统',
   prefix: 'TcH-Admin',
-  footerText: 'TyC Design Admin  © 2018 melon',
+  footerText: '成都甲戌时代科技 © 2018 Melon',
   logo:  `${path}/logo.svg`,
   iconFontCSS: `${path}/iconfont.css`,
   iconFontJS: `${path}/iconfont.js`,

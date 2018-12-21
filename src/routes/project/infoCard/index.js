@@ -21,8 +21,9 @@ import styles from './index.less'
 import {getButtons, cleanObject} from 'utils'
 import {apiDev} from 'utils/config'
 import {menuData} from 'common/menu'
-import {PRO_PDF,PRO_EXPORT} from 'common/urls'
+import {PRO_PDF, PRO_EXPORT} from 'common/urls'
 import {createURL} from 'services/app'
+
 const FormItem = Form.Item;
 const {Option} = Select;
 const getValue = obj =>
@@ -128,6 +129,10 @@ class CreateForm extends Component {
     form.setFieldsValue(object);
   }
 
+  handlRange = (param) => {
+    return param[0]+','+param[1]
+  }
+
   formManager = (managers, checkDetail, form, getFieldDecorator) => {
     if (managers) {
       return managers.map((key, index) => {
@@ -140,11 +145,13 @@ class CreateForm extends Component {
                      disabled={checkDetail} placeholder="请输入姓名"/>
             </FormItem>
           </Col>
-          <Col className={styles.colPeople} md={7} sm={24}>
+          <Col className={styles.colPeople} md={9} sm={24}>
             <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
-              <DatePicker disabled={checkDetail} onChange={(e, dateString) => this.manager[index].time = dateString}
-                          defaultValue={key.time ? moment(key.time) : null}
-                          style={{width: '100%'}} placeholder="请选择任职时间"/>
+              <DatePicker.RangePicker disabled={checkDetail} onChange={(e, dateString) => {
+                this.manager[index].time = this.handlRange(dateString)
+              }}
+                                     // defaultValue={key.time ?moment(key.time) : null}
+                                      style={{width: '100%'}} placeholder="请选择任职时间"/>
             </FormItem>
           </Col>
           <Col className={styles.colPeople} md={7} sm={24}>
@@ -153,7 +160,7 @@ class CreateForm extends Component {
                      defaultValue={key.phone ? key.phone : ''} placeholder="请输入联系电话"/>
             </FormItem>
           </Col>
-          {checkDetail ? null : <Col className={styles.colPeople} md={4} sm={24}>
+          {checkDetail ? null : <Col className={styles.colPeople} md={2} sm={24}>
             {isLast ?
               <Button style={{marginTop: 4 + 'px'}} shape="circle" type="primary"
                       onClick={() => this.add('manager', form)}>
@@ -180,11 +187,12 @@ class CreateForm extends Component {
                      placeholder="请输入姓名"/>
             </FormItem>
           </Col>
-          <Col className={styles.colPeople} md={7} sm={24}>
+          <Col className={styles.colPeople} md={9} sm={24}>
             <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
-              <DatePicker disabled={checkDetail} onChange={(e, dateString) => this.secretary[index].time = dateString}
-                          defaultValue={key.time ? moment(key.time) : null}
-                          style={{width: '100%'}} placeholder="请选择任职时间"/>
+              <DatePicker.RangePicker disabled={checkDetail}
+                                      onChange={(e, dateString) => this.secretary[index].time = this.handlRange(dateString)}
+                                      defaultValue={key.time ? moment(key.time) : null}
+                                      style={{width: '100%'}} placeholder="请选择任职时间"/>
             </FormItem>
           </Col>
           <Col className={styles.colPeople} md={7} sm={24}>
@@ -193,7 +201,7 @@ class CreateForm extends Component {
                      defaultValue={key.phone ? key.phone : ''} placeholder="请输入联系电话"/>
             </FormItem>
           </Col>
-          {checkDetail ? null : <Col className={styles.colPeople} md={4} sm={24}>
+          {checkDetail ? null : <Col className={styles.colPeople} md={2} sm={24}>
             {isLast ?
               <Button style={{marginTop: 4 + 'px'}} shape="circle" type="primary"
                       onClick={() => this.add('secretary', form)}>
@@ -220,11 +228,12 @@ class CreateForm extends Component {
                      placeholder="请输入姓名"/>
             </FormItem>
           </Col>
-          <Col className={styles.colPeople} md={7} sm={24}>
+          <Col className={styles.colPeople} md={9} sm={24}>
             <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
-              <DatePicker disabled={checkDetail} onChange={(e, dateString) => this.engineer[index].time = dateString}
-                          defaultValue={key.time ? moment(key.time) : null}
-                          style={{width: '100%'}} placeholder="请选择任职时间"/>
+              <DatePicker.RangePicker disabled={checkDetail}
+                                      onChange={(e, dateString) => this.engineer[index].time = this.handlRange(dateString)}
+                                      defaultValue={key.time ? moment(key.time) : null}
+                                      style={{width: '100%'}} placeholder="请选择任职时间"/>
             </FormItem>
           </Col>
           <Col className={styles.colPeople} md={7} sm={24}>
@@ -233,7 +242,7 @@ class CreateForm extends Component {
                      defaultValue={key.phone ? key.phone : ''} placeholder="请输入联系电话"/>
             </FormItem>
           </Col>
-          {checkDetail ? null : <Col className={styles.colPeople} md={4} sm={24}>
+          {checkDetail ? null : <Col className={styles.colPeople} md={2} sm={24}>
             {isLast ?
               <Button style={{marginTop: 4 + 'px'}} shape="circle" type="primary"
                       onClick={() => this.add('engineer', form)}>
@@ -374,7 +383,7 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="里程桩号">
                 {form.getFieldDecorator('mileageNumber', {
-                  rules: [{required: true, message: '请输入里程桩号(数字)', pattern: reg}],
+                  rules: [{required: true, message: '请输入里程桩号'}],//pattern: reg
                   initialValue: selectedValues.mileageNumber ? selectedValues.mileageNumber : testValue,
                 })(<Input disabled={checkDetail} placeholder="请输入里程桩号"/>)}
               </FormItem>
@@ -403,7 +412,7 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同编码">
                 {form.getFieldDecorator('contractNumber', {
-                  rules: [{required: true, message: '请输入合同编码', pattern: reg}],
+                  rules: [{required: true, message: '请输入合同编码'}],//pattern: reg
                   initialValue: selectedValues.contractNumber ? selectedValues.contractNumber : testValue,
                 })(<Input disabled={checkDetail} placeholder="请输入合同编码"/>)}
               </FormItem>
@@ -566,7 +575,7 @@ class CreateForm extends Component {
             <Col md={24} sm={24}>
               <FormItem style={{marginLeft: 12 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="工程概况">
                 {form.getFieldDecorator('description', {
-                  rules: [{required: true}],
+                  rules: [{required: true,message:'请输入工程概况'}],
                   initialValue: selectedValues.description ? selectedValues.description : testValue,
                 })(<Input.TextArea className={styles.customSelect} width={'100%'} disabled={checkDetail}
                                    placeholder="请输入" rows={4}/>)}
@@ -595,8 +604,8 @@ class InfoCard extends Component {
       checkDetail: false
     }
     this.exportParams = {
-      page:1,
-      pageSize:10
+      page: 1,
+      pageSize: 10
     }
   }
 
@@ -675,28 +684,28 @@ class InfoCard extends Component {
       title: '项目经理',
       dataIndex: 'manager',
       render(val) {
-        return <span>{val[0].name}</span>;
+        return <span>{val[val.length-1].name}</span>;
       },
     },
     {
       title: '项目书记',
       dataIndex: 'secretary',
       render(val) {
-        return <span>{val[0].name}</span>;
+        return <span>{val[val.length-1].name}</span>;
       },
     },
     {
       title: '总工',
       dataIndex: 'engineer',
       render(val) {
-        return <span>{val[0].name}</span>;
+        return <span>{val[val.length-1].name}</span>;
       },
     },
     {
       title: '下载信息卡',
       dataIndex: 'id',
       render(val) {
-        return <a href={apiDev+PRO_PDF+val} download={'信息卡'}>下载</a>;
+        return <a href={apiDev + PRO_PDF + val} download={'信息卡'}>下载</a>;
       },
     },
     {
@@ -723,8 +732,8 @@ class InfoCard extends Component {
   ];
 
   componentDidMount() {
-    console.log('didMount',123)
-    if(this.props.app.user.token) {
+    console.log('didMount', 123)
+    if (this.props.app.user.token) {
       this.getProNames([])
       this.getList()
     }
@@ -1020,7 +1029,7 @@ class InfoCard extends Component {
       checkDetail: checkDetail,
       proNames: proNames
     }
-    const exportUrl = createURL(PRO_EXPORT,this.exportParams)
+    const exportUrl = createURL(PRO_EXPORT, this.exportParams)
     return (
       <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="工程项目信息卡">
@@ -1033,7 +1042,7 @@ class InfoCard extends Component {
                     新增
                   </Button> : null}
                 {user.token && getButtons(user.permissionsMap.button, pageButtons[3]) ?
-                  <Button href={exportUrl}  icon="plus" type="primary">
+                  <Button href={exportUrl} icon="plus" type="primary">
                     导出
                   </Button> : null}
                 {/* {selectedRows.length > 0 && (
@@ -1050,7 +1059,7 @@ class InfoCard extends Component {
                 selectedRows={selectedRows}
                 loading={loading.effects['pro_proInfo/fetch']}
                 data={data}
-                scroll={{x: '150%'}}
+                scroll={{x: '200%'}}
                 rowKey="id"
                 bordered
                 columns={this.columns}
