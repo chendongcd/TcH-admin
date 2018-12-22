@@ -4,7 +4,9 @@
     <bookmark url="file://$PROJECT_DIR$/src/routes/project/infoCard/model.js" description="    },&#10;    *queryProNames({payload},{call,put}){&#10; ..." line="57" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f9cf8453-fce7-4f76-8b42-acb0ec5757a4" name="Default" comment="" />
+    <list default="true" id="f9cf8453-fce7-4f76-8b42-acb0ec5757a4" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/src/routes/sub/qualification/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/sub/qualification/index.js" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -19,8 +21,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/routes/sub/qualification/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="1121" column="28" selection-start-line="1121" selection-start-column="28" selection-end-line="1121" selection-end-column="28" />
+            <state relative-caret-position="189">
+              <caret line="1120" column="26" lean-forward="true" selection-start-line="1120" selection-start-column="26" selection-end-line="1120" selection-end-column="26" />
               <folding>
                 <element signature="e#891#913#0" />
                 <element signature="n#CreateForm#0" />
@@ -346,7 +348,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>导出</find>
       <find>uuid</find>
       <find>_setTimeOut</find>
       <find>routers</find>
@@ -376,6 +377,7 @@
       <find>approval</find>
       <find>合同编码</find>
       <find>合同类型</find>
+      <find>shareEvaluation</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -626,12 +628,12 @@
       <workItem from="1545275100894" duration="3944000" />
       <workItem from="1545309114545" duration="3392000" />
       <workItem from="1545359139437" duration="25019000" />
-      <workItem from="1545450576818" duration="14706000" />
+      <workItem from="1545450576818" duration="14821000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="684246000" />
+    <option name="totallyTimeSpent" value="684361000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="343" y="23" width="1344" height="818" extended-state="0" />
@@ -2438,8 +2440,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/routes/sub/qualification/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="1121" column="28" selection-start-line="1121" selection-start-column="28" selection-end-line="1121" selection-end-column="28" />
+        <state relative-caret-position="189">
+          <caret line="1120" column="26" lean-forward="true" selection-start-line="1120" selection-start-column="26" selection-end-line="1120" selection-end-column="26" />
           <folding>
             <element signature="e#891#913#0" />
             <element signature="n#CreateForm#0" />

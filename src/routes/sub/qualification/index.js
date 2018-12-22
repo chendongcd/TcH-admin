@@ -980,7 +980,7 @@ class Qualification extends Component {
         {expandForm ? <Row gutter={{md: 4, lg: 12, xl: 24}}>
           <Col md={8} sm={24}>
             <FormItem label="股份公司综合信誉评价">
-              {getFieldDecorator('companyGroupEvaluation')(<Select placeholder="请选择" style={{width: '100%'}}>
+              {getFieldDecorator('shareEvaluation')(<Select placeholder="请选择" style={{width: '100%'}}>
                 <Option value="优秀">优秀</Option>
                 <Option value="合格">合格</Option>
                 <Option value="不合格">不合格</Option>
@@ -1114,7 +1114,7 @@ class Qualification extends Component {
         type: fieldsValue.type,
         professionType: fieldsValue.professionType,
         registeredCapital: fieldsValue.registeredCapital,
-        companyGroupEvaluation: fieldsValue.companyGroupEvaluation,
+        shareEvaluation: fieldsValue.shareEvaluation,
         companyEvaluation: fieldsValue.companyEvaluation,
         groupEvaluation: fieldsValue.groupEvaluation
       }
