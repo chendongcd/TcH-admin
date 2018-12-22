@@ -1111,7 +1111,7 @@ class Qualification extends Component {
         page: page,
         pageSize: pageSize,
         name: fieldsValue.name,
-        typeId: fieldsValue.typeId,
+        type: fieldsValue.type,
         professionType: fieldsValue.professionType,
         registeredCapital: fieldsValue.registeredCapital,
         companyGroupEvaluation: fieldsValue.companyGroupEvaluation,

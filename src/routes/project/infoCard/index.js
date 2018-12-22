@@ -730,7 +730,6 @@ class InfoCard extends Component {
   ];
 
   componentDidMount() {
-    console.log('didMount', 123)
     if (this.props.app.user.token) {
       this.getProNames([])
       this.getList()

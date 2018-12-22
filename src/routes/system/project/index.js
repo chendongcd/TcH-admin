@@ -151,7 +151,6 @@ class Project extends Component {
   ];
 
   componentDidMount() {
-   // _setTimeOut(() => this.setState({pageLoading: false}), 1000)
       this.getList()
   }
 

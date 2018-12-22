@@ -158,7 +158,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('contractPrice', {
                   rules: [{required: true}],
                   initialValue: selectedValues.contractPrice ? selectedValues.contractPrice : testValue,
-                })(<Input disabled={checkDetail} placehloder='请输入合同金额'/>)}
+                })(<Input disabled={checkDetail} placehloder='请输入合同金额' addonAfter={'元'}/>)}
               </FormItem>
             </Col>
           </Row>

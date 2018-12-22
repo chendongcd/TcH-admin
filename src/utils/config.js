@@ -1,9 +1,9 @@
-const path =process.env.NODE_ENV=='production'?'.':'public'
+const path =process.env.NODE_ENV=='production'?'':'public'
 module.exports = {
   name: '成本管理系统',
   prefix: 'TcH-Admin',
   footerText: '成都甲戌时代科技 © 2018 Melon',
-  logo:  `${path}/logo.svg`,
+  logo:  'http://pjno2bd7f.bkt.clouddn.com/logo.png',//`${path}/logo.svg`,
   iconFontCSS: `${path}/iconfont.css`,
   iconFontJS: `${path}/iconfont.js`,
   apiPrefix: '/api/v1',

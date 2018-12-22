@@ -42,8 +42,8 @@ export default {
       return false
     },
 
-    * update({payload}, {call, put}) {
-      const response = yield call(updateRes, payload);
+    * update({payload,token}, {call, put}) {
+      const response = yield call(updateRes, payload,token);
       if (response.code == '200') {
         return true
       }

@@ -16,12 +16,13 @@ import {
   Upload,
   Divider,
 } from 'antd';
-import {Page, PageHeaderWrapper, StandardTable,PreFile} from 'components'
+import {Page, PageHeaderWrapper, StandardTable, PreFile} from 'components'
 import styles from './index.less'
-import { getButtons,cleanObject,QiNiuOss, ImageUrl} from 'utils'
+import {getButtons, cleanObject, QiNiuOss, ImageUrl} from 'utils'
 import {menuData} from 'common/menu'
 import {TEAM_EXPORT} from 'common/urls'
 import {createURL} from 'services/app'
+
 const pageButtons = menuData[13].buttons.map(a => a.permission)
 const FormItem = Form.Item;
 const {Option} = Select;
@@ -33,7 +34,8 @@ const info_css = {
   color: '#fa541c'
 }
 const teamStatus = ['正在施工', '完工待结算', '已结算']
-const testValue = '123'
+const contractType = ['主合同','补充合同']
+const testValue = ''
 const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
 
 
@@ -102,7 +104,6 @@ class CreateForm extends Component {
   render() {
     const {modalVisible, proNames, subNames, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
     let {previewVisible, previewImage, fileList, progress} = this.state
-
     return (
       <Modal
         destroyOnClose
@@ -135,12 +136,20 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同类型">
                 {form.getFieldDecorator('contractType', {
                   rules: [{required: true, message: '请选择合同类型'}],
-                  initialValue: selectedValues.contractType ? selectedValues.contractType : '',
+                  initialValue: (selectedValues.contractType||selectedValues.contractType==0) ? selectedValues.contractType : '',
                 })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择"
                            style={{width: '100%'}}>
-                  <Option value="0">主合同</Option>
-                  <Option value="1">补充合同</Option>
+                  <Option name={'主合同'} value={0}>主合同</Option>
+                  <Option name={'补充合同'} value={1}>补充合同</Option>
                 </Select>)}
+              </FormItem>
+            </Col>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同编码">
+                {form.getFieldDecorator('contractCode', {
+                  rules: [{required: true}],
+                  initialValue: selectedValues.contractCode ? selectedValues.contractCode : '',
+                })(<Input disabled={checkDetail} placeholder="自动带入"/>)}
               </FormItem>
             </Col>
           </Row>
@@ -275,7 +284,7 @@ class CreateForm extends Component {
                     // fileList={fileList}
                                   listType="picture"
                                   name="files"
-                                  disabled={fileList.length > 0|| checkDetail}
+                                  disabled={fileList.length > 0 || checkDetail}
                                   onSuccess={this.onSuccess}
                                   handleManualRemove={this.remove}
                                   onError={this.onError}
@@ -287,7 +296,8 @@ class CreateForm extends Component {
                     <p className="ant-upload-text">点击或拖动附件进入</p>
                   </Upload.Dragger>
                 )}
-                <PreFile disabled={checkDetail} onClose={this.remove} onPreview={this.handlePreview} progress={progress} file={fileList[0]}/>
+                <PreFile disabled={checkDetail} onClose={this.remove} onPreview={this.handlePreview} progress={progress}
+                         file={fileList[0]}/>
                 <span style={info_css}>备注：请以一份PDF格式文件上传合同扫描件</span>
               </FormItem>
             </Col>
@@ -303,7 +313,8 @@ class CreateForm extends Component {
             </Col>
           </Row>
         </div>
-        <Modal width={643} style={{width: 643, height: 940}} bodyStyle={{width: 643, height: 940}} visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+        <Modal width={643} style={{width: 643, height: 940}} bodyStyle={{width: 643, height: 940}}
+               visible={previewVisible} footer={null} onCancel={this.handleCancel}>
           <iframe style={{width: 595, height: 892}} frameBorder={0} src={previewImage}/>
         </Modal>
       </Modal>
@@ -311,7 +322,7 @@ class CreateForm extends Component {
   }
 
   onUpload = (params) => {
-    QiNiuOss(params).then(res=>{
+    QiNiuOss(params).then(res => {
       this.upload = res
     })
   }
@@ -344,7 +355,7 @@ class CreateForm extends Component {
     } else {
       this.upload.unsubscribe()
     }
-    this.setState({fileList:[]})
+    this.setState({fileList: []})
   }
 }
 
@@ -357,9 +368,11 @@ const CreateCompForm = Form.create()(props => {
       console.log(fieldsValue)
       if (err) return;
       // form.resetFields();
-      companyUpdate(fieldsValue,selectedValues);
+      companyUpdate(fieldsValue, selectedValues);
     });
   };
+
+ // console.log(selectedValues)
   return (
     <Modal
       destroyOnClose
@@ -393,20 +406,20 @@ const CreateCompForm = Form.create()(props => {
         <Row gutter={8}>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="日期">
-              {form.getFieldDecorator('approvalTime', {
+              {form.getFieldDecorator('settlementTime', {
                 rules: [{required: true, message: '请选择日期'}],
-                initialValue: selectedValues.approvalTime ? moment(selectedValues.approvalTime) : null
+                initialValue: selectedValues.settlementTime ? moment(selectedValues.settlementTime) : null
               })(<DatePicker style={{width: '100%'}} placeholder="请选择日期"/>)}
             </FormItem>
           </Col>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="是否备案">
-              {form.getFieldDecorator('approvalFiling', {
-                rules: [{required: true}],
-                initialValue: selectedValues.approvalFiling ? selectedValues.approvalFiling : ''
+              {form.getFieldDecorator('settlementFiling', {
+                rules: [{required: true, message: '请选择是否备案'}],
+                initialValue: (selectedValues.settlementFiling||selectedValues.settlementFiling==0) ? selectedValues.settlementFiling : ''
               })(<Select className={styles.customSelect} placeholder="请选择" style={{width: '100%'}}>
-                <Option value="1">是</Option>
-                <Option value="0">否</Option>
+                <Option name={'是'} value={1}>是</Option>
+                <Option name={'否'} value={0}>否</Option>
               </Select>)}
             </FormItem>
           </Col>
@@ -430,7 +443,7 @@ const CreateCompForm = Form.create()(props => {
           <Col md={24} sm={24}>
             <FormItem style={{marginLeft: 21 + 'px'}} labelCol={{span: 3}} wrapperCol={{span: 15}} label="备注">
               {form.getFieldDecorator('settlementRemark', {
-                rules: [{required: true}],
+                rules: [{required: false}],
                 initialValue: selectedValues.settlementRemark ? selectedValues.settlementRemark : null
               })(<Input.TextArea width={'100%'} placeholder="请输入" rows={4}/>)}
             </FormItem>
@@ -451,14 +464,14 @@ class TeamAccount extends Component {
       updateModalVisible: false,
       selectedRows: [],
       formValues: {},
-      pageLoading:false,
+      pageLoading: false,
       comModal: false,
       selectedValues: {},
       checkDetail: false
     }
     this.exportParams = {
-      page:1,
-      pageSize:10
+      page: 1,
+      pageSize: 10
     }
   }
 
@@ -474,6 +487,13 @@ class TeamAccount extends Component {
         {
           title: '合同编码',
           dataIndex: 'contractCode',
+        },
+        {
+          title: '合同类型',
+          dataIndex: 'contractType',
+          render(val){
+            return<span>{contractType[val]}</span>
+          }
         },
         {
           title: '分包商名称',
@@ -578,7 +598,7 @@ class TeamAccount extends Component {
             title: '日期',
             dataIndex: 'teamTime',
             render(val) {
-              return <span>{moment(val).format('YYYY/MM/DD')}</span>;
+              return <span>{val?moment(val).format('YYYY/MM/DD'):''}</span>;
             },
           }]
         },
@@ -589,15 +609,18 @@ class TeamAccount extends Component {
             title: '日期',
             dataIndex: 'contractTime',
             render(val) {
-              return <span>{moment(val).format('YYYY/MM/DD')}</span>;
+              return <span>{val?moment(val).format('YYYY/MM/DD'):''}</span>;
             },
           },
             {
               title: '是否备案',
-              key: 'approvalFiling',
-              dataIndex: 'approvalFiling',
+              key: 'settlementFiling',
+              dataIndex: 'settlementFiling',
               render(val) {
-                return <span>{val ? '否' : '是'}</span>;
+                if(!val&&val!=0){
+                  return null
+                }
+                return <span>{val==0 ? '否' : '是'}</span>;
               },
             }]
         },
@@ -637,7 +660,7 @@ class TeamAccount extends Component {
             {getButtons(button, pageButtons[3]) ?
               <Fragment>
                 <Divider type="vertical"/>
-                <a onClick={() => this.handleComModalVisible(true,record)}>公司编辑</a></Fragment> : null}
+                <a onClick={() => this.handleComModalVisible(true, record)}>公司编辑</a></Fragment> : null}
           </Fragment>
         )
       }
@@ -680,7 +703,7 @@ class TeamAccount extends Component {
   };
 
   handleFormReset = () => {
-    const {form}= this.props;
+    const {form} = this.props;
     form.resetFields();
     this.setState({
       formValues: {},
@@ -724,10 +747,10 @@ class TeamAccount extends Component {
     });
   };
 
-  handleComModalVisible = (flag,record={}) => {
+  handleComModalVisible = (flag, record = {}) => {
     this.setState({
       comModal: !!flag,
-      selectedValues:record
+      selectedValues: record
     });
   };
 
@@ -771,7 +794,8 @@ class TeamAccount extends Component {
       remark: fields.remark,
       annexUrl: fields.annexUrl,
       contractPerson: fields.contractPerson,
-      phone: fields.phone
+      phone: fields.phone,
+      approvalFiling:fields.approvalFiling
     }
     if (updateModalVisible) {
       dispatch({
@@ -798,26 +822,25 @@ class TeamAccount extends Component {
     }
   };
 
-  companyUpdate=(fields, selectedValues)=>{
+  companyUpdate = (fields, selectedValues) => {
     const {dispatch, app: {user}} = this.props;
     const payload = {
       id: selectedValues.id,
       teamTime: fields.teamTime.format('YYYY-MM-DD'),
-      approvalTime: fields.approvalTime.format('YYYY-MM-DD'),
-      approvalFiling: fields.approvalFiling,
+      settlementFiling: fields.settlementFiling,
       settlementTime: fields.settlementTime.format('YYYY-MM-DD'),
       settlementRemark: fields.settlementRemark,
     }
-      dispatch({
-        type: 'teamAccount/updateCompany',
-        payload: payload,
-        token: user.token
-      }).then(res => {
-        if (res) {
-          this.handleComModalVisible()
-          this.getList()
-        }
-      })
+    dispatch({
+      type: 'teamAccount/updateCompany',
+      payload: payload,
+      token: user.token
+    }).then(res => {
+      if (res) {
+        this.handleComModalVisible()
+        this.getList()
+      }
+    })
   }
 
   renderAdvancedForm() {
@@ -825,7 +848,7 @@ class TeamAccount extends Component {
       form: {getFieldDecorator},
     } = this.props;
     return (
-      <Form onSubmit={(e)=>this.searchList(e)} layout="inline">
+      <Form onSubmit={(e) => this.searchList(e)} layout="inline">
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={6} sm={24}>
             <FormItem label="项目名称">
@@ -840,13 +863,13 @@ class TeamAccount extends Component {
           <Col md={6} sm={24}>
             <FormItem label="队伍状态">
               {getFieldDecorator('status')(<Select placeholder="请选择" style={{width: '100%'}}>
-                {teamStatus.map((a, index) => <Option key={index} value={a}>{a}</Option>)}
+                {teamStatus.map((a, index) => <Option key={index} value={index}>{a}</Option>)}
               </Select>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="合同备案">
-              {getFieldDecorator('approvalFiling')(<Select placeholder="请选择" style={{width: '100%'}}>
+              {getFieldDecorator('approval')(<Select placeholder="请选择" style={{width: '100%'}}>
                 <Option value="1">是</Option>
                 <Option value="0">否</Option>
               </Select>)}
@@ -880,7 +903,7 @@ class TeamAccount extends Component {
 
   render() {
     const {
-      teamAccount: {data, proNames,subNames},
+      teamAccount: {data, proNames, subNames},
       loading,
       app: {user}
     } = this.props;
@@ -893,7 +916,7 @@ class TeamAccount extends Component {
       handleComModalVisible: this.handleComModalVisible,
       handleUpdateModalVisible: this.handleUpdateModalVisible,
       handleCheckDetail: this.handleCheckDetail,
-      companyUpdate:this.companyUpdate
+      companyUpdate: this.companyUpdate
     };
     const parentState = {
       updateModalVisible: updateModalVisible,
@@ -901,9 +924,9 @@ class TeamAccount extends Component {
       selectedValues: selectedValues,
       checkDetail: checkDetail,
       proNames: proNames,
-      subNames:subNames
+      subNames: subNames
     }
-    const exportUrl = createURL(TEAM_EXPORT,{...this.exportParams,...{token:user.token}})
+    const exportUrl = createURL(TEAM_EXPORT, {...this.exportParams, ...{token: user.token}})
 
     return (
       <Page inner={true} loading={pageLoading}>
@@ -927,7 +950,7 @@ class TeamAccount extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '200%'}}
+                scroll={{x: '220%'}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
@@ -961,25 +984,25 @@ class TeamAccount extends Component {
     });
   }
 
-  searchList = (e,page = 1, pageSize = 10) => {
+  searchList = (e, page = 1, pageSize = 10) => {
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
       //  form.resetFields();
-      let payload ={
-          page: page,
-          pageSize: pageSize,
-          projectName: fieldsValue.projectName,
-          subcontractorName: fieldsValue.subcontractorName,
-          status: fieldsValue.status,
-          approvalFiling:fieldsValue.approvalFiling
-        }
+      let payload = {
+        page: page,
+        pageSize: pageSize,
+        projectName: fieldsValue.projectName,
+        subcontractorName: fieldsValue.subcontractorName,
+        status: fieldsValue.status,
+        approval: fieldsValue.approval
+      }
       cleanObject(payload)
       this.exportParams = payload
       this.props.dispatch({
         type: 'teamAccount/fetch',
         payload: payload,
-        token:this.props.app.user.token
+        token: this.props.app.user.token
       });
     });
   }
