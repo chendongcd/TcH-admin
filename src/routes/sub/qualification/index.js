@@ -76,7 +76,7 @@ class CreateForm extends Component {
   };
 
   componentDidUpdate(preProp, preState) {
-    if (!preProp.selectedValues.annex && this.props.selectedValues.annex && this.state.fileList.length == 0) {
+    if (this.props.modalVisible&&!preProp.selectedValues.annex && this.props.selectedValues.annex && this.state.fileList.length == 0) {
       let pdf = JSON.parse(this.props.selectedValues.annex)
       let file = {
         uid: '-1',
@@ -133,18 +133,18 @@ class CreateForm extends Component {
           <Row gutter={8}>
             <Col md={8} sm={24}>
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="成立日期">
-                {form.getFieldDecorator('setUpTime', {
+                {form.getFieldDecorator('createTime', {
                   rules: [{required: true, message: '请选择成立日期'}],
-                  initialValue: selectedValues.setUpTime ? moment(selectedValues.setUpTime) : null
+                  initialValue: selectedValues.createTime ? moment(selectedValues.createTime) : null
                 })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
               </FormItem>
             </Col>
             <Col md={8} sm={24}>
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="纳税人类型">
                 {form.getFieldDecorator('taxpayerType', {
-                  rules: [{required: true}],
+                  rules: [{required: true,message:'请选择纳税人类型'}],
                   initialValue: selectedValues.taxpayerType ? selectedValues.taxpayerType : ''
-                })(<Select disabled={checkDetail} placeholder="请选择纳税人类型" style={{width: '100%'}}>
+                })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择纳税人类型" style={{width: '100%'}}>
                   {taxpayerType.map((a, index) => <Option key={index} value={a}>{a}</Option>)}
                 </Select>)}
               </FormItem>
@@ -152,7 +152,7 @@ class CreateForm extends Component {
             <Col md={8} sm={24}>
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="注册资本金">
                 {form.getFieldDecorator('registeredCapital', {
-                  rules: [{required: true}],
+                  rules: [{required: true,message:'请输入注册资本金'}],
                   initialValue: selectedValues.registeredCapital ? selectedValues.registeredCapital : testValue
                 })(<Input disabled={checkDetail} placeholder="请输入注册资本金" addonAfter="万元"/>)}
               </FormItem>
@@ -164,7 +164,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('type', {
                   rules: [{required: true, message: '请选择分包商类型'}],
                   initialValue: selectedValues.type ? selectedValues.type : ''
-                })(<Select disabled={checkDetail} placeholder="请选择分包商类型" style={{width: '100%'}}>
+                })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择分包商类型" style={{width: '100%'}}>
                   {subType.map((a, index) => <Option key={index} value={a}>{a}</Option>)}
                 </Select>)}
               </FormItem>
@@ -210,7 +210,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('professionType', {
                   rules: [{required: true, message: '请选择专业类型'}],
                   initialValue: selectedValues.professionType ? selectedValues.professionType : ''
-                })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
+                })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
                   {professionType.map((a, index) => <Option key={index} value={a}>{a}</Option>)}
                 </Select>)}
               </FormItem>
@@ -340,7 +340,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('safetyCode', {
                   rules: [{required: true, message: '请输入编号'}],
                   initialValue: selectedValues.safetyCode ? selectedValues.safetyCode : testValue
-                })(<Input placeholder="请输入编号"/>)}
+                })(<Input disabled={checkDetail} placeholder="请输入编号"/>)}
               </FormItem>
             </Col>
             <Col md={8} sm={24}>
@@ -356,7 +356,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('safetyFrom', {
                   rules: [{required: true, message: '请输入发证机关'}],
                   initialValue: selectedValues.safetyFrom ? selectedValues.safetyFrom : testValue
-                })(<Input style={{marginTop: 4}} placeholder="请输入发证机关"/>)}
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入发证机关"/>)}
               </FormItem>
             </Col>
           </Row>
@@ -488,13 +488,12 @@ const CreateReview = Form.create()(props => {
 
   const title = (type) => {
     let name = '股份公司综合信誉评价'
-    switch (type) {
-      case 1:
-        name = '集团公司综合信誉评价'
-        break
-      case 2:
-        name = '公司本级综合信誉评价'
-        break
+
+    if(type==1){
+      name = '集团公司综合信誉评价'
+    }
+    if(type==2){
+      name = '公司本级综合信誉评价'
     }
     return name
   }
@@ -507,7 +506,7 @@ const CreateReview = Form.create()(props => {
             {form.getFieldDecorator('shareEvaluation', {
               rules: [{required: true, message: '请选择'}],
               initialValue: selectedValues.shareEvaluation ? selectedValues.shareEvaluation : ''
-            })(<Select placeholder="请选择" style={{width: '100%'}}>
+            })(<Select className={styles.customSelect} placeholder="请选择" style={{width: '100%'}}>
               <Option value="优秀">优秀</Option>
               <Option value="合格">合格</Option>
               <Option value="不合格">不合格</Option>
@@ -521,7 +520,7 @@ const CreateReview = Form.create()(props => {
             {form.getFieldDecorator('qualification', {
               rules: [{required: true, message: '请选择'}],
               initialValue: selectedValues.qualification ? selectedValues.qualification : ''
-            })(<Select placeholder="请选择" style={{width: '100%'}}>
+            })(<Select className={styles.customSelect} placeholder="请选择" style={{width: '100%'}}>
               <Option value="是">是</Option>
               <Option value="否">否</Option>
             </Select>)}
@@ -532,7 +531,7 @@ const CreateReview = Form.create()(props => {
         <Col md={24} sm={24}>
           <FormItem style={{marginLeft: 21 + 'px'}} labelCol={{span: 4}} wrapperCol={{span: 15}} label="备注">
             {form.getFieldDecorator('shareRemark', {
-              rules: [{required: true}],
+              rules: [{required: false}],
               initialValue: selectedValues.shareRemark ? selectedValues.shareRemark : ''
             })(<Input.TextArea width={'100%'} placeholder="请输入" rows={4}/>)}
           </FormItem>
@@ -560,7 +559,7 @@ const CreateReview = Form.create()(props => {
           <Col md={24} sm={24}>
             <FormItem style={{marginLeft: 21 + 'px'}} labelCol={{span: 5}} wrapperCol={{span: 15}} label="备注">
               {form.getFieldDecorator('groupRemark', {
-                rules: [{required: true}],
+                rules: [{required: false}],
                 initialValue: selectedValues.groupRemark ? selectedValues.groupRemark : ''
               })(<Input.TextArea width={'100%'} placeholder="请输入" rows={4}/>)}
             </FormItem>
@@ -590,10 +589,11 @@ const CreateReview = Form.create()(props => {
         <Row gutter={8}>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 11}} wrapperCol={{span: 12}} label="集团公司信誉评价">
-              {form.getFieldDecorator('companyGroupEvaluation', {
+              {form.getFieldDecorator('groupEvaluation', {
                 rules: [{required: true, message: '请选择'}],
-                initialValue: selectedValues.companyGroupEvaluation ? selectedValues.companyGroupEvaluation : ''
-              })(<Select placeholder="请选择" style={{width: '100%'}}>
+                initialValue: selectedValues.groupEvaluation ? selectedValues.groupEvaluation : ''
+              })(<Select disabled={true} className={styles.customSelect} placeholder="请选择" style={{width: '100%'}}>
+                <Option value="优秀">优秀</Option>
                 <Option value="合格">合格</Option>
                 <Option value="不合格">不合格</Option>
               </Select>)}
@@ -911,6 +911,7 @@ class Qualification extends Component {
       bankAccount: fieldsValue.bankAccount,
       bankFrom: fieldsValue.bankFrom,
       annex: fieldsValue.annex,
+      createTime:fieldsValue.createTime
     }
     if (updateModalVisible) {
       dispatch({
@@ -1000,8 +1001,10 @@ class Qualification extends Component {
             <FormItem label="公司本级综合信誉评价">
               {getFieldDecorator('companyEvaluation')(<Select placeholder="请选择" style={{width: '100%'}}>
                 <Option value="优秀">优秀</Option>
+                <Option value="良好">良好</Option>
                 <Option value="合格">合格</Option>
                 <Option value="不合格">不合格</Option>
+                <Option value="限制使用">限制使用</Option>
               </Select>)}
             </FormItem>
           </Col>
@@ -1139,7 +1142,7 @@ class Qualification extends Component {
       groupRemark: fieldsValue.groupRemark
     } : {
       companyEvaluation: fieldsValue.companyEvaluation,
-      companyGroupEvaluation: fieldsValue.companyGroupEvaluation
+      groupEvaluation: fieldsValue.groupEvaluation
     }
     this.exportParams = payload
     dispatch({
