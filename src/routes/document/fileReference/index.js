@@ -40,13 +40,25 @@ class CreateForm extends Component {
     this.upload = null
   }
 
+  componentDidUpdate(preProp, preState) {
+    if (!preProp.selectedValues.annexUrl && this.props.selectedValues.annexUrl && this.state.fileList.length == 0) {
+      let pdf = JSON.parse(this.props.selectedValues.annexUrl)
+      let file = {
+        uid: '-1',
+        name: pdf.fileName,
+        status: 'done',
+        url: pdf.url,
+      }
+      this.setState({fileList: [file]})
+    }
+  }
+
   okHandle = () => {
     const {form, handleAdd, updateModalVisible, selectedValues} = this.props;
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      //form.resetFields();
-      //fieldsValue.annexUrl = testPDF
+      fieldsValue.annexUrl = `{"url":"${this.state.fileList[0].url}","fileName":"${this.state.fileList[0].name}"}`
       handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
   };
@@ -86,6 +98,7 @@ class CreateForm extends Component {
             <Col md={24} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="附件">
                 {form.getFieldDecorator('annexUrl', {
+                  rules: [{required: true, message: '请上传附件'}],
                   valuePropName: 'fileList',
                   getValueFromEvent: normFile,
                   initialValue: selectedValues.annexUrl ? [selectedValues.annexUrl] : [],
@@ -197,6 +210,20 @@ class FileReference extends Component {
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm')}</span>,
     },
     {
+      title: '下载附件',
+      dataIndex: 'annexUrl',
+      render: (val) => {
+        let href = ''
+        let annex = JSON.parse(val)
+        href = annex.url + '?attname=' + annex.fileName
+        return (
+          <Fragment>
+            <a href={href} download={'附件'}>下载附件</a>
+          </Fragment>
+        )
+      }
+    },
+    {
       title: '操作',
       render: (val, record) => {
         const user = this.props.app.user
@@ -211,7 +238,6 @@ class FileReference extends Component {
                 <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
                 <Divider type="vertical"/>
               </Fragment> : null}
-            <a href={record.annexUrl+'?attname=附件'} download={'附件'}>下载附件</a>
           </Fragment>
         )
       }

@@ -51,6 +51,19 @@ class CreateForm extends Component {
     this.upload = null
   }
 
+  componentDidUpdate(preProp, preState) {
+    if (!preProp.selectedValues.annexUrl && this.props.selectedValues.annexUrl && this.state.fileList.length == 0) {
+      let pdf = JSON.parse(this.props.selectedValues.annexUrl)
+      let file = {
+        uid: '-1',
+        name: pdf.fileName,
+        status: 'done',
+        url: pdf.url,
+      }
+      this.setState({fileList: [file]})
+    }
+  }
+
   okHandle = () => {
     const {form, handleAdd, updateModalVisible, selectedValues} = this.props;
     form.validateFields((err, fieldsValue) => {
@@ -62,6 +75,8 @@ class CreateForm extends Component {
         }
         // console.log(typeof fieldsValue[prop])
       }
+      fieldsValue.annexUrl = `{"url":"${this.state.fileList[0].url}","fileName":"${this.state.fileList[0].name}"}`
+
       // form.resetFields();
       handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
@@ -161,7 +176,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('valuationTime', {
                   rules: [{required: true}],
                   initialValue: selectedValues.valuationTime ? moment(selectedValues.valuationPeriod) : null,
-                })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
+                })(<DatePicker.MonthPicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
               </FormItem>
             </Col>
           </Row>
@@ -274,17 +289,18 @@ class CreateForm extends Component {
             <Col md={24} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="附件">
                 {form.getFieldDecorator('annexUrl', {
+                  rules: [{required: true, message: '请上传附件'}],
                   valuePropName: 'fileList',
                   getValueFromEvent: normFile,
-                  initialValue: selectedValues.annexUrl ? selectedValues.annexUrl : [],
+                  initialValue: selectedValues.annexUrl ? [selectedValues.annexUrl] : [],
                 })(
                   <Upload.Dragger onChange={this.handleChange}
-                                  accept={'image/*'}
+                                  accept={'.pdf'}
                                   showUploadList={false}
                     // fileList={fileList}
                                   listType="picture"
                                   name="files"
-                                  disabled={fileList.length > 0}
+                                  disabled={fileList.length > 0||checkDetail}
                                   onSuccess={this.onSuccess}
                                   handleManualRemove={this.remove}
                                   onError={this.onError}
@@ -296,14 +312,15 @@ class CreateForm extends Component {
                     <p className="ant-upload-text">点击或拖动附件进入</p>
                   </Upload.Dragger>
                 )}
-                <PreFile onClose={this.remove} onPreview={this.handlePreview} progress={progress} file={fileList[0]}/>
-                <span style={info_css}>备注：中期计价附件（封面、验工计价批复表、汇总表；末次计价附件（公司批复的《劳务结算审批》、结算资料），请以一份PDF格式文件上传</span>
+                <PreFile disabled={checkDetail} onClose={this.remove} onPreview={this.handlePreview} progress={progress} file={fileList[0]}/>
+                <span style={info_css}>备注：中期计价附件（封面、验工计价批复表、汇总表）；</span>
+                <span  style={info_css}>末次计价附件（公司批复的《劳务结算审批》、结算资料），请以一份PDF格式文件上传</span>
               </FormItem>
             </Col>
           </Row>
         </div>
-        <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-        <img alt="中期计价附件" style={{width: '100%'}} src={previewImage}/>
+        <Modal width={643} style={{width: 643, height: 940}} bodyStyle={{width: 643, height: 940}} visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+          <iframe style={{width: 595, height: 892}} frameBorder={0} src={previewImage}/>
       </Modal>
       </Modal>
     )
@@ -399,7 +416,7 @@ class MeterDown extends Component {
       title: '计价日期',
       dataIndex: 'valuationTime',
       render(val) {
-        return <span>{val?moment(val).format('YYYY/MM/DD'):''}</span>;
+        return <span>{val?moment(val).format('YYYY/MM'):''}</span>;
       },
     },
     {
@@ -423,7 +440,7 @@ class MeterDown extends Component {
         {
           title: '扣款',
           dataIndex: 'valuationPriceReduce',
-          key: 'aluationPriceReduce',
+          key: 'valuationPriceReduce',
           render(val) {
             return <span>{val}</span>;
           },
@@ -467,6 +484,42 @@ class MeterDown extends Component {
       dataIndex: 'remark',
     },
     {
+      title: '下载附件',
+      dataIndex: 'annexUrl',
+      render: (val) => {
+        //if(JSON.parse(record.annexUrl))
+        function isJSON(str) {
+          if (typeof str == 'string') {
+            try {
+              var obj = JSON.parse(str);
+              if (str.indexOf('{') > -1) {
+                return true;
+              } else {
+                return false;
+              }
+            } catch (e) {
+              return false;
+            }
+          }
+          return false;
+        }
+
+        let href = ''
+        if (isJSON(val)) {
+          let annex = JSON.parse(val)
+          href = annex.url + '?attname=' + annex.fileName
+          //console.log(href)
+        } else {
+          href = val
+        }
+        return (
+          <Fragment>
+            <a href={href} download={'附件'}>下载附件</a>
+          </Fragment>
+        )
+      }
+    },
+    {
       title: '操作',
       render: (val, record) => {
         if(record.id=='sum'){
@@ -489,7 +542,6 @@ class MeterDown extends Component {
                 <a onClick={() => this.handleCheckDetail(true, record)}>查看</a>
                 <Divider type="vertical"/>
               </Fragment> : null}
-            <a href={record.annexUrl} download={'附件'}>下载附件</a>
           </Fragment>
         )
       }
@@ -767,7 +819,7 @@ class MeterDown extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '200%'}}
+                scroll={{x: '250%'}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

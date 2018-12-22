@@ -69,11 +69,24 @@ class CreateForm extends Component {
         }
         // console.log(typeof fieldsValue[prop])
       }
-      fieldsValue.annex = {url:this.state.fileList[0].url,fileName:this.state.fileList[0].name}
+      fieldsValue.annex = `{"url":"${this.state.fileList[0].url}","fileName":"${this.state.fileList[0].name}"}`
       // form.resetFields();
       handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
   };
+
+  componentDidUpdate(preProp, preState) {
+    if (!preProp.selectedValues.annex && this.props.selectedValues.annex && this.state.fileList.length == 0) {
+      let pdf = JSON.parse(this.props.selectedValues.annex)
+      let file = {
+        uid: '-1',
+        name: pdf.fileName,
+        status: 'done',
+        url: pdf.url,
+      }
+      this.setState({fileList: [file]})
+    }
+  }
 
   handleCancel = () => this.setState({previewVisible: false})
 
@@ -388,6 +401,7 @@ class CreateForm extends Component {
             <Col md={24} sm={24}>
               <FormItem style={{marginLeft: 14 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="附件">
                 {form.getFieldDecorator('annex', {
+                  rules: [{required: true, message: '请上传附件'}],
                   valuePropName: 'fileList',
                   getValueFromEvent: normFile,
                   initialValue: selectedValues.annex ? [selectedValues.annex] : [],
@@ -398,7 +412,7 @@ class CreateForm extends Component {
                     // fileList={fileList}
                                    listType="picture"
                                    name="files"
-                                   disabled={fileList.length > 0}
+                                   disabled={fileList.length > 0|| checkDetail}
                                    onSuccess={this.onSuccess}
                                    handleManualRemove={this.remove}
                                    onError={this.onError}
@@ -410,14 +424,14 @@ class CreateForm extends Component {
                     <p className="ant-upload-text">点击或拖动附件进入</p>
                   </Upload.Dragger>
                 )}
-                <PreFile onClose={this.remove} onPreview={this.handlePreview} progress={progress} file={fileList[0]}/>
+                <PreFile disabled={checkDetail} onClose={this.remove} onPreview={this.handlePreview} progress={progress} file={fileList[0]}/>
                 <span style={info_css}>备注：包含营业执照、资质证书、安全生产许可证、开户银行许可证、法人身份证等相关资质资料(盖鲜章),请以一份PDF格式文件上传。</span>
               </FormItem>
             </Col>
           </Row>
         </div>
-        <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-          <img alt="example" style={{width: '100%'}} src={previewImage}/>
+        <Modal width={643} style={{width: 643, height: 940}} bodyStyle={{width: 643, height: 940}} visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+          <iframe style={{width: 595, height: 892}} frameBorder={0} src={previewImage}/>
         </Modal>
       </Modal>
     )
@@ -686,14 +700,46 @@ class Qualification extends Component {
       dataIndex:'id',
       render: (val, record) => {
         return (
-            <a href={apiDev+SUB_QUA_PDF+val} download={'分包商资质信息卡'}>下载附件</a>
+            <a href={apiDev+SUB_QUA_PDF+val} download={'分包商资质信息卡'}>下载</a>
+        )
+      }
+    },
+    {
+      title: '下载附件',
+      render: (val, record) => {
+
+        //if(JSON.parse(record.annexUrl))
+        function isJSON(str) {
+          if (typeof str == 'string') {
+            try {
+              var obj = JSON.parse(str);
+              if (str.indexOf('{') > -1) {
+                return true;
+              } else {
+                return false;
+              }
+            } catch (e) {
+              return false;
+            }
+          }
+          return false;
+        }
+
+        let href = ''
+        if (isJSON(record.annex)) {
+          let annex = JSON.parse(record.annex)
+          href = annex.url + '?attname=' + annex.fileName
+          //console.log(href)
+        } else {
+          href = record.annex
+        }
+        return (
+            <a href={href} download="附件">下载</a>
         )
       }
     },
     {
       title: '操作',
-      fixed: 'right',
-      width: 175,
       render: (val, record) => {
         const user = this.props.app.user
         if (!user.token) {
@@ -1036,7 +1082,7 @@ class Qualification extends Component {
                 bordered
                 rowKey="id"
                 data={data}
-                scroll={{x: '200%'}}
+                scroll={{x: '210%'}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

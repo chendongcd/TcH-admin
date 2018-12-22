@@ -74,7 +74,6 @@ export default {
     },
 
     * logout(_, {call, put}) {
-      console.log(123)
       yield put({type: 'updateState', payload: {loading: true, user: {}}})
       yield call(delay, 500)
       const response = yield call(signOut);

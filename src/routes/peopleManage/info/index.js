@@ -55,20 +55,32 @@ class CreateForm extends Component {
     this.upload = null
   }
 
+  componentDidUpdate(preProp, preState) {
+    if (!preProp.selectedValues.headUrl && this.props.selectedValues.headUrl && this.state.fileList.length == 0) {
+      let pdf = JSON.parse(this.props.selectedValues.headUrl)
+      let file = {
+        uid: '-1',
+        name: pdf.fileName,
+        status: 'done',
+        url: pdf.url,
+      }
+      this.setState({fileList: [file]})
+    }
+  }
+
   okHandle = () => {
     const {form, handleAdd, updateModalVisible, selectedValues} = this.props;
 
     form.validateFields((err, fieldsValue) => {
-      console.log(fieldsValue)
+    //  console.log(fieldsValue)
       if (err) return;
       for (let prop in fieldsValue) {
         if (fieldsValue[prop] instanceof moment) {
-          // console.log(fieldsValue[prop].format())
           fieldsValue[prop] = fieldsValue[prop].format('YYYY-MM-DD')
-          //  console.log(fieldsValue[prop])
         }
-        // console.log(typeof fieldsValue[prop])
       }
+      fieldsValue.headUrl = `{"url":"${this.state.fileList[0].url}","fileName":"${this.state.fileList[0].name}"}`
+
       // form.resetFields();
       handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
@@ -423,11 +435,12 @@ class CreateForm extends Component {
         </Row>
         <Row gutter={8}>
           <Col md={24} sm={24}>
-            <FormItem style={{marginLeft:0}} labelCol={{span: 3}} wrapperCol={{span: 15}} label="附件">
+            <FormItem style={{marginLeft:0}} labelCol={{span: 3}} wrapperCol={{span: 15}} label="头像">
               {form.getFieldDecorator('headUrl', {
+                rules: [{required: true,message:'请上传用户头像'}],
                 valuePropName: 'fileList',
                 getValueFromEvent: normFile,
-                initialValue: selectedValues.annexUrl ? selectedValues.annexUrl : [],
+                initialValue: selectedValues.annexUrl ? [selectedValues.annexUrl] : [],
               })(
                 <Upload.Dragger onChange={this.handleChange}
                                 accept={'image/*'}
@@ -435,7 +448,7 @@ class CreateForm extends Component {
                   // fileList={fileList}
                                 listType="picture"
                                 name="files"
-                                disabled={fileList.length > 0}
+                                disabled={fileList.length > 0|| checkDetail}
                                 onSuccess={this.onSuccess}
                                 handleManualRemove={this.remove}
                                 onError={this.onError}
@@ -447,7 +460,7 @@ class CreateForm extends Component {
                   <p className="ant-upload-text">点击或拖动附件进入</p>
                 </Upload.Dragger>
               )}
-              <PreFile onClose={this.remove} onPreview={this.handlePreview} progress={progress} file={fileList[0]}/>
+              <PreFile noPdf={true} disabled={checkDetail} onClose={this.remove} onPreview={this.handlePreview} progress={progress} file={fileList[0]}/>
               <span style={info_css}>上传本人头像</span>
             </FormItem>
           </Col>
@@ -493,9 +506,7 @@ class CreateForm extends Component {
   }
 
   onProgress = (e) => {
-    //  console.log(Upload.autoUpdateProgress)
     this.setState({progress: parseInt(e.total.percent)})
-    // console.log('上传进度', e)
   }
 
   onError = (error) => {
@@ -729,7 +740,6 @@ class PeopleInfo extends Component {
   };
 
   handleUpdateModalVisible = (flag, record) => {
-    console.log(record)
     this.setState({
       updateModalVisible: !!flag,
       modalVisible:!!flag,
@@ -884,7 +894,6 @@ class PeopleInfo extends Component {
   }
 
   normFile = (e) => {
-    console.log('Upload event:', e);
     if (Array.isArray(e)) {
       return e;
     }

@@ -17,7 +17,7 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable, PreFile} from 'components'
 import styles from './index.less'
-import { getButtons, cleanObject,QiNiuOss, ImageUrl} from "utils";
+import {getButtons, cleanObject, QiNiuOss, ImageUrl} from "utils";
 import {menuData} from "../../../common/menu";
 
 const FormItem = Form.Item;
@@ -42,13 +42,26 @@ class CreateForm extends Component {
     this.upload = null
   }
 
+  componentDidUpdate(preProp, preState) {
+    if (!preProp.selectedValues.annexUrl && this.props.selectedValues.annexUrl && this.state.fileList.length == 0) {
+      let pdf = JSON.parse(this.props.selectedValues.annexUrl)
+      let file = {
+        uid: '-1',
+        name: pdf.fileName,
+        status: 'done',
+        url: pdf.url,
+      }
+      this.setState({fileList: [file]})
+    }
+  }
+
   okHandle = () => {
     const {form, handleAdd, updateModalVisible, selectedValues} = this.props;
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
       //form.resetFields();
-      //   fieldsValue.annexUrl = testPDF
+      fieldsValue.annexUrl = `{"url":"${this.state.fileList[0].url}","fileName":"${this.state.fileList[0].name}"}`
       handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
   };
@@ -68,7 +81,7 @@ class CreateForm extends Component {
   render() {
     const {modalVisible, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, selectedValues,} = this.props;
 
-    let { fileList, progress} = this.state
+    let {fileList, progress} = this.state
 
     return (
       <Modal
@@ -106,6 +119,7 @@ class CreateForm extends Component {
             <Col md={24} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="附件">
                 {form.getFieldDecorator('annexUrl', {
+                  rules: [{required: true, message: '请上传附件'}],
                   valuePropName: 'fileList',
                   getValueFromEvent: normFile,
                   initialValue: selectedValues.annexUrl ? [selectedValues.annexUrl] : [],
@@ -148,7 +162,7 @@ class CreateForm extends Component {
   }
 
   onUpload = (params) => {
-    QiNiuOss(params).then(res=>{
+    QiNiuOss(params).then(res => {
       this.upload = res
     })
   }
@@ -170,7 +184,7 @@ class CreateForm extends Component {
       name: this.state.fileList[0].name,
       status: 'done',
       url: ImageUrl + res.key,
-      type:this.state.fileList[0].type
+      type: this.state.fileList[0].type
     }
     this.setState({fileList: [file]})
     this.props.form.setFieldsValue({annexUrl: [file]});
@@ -182,7 +196,7 @@ class CreateForm extends Component {
     } else {
       this.upload.unsubscribe()
     }
-    this.setState({fileList:[]})
+    this.setState({fileList: []})
   }
 }
 
@@ -221,10 +235,24 @@ class FileRead extends Component {
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm')}</span>,
     },
     {
+      title: '下载附件',
+      dataIndex: 'annexUrl',
+      render: (val) => {
+        let href = ''
+        let annex = JSON.parse(val)
+        href = annex.url + '?attname=' + annex.fileName
+        return (
+          <Fragment>
+            <a href={href} download={'附件'}>下载附件</a>
+          </Fragment>
+        )
+      }
+    },
+    {
       title: '操作',
       render: (val, record) => {
         const user = this.props.app.user
-        if(!user.token){
+        if (!user.token) {
           return null
         }
         const button = user.permissionsMap.button
@@ -234,8 +262,7 @@ class FileRead extends Component {
               <Fragment>
                 <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
                 <Divider type="vertical"/>
-              </Fragment>: null}
-            <a href={record.annexUrl+'?attname=附件'} download={'附件'}>下载附件</a>
+              </Fragment> : null}
           </Fragment>
         )
       }
@@ -243,7 +270,7 @@ class FileRead extends Component {
   ];
 
   componentDidMount() {
-   this.getList()
+    this.getList()
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
@@ -338,7 +365,7 @@ class FileRead extends Component {
       name: fieldsValue.name,
       fileType: fieldsValue.fileType,
       annexUrl: fieldsValue.annexUrl,
-      remark:fieldsValue.remark
+      remark: fieldsValue.remark
     }
     if (updateModalVisible) {
       dispatch({
@@ -416,7 +443,7 @@ class FileRead extends Component {
     const {
       fileRead: {data},
       loading,
-      app:{user}
+      app: {user}
     } = this.props;
     const {selectedRows, modalVisible, updateModalVisible, selectedValues, pageLoading} = this.state;
 
@@ -424,7 +451,7 @@ class FileRead extends Component {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
       handleUpdateModalVisible: this.handleUpdateModalVisible,
-      normFile:this.normFile
+      normFile: this.normFile
     };
     const parentState = {
       updateModalVisible: updateModalVisible,
@@ -438,17 +465,17 @@ class FileRead extends Component {
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
               <div className={styles.tableListOperator}>
-                {user.token&&getButtons(user.permissionsMap.button,pageButtons[0]) ?
+                {user.token && getButtons(user.permissionsMap.button, pageButtons[0]) ?
                   <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                     新增
                   </Button> : null}
-            </div>
+              </div>
               <StandardTable
                 selectedRows={selectedRows}
                 loading={loading.effects['fileRead/fetch']}
                 data={data}
                 bordered
-                rowKey ={'id'}
+                rowKey={'id'}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

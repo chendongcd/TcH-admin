@@ -19,14 +19,30 @@ export default {
       console.log(response)
       if(response.code=='200') {
         if(response.list.length>0) {
-          let x = 0, y = 0, z = 0
+          let x = 0, y = 0, z = 0,a9=0,a10=0,a11=0,a12=0,a13=0
           response.list.forEach(a => {
             x += a.valuationPrice
             y += a.endedPrice
+            a9+=a.valuationPriceReduce
+            a10+=a.warranty
+            a11+=a.performanceBond
+            a12+=a.compensation
+            a13+=a.shouldAmount
           })
 
           z = Math.floor(x / (x + y) * 100) / 100
-          let sum = {id: 'sum', underRate: z, code: '合计:'}
+          let sum = {
+            id: 'sum',
+            valuationPrice:x,
+            endedPrice:y,
+            underRate: z,
+            code: '合计:',
+            valuationPriceReduce:a9,
+            warranty:a10,
+            performanceBond:a11,
+            compensation:a12,
+            shouldAmount:a13
+          }
           response.list = [...response.list, sum]
         }
         yield put({

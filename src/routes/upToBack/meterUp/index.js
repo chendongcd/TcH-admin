@@ -34,7 +34,7 @@ const pageButtons = menuData[8].buttons.map(a => a.permission)
 const info_css = {
   color: '#fa541c'
 }
-const testValue = '123'
+const testValue = ''
 const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
 // {
 //   uid: '-1',
@@ -274,6 +274,7 @@ class CreateForm extends Component {
               <FormItem style={{marginLeft: 15 + 'px'}} labelCol={{span: 2}}
                         wrapperCol={{span: 15}} label="附件">
                 {form.getFieldDecorator('annexUrl', {
+                  rules: [{required: true, message: '请上传附件'}],
                   valuePropName: 'fileList',
                   getValueFromEvent: normFile,
                   initialValue: selectedValues.annexUrl ? [selectedValues.annexUrl] : [],

@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import PropTypes from 'prop-types'
 import {Progress, Icon} from 'antd'
 import classnames from 'classnames'
 
@@ -15,17 +14,23 @@ class PreFile extends Component {
   }
 
   render() {
-    let {file, progress, onPreview, onClose, index,noImage,disabled} = this.props
+    let {file, progress, onPreview, onClose, index, noImage, disabled, noPdf} = this.props
     if (file) {
       return (
         <div className={containerClass}>
           <div className={listItem}>
             <div className={item}>
-              {file.status == 'done' ?( noImage?<a href={file.url+'?attname='+file.name} download={file.name}>{file.name}</a>:<div onClick={() => onPreview(file)} style={{display:'flex',alignItems:'center',cursor: 'pointer'}}>
-                <span style={{marginTop:12,marginLeft:20}}>{file.name}</span>
-            </div>) : <Progress style={{marginTop: 15}} percent={progress} status="active"/>}
+              {file.status == 'done' ? (noImage ?
+                <a href={file.url + '?attname=' + file.name} download={file.name}>{file.name}</a> :
+                noPdf?<span onClick={() => onPreview(file)} style={{cursor: 'pointer'}}>
+             <img className={imgClass} src={file.url}/>
+                <span style={{marginLeft: 60}}>{file.name}</span>
+            </span>:
+                <div onClick={() => onPreview(file)} style={{display: 'flex', alignItems: 'center', cursor: 'pointer'}}>
+                  <span style={{marginTop: 12, marginLeft: 20}}>{file.name}</span>
+                </div>) : <Progress style={{marginTop: 15}} percent={progress} status="active"/>}
             </div>
-            {disabled?null: <Icon onClick={() => onClose(file, index)} type="close"/>}
+            {disabled ? null : <Icon onClick={() => onClose(file, index)} type="close"/>}
           </div>
         </div>
       )

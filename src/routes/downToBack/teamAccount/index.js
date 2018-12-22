@@ -33,7 +33,7 @@ const info_css = {
   color: '#fa541c'
 }
 const teamStatus = ['正在施工', '完工待结算', '已结算']
-const testValue = ''
+const testValue = '123'
 const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
 
 
@@ -51,6 +51,19 @@ class CreateForm extends Component {
     this.upload = null
   }
 
+  componentDidUpdate(preProp, preState) {
+    if (!preProp.selectedValues.annexUrl && this.props.selectedValues.annexUrl && this.state.fileList.length == 0) {
+      let pdf = JSON.parse(this.props.selectedValues.annexUrl)
+      let file = {
+        uid: '-1',
+        name: pdf.fileName,
+        status: 'done',
+        url: pdf.url,
+      }
+      this.setState({fileList: [file]})
+    }
+  }
+
   okHandle = () => {
     const {form, handleAdd, updateModalVisible, selectedValues} = this.props;
 
@@ -64,6 +77,7 @@ class CreateForm extends Component {
           fieldsValue[prop] = fieldsValue[prop].format('YYYY-MM-DD')
         }
       }
+      fieldsValue.annexUrl = `{"url":"${this.state.fileList[0].url}","fileName":"${this.state.fileList[0].name}"}`
       handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
   };
@@ -250,17 +264,18 @@ class CreateForm extends Component {
             <Col md={24} sm={24}>
               <FormItem style={{marginLeft: 18 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="附件">
                 {form.getFieldDecorator('annexUrl', {
+                  rules: [{required: true, message: '请上传附件'}],
                   valuePropName: 'fileList',
                   getValueFromEvent: normFile,
-                  initialValue: selectedValues.annexUrl ? selectedValues.annexUrl : [],
+                  initialValue: selectedValues.annexUrl ? [selectedValues.annexUrl] : [],
                 })(
                   <Upload.Dragger onChange={this.handleChange}
-                                  accept={'image/*'}
+                                  accept={'.pdf'}
                                   showUploadList={false}
                     // fileList={fileList}
                                   listType="picture"
                                   name="files"
-                                  disabled={fileList.length > 0}
+                                  disabled={fileList.length > 0|| checkDetail}
                                   onSuccess={this.onSuccess}
                                   handleManualRemove={this.remove}
                                   onError={this.onError}
@@ -272,8 +287,8 @@ class CreateForm extends Component {
                     <p className="ant-upload-text">点击或拖动附件进入</p>
                   </Upload.Dragger>
                 )}
-                <PreFile onClose={this.remove} onPreview={this.handlePreview} progress={progress} file={fileList[0]}/>
-                <span style={info_css}>备注：请以一份PDF格式文件上传。</span>
+                <PreFile disabled={checkDetail} onClose={this.remove} onPreview={this.handlePreview} progress={progress} file={fileList[0]}/>
+                <span style={info_css}>备注：请以一份PDF格式文件上传合同扫描件</span>
               </FormItem>
             </Col>
           </Row>
@@ -288,8 +303,8 @@ class CreateForm extends Component {
             </Col>
           </Row>
         </div>
-        <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-          <img alt="example" style={{width: '100%'}} src={previewImage}/>
+        <Modal width={643} style={{width: 643, height: 940}} bodyStyle={{width: 643, height: 940}} visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+          <iframe style={{width: 595, height: 892}} frameBorder={0} src={previewImage}/>
         </Modal>
       </Modal>
     )
@@ -518,7 +533,32 @@ class TeamAccount extends Component {
           title: '附件（含同）',
           dataIndex: 'annexUrl',
           render(val) {
-            return <a href={val} download={'附件'}>下载附件</a>;
+            //if(JSON.parse(record.annexUrl))
+            function isJSON(str) {
+              if (typeof str == 'string') {
+                try {
+                  var obj = JSON.parse(str);
+                  if (str.indexOf('{') > -1) {
+                    return true;
+                  } else {
+                    return false;
+                  }
+                } catch (e) {
+                  return false;
+                }
+              }
+              return false;
+            }
+
+            let href = ''
+            if (isJSON(val)) {
+              let annex = JSON.parse(val)
+              href = annex.url + '?attname=' + annex.fileName
+              //console.log(href)
+            } else {
+              href = val
+            }
+            return <a href={href} download={'附件'}>下载附件</a>;
           },
         },
         {

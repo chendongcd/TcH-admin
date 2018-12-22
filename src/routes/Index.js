@@ -65,14 +65,14 @@ class IndexPage extends Component {
       },
     }
     const {iconFontJS, iconFontCSS, logo} = config
+  //  console.log(logo)
     return (
       <div>
         <Loader fullScreen spinning={loading}/>
         <Helmet>
           <title>成本管理系统</title>
           <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-          <link rel="icon" href={logo} type="image/x-icon"/>
-          {/* <link rel="apple-touch-icon" href="http://mysite.com/img/apple-touch-icon-57x57.png" />*/}
+          <link rel="icon" href={logo} />
           {iconFontJS && <script src={iconFontJS}/>}
           {iconFontCSS && <link rel="stylesheet" href={iconFontCSS}/>}
         </Helmet>
@@ -97,11 +97,11 @@ class IndexPage extends Component {
           </Layout>
           :
           <div>
-            <Layout style={{height: '100vh',backgroundColor:'#FFFFFF'}}>
+            <Layout style={{height: '100vh', backgroundColor: '#FFFFFF'}}>
               <Content>
                 {children.props.children.filter(r => r.props.path && r.props.path == '/login')}
               </Content>
-              <Footer style={{backgroundColor:'#FFFFFF'}}>
+              <Footer style={{backgroundColor: '#FFFFFF'}}>
                 {config.footerText}
               </Footer>
             </Layout>

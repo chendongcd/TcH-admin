@@ -57,11 +57,43 @@ class CreateForm extends Component {
     this.upload = []
   }
 
+  componentDidUpdate(preProp, preState) {
+    if (!preProp.selectedValues.jointHearingAnnex && this.props.selectedValues.jointHearingAnnex && this.state.jointHearingAnnex.length == 0) {
+      let pdf = JSON.parse(this.props.selectedValues.jointHearingAnnex)
+      let file = {
+        uid: '-1',
+        name: pdf.fileName,
+        status: 'done',
+        url: pdf.url,
+      }
+      this.setState({jointHearingAnnex: [file]})
+    }
+    if (!preProp.selectedValues.responsibilityAnnex && this.props.selectedValues.responsibilityAnnex && this.state.responsibilityAnnex.length == 0) {
+      let pdf = JSON.parse(this.props.selectedValues.responsibilityAnnex)
+      let file = {
+        uid: '0',
+        name: pdf.fileName,
+        status: 'done',
+        url: pdf.url,
+      }
+      this.setState({responsibilityAnnex: [file]})
+    }
+    if (!preProp.selectedValues.evaluationAnnex && this.props.selectedValues.evaluationAnnex && this.state.evaluationAnnex.length == 0) {
+      let pdf = JSON.parse(this.props.selectedValues.evaluationAnnex)
+      let file = {
+        uid: '1',
+        name: pdf.fileName,
+        status: 'done',
+        url: pdf.url,
+      }
+      this.setState({evaluationAnnex: [file]})
+    }
+  }
+
   okHandle = () => {
     const {form, handleAdd, updateModalVisible, selectedValues} = this.props;
 
     form.validateFields((err, fieldsValue) => {
-      console.log(fieldsValue)
       if (err) return;
       for (let prop in fieldsValue) {
         if (fieldsValue[prop] instanceof moment) {
@@ -71,10 +103,9 @@ class CreateForm extends Component {
         }
         // console.log(typeof fieldsValue[prop])
       }
-      // fieldsValue.jointHearingAnnex = testPDF
-      // fieldsValue.responsibilityAnnex = testPDF
-      // fieldsValue.evaluationAnnex = testPDF
-      // form.resetFields();
+      fieldsValue.jointHearingAnnex = `{"url":"${this.state.jointHearingAnnex[0].url}","fileName":"${this.state.jointHearingAnnex[0].name}"}`
+      fieldsValue.responsibilityAnnex = `{"url":"${this.state.responsibilityAnnex[0].url}","fileName":"${this.state.responsibilityAnnex[0].name}"}`
+      fieldsValue.evaluationAnnex = `{"url":"${this.state.evaluationAnnex[0].url}","fileName":"${this.state.evaluationAnnex[0].name}"}`
       handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
   };
@@ -300,6 +331,7 @@ class CreateForm extends Component {
             <Col md={24} sm={24}>
               <FormItem style={{marginLeft: 11 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="附件">
                 {form.getFieldDecorator('evaluationAnnex', {
+                  rules: [{required: true, message: '请上传附件'}],
                   valuePropName: 'fileList',
                   getValueFromEvent: normFile,
                   initialValue: selectedValues.evaluationAnnex ? [selectedValues.evaluationAnnex] : [],
@@ -310,7 +342,7 @@ class CreateForm extends Component {
                     // fileList={fileList}
                                   listType="text"
                                   name="files"
-                                  disabled={jointHearingAnnex.length > 0}
+                                  disabled={jointHearingAnnex.length > 0||checkDetail}
                                   onSuccess={(e) => this.onSuccess(e, 0)}
                                   handleManualRemove={(e) => this.remove(e, 0)}
                                   onError={this.onError}
@@ -365,6 +397,7 @@ class CreateForm extends Component {
             <Col md={24} sm={24}>
               <FormItem style={{marginLeft: 11 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="附件">
                 {form.getFieldDecorator('jointHearingAnnex', {
+                  rules: [{required: true, message: '请上传附件'}],
                   valuePropName: 'fileList',
                   getValueFromEvent: normFile,
                   initialValue: selectedValues.jointHearingAnnex ? [selectedValues.jointHearingAnnex] : [],
@@ -375,7 +408,7 @@ class CreateForm extends Component {
                     // fileList={fileList}
                                   listType="text"
                                   name="files"
-                                  disabled={jointHearingAnnex.length > 0}
+                                  disabled={jointHearingAnnex.length > 0||checkDetail}
                                   onSuccess={(e) => this.onSuccess(e, 1)}
                                   handleManualRemove={(e) => this.remove(e, 1)}
                                   onError={this.onError}
@@ -457,17 +490,18 @@ class CreateForm extends Component {
               <Col md={24} sm={24}>
                 <FormItem style={{marginLeft: 25 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="附件">
                   {form.getFieldDecorator('responsibilityAnnex', {
+                    rules: [{required: true, message: '请上传附件'}],
                     valuePropName: 'fileList',
                     getValueFromEvent: normFile,
                     initialValue: selectedValues.responsibilityAnnex ? [selectedValues.responsibilityAnnex] : [],
                   })(
                     <Upload.Dragger onChange={(e) => this.handleChange(e, 2)}
-                                    accept={'image/*'}
+                                    accept={'.pdf'}
                                     showUploadList={false}
                       // fileList={fileList}
                                     listType="picture"
                                     name="files"
-                                    disabled={responsibilityAnnex.length > 0}
+                                    disabled={responsibilityAnnex.length > 0||checkDetail}
                                     onSuccess={(e) => this.onSuccess(e, 2)}
                                     handleManualRemove={(e) => this.remove(e, 2)}
                                     onError={this.onError}
@@ -479,7 +513,7 @@ class CreateForm extends Component {
                       <p className="ant-upload-text">点击或拖动附件进入</p>
                     </Upload.Dragger>
                   )}
-                  <PreFile index={2} onClose={this.remove} onPreview={this.handlePreview} progress={resProgress}
+                  <PreFile disabled={checkDetail} index={2} onClose={this.remove} onPreview={this.handlePreview} progress={resProgress}
                            file={responsibilityAnnex[0]}/>
                   <span style={info_css}>备注：请以一份图片格式文件上传</span>
                 </FormItem>
@@ -487,8 +521,8 @@ class CreateForm extends Component {
             </Row>
           </Fragment>:null}
         </div>
-        <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-          <img alt="中期计价附件" style={{width: '100%'}} src={previewImage}/>
+        <Modal width={643} style={{width: 643, height: 940}} bodyStyle={{width: 643, height: 940}} visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+          <iframe style={{width: 595, height: 892}} frameBorder={0} src={previewImage}/>
         </Modal>
       </Modal>
     );
@@ -707,7 +741,10 @@ class ProEvaluate extends Component {
         key: 'evaluationAnnex',
         dataIndex: 'evaluationAnnex',
         render(val) {
-          return <a href={val} download={'附件'}>下载</a>;
+          let href = ''
+          let annex = JSON.parse(val)
+          href = annex.url + '?attname=' + annex.fileName
+          return <a href={href}>下载</a>;
         },
       }]
     },
@@ -733,7 +770,10 @@ class ProEvaluate extends Component {
         key: 'jointHearingAnnex',
         dataIndex: 'jointHearingAnnex',
         render(val) {
-          return <a href="#">下载</a>;
+          let href = ''
+            let annex = JSON.parse(val)
+            href = annex.url + '?attname=' + annex.fileName
+          return <a href={href}>下载</a>;
         },
       }]
     },
@@ -763,7 +803,10 @@ class ProEvaluate extends Component {
         key: 'responsibilityAnnex',
         dataIndex: 'responsibilityAnnex',
         render(val) {
-          return <a href={val} download={'附件'}>下载</a>;
+          let href = ''
+          let annex = JSON.parse(val)
+          href = annex.url + '?attname=' + annex.fileName
+          return <a href={href}>下载</a>;
         },
       }]
     },
