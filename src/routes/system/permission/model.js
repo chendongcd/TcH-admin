@@ -11,8 +11,8 @@ export default {
     },
   },
   effects: {
-    *query({ payload }, { call, put }) {
-      const response = yield call(queryRoleList, payload);
+    *query({ payload ,token}, { call, put }) {
+      const response = yield call(queryRoleList, payload,token);
       if(response.code=='200'){
       //  let data = {list:response.list,pagination:response.pagination}
         yield put({

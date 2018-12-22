@@ -78,10 +78,7 @@ class Project extends Component {
       pageLoading: false,
       selectedValues: {}
     }
-    this.exportParams = {
-      page:1,
-      pageSize:10
-    }
+    this.exportParams = {}
   }
 
   columns = [
@@ -368,7 +365,7 @@ class Project extends Component {
       modalVisible: modalVisible,
       selectedValues: selectedValues
     }
-    const exportUrl = createURL(SYS_PRO_EXPORT,{...this.exportParams,...{token:user.token}})
+    const exportUrl = createURL(SYS_PRO_EXPORT,this.exportParams)
 
     return (
       <Page inner={true} loading={pageLoading}>
@@ -414,8 +411,6 @@ class Project extends Component {
       if (err) return;
       //  form.resetFields();
       let payload = {
-        page: page,
-        pageSize: pageSize,
         projectName: fieldsValue.projectName,
         code:fieldsValue.code,
         status:fieldsValue.status

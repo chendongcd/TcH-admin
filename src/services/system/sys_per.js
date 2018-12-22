@@ -2,12 +2,12 @@ import {request,config} from 'utils';
 
 const {apiDev} = config
 const api = `${apiDev}/role`
-export async function queryRoleList(params) {
+export async function queryRoleList(params,token) {
   console.log('请求角色列表',`${apiDev}/role/list/v1.1`)
   return request(`${api}/list/v1.1`,{
     method: 'GET',
     body: params
-  });
+  },token);
 }
 
 export async function queryRoleDetail(params) {

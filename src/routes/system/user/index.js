@@ -152,8 +152,6 @@ class User extends Component {
       checkDetail: false
     }
     this.exportParams = {
-      page: 1,
-      pageSize: 10
     }
   }
 
@@ -243,7 +241,7 @@ class User extends Component {
 
   componentDidMount() {
     if (this.props.app.user.token) {
-      this.getProNames([])
+      this.getProNames()
       this.getRoleNames([])
       this.getList()
     }
@@ -429,7 +427,7 @@ class User extends Component {
       roleNames: roleNames,
       loading: loading
     }
-    const exportUrl = createURL(SYS_USER_EXPORT, {...this.exportParams, ...{token: user.token}})
+    const exportUrl = createURL(SYS_USER_EXPORT,this.exportParams)
 
     return (
       <Page inner={true} loading={pageLoading}>
@@ -465,12 +463,13 @@ class User extends Component {
     )
   }
 
-  getProNames = (proName) => {
+  getProNames = (proName=[]) => {
     if (proName.length < 1) {
       this.props.dispatch(
         {
           type: 'sys_user/queryProNames',
-          payload: {page: 1, pageSize: 10}
+          payload: {page: 1, pageSize: 10},
+          token:this.props.app.user.token
         }
       )
     }
@@ -481,7 +480,7 @@ class User extends Component {
       this.props.dispatch(
         {
           type: 'sys_user/queryRoleNames',
-          payload: {page: 1, pageSize: 10}
+          payload: {page: 1, pageSize: 10},
         }
       )
     }

@@ -70,10 +70,9 @@ export default {
       return false
     },
 
-    *queryProNames({payload},{call,put}){
-      const response = yield call(queryProPerList, payload);
+    *queryProNames({payload,token},{call,put}){
+      const response = yield call(queryProPerList, payload,token);
       //console.log(response)
-      console.log(123)
       console.log(response)
       if(response.code=='200'){
         yield put({
@@ -87,8 +86,8 @@ export default {
       }
     },
 
-    *queryRoleNames({payload},{call,put}){
-      const response = yield call(queryRoleList, payload);
+    *queryRoleNames({payload,token},{call,put}){
+      const response = yield call(queryRoleList, payload,token);
      // console.log(response)
       if(response.code=='200'){
         yield put({

@@ -1,8 +1,8 @@
 //导出URL
 
-export const SYS_PRO_EXPORT = '/system/project/export/v1.1'
+export const SYS_PRO_EXPORT = '/project/export_project/v1.1'
 
-export const SYS_USER_EXPORT = '/system/user/export/v1.1'
+export const SYS_USER_EXPORT = '/user/export/v1.1'
 
 export const PRO_EXPORT = '/project/export/v1.1'
 
