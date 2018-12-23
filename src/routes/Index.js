@@ -64,7 +64,7 @@ class IndexPage extends Component {
         dispatch({type: 'app/handleNavOpenKeys', payload: {navOpenKeys: openKeys}})
       },
     }
-    const {iconFontJS, iconFontCSS, logo} = config
+    const {iconFontJS, iconFontCSS,ico} = config
   //  console.log(logo)
     return (
       <div>
@@ -72,7 +72,7 @@ class IndexPage extends Component {
         <Helmet>
           <title>成本管理系统</title>
           <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-          <link rel="icon" href={logo} />
+          <link rel="shortcut icon" href={ico} />
           {iconFontJS && <script src={iconFontJS}/>}
           {iconFontCSS && <link rel="stylesheet" href={iconFontCSS}/>}
         </Helmet>

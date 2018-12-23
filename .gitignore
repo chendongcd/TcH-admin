@@ -5,6 +5,8 @@
 
 # production
 /dist
+.idea
+.idea/workspace.xml
 
 # misc
 .DS_Store
