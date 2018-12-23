@@ -18,6 +18,8 @@ app.model(require('./models/app').default);
 app.model(require('./models/rule').default);
 //app.model(require('./routes/system/user/model').default);
 // 4. Router
+
+console.log(require('./router').default)
 app.router(require('./router').default);
 
 // 5. Start

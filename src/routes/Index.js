@@ -20,7 +20,7 @@ class IndexPage extends Component {
   }
 
   componentDidMount() {
-
+    console.log(123)
     let {app, history} = this.props
     if (!app.user.token) {
       history.push('/login')
@@ -76,7 +76,7 @@ class IndexPage extends Component {
           {iconFontJS && <script src={iconFontJS}/>}
           {iconFontCSS && <link rel="stylesheet" href={iconFontCSS}/>}
         </Helmet>
-        {user.token ? <Layout className={classnames({[styles.dark]: darkTheme, [styles.light]: !darkTheme})}>
+         <Layout className={classnames({[styles.dark]: darkTheme, [styles.light]: !darkTheme})}>
             {!isNavbar && <Sider
               trigger={null}
               collapsible
@@ -95,17 +95,6 @@ class IndexPage extends Component {
               </Footer>
             </Layout>
           </Layout>
-          :
-          <div>
-            <Layout style={{height: '100vh', backgroundColor: '#FFFFFF'}}>
-              <Content>
-                {children.props.children.filter(r => r.props.path && r.props.path == '/login')}
-              </Content>
-              <Footer style={{backgroundColor: '#FFFFFF'}}>
-                {config.footerText}
-              </Footer>
-            </Layout>
-          </div>}
       </div>
     );
   }
