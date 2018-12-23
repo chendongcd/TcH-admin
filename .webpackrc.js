@@ -31,4 +31,5 @@ export default {
     /\.svg$/,
   ],
   ignoreMomentLocale: true,
+  es5ImcompatibleVersions: true,
 }

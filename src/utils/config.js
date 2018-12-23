@@ -3,7 +3,7 @@ module.exports = {
   name: '成本管理系统',
   prefix: 'TcH-Admin',
   footerText: '成都甲戌时代科技 © 2018 Melon',
-  logo:  'http://pjno2bd7f.bkt.clouddn.com/logo.png',//`${path}/logo.svg`,
+  logo:  'http://pjno2bd7f.bkt.clouddn.com/logo.png',//`${path}/logo.png`,
   ico:`${path}/logo.png`,
   iconFontCSS: `${path}/iconfont.css`,
   iconFontJS: `${path}/iconfont.js`,
