@@ -14,9 +14,9 @@ import {
   Upload,
   Divider,
 } from 'antd';
-import {Page, PageHeaderWrapper, StandardTable,PreFile} from 'components'
+import {Page, PageHeaderWrapper, StandardTable, PreFile} from 'components'
 import styles from './index.less'
-import { getButtons, cleanObject, QiNiuOss, ImageUrl} from "utils";
+import {getButtons, cleanObject, QiNiuOss, ImageUrl} from "utils";
 import {menuData} from "../../../common/menu";
 
 const FormItem = Form.Item;
@@ -59,9 +59,13 @@ class CreateForm extends Component {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
       fieldsValue.annexUrl = `{"url":"${this.state.fileList[0].url}","fileName":"${this.state.fileList[0].name}"}`
-      handleAdd(fieldsValue, updateModalVisible, selectedValues);
+      handleAdd(fieldsValue, updateModalVisible, selectedValues, this.cleanState);
     });
   };
+
+  cleanState = () => {
+    this.setState({fileList: [], previewImage: ''})
+  }
 
   componentWillUnmount() {
     this.upload = null
@@ -72,16 +76,20 @@ class CreateForm extends Component {
   }
 
   render() {
-    const {modalVisible, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, selectedValues} = this.props;
+    const {modalVisible, handleCheckDetail,checkDetail,form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, selectedValues} = this.props;
     let {fileList, progress} = this.state
 
     return (
       <Modal
         destroyOnClose
-        title={updateModalVisible ? "编辑文档" : "新增文档"}
+        title={checkDetail ? '文档详情' :updateModalVisible ? "编辑文档" : "新增文档"}
         visible={modalVisible}
-        onOk={this.okHandle}
-        onCancel={() => updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
+        onOk={()=>checkDetail ? handleCheckDetail():this.okHandle()}
+        onCancel={() => {
+          this.cleanState()
+          checkDetail ? handleCheckDetail() :updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()
+        }
+        }
       >
         <div className={styles.modalContent}>
           <Row gutter={8}>
@@ -90,7 +98,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('name', {
                   rules: [{required: true, message: '项目名不能为空',}],
                   initialValue: selectedValues.name ? selectedValues.name : testValue
-                })(<Input placeholder="请输入"/>)}
+                })(<Input disabled={checkDetail} placeholder="请输入"/>)}
               </FormItem>
             </Col>
           </Row>
@@ -109,7 +117,7 @@ class CreateForm extends Component {
                     // fileList={fileList}
                     listType="picture"
                     name="files"
-                    disabled={fileList.length > 0}
+                    disabled={fileList.length > 0||checkDetail}
                     onSuccess={this.onSuccess}
                     handleManualRemove={this.remove}
                     onError={this.onError}
@@ -121,7 +129,7 @@ class CreateForm extends Component {
                     <p className="ant-upload-text">点击或拖动附件进入</p>
                   </Upload.Dragger>
                 )}
-                <PreFile noImage={true} onClose={this.remove} progress={progress} file={fileList[0]}/>
+                <PreFile disabled={checkDetail} noImage={true} onClose={this.remove} progress={progress} file={fileList[0]}/>
               </FormItem>
             </Col>
           </Row>
@@ -131,7 +139,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('remark', {
                   rules: [{required: false}],
                   initialValue: selectedValues.remark ? selectedValues.remark : testValue
-                })(<Input.TextArea width={'100%'} placeholder="请输入" rows={4}/>)}
+                })(<Input.TextArea disabled={checkDetail} width={'100%'} placeholder="请输入" rows={4}/>)}
               </FormItem>
             </Col>
           </Row>
@@ -141,7 +149,7 @@ class CreateForm extends Component {
   }
 
   onUpload = (params) => {
-    QiNiuOss(params).then(res=>{
+    QiNiuOss(params).then(res => {
       this.upload = res
     })
   }
@@ -163,7 +171,7 @@ class CreateForm extends Component {
       name: this.state.fileList[0].name,
       status: 'done',
       url: ImageUrl + res.key,
-      type:this.state.fileList[0].type
+      type: this.state.fileList[0].type
     }
     this.setState({fileList: [file]})
     this.props.form.setFieldsValue({annexUrl: [file]});
@@ -175,7 +183,7 @@ class CreateForm extends Component {
     } else {
       this.upload.unsubscribe()
     }
-    this.setState({fileList:[]})
+    this.setState({fileList: []})
   }
 }
 
@@ -198,7 +206,7 @@ class FileReference extends Component {
   columns = [
     {
       title: '序号',
-      dataIndex: 'code',
+      dataIndex: 'id',
     },
     {
       title: '文件名称',
@@ -234,10 +242,12 @@ class FileReference extends Component {
         return (
           <Fragment>
             {getButtons(button, pageButtons[1]) ?
-              <Fragment>
-                <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
-                <Divider type="vertical"/>
-              </Fragment> : null}
+              <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
+              : null}
+            <Divider type="vertical"/>
+            {getButtons(button, pageButtons[2]) ?
+              <a onClick={() => this.handleCheckDetail(true, record)}>查看</a>
+              : null}
           </Fragment>
         )
       }
@@ -283,30 +293,6 @@ class FileReference extends Component {
     this.getList()
   };
 
-  handleMenuClick = e => {
-    const {dispatch} = this.props;
-    const {selectedRows} = this.state;
-
-    if (!selectedRows) return;
-    switch (e.key) {
-      case 'remove':
-        dispatch({
-          type: 'rule/remove',
-          payload: {
-            key: selectedRows.map(row => row.key),
-          },
-          callback: () => {
-            this.setState({
-              selectedRows: [],
-            });
-          },
-        });
-        break;
-      default:
-        break;
-    }
-  };
-
   handleSelectRows = rows => {
     this.setState({
       selectedRows: rows,
@@ -319,6 +305,14 @@ class FileReference extends Component {
     });
   };
 
+  handleCheckDetail = (flag, record) => {
+    this.setState({
+      checkDetail: !!flag,
+      modalVisible: !!flag,
+      selectedValues: record || {},
+    });
+  };
+
   handleUpdateModalVisible = (flag, record) => {
     this.setState({
       updateModalVisible: !!flag,
@@ -327,7 +321,7 @@ class FileReference extends Component {
     });
   };
 
-  handleAdd = (fieldsValue, updateModalVisible, selectedValues) => {
+  handleAdd = (fieldsValue, updateModalVisible, selectedValues, cleanState) => {
     const {dispatch, app: {user}} = this.props;
     const payload = {
       name: fieldsValue.name,
@@ -343,6 +337,7 @@ class FileReference extends Component {
         if (res) {
           this.handleUpdateModalVisible()
           this.getList()
+          cleanState()
         }
       })
     } else {
@@ -354,6 +349,7 @@ class FileReference extends Component {
         if (res) {
           this.handleModalVisible()
           this.getList()
+          cleanState()
         }
       })
     }
@@ -391,7 +387,6 @@ class FileReference extends Component {
   }
 
   normFile = (e) => {
-    console.log('Upload event:', e);
     if (Array.isArray(e)) {
       return e;
     }
@@ -404,18 +399,20 @@ class FileReference extends Component {
       loading,
       app: {user}
     } = this.props;
-    const {selectedRows, modalVisible, updateModalVisible, selectedValues, pageLoading} = this.state;
+    const {selectedRows,checkDetail, modalVisible, updateModalVisible, selectedValues, pageLoading} = this.state;
 
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
       handleUpdateModalVisible: this.handleUpdateModalVisible,
-      normFile:this.normFile
+      normFile: this.normFile,
+      handleCheckDetail:this.handleCheckDetail
     };
     const parentState = {
       updateModalVisible: updateModalVisible,
       modalVisible: modalVisible,
       selectedValues: selectedValues,
+      checkDetail:checkDetail
     }
     return (
       <Page inner={true} loading={pageLoading}>

@@ -319,7 +319,7 @@ class CreateForm extends Component {
         visible={modalVisible}
         width={992}
         maskClosable={false}
-        onOk={() => this.okHandle(form, updateModalVisible, handleAdd, selectedValues)}
+        onOk={()=>checkDetail ? handleCheckDetail(): this.okHandle(form, updateModalVisible, handleAdd, selectedValues)}
         onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
       >
         <div className={styles.modalContent}>
@@ -773,30 +773,6 @@ class InfoCard extends Component {
     this.setState({
       expandForm: !expandForm,
     });
-  };
-
-  handleMenuClick = e => {
-    const {dispatch} = this.props;
-    const {selectedRows} = this.state;
-
-    if (!selectedRows) return;
-    switch (e.key) {
-      case 'remove':
-        dispatch({
-          type: 'rule/remove',
-          payload: {
-            key: selectedRows.map(row => row.key),
-          },
-          callback: () => {
-            this.setState({
-              selectedRows: [],
-            });
-          },
-        });
-        break;
-      default:
-        break;
-    }
   };
 
   handleSelectRows = rows => {

@@ -16,7 +16,6 @@ export default {
   effects: {
     * fetch({payload, token}, {call, put}) {
       const response = yield call(queryProInfoList, payload, token);
-      console.log(payload)
       if (response.code == '200') {
         yield put({
           type: 'save',

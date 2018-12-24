@@ -58,7 +58,7 @@ const CreateForm = Form.create()(props => {
       visible={modalVisible}
       width={992}
       maskClosable={false}
-      onOk={okHandle}
+      onOk={()=>checkDetail ? handleCheckDetail():okHandle()}
       onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
     >
       <div className={styles.modalContent}>

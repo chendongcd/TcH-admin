@@ -1,5 +1,5 @@
 import React from 'react';
-import {Router, Route, Switch,Redirect} from 'dva/router';
+import {Router, Route, Switch, Redirect} from 'dva/router';
 import {LocaleProvider} from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import App from './routes/Index'
@@ -70,89 +70,89 @@ const registerModel = (app, model) => {
   }
 }
 const Routers = function ({history, app}) {
-  // const Login = dynamic({
-  //   app,
-  //   models: [appModel],
-  //   component:()=> import(/* webpackChunkName: "Login" */'./routes/login/index'),
-  // })
-  // const Home = dynamic({
-  //   app,
-  //   models: [appModel],
-  //   component: ()=>import(/* webpackChunkName: "Home" */'./routes/home/index'),
-  // })
-  // const Sys_Project = dynamic({
-  //   app,
-  //   models: ()=>[import('./routes/system/project/model')],
-  //   component:()=> import(/* webpackChunkName: "SysProject" */'./routes/system/project/index'),
-  // })
-  // const Sys_Permission = dynamic({
-  //   app,
-  //   models: ()=> [import('./routes/system/permission/model')],
-  //   component:()=> import(/* webpackChunkName: "SysPermission" */'./routes/system/permission/index'),
-  // })
-  // const Sys_User = dynamic({
-  //   app,
-  //   models:()=> [import('./routes/system/user/model')],
-  //   component:()=> import(/* webpackChunkName: "SysUser" */'./routes/system/user/index'),
-  // })
-  // const Pro_InfoCard = dynamic({
-  //   app,
-  //   models: ()=> [import('./routes/project/infoCard/model')],
-  //   component:()=> import(/* webpackChunkName: "InfoCard" */'./routes/project/infoCard/index'),
-  // })
-  // const Up_MeterUp = dynamic({
-  //   app,
-  //   models: ()=> [import('./routes/upToBack/meterUp/model')],
-  //   component:()=> import(/* webpackChunkName: "Meter" */'./routes/upToBack/meterUp/index'),
-  // })
-  // const Sub_Qualification = dynamic({
-  //   app,
-  //   models:()=> [import('./routes/sub/qualification/model')],
-  //   component:()=> import(/* webpackChunkName: "Qualification" */'./routes/sub/qualification/index')
-  // })
-  // const Sub_Resume = dynamic({
-  //   app,
-  //   models:()=>[import('./routes/sub/resume/model')],
-  //   component:()=> import(/* webpackChunkName: "Resume" */'./routes/sub/resume/index')
-  // })
-  // const Down_MeterDown = dynamic({
-  //   app,
-  //   models:()=>[import('./routes/downToBack/meterDown/model')],
-  //   component:()=> import(/* webpackChunkName: "MeterDown" */'./routes/downToBack/meterDown/index')
-  // })
-  // const Down_TeamAccount = dynamic({
-  //   app,
-  //   models:()=>[import('./routes/downToBack/teamAccount/model')],
-  //   component:()=> import(/* webpackChunkName: "TeamAccount" */'./routes/downToBack/teamAccount/index')
-  // })
-  // const Evaluate_Pro = dynamic({
-  //   app,
-  //   models:()=>[import('./routes/evaluation/proEvaluate/model')],
-  //   component:()=> import(/* webpackChunkName: "ProEvaluate" */'./routes/evaluation/proEvaluate/index')
-  // })
-  // const People_Info = dynamic({
-  //   app,
-  //   models:()=>[import('./routes/peopleManage/info/model')],
-  //   component:()=> import(/* webpackChunkName: "PeopleManage" */'./routes/peopleManage/info/index')
-  // })
-  // const Document_fileRead = dynamic({
-  //   app,
-  //   models:()=>[import('./routes/document/fileRead/model')],
-  //   component:()=> import(/* webpackChunkName: "FileRead" */'./routes/document/fileRead/index')
-  // })
-  // const Document_fileReference = dynamic({
-  //   app,
-  //   models:()=>[import('./routes/document/fileReference/model')],
-  //   component:()=> import(/* webpackChunkName: "FileReference" */'./routes/document/fileReference/index')
-  // })
-  // const NotFound = dynamic({
-  //   app,
-  //   models:[appModel],
-  //   component:()=> import(/* webpackChunkName: "404" */'./routes/error/404')
-  // })
+  const Login = dynamic({
+    app,
+    models: [appModel],
+    component: () => import(/* webpackChunkName: "Login" */'./routes/login/index'),
+  })
+  const Home = dynamic({
+    app,
+    models: [appModel],
+    component: () => import(/* webpackChunkName: "Home" */'./routes/home/index'),
+  })
+  const Sys_Project = dynamic({
+    app,
+    models: () => [import('./routes/system/project/model')],
+    component: () => import(/* webpackChunkName: "SysProject" */'./routes/system/project/index'),
+  })
+  const Sys_Permission = dynamic({
+    app,
+    models: () => [import('./routes/system/permission/model')],
+    component: () => import(/* webpackChunkName: "SysPermission" */'./routes/system/permission/index'),
+  })
+  const Sys_User = dynamic({
+    app,
+    models: () => [import('./routes/system/user/model')],
+    component: () => import(/* webpackChunkName: "SysUser" */'./routes/system/user/index'),
+  })
+  const Pro_InfoCard = dynamic({
+    app,
+    models: () => [import('./routes/project/infoCard/model')],
+    component: () => import(/* webpackChunkName: "InfoCard" */'./routes/project/infoCard/index'),
+  })
+  const Up_MeterUp = dynamic({
+    app,
+    models: () => [import('./routes/upToBack/meterUp/model')],
+    component: () => import(/* webpackChunkName: "Meter" */'./routes/upToBack/meterUp/index'),
+  })
+  const Sub_Qualification = dynamic({
+    app,
+    models: () => [import('./routes/sub/qualification/model')],
+    component: () => import(/* webpackChunkName: "Qualification" */'./routes/sub/qualification/index')
+  })
+  const Sub_Resume = dynamic({
+    app,
+    models: () => [import('./routes/sub/resume/model')],
+    component: () => import(/* webpackChunkName: "Resume" */'./routes/sub/resume/index')
+  })
+  const Down_MeterDown = dynamic({
+    app,
+    models: () => [import('./routes/downToBack/meterDown/model')],
+    component: () => import(/* webpackChunkName: "MeterDown" */'./routes/downToBack/meterDown/index')
+  })
+  const Down_TeamAccount = dynamic({
+    app,
+    models: () => [import('./routes/downToBack/teamAccount/model')],
+    component: () => import(/* webpackChunkName: "TeamAccount" */'./routes/downToBack/teamAccount/index')
+  })
+  const Evaluate_Pro = dynamic({
+    app,
+    models: () => [import('./routes/evaluation/proEvaluate/model')],
+    component: () => import(/* webpackChunkName: "ProEvaluate" */'./routes/evaluation/proEvaluate/index')
+  })
+  const People_Info = dynamic({
+    app,
+    models: () => [import('./routes/peopleManage/info/model')],
+    component: () => import(/* webpackChunkName: "PeopleManage" */'./routes/peopleManage/info/index')
+  })
+  const Document_fileRead = dynamic({
+    app,
+    models: () => [import('./routes/document/fileRead/model')],
+    component: () => import(/* webpackChunkName: "FileRead" */'./routes/document/fileRead/index')
+  })
+  const Document_fileReference = dynamic({
+    app,
+    models: () => [import('./routes/document/fileReference/model')],
+    component: () => import(/* webpackChunkName: "FileReference" */'./routes/document/fileReference/index')
+  })
+  const NotFound = dynamic({
+    app,
+    models: [appModel],
+    component: () => import(/* webpackChunkName: "404" */'./routes/error/404')
+  })
 
 
-  const routes = [
+  /*const routes = [
     {
       path: '/',
       component: App,
@@ -378,14 +378,48 @@ const Routers = function ({history, app}) {
       },
     },
     // *
-  ]
+  ]*/
 
-  console.log(routes)
-  return  <Router history={history} routes={routes} />
   return (
     <LocaleProvider locale={zhCN}>
-     {/* <Router history={history}>
-        <App {...app}>
+      <Router history={history}>
+      {/*  <Switch>
+          <Route path="/" exact component={App}>
+            <IndexRoute  component={Home}/>
+            <Route path="/system">
+              <Route path="/project" component={Sys_Project}/>
+              <Route path="permission" component={Sys_Permission}/>
+              <Route path="/user" component={Sys_User}/>
+            </Route>
+            <Route path="/project">
+              <Route path="/infoCard" component={Pro_InfoCard}/>
+            </Route>
+            <Route path="/up">
+              <Route path="/meterUp" component={Up_MeterUp}/>
+            </Route>
+            <Route path="/sub">
+              <Route path="/qualification" component={Sub_Qualification}/>
+              <Route path="/resume" component={Sub_Resume}/>
+            </Route>
+            <Route path="/down">
+              <Route path="/inspect" component={Down_MeterDown}/>
+              <Route path="/account" component={Down_TeamAccount}/>
+            </Route>
+            <Route path="/people">
+              <Route path="/info" component={People_Info}/>
+            </Route>
+            <Route path="/evaluation">
+              <Route path="/evaluate" component={Evaluate_Pro}/>
+            </Route>
+            <Route path="/files">
+              <Route path="/read" component={Document_fileRead}/>
+              <Route path="/reference" component={Document_fileReference}/>
+            </Route>
+          </Route>
+          <Route path="/login" component={Login}/>
+          <Route path="/404" component={NotFound}/>
+        </Switch>*/}
+        <App>
           <Switch>
             <Redirect exact from="/"  to="/home"/>
             <Route path="/home" exact component={Home}/>
@@ -406,8 +440,7 @@ const Routers = function ({history, app}) {
             <Route path="/404"  component={NotFound}/>
           </Switch>
         </App>
-      </Router>*/}
-      <Router history={history} routes={routes} />
+      </Router>
     </LocaleProvider>
   );
 }

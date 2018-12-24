@@ -20,10 +20,9 @@ class IndexPage extends Component {
   }
 
   componentDidMount() {
-    console.log(123)
     let {app, history} = this.props
     if (!app.user.token) {
-      history.push('/login')
+        history.push('/login')
     }
   }
 
@@ -64,19 +63,18 @@ class IndexPage extends Component {
         dispatch({type: 'app/handleNavOpenKeys', payload: {navOpenKeys: openKeys}})
       },
     }
-    const {iconFontJS, iconFontCSS,ico} = config
-  //  console.log(logo)
+    const {iconFontJS, iconFontCSS, ico} = config
     return (
       <div>
         <Loader fullScreen spinning={loading}/>
         <Helmet>
           <title>成本管理系统</title>
           <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-          <link rel="shortcut icon" href={ico} />
+          <link rel="shortcut icon" href={ico}/>
           {iconFontJS && <script src={iconFontJS}/>}
           {iconFontCSS && <link rel="stylesheet" href={iconFontCSS}/>}
         </Helmet>
-         <Layout className={classnames({[styles.dark]: darkTheme, [styles.light]: !darkTheme})}>
+        {user.token ? <Layout className={classnames({[styles.dark]: darkTheme, [styles.light]: !darkTheme})}>
             {!isNavbar && <Sider
               trigger={null}
               collapsible
@@ -95,6 +93,8 @@ class IndexPage extends Component {
               </Footer>
             </Layout>
           </Layout>
+          :
+          children.props.children.filter(r => r.props.path && r.props.path == '/login')}
       </div>
     );
   }

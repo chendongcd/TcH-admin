@@ -16,7 +16,7 @@ import {
   Collapse,
   Spin
 } from 'antd';
-import {arrayToTree, _setTimeOut, getButtons,cleanObject} from 'utils'
+import {arrayToTree, _setTimeOut, getButtons, cleanObject} from 'utils'
 import {menuData} from '../../../common/menu'
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
@@ -54,7 +54,7 @@ const CreateForm = Form.create()(props => {
     </Modal>
   );
 });
-const pageButtons = menuData[3].buttons.map(a=>a.permission)
+const pageButtons = menuData[3].buttons.map(a => a.permission)
 
 class CreatDrawer extends Component {
 
@@ -76,6 +76,8 @@ class CreatDrawer extends Component {
   }
 
   onCheck = (checkedKeys, info) => {
+    // console.log(checkedKeys)
+    // console.log(info)
     this.resouces = checkedKeys.checked
     this.setState({checkedKeys})
   }
@@ -107,7 +109,10 @@ class CreatDrawer extends Component {
   onCertain = (setPermission, selectedValues) => {
     //console.log(this.resouces)
     const res = this.resouces.length == 0 ? selectedValues.resouces : this.resouces
-    setPermission({id: selectedValues.id, resouces: res.map(a => JSON.parse(`{"permission":"${a}"}`))})
+    setPermission({id: selectedValues.id, resouces: res.map(a => JSON.parse(`{"permission":"${a}"}`))},this.cleanCheckedKeys)
+  }
+
+  cleanCheckedKeys=()=>{
     this.setState({checkedKeys: []})
   }
 
@@ -270,10 +275,10 @@ class Permission extends Component {
         const user = this.props.app.user
         return (
           <Fragment>
-            {user.token&&getButtons(user.permissionsMap.button, pageButtons[1]) ?
+            {user.token && getButtons(user.permissionsMap.button, pageButtons[1]) ?
               <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a> : null}
             <Divider type="vertical"/>
-            {user.token&&getButtons(user.permissionsMap.button, pageButtons[2]) ?
+            {user.token && getButtons(user.permissionsMap.button, pageButtons[2]) ?
               <a onClick={() => this.showDrawer(record)}>权限设置</a> : null}
           </Fragment>
         )
@@ -281,11 +286,11 @@ class Permission extends Component {
     },
   ];
 
-   componentDidMount() {
-   // _setTimeOut(() => this.setState({pageLoading: false}), 1000)
-     if(this.props.app.user.token) {
-       this.getList()
-     }
+  componentDidMount() {
+    // _setTimeOut(() => this.setState({pageLoading: false}), 1000)
+    if (this.props.app.user.token) {
+      this.getList()
+    }
     /*dispatch({
       type: 'rule/fetch',
     });*/
@@ -371,8 +376,8 @@ class Permission extends Component {
           description: '用于公司管理项目角色'
         },
         token: user.token
-      }).then(res=>{
-        if(res){
+      }).then(res => {
+        if (res) {
           this.handleModalVisible()
           this.getList()
         }
@@ -429,13 +434,18 @@ class Permission extends Component {
     });
   }
 
-  setPermission = (payload) => {
+  setPermission = (payload,cleanState) => {
     // console.log(payload)
+    console.log(payload)
     this.props.dispatch({
       type: 'sys_per/updateRolePer',
       payload: payload,
-      token: this.props.app.user.token,
-      callback: this.onDrawClose
+      token: this.props.app.user.token
+    }).then(res=>{
+      if(res){
+        this.onDrawClose()
+        cleanState()
+      }
     })
   }
 
@@ -462,7 +472,7 @@ class Permission extends Component {
     const {
       sys_per: {data},
       loading,
-      app:{user}
+      app: {user}
     } = this.props;
     const {selectedRows, modalVisible, pageLoading, updateModalVisible, selectedValues} = this.state;
     const parentMethods = {
@@ -482,7 +492,7 @@ class Permission extends Component {
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
               <div className={styles.tableListOperator}>
-                {user.token&&getButtons(user.permissionsMap.button, pageButtons[0]) ?
+                {user.token && getButtons(user.permissionsMap.button, pageButtons[0]) ?
                   <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                     新增
                   </Button> : null}
@@ -510,7 +520,7 @@ class Permission extends Component {
     this.props.dispatch({
       type: 'sys_per/query',
       payload: {page: page, pageSize: pageSize},
-      token:this.props.app.user.token
+      token: this.props.app.user.token
     });
   }
 

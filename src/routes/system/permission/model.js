@@ -67,17 +67,18 @@ export default {
       }
       return false
     },
-    *updateRolePer({ payload,token,callback }, { call, put }){
+    *updateRolePer({ payload,token }, { call, put }){
       const response = yield call(updateRolePer, payload,token);
       console.log(response)
       if(response.code=='200'){
         message.success('角色权限设置成功')
-        if (callback) callback();
+        return true
       }
       if(response.code=='401'){
         yield put({type:'app/logout'})
         return false
       }
+      return false
     }
   },
 

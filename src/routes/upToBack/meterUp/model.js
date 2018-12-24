@@ -27,7 +27,7 @@ export default {
             a14 += a.notCalculatedAmount
             a13 += a.extraAmount
             aPre+=a.prepaymentAmount
-            a7+=a.valuationAmountNotTax
+            a7=(a7+a.valuationAmountNotTax*100)
             a8+=a.realAmountTax
             a9+=a.realAmount
             a10+=a.alreadyPaidAmount
@@ -43,7 +43,7 @@ export default {
             code: '合计:',
             prepaymentAmount:aPre,
             valuationAmountTax:a5,
-            valuationAmountNotTax:a7,
+            valuationAmountNotTax:Math.floor(a7) / 100,
             realAmountTax:a8,
             alreadyPaidAmount:a10,
             unpaidAmount:a11,

@@ -78,9 +78,13 @@ class CreateForm extends Component {
       fieldsValue.annexUrl = `{"url":"${this.state.fileList[0].url}","fileName":"${this.state.fileList[0].name}"}`
 
       // form.resetFields();
-      handleAdd(fieldsValue, updateModalVisible, selectedValues);
+      handleAdd(fieldsValue, updateModalVisible, selectedValues,this.cleanState);
     });
   };
+
+  cleanState=()=>{
+    this.setState({fileList:[],previewImage:''})
+  }
 
   handleCancel = () => this.setState({previewVisible: false})
 
@@ -111,8 +115,12 @@ class CreateForm extends Component {
         visible={modalVisible}
         width={992}
         maskClosable={false}
-        onOk={this.okHandle}
-        onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
+        onOk={()=>checkDetail ? handleCheckDetail():this.okHandle()}
+        onCancel={() =>{
+          this.cleanState()
+          checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()
+        }
+        }
       >
         <div className={styles.modalContent}>
           <Row gutter={8}>
@@ -641,7 +649,7 @@ class MeterDown extends Component {
     });
   };
 
-  handleAdd = (fields, updateModalVisible, selectedValues) => {
+  handleAdd = (fields, updateModalVisible, selectedValues,cleanState) => {
     // const {dispatch} = this.props;
     // dispatch({
     //   type: 'rule/add',
@@ -680,6 +688,7 @@ class MeterDown extends Component {
         if (res) {
           this.handleUpdateModalVisible()
           this.getList()
+          cleanState()
         }
       })
     } else {
@@ -691,6 +700,7 @@ class MeterDown extends Component {
         if (res) {
           this.handleModalVisible()
           this.getList()
+          cleanState()
         }
       })
     }

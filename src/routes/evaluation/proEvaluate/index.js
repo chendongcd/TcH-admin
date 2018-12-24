@@ -15,6 +15,7 @@ import {
   Modal,
   Upload,
   Divider,
+  message
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable, PreFile} from 'components'
 import styles from './index.less'
@@ -51,7 +52,7 @@ class CreateForm extends Component {
       resProgress: 0,
       previewVisible: false,
       previewImage: '',
-      isSignRes: ''
+      isSignRes: '1'
     };
     this.selectProject = {}
     this.upload = []
@@ -106,19 +107,27 @@ class CreateForm extends Component {
       fieldsValue.jointHearingAnnex = `{"url":"${this.state.jointHearingAnnex[0].url}","fileName":"${this.state.jointHearingAnnex[0].name}"}`
       fieldsValue.responsibilityAnnex = `{"url":"${this.state.responsibilityAnnex[0].url}","fileName":"${this.state.responsibilityAnnex[0].name}"}`
       fieldsValue.evaluationAnnex = `{"url":"${this.state.evaluationAnnex[0].url}","fileName":"${this.state.evaluationAnnex[0].name}"}`
-      handleAdd(fieldsValue, updateModalVisible, selectedValues);
+      handleAdd(fieldsValue, updateModalVisible, selectedValues,this.cleanState);
     });
   };
+
+  cleanState=()=>{
+    this.selectProject = {}
+    this.setState({isSignRes:'',previewImage:'',responsibilityAnnex:[],jointHearingAnnex:[],evaluationAnnex:[]})
+  }
 
   onChange = (value, option) => {
     this.selectProject = option.props.item
     this.props.form.setFieldsValue({
       engineeringType: this.selectProject.projectType,
       projectStatus: this.selectProject.statusStr,
-      contractEndTime: moment(this.selectProject.contractEndTime).format('YYYY-MM-DD'),
-      contractStartTime: moment(this.selectProject.contractStartTime).format('YYYY-MM-DD'),
+      contractEndTime:this.selectProject.contractEndTime,
+      contractStartTime:this.selectProject.contractStartTime,
       duration: this.selectProject.distanceTime
     });
+    if(!this.selectProject.contractEndTime){
+      message.error('请先完善该项目工程信息卡');
+    }
   }
 
   handleCancel = () => this.setState({previewVisible: false})
@@ -150,8 +159,12 @@ class CreateForm extends Component {
         visible={modalVisible}
         width={992}
         maskClosable={false}
-        onOk={this.okHandle}
-        onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
+        onOk={()=>checkDetail ? handleCheckDetail():this.okHandle()}
+        onCancel={() => {
+          this.cleanState()
+          checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()
+        }
+        }
       >
         <div className={styles.modalContent}>
           <Row gutter={8}>
@@ -172,7 +185,7 @@ class CreateForm extends Component {
             <Col md={8} sm={24}>
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="工程类别">
                 {form.getFieldDecorator('engineeringType', {
-                  rules: [{required: true}],
+                  rules: [{required: true,message:'请先选择项目'}],
                   initialValue: selectedValues.engineeringType ? selectedValues.engineeringType : '',
                 })(<Input disabled={true} placeholder="自动带出"/>)}
               </FormItem>
@@ -191,9 +204,9 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="项目状态">
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="工程状态">
                 {form.getFieldDecorator('projectStatus', {
-                  rules: [{required: true}],
+                  rules: [{required: true,message:'请先选择项目'}],
                   initialValue: selectedValues.projectStatus ? selectedValues.projectStatus : ''
                 })(<Input disabled={true} placehloder='自动带出'/>)}
               </FormItem>
@@ -260,7 +273,7 @@ class CreateForm extends Component {
             <Col md={8} sm={24}>
               <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="合同开工日期">
                 {form.getFieldDecorator('contractStartTime', {
-                  rules: [{required: true}],
+                  rules: [{required: true,message:'请先完善该项目工程信息卡'}],
                   initialValue: selectedValues.contractStartTime ? moment(selectedValues.contractStartTime).format('YYYY-MM-DD') : ''
                 })(<Input disabled={true} placeholder='自动带出'/>)}
               </FormItem>
@@ -268,7 +281,7 @@ class CreateForm extends Component {
             <Col md={8} sm={24}>
               <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="合同竣工日期">
                 {form.getFieldDecorator('contractEndTime', {
-                  rules: [{required: true}],
+                  rules: [{required: true,message:'请先完善该项目工程信息卡'}],
                   initialValue: selectedValues.contractEndTime ? moment(selectedValues.contractEndTime).format('YYYY-MM-DD') : ''
                 })(<Input disabled={true} placeholder='自动带出'/>)}
               </FormItem>
@@ -276,9 +289,9 @@ class CreateForm extends Component {
             <Col md={8} sm={24}>
               <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="工期(月)">
                 {form.getFieldDecorator('duration', {
-                  rules: [{required: true}],
-                  initialValue: selectedValues.duration ? selectedValues.duration : ''
-                })(<Input disabled={checkDetail || updateModalVisible} placeholder='自动计算'/>)}
+                  rules: [{required: true,message:'请先完善该项目工程信息卡'}],
+                  initialValue: selectedValues.distanceTime ? selectedValues.distanceTime : ''
+                })(<Input disabled={true} placeholder='自动带出'/>)}
               </FormItem>
             </Col>
           </Row>
@@ -652,7 +665,7 @@ class ProEvaluate extends Component {
   columns = [
     {
       title: '序号',
-      dataIndex: 'code',
+      dataIndex: 'id',
     },
     {
       title: '项目名称',
@@ -663,7 +676,7 @@ class ProEvaluate extends Component {
       dataIndex: 'engineeringType',
     },
     {
-      title: '项目状态',
+      title: '工程状态',
       dataIndex: 'projectStatus',
     },
     {
@@ -711,8 +724,8 @@ class ProEvaluate extends Component {
         },
       }, {
         title: '工期(月)',
-        key: 'duration',
-        dataIndex: 'duration',
+        key: 'distanceTime',
+        dataIndex: 'distanceTime',
       }]
     },
     {
@@ -780,6 +793,12 @@ class ProEvaluate extends Component {
     {
       title: '责任状签订',
       children: [{
+        title: '责任状是否签订',
+        key: 'isSign',
+        render(val,record){
+          return<span>{record.responsibilityTime?'是':'否'}</span>
+        }
+      },{
         title: '效益点',
         key: 'responsibilityBenefiy',
         dataIndex: 'responsibilityBenefiy'
@@ -957,7 +976,7 @@ class ProEvaluate extends Component {
     });
   };
 
-  handleAdd = (fields, updateModalVisible, selectedValues) => {
+  handleAdd = (fields, updateModalVisible, selectedValues,cleanState) => {
     // const {dispatch} = this.props;
     // dispatch({
     //   type: 'rule/add',
@@ -1004,6 +1023,7 @@ class ProEvaluate extends Component {
         if (res) {
           this.handleUpdateModalVisible()
           this.getList()
+          cleanState()
         }
       })
     } else {
@@ -1015,6 +1035,7 @@ class ProEvaluate extends Component {
         if (res) {
           this.handleModalVisible()
           this.getList()
+          cleanState()
         }
       })
     }
@@ -1042,9 +1063,14 @@ class ProEvaluate extends Component {
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="项目状态">
+            <FormItem label="工程状态">
               {getFieldDecorator('projectStatus')(
-                <Input/>
+                <Select placeholder="请选择" style={{width: '84%'}}>
+                  <Option value="0">在建</Option>
+                  <Option value="1">完工未结算</Option>
+                  <Option value="2">完工已结算</Option>
+                  <Option value="3">停工</Option>
+                </Select>
               )}
             </FormItem>
           </Col>

@@ -411,6 +411,8 @@ class Project extends Component {
       if (err) return;
       //  form.resetFields();
       let payload = {
+        page: page,
+        pageSize: pageSize,
         projectName: fieldsValue.projectName,
         code:fieldsValue.code,
         status:fieldsValue.status

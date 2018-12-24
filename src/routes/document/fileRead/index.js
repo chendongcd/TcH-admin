@@ -62,12 +62,12 @@ class CreateForm extends Component {
       if (err) return;
       //form.resetFields();
       fieldsValue.annexUrl = `{"url":"${this.state.fileList[0].url}","fileName":"${this.state.fileList[0].name}"}`
-      handleAdd(fieldsValue, updateModalVisible, selectedValues);
+      handleAdd(fieldsValue, updateModalVisible, selectedValues,this.cleanState);
     });
   };
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-
+  cleanState=()=>{
+    this.setState({fileList:[]})
   }
 
   componentWillUnmount() {
@@ -79,43 +79,47 @@ class CreateForm extends Component {
   }
 
   render() {
-    const {modalVisible, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, selectedValues,} = this.props;
+    const {modalVisible, checkDetail ,handleCheckDetail,form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, selectedValues} = this.props;
 
     let {fileList, progress} = this.state
 
     return (
       <Modal
         destroyOnClose
-        title={updateModalVisible ? "编辑文档" : "新增文档"}
+        title={checkDetail ? '文档详情' :updateModalVisible ? "编辑文档" : "新增文档"}
         visible={modalVisible}
-        onOk={this.okHandle}
-        onCancel={() => updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
+        onOk={()=>checkDetail ? handleCheckDetail():this.okHandle()}
+        onCancel={() => {
+          this.cleanState()
+          checkDetail ? handleCheckDetail() :updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()
+        }
+        }
       >
         <div className={styles.modalContent}>
-          <Row gutter={8}>
+          <Row gutter={12}>
             <Col md={24} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="文档名称">
                 {form.getFieldDecorator('name', {
                   rules: [{required: true, message: '项目名不能为空',}],
                   initialValue: selectedValues.name ? selectedValues.name : testValue
-                })(<Input placeholder="请输入"/>)}
+                })(<Input disabled={checkDetail} placeholder="请输入"/>)}
               </FormItem>
             </Col>
           </Row>
-          <Row gutter={8}>
+          <Row gutter={12}>
             <Col md={24} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="文件类型">
                 {form.getFieldDecorator('fileType', {
                   rules: [{required: true, message: '请选择文件类型'}],
                   initialValue: selectedValues.fileType ? selectedValues.fileType : ''
-                })(<Select placeholder="请选择" style={{width: '100%'}}>
+                })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
                   <Option value="管理办法">管理办法</Option>
                   <Option value="通知">通知</Option>
                 </Select>)}
               </FormItem>
             </Col>
           </Row>
-          <Row gutter={8}>
+          <Row gutter={12}>
             <Col md={24} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="附件">
                 {form.getFieldDecorator('annexUrl', {
@@ -130,7 +134,7 @@ class CreateForm extends Component {
                     // fileList={fileList}
                     listType="picture"
                     name="files"
-                    disabled={fileList.length > 0}
+                    disabled={fileList.length > 0||checkDetail}
                     onSuccess={this.onSuccess}
                     handleManualRemove={this.remove}
                     onError={this.onError}
@@ -142,17 +146,17 @@ class CreateForm extends Component {
                     <p className="ant-upload-text">点击或拖动附件进入</p>
                   </Upload.Dragger>
                 )}
-                <PreFile noImage={true} onClose={this.remove} progress={progress} file={fileList[0]}/>
+                <PreFile disabled={checkDetail} noImage={true} onClose={this.remove} progress={progress} file={fileList[0]}/>
               </FormItem>
             </Col>
           </Row>
-          <Row gutter={8}>
+          <Row gutter={12}>
             <Col md={24} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="备注">
                 {form.getFieldDecorator('remark', {
                   rules: [{required: false}],
                   initialValue: selectedValues.remark ? selectedValues.remark : testValue
-                })(<Input.TextArea width={'100%'} placeholder="请输入" rows={4}/>)}
+                })(<Input.TextArea disabled={checkDetail} width={'100%'} placeholder="请输入" rows={4}/>)}
               </FormItem>
             </Col>
           </Row>
@@ -219,7 +223,7 @@ class FileRead extends Component {
   columns = [
     {
       title: '序号',
-      dataIndex: 'code',
+      dataIndex: 'id',
     },
     {
       title: '文件名称',
@@ -259,10 +263,13 @@ class FileRead extends Component {
         return (
           <Fragment>
             {getButtons(button, pageButtons[1]) ?
-              <Fragment>
+
                 <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
-                <Divider type="vertical"/>
-              </Fragment> : null}
+               : null}
+            <Divider type="vertical"/>
+            {getButtons(button, pageButtons[2]) ?
+                <a  onClick={() => this.handleCheckDetail(true, record)}>查看</a>
+               : null}
           </Fragment>
         )
       }
@@ -344,6 +351,14 @@ class FileRead extends Component {
     });
   };
 
+  handleCheckDetail = (flag, record) => {
+    this.setState({
+      checkDetail: !!flag,
+      modalVisible: !!flag,
+      selectedValues: record || {},
+    });
+  };
+
   handleUpdateModalVisible = (flag, record) => {
     this.setState({
       updateModalVisible: !!flag,
@@ -352,7 +367,7 @@ class FileRead extends Component {
     });
   };
 
-  handleAdd = (fieldsValue, updateModalVisible, selectedValues) => {
+  handleAdd = (fieldsValue, updateModalVisible, selectedValues,cleanState) => {
     // const {dispatch} = this.props;
     // dispatch({
     //   type: 'rule/add',
@@ -376,6 +391,7 @@ class FileRead extends Component {
         if (res) {
           this.handleUpdateModalVisible()
           this.getList()
+          cleanState()
         }
       })
     } else {
@@ -387,6 +403,7 @@ class FileRead extends Component {
         if (res) {
           this.handleModalVisible()
           this.getList()
+          cleanState()
         }
       })
     }
@@ -445,18 +462,20 @@ class FileRead extends Component {
       loading,
       app: {user}
     } = this.props;
-    const {selectedRows, modalVisible, updateModalVisible, selectedValues, pageLoading} = this.state;
+    const {selectedRows, modalVisible, updateModalVisible, selectedValues, pageLoading,checkDetail} = this.state;
 
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
       handleUpdateModalVisible: this.handleUpdateModalVisible,
-      normFile: this.normFile
+      normFile: this.normFile,
+      handleCheckDetail:this.handleCheckDetail
     };
     const parentState = {
       updateModalVisible: updateModalVisible,
       modalVisible: modalVisible,
       selectedValues: selectedValues,
+      checkDetail:checkDetail
     }
     return (
       <Page inner={true} loading={pageLoading}>

@@ -21,8 +21,8 @@ import styles from './index.less'
 import {getButtons,cleanObject,QiNiuOss, ImageUrl} from 'utils'
 import {menuData} from "../../../common/menu";
 import {PEOPLE_EXPORT,PEOPLE_PDF} from 'common/urls'
+import {nationals} from 'common/types'
 import {apiDev} from 'utils/config'
-import {exportExc} from 'services/app'
 import {createURL} from 'services/app'
 const FormItem = Form.Item;
 
@@ -39,7 +39,7 @@ const info_css = {
   textAlign:'center',
   marginLeft:18
 }
-
+const degree=['专科','本科','研究生']
 
 @Form.create()
 class CreateForm extends Component {
@@ -82,9 +82,13 @@ class CreateForm extends Component {
       fieldsValue.headUrl = `{"url":"${this.state.fileList[0].url}","fileName":"${this.state.fileList[0].name}"}`
 
       // form.resetFields();
-      handleAdd(fieldsValue, updateModalVisible, selectedValues);
+      handleAdd(fieldsValue, updateModalVisible, selectedValues,this.cleanState);
     });
   };
+
+  cleanState=()=>{
+    this.setState({fileList:[],previewImage:''})
+  }
 
   handleCancel = () => this.setState({previewVisible: false})
 
@@ -104,9 +108,8 @@ class CreateForm extends Component {
   }
 
   render(){
-  const {modalVisible, form, handleModalVisible,handleUpdateModalVisible,updateModalVisible,handleCheckDetail,selectedValues,checkDetail,normFile} = this.props;
+  const {modalVisible,proNames, form, handleModalVisible,handleUpdateModalVisible,updateModalVisible,handleCheckDetail,selectedValues,checkDetail,normFile} = this.props;
     let {previewVisible, previewImage, fileList, progress} = this.state
-
   return (
     <Modal
       destroyOnClose
@@ -115,8 +118,12 @@ class CreateForm extends Component {
       visible={modalVisible}
       width={992}
       maskClosable={false}
-      onOk={this.okHandle}
-      onCancel={() => checkDetail?handleCheckDetail():updateModalVisible?handleUpdateModalVisible():handleModalVisible()}
+      onOk={()=>checkDetail ? handleCheckDetail():this.okHandle()}
+      onCancel={() => {
+        this.cleanState()
+        checkDetail?handleCheckDetail():updateModalVisible?handleUpdateModalVisible():handleModalVisible()
+      }
+      }
     >
       <div className={styles.modalContent}>
         <Row gutter={8}>
@@ -131,9 +138,9 @@ class CreateForm extends Component {
           <Col md={8} sm={24}>
             <FormItem labelCol={{span:7}} wrapperCol={{span: 15}} label="性别">
               {form.getFieldDecorator('sex', {
-                rules: [{required: true}],
+                rules: [{required: true,message:'请选择性别'}],
                 initialValue: selectedValues.sex ? selectedValues.sex : testValue,
-              })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
+              })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
                 <Option value="男">男</Option>
                 <Option value="女">女</Option>
               </Select>)}
@@ -142,7 +149,7 @@ class CreateForm extends Component {
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="出生日期">
               {form.getFieldDecorator('brithday', {
-                rules: [{required: true}],
+                rules: [{required: true,message:'请选择出生日期'}],
                 initialValue: selectedValues.brithday ? moment(selectedValues.brithday) : null,
               })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择出生日期"/>)}
             </FormItem>
@@ -152,15 +159,15 @@ class CreateForm extends Component {
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="身份证号">
               {form.getFieldDecorator('idCard', {
-                rules: [{required: true}],
+                rules: [{required: true,message:'请输入身份证号'}],
                 initialValue: selectedValues.idCard ? selectedValues.idCard : testValue,
-              })(<Input disabled={checkDetail} placehloder='请输入份证号'/>)}
+              })(<Input disabled={checkDetail} placehloder='请输入身份证号'/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系电话">
               {form.getFieldDecorator('phone', {
-                rules: [{required: true}],
+                rules: [{required: true,message:'请输入联系电话'}],
                 initialValue: selectedValues.phone ? selectedValues.phone : testValue,
               })(<Input placehloder='请输入联系电话'/>)}
             </FormItem>
@@ -168,7 +175,7 @@ class CreateForm extends Component {
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="QQ">
               {form.getFieldDecorator('qqNumber', {
-                rules: [{required: true}],
+                rules: [{required: true,message:'请输入QQ号'}],
                 initialValue: selectedValues.qqNumber ? selectedValues.qqNumber : testValue,
               })(<Input disabled={checkDetail} placehloder='请输入QQ号'/>)}
             </FormItem>
@@ -178,25 +185,31 @@ class CreateForm extends Component {
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="家庭住址">
               {form.getFieldDecorator('homeAddress', {
-                rules: [{required: true}],
+                rules: [{required: true,message:'请输入家庭住址'}],
                 initialValue: selectedValues.homeAddress ? selectedValues.homeAddress : testValue,
               })(<Input disabled={checkDetail} placehloder='请输入家庭住址'/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="项目名称">
-              {form.getFieldDecorator('projectName', {
-                rules: [{required: true}],
-                initialValue: selectedValues.projectName ? selectedValues.projectName : testValue,
-              })(<Input placehloder='请输入项目名称'/>)}
+              {form.getFieldDecorator('projectId', {
+                rules: [{required: true, message: '请选择项目'}],
+                initialValue: selectedValues.projectId ? selectedValues.projectId : '',
+              })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'}
+                         onChange={this.onChange} disabled={checkDetail}
+                         placeholder="请选择" style={{width: '100%'}}>
+                {proNames.map((item, index) => {
+                  return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
+                })}
+              </Select>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="状态">
               {form.getFieldDecorator('status', {
-                rules: [{required: true}],
+                rules: [{required: true,message:'请选择状态'}],
                 initialValue: selectedValues.status ? selectedValues.status : testValue,
-              })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
+              })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
                 <Option value="在岗">在岗</Option>
                 <Option value="调岗">调岗</Option>
                 <Option value="息工">息工</Option>
@@ -210,20 +223,19 @@ class CreateForm extends Component {
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="民族">
               {form.getFieldDecorator('famousFamily', {
-                rules: [{required: true}],
+                rules: [{required: true,message:'请选择民族'}],
                 initialValue: selectedValues.famousFamily ? selectedValues.famousFamily : testValue,
-              })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
-                <Option value="汉族">汉族</Option>
-                <Option value="少数民族">少数民族</Option>
+              })(<Select className={styles.customSelect} showSearch={true} disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
+                {nationals.map((a,index)=><Option key={index} value={a}>{a}</Option>)}
               </Select>)}
             </FormItem>
           </Col>
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="健康状况">
               {form.getFieldDecorator('health', {
-                rules: [{required: true}],
+                rules: [{required: true,message:'请选择健康状况'}],
                 initialValue: selectedValues.health ? selectedValues.health : testValue,
-              })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
+              })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
                 <Option value="健康状态">健康状态</Option>
                 <Option value="亚健康状态">亚健康状态</Option>
                 <Option value="疾病的前驱状态">疾病的前驱状态</Option>
@@ -244,7 +256,7 @@ class CreateForm extends Component {
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="籍贯">
               {form.getFieldDecorator('jiguan', {
-                rules: [{required: true}],
+                rules: [{required: true,message:'请输入籍贯'}],
                 initialValue: selectedValues.jiguan? selectedValues.jiguan : testValue,
               })(<Input disabled={checkDetail} placehloder='请输入籍贯'/>)}
             </FormItem>
@@ -254,7 +266,7 @@ class CreateForm extends Component {
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="职称">
               {form.getFieldDecorator('jobTitle', {
-                rules: [{required: true}],
+                rules: [{required: true,message:'请输入职称'}],
                 initialValue: selectedValues.jobTitle ? selectedValues.jobTitle : testValue,
               })(<Input disabled={checkDetail} placehloder='请输入职称'/>)}
             </FormItem>
@@ -262,9 +274,9 @@ class CreateForm extends Component {
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="职务">
               {form.getFieldDecorator('position', {
-                rules: [{required: true}],
+                rules: [{required: true,message:'请选择职务'}],
                 initialValue: selectedValues.position? selectedValues.position : testValue,
-              })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
+              })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
                 <Option value="成本副经理">成本副经理</Option>
                 <Option value="成本副经理兼部长">成本副经理兼部长</Option>
                 <Option value="部长">部长</Option>
@@ -279,7 +291,7 @@ class CreateForm extends Component {
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="参加工作年限">
               {form.getFieldDecorator('workTime', {
-                rules: [{required: true}],
+                rules: [{required: true,message:'请输入参加工作年限'}],
                 initialValue: selectedValues.workTime ? selectedValues.workTime : testValue,
               })(<Input disabled={checkDetail} placehloder='请输入参加工作年限' addonAfter={'年'}/>)}
             </FormItem>
@@ -287,7 +299,7 @@ class CreateForm extends Component {
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="特长">
               {form.getFieldDecorator('specialty', {
-                rules: [{required: true}],
+                rules: [{required: true,message:'请输入特长'}],
                 initialValue: selectedValues.specialty ? selectedValues.specialty: testValue,
               })(<Input disabled={checkDetail} placehloder='请输入特长'/>)}
             </FormItem>
@@ -297,7 +309,7 @@ class CreateForm extends Component {
           <Col md={12} sm={24}>
             <FormItem labelCol={{span:5}} wrapperCol={{span: 15}} label="出生地">
               {form.getFieldDecorator('birthplace', {
-                rules: [{required: true}],
+                rules: [{required: true,message:'请输入出生地'}],
                 initialValue: selectedValues.birthplace ? selectedValues.birthplace : testValue,
               })(<Input disabled={checkDetail} placehloder='请输入出生地'/>)}
             </FormItem>
@@ -340,9 +352,10 @@ class CreateForm extends Component {
               {form.getFieldDecorator('firstDegreeLevel', {
                 rules: [{required: true, message: '请选择学历'}],
                 initialValue: selectedValues.firstDegreeLevel ? selectedValues.firstDegreeLevel : testValue,
-              })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
-                <Option value="专科">专科</Option>
-                <Option value="本科">本科</Option>
+              })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
+                {degree.map((a,index)=>{
+                  return<Option key={index} value={a}>{a}</Option>
+                })}
               </Select>)}
             </FormItem>
           </Col>
@@ -384,9 +397,10 @@ class CreateForm extends Component {
               {form.getFieldDecorator('secondDegreeLevel', {
                 rules: [{required: false}],
                 initialValue: selectedValues.secondDegreeLevel ? selectedValues.secondDegreeLevel : testValue,
-              })(<Select disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
-                <Option value="专科">专科</Option>
-                <Option value="本科">本科</Option>
+              })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
+                {degree.map((a,index)=>{
+                  return<Option key={index} value={a}>{a}</Option>
+                })}
               </Select>)}
             </FormItem>
           </Col>
@@ -437,7 +451,7 @@ class CreateForm extends Component {
           <Col md={24} sm={24}>
             <FormItem style={{marginLeft:0}} labelCol={{span: 3}} wrapperCol={{span: 15}} label="头像">
               {form.getFieldDecorator('headUrl', {
-                rules: [{required: true,message:'请上传用户头像'}],
+                rules: [{required: true,message:'请上传照片'}],
                 valuePropName: 'fileList',
                 getValueFromEvent: normFile,
                 initialValue: selectedValues.annexUrl ? [selectedValues.annexUrl] : [],
@@ -461,7 +475,7 @@ class CreateForm extends Component {
                 </Upload.Dragger>
               )}
               <PreFile noPdf={true} disabled={checkDetail} onClose={this.remove} onPreview={this.handlePreview} progress={progress} file={fileList[0]}/>
-              <span style={info_css}>上传本人头像</span>
+              <span style={info_css}>请上传照片</span>
             </FormItem>
           </Col>
         </Row>
@@ -558,7 +572,7 @@ class PeopleInfo extends Component {
   columns = [
     {
       title: '人员编码',
-      dataIndex: 'code',
+      dataIndex: 'id',
     },
     {
       title: '姓名',
@@ -592,8 +606,12 @@ class PeopleInfo extends Component {
       },
     },
     {
-      title: '学历',
+      title: '第一学历',
       dataIndex: 'firstDegreeLevel'
+    },
+    {
+      title: '第二学历',
+      dataIndex: 'secondDegreeLevel'
     },
     {
       title: '手机号码',
@@ -632,10 +650,9 @@ class PeopleInfo extends Component {
     },
     {
       title: '简历下载',
-      dataIndex: 'id',
       render: (val, record) => {
         return (
-            <a href={apiDev+PEOPLE_PDF+val} download={'信息卡'}>下载</a>
+            <a href={apiDev+PEOPLE_PDF+ record.id} download={'信息卡'}>下载</a>
         )}
     },
     {
@@ -649,15 +666,11 @@ class PeopleInfo extends Component {
         return (
         <Fragment>
           {getButtons(button, pageButtons[1]) ?
-            <Fragment>
               <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
-              <Divider type="vertical"/>
-            </Fragment>: null}
+            : null}
+          <Divider type="vertical"/>
           {getButtons(button, pageButtons[2]) ?
-            <Fragment>
-              <a onClick={()=>this.handleCheckDetail(true,record)}>查看</a>
-              <Divider type="vertical"/>
-            </Fragment>: null}
+              <a onClick={()=>this.handleCheckDetail(true,record)}>查看</a> : null}
         </Fragment>
       )}
     },
@@ -665,6 +678,7 @@ class PeopleInfo extends Component {
 
   componentDidMount() {
    // const {dispatch} = this.props;
+    this.getProNames()
     this.getList()
   }
 
@@ -755,7 +769,7 @@ class PeopleInfo extends Component {
     });
   };
 
-  handleAdd = (fieldsValue, updateModalVisible, selectedValues) => {
+  handleAdd = (fieldsValue, updateModalVisible, selectedValues,cleanState) => {
     // const {dispatch} = this.props;
     // dispatch({
     //   type: 'rule/add',
@@ -775,6 +789,7 @@ class PeopleInfo extends Component {
       workTime: fieldsValue.workTime,
       specialty: fieldsValue.specialty,
       birthplace: fieldsValue.birthplace,
+      health:fieldsValue.health,
       idCard: fieldsValue.idCard,
       phone: fieldsValue.phone,
       qqNumber: fieldsValue.qqNumber,
@@ -806,6 +821,7 @@ class PeopleInfo extends Component {
         if (res) {
           this.handleUpdateModalVisible()
           this.getList()
+          cleanState()
         }
       })
     } else {
@@ -817,6 +833,7 @@ class PeopleInfo extends Component {
         if (res) {
           this.handleModalVisible()
           this.getList()
+          cleanState()
         }
       })
     }
@@ -865,10 +882,20 @@ class PeopleInfo extends Component {
         </Row>
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={6} sm={24}>
-            <FormItem label="学历">
+            <FormItem label="第一学历">
               {getFieldDecorator('firstDegreeLevel')(<Select style={{width: '100%'}}>
-                <Option value="专科">专科</Option>
-                <Option value="本科">本科</Option>
+                {degree.map((a,index)=>{
+                  return<Option key={index} value={a}>{a}</Option>
+                })}
+              </Select>)}
+            </FormItem>
+          </Col>
+          <Col md={6} sm={24}>
+            <FormItem label="第二学历">
+              {getFieldDecorator('secondDegreeLevel')(<Select style={{width: '100%'}}>
+                {degree.map((a,index)=>{
+                  return<Option key={index} value={a}>{a}</Option>
+                })}
               </Select>)}
             </FormItem>
           </Col>
@@ -902,7 +929,7 @@ class PeopleInfo extends Component {
 
   render() {
     const {
-      peopleManage: {data},
+      peopleManage: {data,proNames},
       loading,
       app:{user}
     } = this.props;
@@ -920,7 +947,8 @@ class PeopleInfo extends Component {
       updateModalVisible:updateModalVisible,
       modalVisible:modalVisible,
       selectedValues:selectedValues,
-      checkDetail:checkDetail
+      checkDetail:checkDetail,
+      proNames:proNames
     }
     const exportUrl = createURL(PEOPLE_EXPORT,{...this.exportParams,...{token:user.token}})
     return (
@@ -958,6 +986,18 @@ class PeopleInfo extends Component {
     )
   }
 
+  getProNames = (proName = []) => {
+    if (proName.length < 1) {
+      this.props.dispatch(
+        {
+          type: 'peopleManage/queryProNames',
+          payload: {page: 1, pageSize: 10},
+          token: this.props.app.user.token
+        }
+      )
+    }
+  }
+
   getList = (page = 1, pageSize = 10) => {
     this.props.dispatch({
       type: 'peopleManage/fetch',
@@ -977,7 +1017,8 @@ class PeopleInfo extends Component {
         projectName: fieldsValue.projectName,
         jobTitle: fieldsValue.jobTitle,
         workTime: fieldsValue.workTime,
-        firstDegreeLevel: fieldsValue.firstDegreeLevel
+        firstDegreeLevel: fieldsValue.firstDegreeLevel,
+        secondDegreeLevel:fieldsValue.secondDegreeLevel
       }
       cleanObject(payload)
       this.exportParams = payload
