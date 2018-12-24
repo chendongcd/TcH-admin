@@ -24,7 +24,7 @@ import {menuData} from 'common/menu'
 import {professionType, subType, taxpayerType} from 'common/types'
 import moment from 'moment'
 import {createURL} from 'services/app'
-import {SUB_QUA_PDF,SUB_QUA_EXPORT} from 'common/urls'
+import {SUB_QUA_PDF, SUB_QUA_EXPORT} from 'common/urls'
 import {apiDev} from 'utils/config'
 
 const pageButtons = menuData[10].buttons.map(a => a.permission)
@@ -41,6 +41,20 @@ const info_css = {
 const testValue = ''
 const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
 
+const TenW = 1000000
+const _setColor = function (time) {
+  let num
+  num = time.split(' ')[0]
+  if (time.includes('前')) {
+    return '#F10200'
+  } else {
+    if (time.includes('天') || (num <= 3 && time.includes('月'))) {
+      return '#FBBD2C'
+    }
+    return 'green'
+  }
+
+}
 
 @Form.create()
 class CreateForm extends Component {
@@ -60,7 +74,7 @@ class CreateForm extends Component {
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-     // fieldsValue.annex = testPDF
+      // fieldsValue.annex = testPDF
       for (let prop in fieldsValue) {
         if (fieldsValue[prop] instanceof moment) {
           // console.log(fieldsValue[prop].format())
@@ -71,12 +85,12 @@ class CreateForm extends Component {
       }
       fieldsValue.annex = `{"url":"${this.state.fileList[0].url}","fileName":"${this.state.fileList[0].name}"}`
       // form.resetFields();
-      handleAdd(fieldsValue, updateModalVisible, selectedValues,this.cleanState);
+      handleAdd(fieldsValue, updateModalVisible, selectedValues, this.cleanState);
     });
   };
 
   componentDidUpdate(preProp, preState) {
-    if (this.props.modalVisible&&!preProp.selectedValues.annex && this.props.selectedValues.annex && this.state.fileList.length == 0) {
+    if (this.props.modalVisible && !preProp.selectedValues.annex && this.props.selectedValues.annex && this.state.fileList.length == 0) {
       let pdf = JSON.parse(this.props.selectedValues.annex)
       let file = {
         uid: '-1',
@@ -90,8 +104,8 @@ class CreateForm extends Component {
 
   handleCancel = () => this.setState({previewVisible: false})
 
-  cleanState=()=>{
-    this.setState({fileList:[],previewImage:''})
+  cleanState = () => {
+    this.setState({fileList: [], previewImage: ''})
   }
 
   handlePreview = (file) => {
@@ -120,7 +134,7 @@ class CreateForm extends Component {
         visible={modalVisible}
         width={992}
         maskClosable={false}
-        onOk={()=>checkDetail ? handleCheckDetail():this.okHandle()}
+        onOk={() => checkDetail ? handleCheckDetail() : this.okHandle()}
         onCancel={() => {
           this.cleanState()
           checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()
@@ -150,9 +164,10 @@ class CreateForm extends Component {
             <Col md={8} sm={24}>
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="纳税人类型">
                 {form.getFieldDecorator('taxpayerType', {
-                  rules: [{required: true,message:'请选择纳税人类型'}],
+                  rules: [{required: true, message: '请选择纳税人类型'}],
                   initialValue: selectedValues.taxpayerType ? selectedValues.taxpayerType : ''
-                })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择纳税人类型" style={{width: '100%'}}>
+                })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择纳税人类型"
+                           style={{width: '100%'}}>
                   {taxpayerType.map((a, index) => <Option key={index} value={a}>{a}</Option>)}
                 </Select>)}
               </FormItem>
@@ -160,7 +175,7 @@ class CreateForm extends Component {
             <Col md={8} sm={24}>
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="注册资本金">
                 {form.getFieldDecorator('registeredCapital', {
-                  rules: [{required: true,message:'请输入注册资本金'}],
+                  rules: [{required: true, message: '请输入注册资本金'}],
                   initialValue: selectedValues.registeredCapital ? selectedValues.registeredCapital : testValue
                 })(<Input disabled={checkDetail} placeholder="请输入注册资本金" addonAfter="万元"/>)}
               </FormItem>
@@ -172,7 +187,8 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('type', {
                   rules: [{required: true, message: '请选择分包商类型'}],
                   initialValue: selectedValues.type ? selectedValues.type : ''
-                })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择分包商类型" style={{width: '100%'}}>
+                })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择分包商类型"
+                           style={{width: '100%'}}>
                   {subType.map((a, index) => <Option key={index} value={a}>{a}</Option>)}
                 </Select>)}
               </FormItem>
@@ -180,7 +196,7 @@ class CreateForm extends Component {
             <Col md={8} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="电话">
                 {form.getFieldDecorator('phone', {
-                  rules: [{required: true,message:'请输入电话'}],
+                  rules: [{required: true, message: '请输入电话'}],
                   initialValue: selectedValues.phone ? selectedValues.phone : testValue
                 })(<Input disabled={checkDetail} placeholder="请输入电话"/>)}
               </FormItem>
@@ -188,7 +204,7 @@ class CreateForm extends Component {
             <Col md={8} sm={24}>
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="电子邮箱">
                 {form.getFieldDecorator('email', {
-                  rules: [{required: true,message:'请输入电子邮箱'}],
+                  rules: [{required: true, message: '请输入电子邮箱'}],
                   initialValue: selectedValues.email ? selectedValues.email : testValue
                 })(<Input disabled={checkDetail} placeholder="请输入电子邮箱"/>)}
               </FormItem>
@@ -198,7 +214,7 @@ class CreateForm extends Component {
             <Col md={16} sm={24}>
               <FormItem style={{marginLeft: 14 + 'px'}} labelCol={{span: 3}} wrapperCol={{span: 15}} label="注册地址">
                 {form.getFieldDecorator('address', {
-                  rules: [{required: true,message:'请输入注册地址'}],
+                  rules: [{required: true, message: '请输入注册地址'}],
                   initialValue: selectedValues.address ? selectedValues.address : testValue
                 })(<Input disabled={checkDetail} placeholder="请输入注册地址"/>)}
               </FormItem>
@@ -206,7 +222,7 @@ class CreateForm extends Component {
             <Col md={8} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="邮编">
                 {form.getFieldDecorator('zipCode', {
-                  rules: [{required: true,message:'请输入邮编'}],
+                  rules: [{required: true, message: '请输入邮编'}],
                   initialValue: selectedValues.zipCode ? selectedValues.zipCode : testValue
                 })(<Input disabled={checkDetail} placeholder="请输入邮编"/>)}
               </FormItem>
@@ -218,7 +234,8 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('professionType', {
                   rules: [{required: true, message: '请选择专业类型'}],
                   initialValue: selectedValues.professionType ? selectedValues.professionType : ''
-                })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
+                })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择"
+                           style={{width: '100%'}}>
                   {professionType.map((a, index) => <Option key={index} value={a}>{a}</Option>)}
                 </Select>)}
               </FormItem>
@@ -414,31 +431,33 @@ class CreateForm extends Component {
                   getValueFromEvent: normFile,
                   initialValue: selectedValues.annex ? [selectedValues.annex] : [],
                 })(
-                  <Upload.Dragger  onChange={this.handleChange}
-                                   accept={'.pdf'}
-                                   showUploadList={false}
+                  <Upload.Dragger onChange={this.handleChange}
+                                  accept={'.pdf'}
+                                  showUploadList={false}
                     // fileList={fileList}
-                                   listType="picture"
-                                   name="files"
-                                   disabled={fileList.length > 0|| checkDetail}
-                                   onSuccess={this.onSuccess}
-                                   handleManualRemove={this.remove}
-                                   onError={this.onError}
-                                   onProgress={this.onProgress}
-                                   customRequest={this.onUpload}>
+                                  listType="picture"
+                                  name="files"
+                                  disabled={fileList.length > 0 || checkDetail}
+                                  onSuccess={this.onSuccess}
+                                  handleManualRemove={this.remove}
+                                  onError={this.onError}
+                                  onProgress={this.onProgress}
+                                  customRequest={this.onUpload}>
                     <p className="ant-upload-drag-icon">
                       <Icon type="inbox"/>
                     </p>
                     <p className="ant-upload-text">点击或拖动附件进入</p>
                   </Upload.Dragger>
                 )}
-                <PreFile disabled={checkDetail} onClose={this.remove} onPreview={this.handlePreview} progress={progress} file={fileList[0]}/>
+                <PreFile disabled={checkDetail} onClose={this.remove} onPreview={this.handlePreview} progress={progress}
+                         file={fileList[0]}/>
                 <span style={info_css}>备注：包含营业执照、资质证书、安全生产许可证、开户银行许可证、法人身份证等相关资质资料(盖鲜章),请以一份PDF格式文件上传。</span>
               </FormItem>
             </Col>
           </Row>
         </div>
-        <Modal width={643} style={{width: 643, height: 940}} bodyStyle={{width: 643, height: 940}} visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+        <Modal width={643} style={{width: 643, height: 940}} bodyStyle={{width: 643, height: 940}}
+               visible={previewVisible} footer={null} onCancel={this.handleCancel}>
           <iframe style={{width: 595, height: 892}} frameBorder={0} src={previewImage}/>
         </Modal>
       </Modal>
@@ -446,7 +465,7 @@ class CreateForm extends Component {
   }
 
   onUpload = (params) => {
-    QiNiuOss(params).then(res=>{
+    QiNiuOss(params).then(res => {
       this.upload = res
     })
   }
@@ -479,7 +498,7 @@ class CreateForm extends Component {
     } else {
       this.upload.unsubscribe()
     }
-    this.setState({fileList:[]})
+    this.setState({fileList: []})
   }
 }
 
@@ -497,10 +516,10 @@ const CreateReview = Form.create()(props => {
   const title = (type) => {
     let name = '股份公司综合信誉评价'
 
-    if(type==1){
+    if (type == 1) {
       name = '集团公司综合信誉评价'
     }
-    if(type==2){
+    if (type == 2) {
       name = '公司本级综合信誉评价'
     }
     return name
@@ -645,15 +664,15 @@ class Qualification extends Component {
       checkDetail: false
     }
     this.exportParams = {
-      page:1,
-      pageSize:10
+      page: 1,
+      pageSize: 10
     }
   }
 
   columns = [
     {
       title: '分包商备案编码',
-      dataIndex: 'businessLicenseCode',
+      dataIndex: 'code',
     },
     {
       title: '分包商全称',
@@ -697,7 +716,13 @@ class Qualification extends Component {
     },
     {
       title: '证件期限',
-      dataIndex: 'businessLicenseValidityPeriod'
+      dataIndex: 'businessLicenseValidityPeriod',
+      render(val) {
+        let time = moment(val).format('YYYY/MM/DD')
+        let ss = moment(val).fromNow()
+        let color = _setColor(ss)
+        return <span style={{color: color}}>{val ? time : ''}</span>
+      }
     },
     {
       title: '备注',
@@ -705,10 +730,10 @@ class Qualification extends Component {
     },
     {
       title: '下载分包商资质信息卡',
-      dataIndex:'id',
+      dataIndex: 'id',
       render: (val, record) => {
         return (
-            <a href={apiDev+SUB_QUA_PDF+val} download={'分包商资质信息卡'}>下载</a>
+          <a href={apiDev + SUB_QUA_PDF + val} download={'分包商资质信息卡'}>下载</a>
         )
       }
     },
@@ -742,7 +767,7 @@ class Qualification extends Component {
           href = record.annex
         }
         return (
-            <a href={href} download="附件">下载</a>
+          <a href={href} download="附件">下载</a>
         )
       }
     },
@@ -883,7 +908,7 @@ class Qualification extends Component {
     });
   };
 
-  handleAdd = (fieldsValue, updateModalVisible, selectedValues,cleanState) => {
+  handleAdd = (fieldsValue, updateModalVisible, selectedValues, cleanState) => {
     // const {dispatch} = this.props;
     // dispatch({
     //   type: 'rule/add',
@@ -919,7 +944,7 @@ class Qualification extends Component {
       bankAccount: fieldsValue.bankAccount,
       bankFrom: fieldsValue.bankFrom,
       annex: fieldsValue.annex,
-      createTime:fieldsValue.createTime
+      createTime: fieldsValue.createTime
     }
     if (updateModalVisible) {
       dispatch({
@@ -978,12 +1003,12 @@ class Qualification extends Component {
           <Col md={6} sm={24}>
             <FormItem label="注册资金">
               {getFieldDecorator('registeredCapital')(<Select placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">500万以下</Option>
-                <Option value="1">500万-1000万</Option>
-                <Option value="2">1000万-3000万</Option>
-                <Option value="3">3000万-5000万</Option>
-                <Option value="4">5000万-1亿</Option>
-                <Option value="5">1亿以上</Option>
+                <Option value={`{"minAmount":"0","maxAmount":"${5 * TenW}"}`}>500万以下</Option>
+                <Option value={`{"minAmount":"${5 * TenW}","maxAmount":"${10 * TenW}"}`}>500万-1000万</Option>
+                <Option value={`{"minAmount":"${10 * TenW}","maxAmount":"${30 * TenW}"}`}>1000万-3000万</Option>
+                <Option value={`{"minAmount":"${30 * TenW}","maxAmount":"${50 * TenW}"}`}>3000万-5000万</Option>
+                <Option value={`{"minAmount":"${50 * TenW}","maxAmount":"${100 * TenW}"}`}>5000万-1亿</Option>
+                <Option value={`{"minAmount":"${100 * TenW}","maxAmount":"${900 * TenW}"}`}>1亿以上</Option>
               </Select>)}
             </FormItem>
           </Col>
@@ -1072,7 +1097,7 @@ class Qualification extends Component {
       checkDetail: checkDetail,
       selectedRows: selectedRows
     }
-    const exportUrl = createURL(SUB_QUA_EXPORT,{...this.exportParams,...{token:user.token}})
+    const exportUrl = createURL(SUB_QUA_EXPORT, {...this.exportParams, ...{token: user.token}})
     return (
       <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="分包商资质信息">
@@ -1120,18 +1145,26 @@ class Qualification extends Component {
     e.preventDefault()
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
+      let minAmount, maxAmount
+      if (fieldsValue.registeredCapital) {
+        let amount = JSON.parse(fieldsValue.registeredCapital)
+        minAmount = amount.minAmount
+        maxAmount = amount.maxAmount
+      }
       let payload = {
         page: page,
         pageSize: pageSize,
         name: fieldsValue.name,
         type: fieldsValue.type,
         professionType: fieldsValue.professionType,
-        registeredCapital: fieldsValue.registeredCapital,
+        minAmount: minAmount,
+        maxAmount: maxAmount,
         shareEvaluation: fieldsValue.shareEvaluation,
         companyEvaluation: fieldsValue.companyEvaluation,
         groupEvaluation: fieldsValue.groupEvaluation
       }
       cleanObject(payload)
+      console.log(payload)
       //  form.resetFields();
       this.props.dispatch({
         type: 'sub_qua/fetch',

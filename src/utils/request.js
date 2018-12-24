@@ -9,6 +9,7 @@ const codeMessage = {
   204: '删除数据成功。',
   400: '发出的请求有错误，服务器没有进行新建或修改数据的操作。',
   401: '用户信息认证失效，请重新登陆',
+  402: '用户权限被修改，请重新登陆',
   403: '用户权限被禁',
   404: '发出的请求针对的是不存在的记录，服务器没有进行操作。',
   406: '请求的格式不可得。',
@@ -86,7 +87,7 @@ export default function request(url, options, token) {
 
     req.onload = function () {
       //if (!isExport) {
-        if (req.readyState === 4 && (req.status == 200||req.status == 401)) {
+        if (req.readyState === 4 && (req.status == 200||req.status == 401||req.status == 402)) {
           checkStatus(JSON.parse(req.response))
           resolve(JSON.parse(req.response))
         } else {

@@ -15,9 +15,7 @@ export default {
   effects: {
     *fetch({ payload ,token}, { call, put }) {
       const response = yield call(queryUpList, payload,token);
-      console.log(response)
       if(response.code == '200'){
-        if(response.code=='200') {
           let x = 0, y = 0, z = 0, a5 = 0, a14 = 0, a13 = 0, a15 = 0
           let aPre = 0,a7=0,a8=0,a9=0,a10=0,a11=0
           response.list.forEach(a => {
@@ -33,9 +31,8 @@ export default {
             a10+=a.alreadyPaidAmount
             a11+=a.unpaidAmount
           })
-
-          z = Math.floor(y / x * 100) / 100
-          a15 = Math.floor(a5 / (a5 + a14 + a13) * 100) / 100
+          z = x==0?0:Math.floor(y / x * 100) / 100
+          a15 = (a5 + a14 + a13)==0?0:Math.floor(a5 / (a5 + a14 + a13) * 100) / 100
           let sum = {
             id: 'sum',
             payProportion: z,
@@ -51,14 +48,13 @@ export default {
             extraAmount:a13
           }
           response.list = [...response.list, sum]
-        }
         //console.log(response)
         yield put({
           type: 'save',
           payload: response,
         });
       }
-      if(response.code=='401'){
+      if(global.checkToken(response)){
         yield put({type:'app/logout'})
         return false
       }
@@ -73,7 +69,7 @@ export default {
         message.success('新增成功');
         return true
       }
-      if(response.code=='401'){
+      if(global.checkToken(response)){
         yield put({type:'app/logout'})
         return false
       }
@@ -85,7 +81,7 @@ export default {
         message.success('修改成功');
         return true
       }
-      if(response.code=='401'){
+      if(global.checkToken(response)){
         yield put({type:'app/logout'})
         return false
       }
@@ -93,14 +89,13 @@ export default {
     },
     *queryProNames({payload,token},{call,put}){
       const response = yield call(queryProPerList, payload,token);
-      console.log(response)
       if(response.code=='200'){
         yield put({
           type:'saveProName',
           payload:response.entity
         })
       }
-      if(response.code=='401'){
+      if(global.checkToken(response)){
         yield put({type:'app/logout'})
         return false
       }

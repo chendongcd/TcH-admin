@@ -119,7 +119,7 @@ export function getButtons(pageButtons=[], button) {
 /*删除对象中的空对象*/
 export function cleanObject(obj) {
   for(let o in obj){
-    if(!obj[o]){
+    if(!obj[o]&&obj[o]!=0){
       delete obj[o]
     }
   }

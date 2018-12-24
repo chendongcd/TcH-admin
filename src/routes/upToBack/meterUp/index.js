@@ -844,18 +844,19 @@ class MeterUp extends Component {
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
-      let time = fieldsValue.meteringTime ? fieldsValue.meteringTime.format('YYYY-MM-DD') : null
+      let time = fieldsValue.meteringTime ? fieldsValue.meteringTime.format('YYYY-MM') : null
       let payload = {
         page: page,
         pageSize: pageSize,
         projectName: fieldsValue.projectName,
-        minPayProportion: fieldsValue.minPayProportion,
-        maxPayProportion: fieldsValue.maxPayProportion,
-        minProductionValue: fieldsValue.minProductionValue,
-        maxProductionValue: fieldsValue.maxProductionValue,
+        minPayProportion: fieldsValue.minPayProportion?fieldsValue.minPayProportion/100:'',
+        maxPayProportion: fieldsValue.maxPayProportion?fieldsValue.maxPayProportion/100:'',
+        minProductionValue: fieldsValue.minProductionValue?fieldsValue.minProductionValue/100:'',
+        maxProductionValue: fieldsValue.maxProductionValue?fieldsValue.maxProductionValue/100:'',
         meteringTime: time
       }
       cleanObject(payload)
+      console.log(payload)
       //  form.resetFields();
       this.exportParams = payload
       this.props.dispatch({

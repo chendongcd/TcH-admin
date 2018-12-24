@@ -16,27 +16,25 @@ export default {
   effects: {
     *queryUserList({ payload }, { call, put }) {
       const response = yield call(queryUserList, payload);
-      console.log(response)
       if(response.code=='200'){
         yield put({
           type: 'save',
           payload: response,
         });
       }
-      if(response.code=='401'){
+      if(global.checkToken(response)){
         yield put({type:'app/logout'})
         return false
       }
     },
     *addUser({payload,token,callback,callback2},{call,put}){
       const response = yield call(addUser, payload,token);
-      console.log(response)
       if(response.code=='200'){
         message.success('新增用户成功')
         callback()
         callback2()
       }
-      if(response.code=='401'){
+      if(global.checkToken(response)){
         yield put({type:'app/logout'})
         return false
       }
@@ -48,7 +46,7 @@ export default {
         callback()
         callback2()
       }
-      if(response.code=='401'){
+      if(global.checkToken(response)){
         yield put({type:'app/logout'})
         return false
       }
@@ -58,12 +56,11 @@ export default {
     },
     *updateStatusUser({payload,token},{call,put}){
       const response = yield call(updateStatusUser, payload,token);
-    //  console.log(response)
       if(response.code=='200'){
         message.success(`该用户已被${payload.disable == 0 ? '启用' : '禁用'}`)
         return true
       }
-      if(response.code=='401'){
+      if(global.checkToken(response)){
         yield put({type:'app/logout'})
         return false
       }
@@ -72,15 +69,13 @@ export default {
 
     *queryProNames({payload,token},{call,put}){
       const response = yield call(queryProPerList, payload,token);
-      //console.log(response)
-      console.log(response)
       if(response.code=='200'){
         yield put({
           type:'saveProName',
           payload:response.list
         })
       }
-      if(response.code=='401'){
+      if(global.checkToken(response)){
         yield put({type:'app/logout'})
         return false
       }
@@ -88,14 +83,13 @@ export default {
 
     *queryRoleNames({payload,token},{call,put}){
       const response = yield call(queryRoleList, payload,token);
-     // console.log(response)
       if(response.code=='200'){
         yield put({
           type:'saveRoleName',
           payload:response.list
         })
       }
-      if(response.code=='401'){
+      if(global.checkToken(response)){
         yield put({type:'app/logout'})
         return false
       }

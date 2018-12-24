@@ -20,7 +20,7 @@ export default {
           payload: response,
         });
       }
-      if(response.code=='401'){
+      if(global.checkToken(response)){
         yield put({type:'app/logout'})
       }
     },
@@ -29,7 +29,7 @@ export default {
       if(response.code=='200'){
         return response.entity
       }
-      if(response.code=='401'){
+      if(global.checkToken(response)){
         yield put({type:'app/logout'})
         return false
       }
@@ -43,12 +43,11 @@ export default {
 
     *addRole({ payload ,token}, { call, put }){
       const response = yield call(addRole, payload,token);
-      console.log(response)
       if(response.code=='200'){
         message.success('新增角色成功')
        return true
       }
-      if(response.code=='401'){
+      if(global.checkToken(response)){
         yield put({type:'app/logout'})
         return false
       }
@@ -56,12 +55,11 @@ export default {
     },
     *updateRole({ payload,token }, { call, put }){
       const response = yield call(updateRole, payload,token);
-      console.log(response)
       if(response.code=='200'){
         message.success('角色信息更新成功')
        return true
       }
-      if(response.code=='401'){
+      if(global.checkToken(response)){
         yield put({type:'app/logout'})
         return false
       }
@@ -74,7 +72,7 @@ export default {
         message.success('角色权限设置成功')
         return true
       }
-      if(response.code=='401'){
+      if(global.checkToken(response)){
         yield put({type:'app/logout'})
         return false
       }

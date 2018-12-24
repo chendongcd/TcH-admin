@@ -860,7 +860,7 @@ class PeopleInfo extends Component {
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="职务">
-              {getFieldDecorator('jobTitle')(
+              {getFieldDecorator('position')(
                 <Select placeholder="请选择" style={{width: '100%'}}>
                   <Option value="成本副经理">成本副经理</Option>
                   <Option value="成本副经理兼部长">成本副经理兼部长</Option>
@@ -900,8 +900,8 @@ class PeopleInfo extends Component {
             </FormItem>
           </Col>
           <Col push={6} md={12} sm={24}>
-            <div style={{overflow: 'hidden'}}>
-              <div style={{float: 'right', marginBottom: 24}}>
+            <div>
+              <div>
                 <Button type="primary" htmlType="submit">
                   查询
                 </Button>
@@ -1015,7 +1015,7 @@ class PeopleInfo extends Component {
         pageSize: pageSize,
         name: fieldsValue.name,
         projectName: fieldsValue.projectName,
-        jobTitle: fieldsValue.jobTitle,
+        position: fieldsValue.position,
         workTime: fieldsValue.workTime,
         firstDegreeLevel: fieldsValue.firstDegreeLevel,
         secondDegreeLevel:fieldsValue.secondDegreeLevel

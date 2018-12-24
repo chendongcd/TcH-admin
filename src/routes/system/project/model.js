@@ -1,7 +1,5 @@
-import {addPro, updatePro, queryProDetail, queryProList, queryRule,updateProStatus} from '../../../services/system/sys_project'
+import {addPro, updatePro, queryProDetail, queryProList,updateProStatus} from '../../../services/system/sys_project'
 import {message} from "antd/lib/index";
-
-const delay = timeout => new Promise(resolve => setTimeout(resolve, timeout));
 export default {
   namespace: 'sys_pro',
 
@@ -20,7 +18,7 @@ export default {
         message.success('新增成功');
        return true
       }
-      if(response.code=='401'){
+      if(global.checkToken(response)){
         yield put({type:'app/logout'})
         return false
       }
@@ -32,7 +30,7 @@ export default {
         message.success('修改成功');
         return true
       }
-      if(response.code=='401'){
+      if(global.checkToken(response)){
         yield put({type:'app/logout'})
         return false
       }
@@ -46,7 +44,7 @@ export default {
           payload: response,
         });
       }
-      if(response.code=='401'){
+      if(global.checkToken(response)){
         yield put({type:'app/logout'})
         return false
       }
@@ -56,11 +54,10 @@ export default {
     },
     * updateProStatus({payload, token}, {call, put}) {
       const response = yield call(updateProStatus, payload, token);
-      console.log(response)
       if (response.code == '200') {
         return true
       }
-      if(response.code=='401'){
+      if(global.checkToken(response)){
         yield put({type:'app/logout'})
         return false
       }

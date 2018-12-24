@@ -1,6 +1,8 @@
-import {addSubQua, querySubQuaList, updateSubQua} from '../../../services/sub/qualification'
+import {addSubQua, querySubQuaList, updateSubQua,querySubQuaResume} from '../../../services/sub/qualification'
 import {queryProPerList} from "../../../services/system/sys_project";
 import {message} from "antd/lib/index";
+
+
 
 export default {
   namespace: 'sub_qua',
@@ -23,7 +25,7 @@ export default {
           payload: response,
         });
       }
-      if(response.code=='401'){
+      if(global.checkToken(response)){
         yield put({type:'app/logout'})
         return false
       }
@@ -34,7 +36,7 @@ export default {
         message.success('新增成功');
         return true
       }
-      if(response.code=='401'){
+      if(global.checkToken(response)){
         yield put({type:'app/logout'})
         return false
       }
@@ -49,7 +51,7 @@ export default {
           payload: response.entity
         })
       }
-      if(response.code=='401'){
+      if(global.checkToken(response)){
         yield put({type:'app/logout'})
         return false
       }
@@ -59,12 +61,27 @@ export default {
       if (response.code == '200') {
         return true
       }
-      if(response.code=='401'){
+      if(global.checkToken(response)){
         yield put({type:'app/logout'})
         return false
       }
       return false
     },
+    * querySubResume({payload, token}, {call, put}) {
+      const response = yield call(querySubQuaResume, payload, token);
+      console.log(response)
+      if (response.code == '200') {
+        yield put({
+          type: 'saveProName',
+          payload: response.entity
+        })
+      }
+      if(global.checkToken(response)){
+        yield put({type:'app/logout'})
+        return false
+      }
+    },
+
   },
 
   reducers: {

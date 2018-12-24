@@ -10,9 +10,9 @@ export async function querySubQuaList(params,token) {
   },token);
 }
 
-export async function querySubQuaDetail(params) {
-  console.log('请求分包商资质信息详情',`${api}/detail/v1.1`)
-  return request(`${api}/detail/v1.1`,{
+export async function querySubQuaResume(params) {
+  console.log('请求分包商履历详情',`${apiDev}/subcontractor_resume/list_for_subcontractor/v1.1`)
+  return request(`${apiDev}/subcontractor_resume/list_for_subcontractor/v1.1`,{
     method: 'GET',
     body: params
   });

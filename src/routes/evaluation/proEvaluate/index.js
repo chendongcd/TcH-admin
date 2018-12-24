@@ -32,6 +32,8 @@ const getValue = obj =>
     .join(',');
 const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
 const testValue = ''
+const status = [{id: 0, name: '在建'}, {id: 1, name: '完工未结算'}, {id: 2, name: '完工已结算'}, {id: 3, name: '停工'}];
+
 const reStatus = ["未评估", "初评", "复评(二次)", "复评(三次)", "复评(四次)", "定评"]
 const info_css = {
   color: '#fa541c'
@@ -205,10 +207,15 @@ class CreateForm extends Component {
             </Col>
             <Col md={8} sm={24}>
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="工程状态">
-                {form.getFieldDecorator('projectStatus', {
+                {form.getFieldDecorator('engineeringStatus', {
                   rules: [{required: true,message:'请先选择项目'}],
-                  initialValue: selectedValues.projectStatus ? selectedValues.projectStatus : ''
-                })(<Input disabled={true} placehloder='自动带出'/>)}
+                  initialValue: selectedValues.engineeringStatus ? selectedValues.engineeringStatus : ''
+                })((<Select className={styles.customSelect} disabled={true} placeholder="自动带出"
+                            style={{width: '100%'}}>
+                  {status.map((item, index) => {
+                    return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
+                  })}
+                </Select>))}
               </FormItem>
             </Col>
           </Row>
@@ -677,7 +684,10 @@ class ProEvaluate extends Component {
     },
     {
       title: '工程状态',
-      dataIndex: 'projectStatus',
+      dataIndex: 'engineeringStatus',
+      render(val){
+        return <span>{status[val].name}</span>
+      }
     },
     {
       title: '合同额',
@@ -794,7 +804,7 @@ class ProEvaluate extends Component {
       title: '责任状签订',
       children: [{
         title: '责任状是否签订',
-        key: 'isSign',
+        key: 'isSigns',
         render(val,record){
           return<span>{record.responsibilityTime?'是':'否'}</span>
         }
@@ -889,15 +899,12 @@ class ProEvaluate extends Component {
   };
 
   handleFormReset = () => {
-    const {form, dispatch} = this.props;
+    const {form} = this.props;
     form.resetFields();
     this.setState({
       formValues: {},
     });
-    dispatch({
-      type: 'rule/fetch',
-      payload: {},
-    });
+    this.getList()
   };
 
   handleMenuClick = e => {
@@ -927,30 +934,6 @@ class ProEvaluate extends Component {
   handleSelectRows = rows => {
     this.setState({
       selectedRows: rows,
-    });
-  };
-
-  handleSearch = e => {
-    e.preventDefault();
-
-    const {dispatch, form} = this.props;
-
-    form.validateFields((err, fieldsValue) => {
-      if (err) return;
-
-      const values = {
-        ...fieldsValue,
-        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
-      };
-
-      this.setState({
-        formValues: values,
-      });
-
-      dispatch({
-        type: 'rule/fetch',
-        payload: values,
-      });
     });
   };
 
@@ -990,7 +973,7 @@ class ProEvaluate extends Component {
       engineeringType: fields.engineeringType,
       signTime: fields.signTime,
       evaluationStatus: fields.evaluationStatus,
-      projectStatus: fields.projectStatus,
+      engineeringStatus: fields.engineeringStatus,
       winningBid: fields.winningBid,
       effectiveIncome: fields.effectiveIncome,
       isSign: fields.isSign,
@@ -1046,7 +1029,7 @@ class ProEvaluate extends Component {
       form: {getFieldDecorator},
     } = this.props;
     return (
-      <Form onSubmit={this.handleSearch} layout="inline">
+      <Form onSubmit={this.searchList} layout="inline">
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={8} sm={24}>
             <FormItem label="项目名称">
@@ -1064,12 +1047,11 @@ class ProEvaluate extends Component {
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="工程状态">
-              {getFieldDecorator('projectStatus')(
-                <Select placeholder="请选择" style={{width: '84%'}}>
-                  <Option value="0">在建</Option>
-                  <Option value="1">完工未结算</Option>
-                  <Option value="2">完工已结算</Option>
-                  <Option value="3">停工</Option>
+              {getFieldDecorator('engineeringStatus')(
+                <Select style={{width: '100%'}}>
+                  {status.map((item, index) => {
+                    return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
+                  })}
                 </Select>
               )}
             </FormItem>
@@ -1078,7 +1060,7 @@ class ProEvaluate extends Component {
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={8} sm={24}>
             <FormItem label="合同是否签订">
-              {getFieldDecorator('siSign')(<Select placeholder="请选择" style={{width: '100%'}}>
+              {getFieldDecorator('isSign')(<Select placeholder="请选择" style={{width: '100%'}}>
                 <Option value="是">是</Option>
                 <Option value="否">否</Option>
               </Select>)}
@@ -1086,9 +1068,9 @@ class ProEvaluate extends Component {
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="责任状是否签订">
-              {getFieldDecorator('give')(<Select placeholder="请选择" style={{width: '100%'}}>
-                <Option value="0">是</Option>
-                <Option value="1">否</Option>
+              {getFieldDecorator('isResponsibility')(<Select placeholder="请选择" style={{width: '100%'}}>
+                <Option value="1">是</Option>
+                <Option value="0">否</Option>
               </Select>)}
             </FormItem>
           </Col>
@@ -1203,16 +1185,14 @@ class ProEvaluate extends Component {
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
-      let time = fieldsValue.meteringTime ? fieldsValue.meteringTime.format('YYYY-MM-DD') : null
       let payload = {
         page: page,
         pageSize: pageSize,
         projectName: fieldsValue.projectName,
-        minPayProportion: fieldsValue.minPayProportion,
-        maxPayProportion: fieldsValue.maxPayProportion,
-        minProductionValue: fieldsValue.minProductionValue,
-        maxProductionValue: fieldsValue.maxProductionValue,
-        meteringTime: time
+        engineeringStatus:fieldsValue.engineeringStatus,
+        evaluationStatus:fieldsValue.evaluationStatus,
+        isSign:fieldsValue.isSign,
+        isResponsibility:fieldsValue.isResponsibility
       }
       cleanObject(payload)
       this.exportParams = payload
