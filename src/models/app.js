@@ -28,7 +28,8 @@ export default {
     isNavbar: document.body.clientWidth < 769,
     menu: getMenu(getStorage('userInfo')),
     hasPermission: true,
-    location: {}
+    location: {},
+    contentWidth:'Fluid'
   },
 
   subscriptions: {

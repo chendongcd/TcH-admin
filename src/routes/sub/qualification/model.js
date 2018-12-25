@@ -12,7 +12,8 @@ export default {
       list: [],
       pagination: {},
     },
-    proNames: []
+    proNames: [],
+    subResume:[]
   },
 
   effects: {
@@ -72,14 +73,16 @@ export default {
       console.log(response)
       if (response.code == '200') {
         yield put({
-          type: 'saveProName',
+          type: 'saveSubResume',
           payload: response.entity
         })
+        return true
       }
       if(global.checkToken(response)){
         yield put({type:'app/logout'})
         return false
       }
+      return false
     },
 
   },
@@ -95,6 +98,12 @@ export default {
       return {
         ...state,
         proNames: action.payload
+      }
+    },
+    saveSubResume(state, action) {
+      return {
+        ...state,
+        subResume: action.payload
       }
     },
   },

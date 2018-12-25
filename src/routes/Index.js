@@ -9,6 +9,8 @@ import classnames from 'classnames'
 import '../themes/index.less'
 
 import {withRouter} from 'dva/router'
+import MenuContext from "../components/Layout/MenuContext";
+import PageHeader from "../components/PageHeader";
 
 const {Content, Footer, Sider} = Layout
 const {Header, styles} = MyLayout
@@ -28,7 +30,7 @@ class IndexPage extends Component {
 
   render() {
     const {children, app, dispatch} = this.props
-    const {menu, siderFold, location, darkTheme, navOpenKeys, loading, isNavbar, user, prefix} = app
+    const {menu, siderFold, location, darkTheme, navOpenKeys, loading, isNavbar, user, prefix,contentWidth} = app
     const siderProps = {
       menu,
       location,
@@ -85,6 +87,20 @@ class IndexPage extends Component {
             <Layout style={{height: '100vh'}} id="mainContainer">
               <BackTop target={() => document.getElementById('mainContainer')}/>
               <Header className={classnames({[styles.dark]: darkTheme, [styles.light]: !darkTheme})} {...headerProps} />
+              <MenuContext.Consumer>
+                {value => (
+                  <PageHeader
+                    wide={contentWidth === 'Fixed'}
+                    home={"首页"}
+                    {...value}
+                    key="pageheader"
+                    app={app}
+                    itemRender={item => {
+                      return item.name;
+                    }}
+                  />
+                )}
+              </MenuContext.Consumer>
               <Content style={{minHeight: '100vh-100'}}>
                 {children}
               </Content>

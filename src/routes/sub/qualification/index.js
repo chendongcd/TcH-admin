@@ -16,6 +16,7 @@ import {
   Modal,
   Upload,
   Divider,
+  message
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable, PreFile} from 'components'
 import styles from './index.less'
@@ -502,6 +503,60 @@ class CreateForm extends Component {
   }
 }
 
+const SubResume = Form.create()(props => {
+  const {checkResume,handleResumeModal, subResume} = props;
+
+  return (
+    <Modal
+      destroyOnClose
+      title={'分包履历'}
+      bodyStyle={{padding: 0 + 'px'}}
+      visible={checkResume}
+      width={992}
+      maskClosable={false}
+      afterClose={handleResumeModal}
+    >
+      <div className={styles.modalContent}>
+        <Row gutter={8}>
+          <Col md={12} sm={24}>
+            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="分包商名称">
+
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={8}>
+          <Col md={12} sm={24}>
+            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="开始日期">
+
+            </FormItem>
+          </Col>
+          <Col md={12} sm={24}>
+            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="结束日期">
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={8}>
+          <Col md={12} sm={24}>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 12}} label="该时间段所属项目部">
+            </FormItem>
+          </Col>
+          <Col md={12} sm={24}>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="项目部队伍名称">
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={8}>
+          <Col md={12} sm={24}>
+            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="施工规模">
+
+            </FormItem>
+          </Col>
+        </Row>
+      </div>
+    </Modal>
+  );
+});
+
 const CreateReview = Form.create()(props => {
   let {modalVisible, form, handleReview, handleReviewModal, selectedValues} = props;
   const okHandle = () => {
@@ -661,7 +716,8 @@ class Qualification extends Component {
       expandForm: false,
       reviewType: -1,
       selectedValues: {},
-      checkDetail: false
+      checkDetail: false,
+      checkResume: false
     }
     this.exportParams = {
       page: 1,
@@ -677,6 +733,9 @@ class Qualification extends Component {
     {
       title: '分包商全称',
       dataIndex: 'name',
+      // render:(val,record)=>{
+      //   return <a onClick={()=>this.getResume(record.id)}>{val}</a>
+      // }
     },
     {
       title: '分包商类型',
@@ -818,12 +877,6 @@ class Qualification extends Component {
 
   componentDidMount() {
     this.getList()
-    // setTimeout(() => {
-    //   this.setState({pageLoading:false})
-    // },1000)
-    // dispatch({
-    //   type: 'rule/fetch', payload: {pageSize: 5}
-    // });
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
@@ -1075,11 +1128,11 @@ class Qualification extends Component {
 
   render() {
     const {
-      sub_qua: {data},
+      sub_qua: {data,subResume},
       loading,
-      app: {darkTheme, user}
+      app: { user}
     } = this.props;
-    const {selectedRows, modalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail, reviewType} = this.state;
+    const {selectedRows, checkResume,modalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail, reviewType} = this.state;
 
     const parentMethods = {
       handleAdd: this.handleAdd,
@@ -1128,10 +1181,29 @@ class Qualification extends Component {
             </div>
           </Card>
           <CreateForm {...parentMethods} {...parentState}/>
+{/*
+          <SubResume handleResumeModal={this.handleResumeModal} checkResume={checkResume} subResume={subResume}/>
+*/}
           <CreateReview {...parentMethods} selectedValues={selectedValues} modalVisible={reviewType}/>
         </PageHeaderWrapper>
       </Page>
     )
+  }
+
+  handleResumeModal=(flag)=>{
+    this.setState({checkResume: !!flag})
+  }
+
+  getResume = (id) => {
+    let payload = {subcontractorId: id}
+    this.props.dispatch({type:'sub_qua/querySubResume',payload:payload}).then(res=>{
+      if(res){
+        if(this.props.sub_qua.subResume.length>0) {
+          this.handleResumeModal(true)
+        }
+        message.error('该分包商还未完善履历')
+      }
+    })
   }
 
   getList = (page = 1, pageSize = 10) => {
