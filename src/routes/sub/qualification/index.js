@@ -40,7 +40,6 @@ const info_css = {
   color: '#fa541c'
 }
 const testValue = ''
-const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
 
 const TenW = 1000000
 const _setColor = function (time) {
@@ -75,14 +74,10 @@ class CreateForm extends Component {
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      // fieldsValue.annex = testPDF
       for (let prop in fieldsValue) {
         if (fieldsValue[prop] instanceof moment) {
-          // console.log(fieldsValue[prop].format())
           fieldsValue[prop] = fieldsValue[prop].format('YYYY-MM-DD')
-          //  console.log(fieldsValue[prop])
         }
-        // console.log(typeof fieldsValue[prop])
       }
       fieldsValue.annex = `{"url":"${this.state.fileList[0].url}","fileName":"${this.state.fileList[0].name}"}`
       // form.resetFields();
@@ -472,9 +467,7 @@ class CreateForm extends Component {
   }
 
   onProgress = (e) => {
-    //  console.log(Upload.autoUpdateProgress)
     this.setState({progress: parseInt(e.total.percent)})
-    // console.log('上传进度', e)
   }
 
   onError = (error) => {
@@ -504,7 +497,7 @@ class CreateForm extends Component {
 }
 
 const SubResume = Form.create()(props => {
-  const {checkResume,handleResumeModal, subResume} = props;
+  const {checkResume, handleResumeModal, subResume} = props;
 
   return (
     <Modal
@@ -561,9 +554,7 @@ const CreateReview = Form.create()(props => {
   let {modalVisible, form, handleReview, handleReviewModal, selectedValues} = props;
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
-      console.log(fieldsValue)
       if (err) return;
-      // form.resetFields();
       handleReview(fieldsValue, modalVisible, selectedValues);
     });
   };
@@ -799,32 +790,8 @@ class Qualification extends Component {
     {
       title: '下载附件',
       render: (val, record) => {
-
-        //if(JSON.parse(record.annexUrl))
-        function isJSON(str) {
-          if (typeof str == 'string') {
-            try {
-              var obj = JSON.parse(str);
-              if (str.indexOf('{') > -1) {
-                return true;
-              } else {
-                return false;
-              }
-            } catch (e) {
-              return false;
-            }
-          }
-          return false;
-        }
-
-        let href = ''
-        if (isJSON(record.annex)) {
-          let annex = JSON.parse(record.annex)
-          href = annex.url + '?attname=' + annex.fileName
-          //console.log(href)
-        } else {
-          href = record.annex
-        }
+        let annex = JSON.parse(record.annex)
+        let href = annex.url + '?attname=' + annex.fileName
         return (
           <a href={href} download="附件">下载</a>
         )
@@ -915,8 +882,6 @@ class Qualification extends Component {
   };
 
   handleMenuClick = (e, selectValues) => {
-    console.log(e)
-    console.log(selectValues)
     if (e.key == 3) {
       return
     } else {
@@ -1119,7 +1084,6 @@ class Qualification extends Component {
   }
 
   normFile = (e) => {
-    console.log('Upload event:', e);
     if (Array.isArray(e)) {
       return e;
     }
@@ -1128,11 +1092,11 @@ class Qualification extends Component {
 
   render() {
     const {
-      sub_qua: {data,subResume},
+      sub_qua: {data},
       loading,
-      app: { user}
+      app: {user}
     } = this.props;
-    const {selectedRows, checkResume,modalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail, reviewType} = this.state;
+    const {selectedRows, modalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail, reviewType} = this.state;
 
     const parentMethods = {
       handleAdd: this.handleAdd,
@@ -1181,7 +1145,7 @@ class Qualification extends Component {
             </div>
           </Card>
           <CreateForm {...parentMethods} {...parentState}/>
-{/*
+          {/*
           <SubResume handleResumeModal={this.handleResumeModal} checkResume={checkResume} subResume={subResume}/>
 */}
           <CreateReview {...parentMethods} selectedValues={selectedValues} modalVisible={reviewType}/>
@@ -1190,15 +1154,15 @@ class Qualification extends Component {
     )
   }
 
-  handleResumeModal=(flag)=>{
+  handleResumeModal = (flag) => {
     this.setState({checkResume: !!flag})
   }
 
   getResume = (id) => {
     let payload = {subcontractorId: id}
-    this.props.dispatch({type:'sub_qua/querySubResume',payload:payload}).then(res=>{
-      if(res){
-        if(this.props.sub_qua.subResume.length>0) {
+    this.props.dispatch({type: 'sub_qua/querySubResume', payload: payload}).then(res => {
+      if (res) {
+        if (this.props.sub_qua.subResume.length > 0) {
           this.handleResumeModal(true)
         }
         message.error('该分包商还未完善履历')
@@ -1236,8 +1200,6 @@ class Qualification extends Component {
         groupEvaluation: fieldsValue.groupEvaluation
       }
       cleanObject(payload)
-      console.log(payload)
-      //  form.resetFields();
       this.props.dispatch({
         type: 'sub_qua/fetch',
         payload: payload

@@ -100,11 +100,8 @@ class CreateForm extends Component {
       if (err) return;
       for (let prop in fieldsValue) {
         if (fieldsValue[prop] instanceof moment) {
-          // console.log(fieldsValue[prop].format())
           fieldsValue[prop] = fieldsValue[prop].format('YYYY-MM-DD')
-          //  console.log(fieldsValue[prop])
         }
-        // console.log(typeof fieldsValue[prop])
       }
       fieldsValue.jointHearingAnnex = `{"url":"${this.state.jointHearingAnnex[0].url}","fileName":"${this.state.jointHearingAnnex[0].name}"}`
       fieldsValue.responsibilityAnnex = `{"url":"${this.state.responsibilityAnnex[0].url}","fileName":"${this.state.responsibilityAnnex[0].name}"}`
@@ -567,7 +564,6 @@ class CreateForm extends Component {
   }
 
   onProgress = (e, index) => {
-    //  console.log(Upload.autoUpdateProgress)
     if (index == 2) {
       this.setState({resProgress: parseInt(e.total.percent)})
     }
@@ -577,7 +573,6 @@ class CreateForm extends Component {
     if (index == 0) {
       this.setState({evaProgress: parseInt(e.total.percent)})
     }
-    // console.log('上传进度', e)
   }
 
   onError = (error) => {
@@ -585,8 +580,6 @@ class CreateForm extends Component {
   }
 
   onSuccess = (res, index) => {
-    //this.state.fileList.push(ImageUrl+res.key)
-    console.log(res)
     if (index == 2) {
       let file = {
         uid: '-1',
@@ -995,9 +988,7 @@ class ProEvaluate extends Component {
       responsibilitySecretary: fields.responsibilitySecretary,
       responsibilityAnnex: fields.responsibilityAnnex,
     }
-    // return console.log(updateModalVisible)
     if (updateModalVisible) {
-      //  return console.log(selectedValues.id)
       dispatch({
         type: 'proEvaluate/update',
         payload: {...payload, ...{id: selectedValues.id}},
@@ -1096,7 +1087,6 @@ class ProEvaluate extends Component {
   }
 
   normFile = (e) => {
-    console.log('Upload event:', e);
     if (Array.isArray(e)) {
       return e;
     }

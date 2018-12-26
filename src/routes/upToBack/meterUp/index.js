@@ -35,13 +35,7 @@ const info_css = {
   color: '#fa541c'
 }
 const testValue = ''
-const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
-// {
-//   uid: '-1',
-//     name: 'xxx.png',
-//   status: 'done',
-//   url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-// }
+
 @Form.create()
 class CreateForm extends Component {
 
@@ -57,7 +51,6 @@ class CreateForm extends Component {
   }
 
   componentDidMount() {
-    // console.log(this.upload)
   }
 
   componentDidUpdate(preProp, preState) {
@@ -77,19 +70,15 @@ class CreateForm extends Component {
     const {form, handleAdd, updateModalVisible, selectedValues} = this.props;
 
     form.validateFields((err, fieldsValue) => {
-      //return
       if (err) return;
       fieldsValue.meteringTime = fieldsValue.meteringTime.format('YYYY-MM-DD')
       fieldsValue.annexUrl = `{"url":"${this.state.fileList[0].url}","fileName":"${this.state.fileList[0].name}"}`
-      // console.log(fieldsValue)
-      //return
-      // form.resetFields();
-      handleAdd(fieldsValue, updateModalVisible, selectedValues,this.cleanState);
+      handleAdd(fieldsValue, updateModalVisible, selectedValues, this.cleanState);
     });
   };
 
-  cleanState=()=>{
-    this.setState({fileList:[],previewImage:''})
+  cleanState = () => {
+    this.setState({fileList: [], previewImage: ''})
   }
 
   handleCancel = () => this.setState({previewVisible: false})
@@ -120,7 +109,7 @@ class CreateForm extends Component {
         visible={modalVisible}
         width={992}
         maskClosable={false}
-        onOk={()=>checkDetail ? handleCheckDetail():this.okHandle()}
+        onOk={() => checkDetail ? handleCheckDetail() : this.okHandle()}
         onCancel={() => {
           this.cleanState()
           checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()
@@ -328,9 +317,7 @@ class CreateForm extends Component {
   }
 
   onProgress = (e) => {
-    //  console.log(Upload.autoUpdateProgress)
     this.setState({progress: parseInt(e.total.percent)})
-    // console.log('上传进度', e)
   }
 
   onError = (error) => {
@@ -478,10 +465,8 @@ class MeterUp extends Component {
     },
     {
       title: '操作',
-      // fixed: 'right',
-      // width: 180,
       render: (val, record) => {
-        if (record.id == 'sum') {
+        if (record.id === 'sum') {
           return null
         }
         const user = this.props.app.user
@@ -489,32 +474,9 @@ class MeterUp extends Component {
           return null
         }
         const button = user.permissionsMap.button
+        let annex = JSON.parse(record.annexUrl)
+        let href = annex.url + '?attname=' + annex.fileName
 
-        //if(JSON.parse(record.annexUrl))
-        function isJSON(str) {
-          if (typeof str == 'string') {
-            try {
-              var obj = JSON.parse(str);
-              if (str.indexOf('{') > -1) {
-                return true;
-              } else {
-                return false;
-              }
-            } catch (e) {
-              return false;
-            }
-          }
-          return false;
-        }
-
-        let href = ''
-        if (isJSON(record.annexUrl)) {
-          let annex = JSON.parse(record.annexUrl)
-          href = annex.url + '?attname=' + annex.fileName
-          //console.log(href)
-        } else {
-          href = record.annexUrl
-        }
         return (
           <Fragment>
             {getButtons(button, pageButtons[1]) ?
@@ -623,7 +585,7 @@ class MeterUp extends Component {
     });
   };
 
-  handleAdd = (fields, updateModalVisible, selectedValues,cleanState) => {
+  handleAdd = (fields, updateModalVisible, selectedValues, cleanState) => {
     // const {dispatch} = this.props;
     // dispatch({
     //   type: 'rule/add',
@@ -744,7 +706,6 @@ class MeterUp extends Component {
   }
 
   normFile = (e) => {
-    console.log('Upload event:', e);
     if (Array.isArray(e)) {
       return e;
     }
@@ -777,7 +738,7 @@ class MeterUp extends Component {
     return (
       <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="对上计量台账">
-{/*          <iframe width={50} style={{height: 50, zoom: '70%'}} scrolling={'no'} frameBorder={0}
+          {/*          <iframe width={50} style={{height: 50, zoom: '70%'}} scrolling={'no'} frameBorder={0}
                   src={'http://pjno2bd7f.bkt.clouddn.com/rc-upload-1545408599943-2'}/>*/}
           <Card bordered={false}>
             <div className={styles.tableList}>
@@ -849,15 +810,14 @@ class MeterUp extends Component {
         page: page,
         pageSize: pageSize,
         projectName: fieldsValue.projectName,
-        minPayProportion: fieldsValue.minPayProportion?fieldsValue.minPayProportion/100:'',
-        maxPayProportion: fieldsValue.maxPayProportion?fieldsValue.maxPayProportion/100:'',
-        minProductionValue: fieldsValue.minProductionValue?fieldsValue.minProductionValue/100:'',
-        maxProductionValue: fieldsValue.maxProductionValue?fieldsValue.maxProductionValue/100:'',
+        minPayProportion: fieldsValue.minPayProportion ? fieldsValue.minPayProportion / 100 : '',
+        maxPayProportion: fieldsValue.maxPayProportion ? fieldsValue.maxPayProportion / 100 : '',
+        minProductionValue: fieldsValue.minProductionValue ? fieldsValue.minProductionValue / 100 : '',
+        maxProductionValue: fieldsValue.maxProductionValue ? fieldsValue.maxProductionValue / 100 : '',
         meteringTime: time
       }
       cleanObject(payload)
-      console.log(payload)
-      //  form.resetFields();
+
       this.exportParams = payload
       this.props.dispatch({
         type: 'meterUp/fetch',

@@ -1,7 +1,6 @@
 import React,{Component}from 'react'
 import { connect } from 'dva'
 import { Page } from 'components'
-import styles from './index.less'
 
 class Home extends Component {
 

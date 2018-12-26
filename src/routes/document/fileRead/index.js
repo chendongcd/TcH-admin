@@ -172,9 +172,7 @@ class CreateForm extends Component {
   }
 
   onProgress = (e) => {
-    //  console.log(Upload.autoUpdateProgress)
     this.setState({progress: parseInt(e.total.percent)})
-    // console.log('上传进度', e)
   }
 
   onError = (error) => {
@@ -449,7 +447,6 @@ class FileRead extends Component {
   }
 
   normFile = (e) => {
-    console.log('Upload event:', e);
     if (Array.isArray(e)) {
       return e;
     }

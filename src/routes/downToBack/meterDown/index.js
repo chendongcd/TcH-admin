@@ -67,13 +67,11 @@ class CreateForm extends Component {
   okHandle = () => {
     const {form, handleAdd, updateModalVisible, selectedValues} = this.props;
     form.validateFields((err, fieldsValue) => {
-      console.log(fieldsValue)
       if (err) return;
       for (let prop in fieldsValue) {
         if (fieldsValue[prop] instanceof moment) {
           fieldsValue[prop] = fieldsValue[prop].format('YYYY-MM-DD')
         }
-        // console.log(typeof fieldsValue[prop])
       }
       fieldsValue.annexUrl = `{"url":"${this.state.fileList[0].url}","fileName":"${this.state.fileList[0].name}"}`
 
@@ -341,9 +339,7 @@ class CreateForm extends Component {
   }
 
   onProgress = (e) => {
-    //  console.log(Upload.autoUpdateProgress)
     this.setState({progress: parseInt(e.total.percent)})
-    // console.log('上传进度', e)
   }
 
   onError = (error) => {
@@ -516,7 +512,6 @@ class MeterDown extends Component {
         if (isJSON(val)) {
           let annex = JSON.parse(val)
           href = annex.url + '?attname=' + annex.fileName
-          //console.log(href)
         } else {
           href = val
         }
@@ -775,7 +770,6 @@ class MeterDown extends Component {
   }
 
   normFile = (e) => {
-    console.log('Upload event:', e);
     if (Array.isArray(e)) {
       return e;
     }

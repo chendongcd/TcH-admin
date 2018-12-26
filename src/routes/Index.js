@@ -66,7 +66,6 @@ class IndexPage extends Component {
       },
     }
     const {iconFontJS, iconFontCSS, ico} = config
-    console.log(app.locationPathname)
     return (
       <div>
         <Loader fullScreen spinning={loading}/>

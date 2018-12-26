@@ -68,16 +68,13 @@ class CreatDrawer extends Component {
   }
 
   componentDidUpdate(prevProps, preState) {
-    // console.log(prevProps.selectedValues)
     if (!prevProps.selectedValues.resouces && this.props.selectedValues.resouces) {
       ///this.setState({checkStrictly:false})
       this.setState({checkedKeys: this.props.selectedValues.resouces})
     }
   }
 
-  onCheck = (checkedKeys, info) => {
-    // console.log(checkedKeys)
-    // console.log(info)
+  onCheck = (checkedKeys) => {
     this.resouces = checkedKeys.checked
     this.setState({checkedKeys})
   }
@@ -107,7 +104,6 @@ class CreatDrawer extends Component {
   }
 
   onCertain = (setPermission, selectedValues) => {
-    //console.log(this.resouces)
     const res = this.resouces.length === 0 ? selectedValues.resouces : this.resouces
     setPermission({id: selectedValues.id, resouces: res.map(a => JSON.parse(`{"permission":"${a}"}`))},this.cleanCheckedKeys)
   }
@@ -146,7 +142,6 @@ class CreatDrawer extends Component {
     );
     // 生成树状
     const menuTree = arrayToTree(menuData.filter(_ => (_.mpid !== '-1' && _.id !== '1')), 'id', 'mpid')
-    // console.log()
     return (
       <Drawer
         width={440}
@@ -433,8 +428,6 @@ class Permission extends Component {
   }
 
   setPermission = (payload,cleanState) => {
-    // console.log(payload)
-    console.log(payload)
     this.props.dispatch({
       type: 'sys_per/updateRolePer',
       payload: payload,
@@ -454,7 +447,6 @@ class Permission extends Component {
     }).then(res => {
       if (res) {
         res.resouces = res.resouces.map(a => a.permission)
-        //console.log(res.resouces)
         this.setState({
           selectedValues: res
         });

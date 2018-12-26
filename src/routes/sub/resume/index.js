@@ -17,10 +17,11 @@ import {
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
 import {getButtons, cleanObject} from "utils";
-import { menuData} from 'common/menu'
+import {menuData} from 'common/menu'
 
 import {SUB_RES_EXPORT} from 'common/urls'
 import {createURL} from 'services/app'
+
 const FormItem = Form.Item;
 const {Option} = Select;
 const getValue = obj =>
@@ -36,17 +37,12 @@ const CreateForm = Form.create()(props => {
 
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
-      console.log(fieldsValue)
       if (err) return;
       for (let prop in fieldsValue) {
         if (fieldsValue[prop] instanceof moment) {
-          // console.log(fieldsValue[prop].format())
           fieldsValue[prop] = fieldsValue[prop].format('YYYY-MM-DD')
-          //  console.log(fieldsValue[prop])
         }
-        // console.log(typeof fieldsValue[prop])
       }
-      // form.resetFields();
       handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
   };
@@ -58,7 +54,7 @@ const CreateForm = Form.create()(props => {
       visible={modalVisible}
       width={992}
       maskClosable={false}
-      onOk={()=>checkDetail ? handleCheckDetail():okHandle()}
+      onOk={() => checkDetail ? handleCheckDetail() : okHandle()}
       onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
     >
       <div className={styles.modalContent}>
@@ -66,15 +62,15 @@ const CreateForm = Form.create()(props => {
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="分包商名称">
               {form.getFieldDecorator('subcontractorId', {
-              rules: [{required: true, message: '请选择项目'}],
-              initialValue: selectedValues.subcontractorId ? selectedValues.subcontractorId : '',
-            })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'}
-                       disabled={checkDetail} placeholder="请选择"
-                       style={{width: '100%'}}>
-              {subNames.map((item, index) => {
-                return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
-              })}
-            </Select>)}
+                rules: [{required: true, message: '请选择项目'}],
+                initialValue: selectedValues.subcontractorId ? selectedValues.subcontractorId : '',
+              })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'}
+                         disabled={checkDetail} placeholder="请选择"
+                         style={{width: '100%'}}>
+                {subNames.map((item, index) => {
+                  return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
+                })}
+              </Select>)}
             </FormItem>
           </Col>
         </Row>
@@ -132,7 +128,8 @@ const CreateForm = Form.create()(props => {
               {form.getFieldDecorator('constructionScale', {
                 rules: [{required: true, message: '请选择施工规模'}],
                 initialValue: selectedValues.constructionScale ? selectedValues.constructionScale : testValue
-              })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
+              })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择"
+                         style={{width: '100%'}}>
                 <Option value="项目1">项目1</Option>
                 <Option value="项目2">项目2</Option>
               </Select>)}
@@ -145,13 +142,11 @@ const CreateForm = Form.create()(props => {
 });
 
 const CreateReview = Form.create()(props => {
-  const {modalVisible, form, handleReview, handleReviewModal,selectedValues} = props;
+  const {modalVisible, form, handleReview, handleReviewModal, selectedValues} = props;
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
-      console.log(fieldsValue)
       if (err) return;
-      // form.resetFields();
-      handleReview(fieldsValue,selectedValues);
+      handleReview(fieldsValue, selectedValues);
     });
   };
   return (
@@ -171,7 +166,7 @@ const CreateReview = Form.create()(props => {
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 10}} label="信誉评价">
               {form.getFieldDecorator('projectEvaluation', {
                 rules: [{required: true, message: '请选择'}],
-                initialValue:selectedValues.projectEvaluation?selectedValues.projectEvaluation:''
+                initialValue: selectedValues.projectEvaluation ? selectedValues.projectEvaluation : ''
               })(<Select placeholder="请选择" style={{width: '100%'}}>
                 <Option value="优秀">优秀</Option>
                 <Option value="合格">合格</Option>
@@ -185,7 +180,7 @@ const CreateReview = Form.create()(props => {
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 10}} label="集团公司信誉评价">
               {form.getFieldDecorator('groupEvaluation', {
                 rules: [{required: true, message: '请选择'}],
-                initialValue:selectedValues.groupEvaluation?selectedValues.groupEvaluation:''
+                initialValue: selectedValues.groupEvaluation ? selectedValues.groupEvaluation : ''
               })(<Select placeholder="请选择" style={{width: '100%'}}>
                 <Option value="合格">合格</Option>
                 <Option value="不合格">不合格</Option>
@@ -197,8 +192,8 @@ const CreateReview = Form.create()(props => {
           <Col md={24} sm={24}>
             <FormItem style={{marginLeft: 21 + 'px'}} labelCol={{span: 3}} wrapperCol={{span: 15}} label="文字评价">
               {form.getFieldDecorator('projectDescription', {
-                rules: [{required: true,message: '请输入文字评价'}],
-                initialValue:selectedValues.projectDescription?selectedValues.projectDescription:''
+                rules: [{required: true, message: '请输入文字评价'}],
+                initialValue: selectedValues.projectDescription ? selectedValues.projectDescription : ''
               })(<Input.TextArea width={'100%'} placeholder="请输入" rows={4}/>)}
             </FormItem>
           </Col>
@@ -224,8 +219,8 @@ class Resume extends Component {
       checkDetail: false
     }
     this.exportParams = {
-      page:1,
-      pageSize:10
+      page: 1,
+      pageSize: 10
     }
   }
 
@@ -290,8 +285,6 @@ class Resume extends Component {
     },
     {
       title: '操作',
-      fixed: 'right',
-      width: 185,
       render: (val, record) => {
         const user = this.props.app.user
         if (!user.token) {
@@ -307,7 +300,7 @@ class Resume extends Component {
               <a onClick={() => this.handleCheckDetail(true, record)}>查看</a> : null}
             {getButtons(button, pageButtons[4]) ? <Fragment>
               <Divider type="vertical"/>
-              <a onClick={() => this.handleReviewModal(true,record)}>项目部评价</a>
+              <a onClick={() => this.handleReviewModal(true, record)}>项目部评价</a>
             </Fragment> : null}
             {/* {getButtons(button,pageButtons[3])? <a>导出</a>:null}*/}
           </Fragment>
@@ -317,7 +310,7 @@ class Resume extends Component {
   ];
 
   componentDidMount() {
-    if(this.props.app.user.token) {
+    if (this.props.app.user.token) {
       this.getSubNames()
       this.getTeamNames()
       this.getProNames()
@@ -396,10 +389,10 @@ class Resume extends Component {
     });
   };
 
-  handleReviewModal = (flag,record={}) => {
+  handleReviewModal = (flag, record = {}) => {
     this.setState({
       reviewType: !!flag,
-      selectedValues:record
+      selectedValues: record
     })
   }
 
@@ -420,13 +413,6 @@ class Resume extends Component {
   };
 
   handleAdd = (fields, updateModalVisible, selectedValues) => {
-    // const {dispatch} = this.props;
-    // dispatch({
-    //   type: 'rule/add',
-    //   payload: {
-    //     desc: fields.desc,
-    //   },
-    // });
     const {dispatch, app: {user}} = this.props;
     const payload = {
       projectId: fields.projectId,
@@ -436,9 +422,7 @@ class Resume extends Component {
       laborAccountId: fields.laborAccountId,
       constructionScale: fields.constructionScale,
     }
-    // return console.log(updateModalVisible)
     if (updateModalVisible) {
-      //  return console.log(selectedValues.id)
       dispatch({
         type: 'sub_resume/update',
         payload: {...payload, ...{id: selectedValues.id}},
@@ -463,32 +447,25 @@ class Resume extends Component {
     }
   };
 
-  handleReview=(fields, selectedValues) => {
-    // const {dispatch} = this.props;
-    // dispatch({
-    //   type: 'rule/add',
-    //   payload: {
-    //     desc: fields.desc,
-    //   },
-    // });
+  handleReview = (fields, selectedValues) => {
+
     const {dispatch, app: {user}} = this.props;
     const payload = {
       groupEvaluation: fields.groupEvaluation,
       projectEvaluation: fields.projectEvaluation,
       projectDescription: fields.projectDescription
     }
-    // return console.log(updateModalVisible)
-      //  return console.log(selectedValues.id)
-      dispatch({
-        type: 'sub_resume/update',
-        payload: {...payload, ...{id: selectedValues.id}},
-        token: user.token
-      }).then(res => {
-        if (res) {
-          this.handleReviewModal()
-          this.getList()
-        }
-      })
+
+    dispatch({
+      type: 'sub_resume/update',
+      payload: {...payload, ...{id: selectedValues.id}},
+      token: user.token
+    }).then(res => {
+      if (res) {
+        this.handleReviewModal()
+        this.getList()
+      }
+    })
   };
 
   renderAdvancedForm() {
@@ -556,7 +533,7 @@ class Resume extends Component {
       handleReviewModal: this.handleReviewModal,
       handleUpdateModalVisible: this.handleUpdateModalVisible,
       handleCheckDetail: this.handleCheckDetail,
-      handleReview:this.handleReview
+      handleReview: this.handleReview
     };
     const parentState = {
       updateModalVisible: updateModalVisible,
@@ -567,7 +544,7 @@ class Resume extends Component {
       teamList: teamList,
       proNames: proNames
     }
-    const exportUrl = createURL(SUB_RES_EXPORT,{...this.exportParams,...{token:user.token}})
+    const exportUrl = createURL(SUB_RES_EXPORT, {...this.exportParams, ...{token: user.token}})
     return (
       <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="分包商履历">

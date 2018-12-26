@@ -67,7 +67,6 @@ export default {
     },
     *updateRolePer({ payload,token }, { call, put }){
       const response = yield call(updateRolePer, payload,token);
-      console.log(response)
       if(response.code=='200'){
         message.success('角色权限设置成功')
         return true

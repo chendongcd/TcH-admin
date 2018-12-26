@@ -37,7 +37,6 @@ const CreateForm = Form.create()(props => {
       handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
   };
-  // console.log(selectedValues)
   return (
     <Modal
       destroyOnClose
@@ -326,7 +325,6 @@ class Project extends Component {
       sys_pro: {data},
       app:{user}
     } = this.props;
-    //console.log(loading)
     const {selectedRows, modalVisible, updateModalVisible, selectedValues} = this.state;
     const parentMethods = {
       handleAdd: this.handleAdd,

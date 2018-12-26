@@ -13,7 +13,6 @@ export default {
   effects: {
     * fetch({payload, token}, {call, put}) {
       const response = yield call(queryReferList, payload, token);
-      console.log(payload)
       if (response.code == '200') {
         yield put({
           type: 'save',
@@ -27,7 +26,6 @@ export default {
     },
     * add({payload, token}, {call, put}) {
       const response = yield call(addRefer, payload, token);
-      console.log(response)
       if (response.code == '200') {
         message.success('新增成功');
         return true

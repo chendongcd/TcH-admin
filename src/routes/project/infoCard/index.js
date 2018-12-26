@@ -69,13 +69,6 @@ class CreateForm extends Component {
     }
   }
 
-  // const {getFieldDecorator, getFieldValue} = form
-  // getFieldDecorator('managers', {initialValue: [{manaName: '', manaTime: '', manaPhone: ''}]});
-  // getFieldDecorator('secretary', {initialValue: [{secreName: '', secreTime: '', secrePhone: ''}]});
-  // getFieldDecorator('chiefEngineer', {initialValue: [{chiefName: '', chiefTime: '', chiefPhone: ''}]});
-  // const managers = getFieldValue('managers');
-  // const secretary = getFieldValue('secretary');
-  // const chiefEngineer = getFieldValue('chiefEngineer');
   remove = (k, type, form) => {
     // can use data-binding to get
     const keys = form.getFieldValue(type);
@@ -104,12 +97,10 @@ class CreateForm extends Component {
   }
 
   add = (type, form) => {
-    // can use data-binding to get
     const keys = form.getFieldValue(type);
     const nextKeys = keys.concat({name: '', time: '', phone: ''});
     uuid++;
-    // can use data-binding to set
-    // important! notify form to detect changes
+
     let object = {
       manager: nextKeys,
     }
@@ -136,7 +127,6 @@ class CreateForm extends Component {
   formManager = (managers, checkDetail, form, getFieldDecorator) => {
     if (managers) {
       return managers.map((key, index) => {
-        // console.log(key)
         let isLast = (managers.length == index + 1)
         return (<Row key={`manager${index}`} gutter={8}>
           <Col className={styles.colPeople} md={6} sm={24}>
@@ -259,21 +249,15 @@ class CreateForm extends Component {
 
   okHandle = (form, updateModalVisible, handleAdd, selectedValues) => {
     form.validateFields((err, fieldsValue) => {
-      console.log(this.manager)
-      //console.log(fieldsValue)
       if (err) return;
       for (let prop in fieldsValue) {
         if (fieldsValue[prop] instanceof moment) {
-          // console.log(fieldsValue[prop].format())
           fieldsValue[prop] = fieldsValue[prop].format('YYYY-MM-DD')
-          //  console.log(fieldsValue[prop])
         }
-        // console.log(typeof fieldsValue[prop])
       }
       fieldsValue.manager = this.manager
       fieldsValue.secretary = this.secretary
       fieldsValue.engineer = this.engineer
-      // form.resetFields();
       handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
   };
@@ -308,7 +292,6 @@ class CreateForm extends Component {
       }]
     });
     const managers = form.getFieldValue('manager');
-    // console.log(typeof selectedValues.status)
     const secretary = form.getFieldValue('secretary');
     const chiefEngineer = form.getFieldValue('engineer');
     return (
@@ -804,13 +787,6 @@ class InfoCard extends Component {
   };
 
   handleAdd = (fields, updateModalVisible, selectedValues) => {
-    // const {dispatch} = this.props;
-    // dispatch({
-    //   type: 'rule/add',
-    //   payload: {
-    //     desc: fields.desc,
-    //   },
-    // });
     const {dispatch, app: {user}} = this.props;
     const payload = {
       projectId: fields.projectId,
@@ -842,9 +818,7 @@ class InfoCard extends Component {
       secretary: fields.secretary,
       engineer: fields.engineer,
     }
-    // return console.log(updateModalVisible)
     if (updateModalVisible) {
-      //  return console.log(selectedValues.id)
       dispatch({
         type: 'pro_proInfo/update',
         payload: {...payload, ...{id: selectedValues.id}},

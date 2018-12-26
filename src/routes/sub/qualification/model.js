@@ -19,7 +19,6 @@ export default {
   effects: {
     * fetch({payload,token}, {call, put}) {
       const response = yield call(querySubQuaList, payload,token);
-      console.log(response)
       if (response.code == '200') {
         yield put({
           type: 'save',
@@ -45,7 +44,6 @@ export default {
     },
     * queryProNames({payload, token}, {call, put}) {
       const response = yield call(queryProPerList, payload, token);
-      console.log(response)
       if (response.code == '200') {
         yield put({
           type: 'saveProName',
@@ -70,7 +68,6 @@ export default {
     },
     * querySubResume({payload, token}, {call, put}) {
       const response = yield call(querySubQuaResume, payload, token);
-      console.log(response)
       if (response.code == '200') {
         yield put({
           type: 'saveSubResume',

@@ -155,9 +155,7 @@ class CreateForm extends Component {
   }
 
   onProgress = (e) => {
-    //  console.log(Upload.autoUpdateProgress)
     this.setState({progress: parseInt(e.total.percent)})
-    // console.log('上传进度', e)
   }
 
   onError = (error) => {
@@ -165,7 +163,6 @@ class CreateForm extends Component {
   }
 
   onSuccess = (res) => {
-    //this.state.fileList.push(ImageUrl+res.key)
     let file = {
       uid: '-1',
       name: this.state.fileList[0].name,

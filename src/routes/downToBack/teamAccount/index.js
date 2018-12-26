@@ -72,12 +72,9 @@ class CreateForm extends Component {
     const {form, handleAdd, updateModalVisible, selectedValues} = this.props;
 
     form.validateFields((err, fieldsValue) => {
-      console.log(fieldsValue)
       if (err) return;
-      // form.resetFields();
       for (let prop in fieldsValue) {
         if (fieldsValue[prop] instanceof moment) {
-          // console.log(fieldsValue[prop].format())
           fieldsValue[prop] = fieldsValue[prop].format('YYYY-MM-DD')
         }
       }
@@ -348,9 +345,7 @@ class CreateForm extends Component {
   }
 
   onProgress = (e) => {
-    //  console.log(Upload.autoUpdateProgress)
     this.setState({progress: parseInt(e.total.percent)})
-    // console.log('上传进度', e)
   }
 
   onError = (error) => {
@@ -385,14 +380,12 @@ const CreateCompForm = Form.create()(props => {
 
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
-      console.log(fieldsValue)
       if (err) return;
       // form.resetFields();
       companyUpdate(fieldsValue, selectedValues);
     });
   };
 
- // console.log(selectedValues)
   return (
     <Modal
       destroyOnClose
@@ -594,7 +587,6 @@ class TeamAccount extends Component {
             if (isJSON(val)) {
               let annex = JSON.parse(val)
               href = annex.url + '?attname=' + annex.fileName
-              //console.log(href)
             } else {
               href = val
             }

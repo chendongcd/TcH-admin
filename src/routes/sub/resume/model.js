@@ -55,7 +55,6 @@ export default {
     },
     * querySubNames({payload, token}, {call, put}) {
       const response = yield call(querySubList, payload, token);
-      console.log(response)
       if (response.code == '200') {
         yield put({
           type: 'saveSubName',
@@ -69,7 +68,6 @@ export default {
     },
     * queryTeamNames({payload, token}, {call, put}) {
       const response = yield call(queryPerTeamList, payload, token);
-      console.log(response)
       if (response.code == '200') {
         yield put({
           type: 'saveTeamName',
@@ -83,7 +81,6 @@ export default {
     },
     * queryProNames({payload, token}, {call, put}) {
       const response = yield call(queryProPerList, payload, token);
-      console.log(response)
       if (response.code == '200') {
         yield put({
           type: 'saveProName',

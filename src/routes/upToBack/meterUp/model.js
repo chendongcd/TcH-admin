@@ -48,7 +48,6 @@ export default {
             extraAmount:a13
           }
           response.list = [...response.list, sum]
-        //console.log(response)
         yield put({
           type: 'save',
           payload: response,
