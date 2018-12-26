@@ -29,7 +29,7 @@ export default {
     menu: getMenu(getStorage('userInfo')),
     hasPermission: true,
     location: {},
-    contentWidth:'Fluid'
+    contentWidth:'Fluid',
   },
 
   subscriptions: {

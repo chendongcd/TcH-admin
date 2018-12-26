@@ -75,7 +75,6 @@ class Project extends Component {
       modalVisible: false,
       updateModalVisible: false,
       selectedRows: [],
-      pageLoading: false,
       selectedValues: {}
     }
     this.exportParams = {}
@@ -207,30 +206,6 @@ class Project extends Component {
     });
   };
 
-  handleSearch = e => {
-    e.preventDefault();
-
-    const {dispatch, form} = this.props;
-
-    form.validateFields((err, fieldsValue) => {
-      if (err) return;
-
-      const values = {
-        ...fieldsValue,
-        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
-      };
-
-      this.setState({
-        formValues: values,
-      });
-
-      dispatch({
-        type: 'rule/fetch',
-        payload: values,
-      });
-    });
-  };
-
   handleModalVisible = flag => {
     this.setState({
       modalVisible: !!flag,
@@ -352,7 +327,7 @@ class Project extends Component {
       app:{user}
     } = this.props;
     //console.log(loading)
-    const {selectedRows, modalVisible, pageLoading, updateModalVisible, selectedValues} = this.state;
+    const {selectedRows, modalVisible, updateModalVisible, selectedValues} = this.state;
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
@@ -366,7 +341,7 @@ class Project extends Component {
     const exportUrl = createURL(SYS_PRO_EXPORT,this.exportParams)
 
     return (
-      <Page inner={true} loading={pageLoading}>
+      <Page inner={true} >
         <PageHeaderWrapper title="项目管理">
           <Card bordered={false}>
             <div className={styles.tableList}>

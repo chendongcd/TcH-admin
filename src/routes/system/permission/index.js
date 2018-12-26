@@ -240,7 +240,6 @@ class Permission extends Component {
       selectedRows: [],
       formValues: {},
       drawVisible: false,
-      pageLoading: false,
       selectedValues: {}
     }
   }
@@ -287,7 +286,6 @@ class Permission extends Component {
   ];
 
   componentDidMount() {
-    // _setTimeOut(() => this.setState({pageLoading: false}), 1000)
     if (this.props.app.user.token) {
       this.getList()
     }
@@ -474,7 +472,7 @@ class Permission extends Component {
       loading,
       app: {user}
     } = this.props;
-    const {selectedRows, modalVisible, pageLoading, updateModalVisible, selectedValues} = this.state;
+    const {selectedRows, modalVisible, updateModalVisible, selectedValues} = this.state;
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
@@ -486,7 +484,7 @@ class Permission extends Component {
       selectedValues: selectedValues
     }
     return (
-      <Page inner={true} loading={pageLoading}>
+      <Page inner={true} >
         <PageHeaderWrapper title="权限管理">
           <Card bordered={false}>
             <div className={styles.tableList}>

@@ -815,8 +815,10 @@ class TeamAccount extends Component {
       annexUrl: fields.annexUrl,
       contractPerson: fields.contractPerson,
       phone: fields.phone,
-      approvalFiling:fields.approvalFiling
+      approvalFiling:fields.approvalFiling,
+      contractCode:fields.contractCode
     }
+    cleanObject(payload)
     if (updateModalVisible) {
       dispatch({
         type: 'teamAccount/update',
