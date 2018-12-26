@@ -6,7 +6,13 @@ import Bread from '../Layout/Bread'
 export default class PageHeader extends PureComponent {
 
   getTitle=(app)=>{
-    let current = app.menu.filter(a=>a.route==app.locationPathname)
+    if(app.locationPathname==='/'){
+      return '首页'
+    }
+    if(app.locationPathname==='/login'){
+      return ''
+    }
+    let current = app.menu.filter(a=>a.route===app.locationPathname)
     return current[0].name
   }
 

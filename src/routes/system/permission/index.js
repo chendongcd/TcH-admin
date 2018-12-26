@@ -108,7 +108,7 @@ class CreatDrawer extends Component {
 
   onCertain = (setPermission, selectedValues) => {
     //console.log(this.resouces)
-    const res = this.resouces.length == 0 ? selectedValues.resouces : this.resouces
+    const res = this.resouces.length === 0 ? selectedValues.resouces : this.resouces
     setPermission({id: selectedValues.id, resouces: res.map(a => JSON.parse(`{"permission":"${a}"}`))},this.cleanCheckedKeys)
   }
 

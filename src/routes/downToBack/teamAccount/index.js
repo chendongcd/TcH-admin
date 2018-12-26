@@ -48,7 +48,9 @@ class CreateForm extends Component {
       previewVisible: false,
       previewImage: '',
       fileList: [],
-      progress: 0
+      progress: 0,
+      contractType:-1,
+      contractNum:''
     };
     this.upload = null
   }
@@ -105,9 +107,17 @@ class CreateForm extends Component {
     this.setState({fileList})
   }
 
+  _onSelect=(e)=>{
+    this.setState({contractType:e})
+  }
+  _onChange=(e,option)=>{
+    this.setState({contractNum:option.props.item.contractNumber})
+  }
+
+
   render() {
     const {modalVisible, proNames, subNames, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
-    let {previewVisible, previewImage, fileList, progress} = this.state
+    let {previewVisible, previewImage, fileList, progress,contractType,contractNum} = this.state
     return (
       <Modal
         destroyOnClose
@@ -131,7 +141,7 @@ class CreateForm extends Component {
                   rules: [{required: true, message: '请选择项目'}],
                   initialValue: selectedValues.projectId ? selectedValues.projectId : '',
                 })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'}
-                           disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
+                           disabled={checkDetail} onChange={this._onChange} placeholder="请选择" style={{width: '100%'}}>
                   {proNames.map((item, index) => {
                     return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
                   })}
@@ -145,20 +155,22 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('contractType', {
                   rules: [{required: true, message: '请选择合同类型'}],
                   initialValue: (selectedValues.contractType||selectedValues.contractType==0) ? selectedValues.contractType : '',
-                })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择"
+                })(<Select onSelect={this._onSelect} className={styles.customSelect} disabled={checkDetail} placeholder="请选择"
                            style={{width: '100%'}}>
                   <Option name={'主合同'} value={0}>主合同</Option>
                   <Option name={'补充合同'} value={1}>补充合同</Option>
                 </Select>)}
               </FormItem>
             </Col>
+
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同编码">
+              {contractType===0?<FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同编码">
                 {form.getFieldDecorator('contractCode', {
-                  rules: [{required: true}],
-                  initialValue: selectedValues.contractCode ? selectedValues.contractCode : '',
-                })(<Input disabled={checkDetail} placeholder="自动带入"/>)}
-              </FormItem>
+                  rules: [{required: true,message:'请选择项目'}],
+                  initialValue: contractNum,
+                })(<Input disabled={true} placeholder="自动带入"/>)}
+              </FormItem>:null
+              }
             </Col>
           </Row>
           <Row gutter={0}>

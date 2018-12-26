@@ -14,7 +14,6 @@ class Home extends Component {
   render() {
     return (
       <Page loading={false} className={styles.dashboard}>
-        首页
       </Page>
     )
   }

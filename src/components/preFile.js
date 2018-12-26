@@ -9,10 +9,6 @@ const imgClass = classnames('ant-upload-list-picture ant-upload-list-item-thumbn
 
 class PreFile extends Component {
 
-  constructor(props) {
-    super(props)
-  }
-
   render() {
     let {file, progress, onPreview, onClose, index, noImage, disabled, noPdf} = this.props
     if (file) {
@@ -20,7 +16,7 @@ class PreFile extends Component {
         <div className={containerClass}>
           <div className={listItem}>
             <div className={item}>
-              {file.status == 'done' ? (noImage ?
+              {file.status === 'done' ? (noImage ?
                 <a href={file.url + '?attname=' + file.name} download={file.name}>{file.name}</a> :
                 noPdf?<span onClick={() => onPreview(file)} style={{cursor: 'pointer'}}>
              <img className={imgClass} src={file.url}/>
