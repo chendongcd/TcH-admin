@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react'
 import {connect} from 'dva'
-import moment from 'moment';
+import moment, {isMoment} from 'moment';
 
 import {
   Row,
@@ -69,6 +69,18 @@ class CreateForm extends Component {
     }
   }
 
+  setRange=(item,index,arr)=>{
+    if(item.time.length>0&&!isMoment(item.time[0])){
+    item.time = item.time.split(',').map(a=>moment(a))
+    }
+  }
+
+  setTime=(param)=>{
+    let obj = Object.assign(param)
+    obj.forEach(this.setRange)
+    return obj
+  }
+
   remove = (k, type, form) => {
     // can use data-binding to get
     const keys = form.getFieldValue(type);
@@ -98,7 +110,7 @@ class CreateForm extends Component {
 
   add = (type, form) => {
     const keys = form.getFieldValue(type);
-    const nextKeys = keys.concat({name: '', time: '', phone: ''});
+    const nextKeys = keys.concat({name: '', time: [], phone: ''});
     uuid++;
 
     let object = {
@@ -108,19 +120,28 @@ class CreateForm extends Component {
       object = {
         secretary: nextKeys,
       }
-      this.secretary = this.secretary.concat({name: '', time: '', phone: ''})
+      this.secretary = this.secretary.concat({name: '', time: [], phone: ''})
     } else if (type == 'engineer') {
       object = {
         engineer: nextKeys,
       }
       this.secretary = this.engineer.concat({name: '', time: '', phone: ''})
     } else {
-      this.manager = this.manager.concat({name: '', time: '', phone: ''})
+      this.manager = this.manager.concat({name: '', time: [], phone: ''})
     }
     form.setFieldsValue(object);
   }
 
-  handlRange = (param) => {
+  handleRanges=(params)=>{
+    params.forEach((a)=>{
+      if(Array.isArray(a.time)){
+        a.time = this.handleRange(a.time)
+      }
+    })
+    return params
+  }
+
+  handleRange = (param) => {
     return param[0]+','+param[1]
   }
 
@@ -137,10 +158,11 @@ class CreateForm extends Component {
           </Col>
           <Col className={styles.colPeople} md={9} sm={24}>
             <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
-              <DatePicker.RangePicker disabled={checkDetail} onChange={(e, dateString) => {
-                this.manager[index].time = this.handlRange(dateString)
+              <DatePicker.RangePicker disabled={checkDetail}
+                                      onChange={(e, dateString) => {
+                this.manager[index].time = this.handleRange(dateString)
               }}
-                                     // defaultValue={key.time ?moment(key.time) : null}
+                                      defaultValue={key.time.length>0 ?key.time : []}
                                       style={{width: '100%'}} placeholder="请选择任职时间"/>
             </FormItem>
           </Col>
@@ -180,8 +202,8 @@ class CreateForm extends Component {
           <Col className={styles.colPeople} md={9} sm={24}>
             <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
               <DatePicker.RangePicker disabled={checkDetail}
-                                      onChange={(e, dateString) => this.secretary[index].time = this.handlRange(dateString)}
-                                      defaultValue={key.time ? moment(key.time) : null}
+                                      onChange={(e, dateString) => this.secretary[index].time = this.handleRange(dateString)}
+                                      defaultValue={key.time.length>0 ? key.time : []}
                                       style={{width: '100%'}} placeholder="请选择任职时间"/>
             </FormItem>
           </Col>
@@ -221,8 +243,8 @@ class CreateForm extends Component {
           <Col className={styles.colPeople} md={9} sm={24}>
             <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
               <DatePicker.RangePicker disabled={checkDetail}
-                                      onChange={(e, dateString) => this.engineer[index].time = this.handlRange(dateString)}
-                                      defaultValue={key.time ? moment(key.time) : null}
+                                      onChange={(e, dateString) => this.engineer[index].time = this.handleRange(dateString)}
+                                      defaultValue={key.time.length>0 ? key.time : null}
                                       style={{width: '100%'}} placeholder="请选择任职时间"/>
             </FormItem>
           </Col>
@@ -255,9 +277,9 @@ class CreateForm extends Component {
           fieldsValue[prop] = fieldsValue[prop].format('YYYY-MM-DD')
         }
       }
-      fieldsValue.manager = this.manager
-      fieldsValue.secretary = this.secretary
-      fieldsValue.engineer = this.engineer
+      fieldsValue.manager = this.handleRanges(this.manager)
+      fieldsValue.secretary = this.handleRanges(this.secretary)
+      fieldsValue.engineer = this.handleRanges(this.engineer)
       handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
   };
@@ -271,23 +293,23 @@ class CreateForm extends Component {
     const {proNames, modalVisible, form, handleAdd, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
     const {getFieldDecorator} = this.props.form
     getFieldDecorator('manager', {
-      initialValue: selectedValues.manager ? selectedValues.manager : [{
+      initialValue: selectedValues.manager ? this.setTime(selectedValues.manager) : [{
         name: '',
-        time: '',
+        time: [],
         phone: ''
       }]
     });
     getFieldDecorator('secretary', {
-      initialValue: selectedValues.secretary ? selectedValues.secretary : [{
+      initialValue: selectedValues.secretary ? this.setTime(selectedValues.secretary) : [{
         name: '',
-        time: '',
+        time: [],
         phone: ''
       }]
     });
     getFieldDecorator('engineer', {
-      initialValue: selectedValues.engineer ? selectedValues.engineer : [{
+      initialValue: selectedValues.engineer ? this.setTime(selectedValues.engineer) : [{
         name: '',
-        time: '',
+        time: [],
         phone: ''
       }]
     });
@@ -771,6 +793,7 @@ class InfoCard extends Component {
   };
 
   handleUpdateModalVisible = (flag, record) => {
+    console.log(record)
     this.setState({
       updateModalVisible: !!flag,
       modalVisible: !!flag,
@@ -818,6 +841,8 @@ class InfoCard extends Component {
       secretary: fields.secretary,
       engineer: fields.engineer,
     }
+    console.log(payload)
+    console.log(selectedValues.id)
     if (updateModalVisible) {
       dispatch({
         type: 'pro_proInfo/update',
