@@ -13,7 +13,7 @@ class Home extends Component {
 
   render() {
     return (
-      <Page loading={false} className={styles.dashboard}>
+      <Page loading={false} >
       </Page>
     )
   }

@@ -66,6 +66,7 @@ class IndexPage extends Component {
       },
     }
     const {iconFontJS, iconFontCSS, ico} = config
+    console.log(app.locationPathname)
     return (
       <div>
         <Loader fullScreen spinning={loading}/>
@@ -103,7 +104,7 @@ class IndexPage extends Component {
               </MenuContext.Consumer>
               <Content style={{minHeight: '100vh-100',position:'relative'}}>
                 {children}
-                <Page className={Style.loadingPage} inner={false} loading={true}/>
+                {app.locationPathname==='/home'?null: <Page className={Style.loadingPage} inner={false} loading={true}/>}
               </Content>
               <Footer>
                 {config.footerText}
