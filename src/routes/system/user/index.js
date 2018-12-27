@@ -70,7 +70,6 @@ class CreateForm extends Component {
 
   render() {
     const {modalVisible, form, handleAdd, getProNames, getRoleNames, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail, proNames, roleNames} = this.props;
-    console.log(proNames)
     return (
       <Modal
         destroyOnClose

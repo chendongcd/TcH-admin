@@ -102,7 +102,7 @@ class IndexPage extends Component {
                 )}
               </MenuContext.Consumer>
               <Content style={{minHeight: '100vh-100',position:'relative'}}>
-                {children}
+                {children[0]}
                 {app.locationPathname==='/home'?null: <Page className={Style.loadingPage} inner={false} loading={true}/>}
               </Content>
               <Footer>
@@ -111,14 +111,15 @@ class IndexPage extends Component {
             </Layout>
           </Layout>
           :
-          children.props.children.filter(r => r.props.path && r.props.path == '/login')}
+          <div>
+            {children.filter((r,index) =>index!=0)}</div>}
       </div>
     );
   }
 }
 
 IndexPage.propTypes = {
-  children: PropTypes.element,
+  children: PropTypes.array,
   location: PropTypes.object,
   dispatch: PropTypes.func,
   app: PropTypes.object,
