@@ -77,6 +77,7 @@ class Project extends Component {
       selectedValues: {}
     }
     this.exportParams = {}
+    console.log('进入page')
   }
 
   columns = [

@@ -565,6 +565,7 @@ class PeopleInfo extends Component {
       page:1,
       pageSize:10
     }
+    console.log('进入page')
   }
 
   columns = [

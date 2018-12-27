@@ -216,6 +216,7 @@ class FileRead extends Component {
       selectedValues: {},
       checkDetail: false
     }
+    console.log('进入page')
   }
 
   columns = [
