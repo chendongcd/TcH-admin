@@ -23,12 +23,7 @@ const codeMessage = {
 };
 
 const checkStatus = response => {
- //  console.log(appModal)
- //  if(response.code == 200){
- //    message.error('用户信息认证失效，请重新登陆',5);
- //    appModal.effects.logout({})
- //    return
- //  }
+
   if (response.code >= 200 && response.code < 300) {
     return
   }
@@ -80,8 +75,6 @@ export default function request(url, options, token) {
     }
     req.setRequestHeader('Content-Type', 'application/json')
     if (token) {
-       console.log(token)
-      // console.log(url)
       req.setRequestHeader('Authorization', `${token}`)
     }
 

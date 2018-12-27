@@ -3,6 +3,8 @@ import {Router, Route, Switch, Redirect} from 'dva/router';
 import {LocaleProvider} from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import App from './routes/Index'
+import Project from './routes/system/project/index'
+import InfoCard from './routes/project/infoCard/index'
 import dynamic from 'dva/dynamic';
 import appModel from './models/app'
 // // 设置默认的加载组件
@@ -423,22 +425,22 @@ const Routers = function ({history, app}) {
           <Switch>
             <Redirect exact from="/"  to="/home"/>
             <Route path="/home" exact component={Home}/>
-            <Route path="/login" component={Login}/>
-            <Route path="/system/project"  component={Sys_Project}/>
-            <Route path="/system/permission"  component={Sys_Permission}/>
-            <Route path="/system/user"  component={Sys_User}/>
-            <Route path="/project/infoCard"  component={Pro_InfoCard}/>
-            <Route path="/up/meterUp"  component={Up_MeterUp}/>
-            <Route path="/sub/qualification"  component={Sub_Qualification}/>
-            <Route path="/sub/resume"  component={Sub_Resume}/>
-            <Route path="/down/inspect"  component={Down_MeterDown}/>
-            <Route path="/down/account"  component={Down_TeamAccount}/>
-            <Route path="/people/info"  component={People_Info}/>
-            <Route path="/evaluation/evaluate"  component={Evaluate_Pro}/>
-            <Route path="/files/read"  component={Document_fileRead}/>
-            <Route path="/files/reference"  component={Document_fileReference}/>
-            <Route path="/404"  component={NotFound}/>
+            <Route path="/sys_project"  component={Project}/>
+            <Route path="/sys_permission"  component={Sys_Permission}/>
+            <Route path="/sys_user"  component={Sys_User}/>
+            <Route path="/pro_infoCard"  component={InfoCard}/>
+            <Route path="/up_meterUp"  component={Up_MeterUp}/>
+            <Route path="/sub_qualification"  component={Sub_Qualification}/>
+            <Route path="/sub_resume"  component={Sub_Resume}/>
+            <Route path="/down_inspect"  component={Down_MeterDown}/>
+            <Route path="/down_account"  component={Down_TeamAccount}/>
+            <Route path="/peo_info"  component={People_Info}/>
+            <Route path="/eva_evaluate"  component={Evaluate_Pro}/>
+            <Route path="/files_read"  component={Document_fileRead}/>
+            <Route path="/files_reference"  component={Document_fileReference}/>
           </Switch>
+          <Route path="/404"  component={NotFound}/>
+          <Route path="/login" component={Login}/>
         </App>
       </Router>
     </LocaleProvider>
