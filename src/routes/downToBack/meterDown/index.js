@@ -102,7 +102,7 @@ class CreateForm extends Component {
   }
 
   render() {
-    const {modalVisible, proNames, subNames, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
+    const {modalVisible, proNames,teamList, subNames, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
     let {previewVisible, previewImage, fileList, progress} = this.state
 
     return (
@@ -153,10 +153,15 @@ class CreateForm extends Component {
           <Row gutter={8}>
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="队伍名称">
-                {form.getFieldDecorator('teamName', {
-                  rules: [{required: true}],
-                  initialValue: selectedValues.teamName ? selectedValues.teamName : testValue,
-                })(<Input disabled={checkDetail} placehloder='请输入队伍名称'/>)}
+                {form.getFieldDecorator('laborAccountId', {
+                  rules: [{required: true, message: '请选择队伍名称'}],
+                  initialValue: selectedValues.laborAccountId ? selectedValues.laborAccountId : '',
+                })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'}
+                           disabled={checkDetail} placeholder="请选择队伍名称" style={{width: '100%'}}>
+                  {teamList.list.map((item, index) => {
+                    return <Option key={item.id} item={item} name={item.teamName} value={item.id}>{item.teamName}</Option>
+                  })}
+                </Select>)}
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
@@ -555,6 +560,7 @@ class MeterDown extends Component {
     this.getProNames()
     this.getList()
     this.getSubNames()
+    this.getTeamList()
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
@@ -645,13 +651,7 @@ class MeterDown extends Component {
   };
 
   handleAdd = (fields, updateModalVisible, selectedValues,cleanState) => {
-    // const {dispatch} = this.props;
-    // dispatch({
-    //   type: 'rule/add',
-    //   payload: {
-    //     desc: fields.desc,
-    //   },
-    // });
+
     const {dispatch, app: {user}} = this.props;
     const payload = {
       projectId: fields.projectId,
@@ -661,7 +661,7 @@ class MeterDown extends Component {
       valuationPrice: fields.valuationPrice,
       valuationPerson: fields.valuationPerson,
       valuationPeriod: fields.valuationPeriod,
-      teamName: fields.teamName,
+      laborAccountId: fields.laborAccountId,
       subcontractorId: fields.subcontractorId,
       subcontractorName: selectedValues.subcontractorName,
       shouldAmount: fields.shouldAmount,
@@ -778,7 +778,7 @@ class MeterDown extends Component {
 
   render() {
     const {
-      meterDown: {data, proNames, subNames},
+      meterDown: {data, proNames, subNames,teamList},
       loading,
       app: {user}
     } = this.props;
@@ -797,7 +797,8 @@ class MeterDown extends Component {
       selectedValues: selectedValues,
       checkDetail: checkDetail,
       proNames: proNames,
-      subNames: subNames
+      subNames: subNames,
+      teamList:teamList
     }
     const exportUrl = createURL(DOWN_EXPORT,{...this.exportParams,...{token:user.token}})
 
@@ -893,6 +894,16 @@ class MeterDown extends Component {
         }
       )
     }
+  }
+
+  getTeamList=()=>{
+    this.props.dispatch(
+      {
+        type: 'meterDown/queryTeams',
+        payload: {page: 1, pageSize: 10},
+        token: this.props.app.user.token
+      }
+    )
   }
 }
 

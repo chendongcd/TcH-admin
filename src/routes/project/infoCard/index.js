@@ -841,8 +841,6 @@ class InfoCard extends Component {
       secretary: fields.secretary,
       engineer: fields.engineer,
     }
-    console.log(payload)
-    console.log(selectedValues.id)
     if (updateModalVisible) {
       dispatch({
         type: 'pro_proInfo/update',

@@ -106,7 +106,7 @@ class Project extends Component {
     },
     {
       title: '创建时间',
-      dataIndex: 'createdTime',
+      dataIndex: 'createTime',
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm')}</span>,
     },
     {

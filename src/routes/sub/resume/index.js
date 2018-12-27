@@ -227,7 +227,7 @@ class Resume extends Component {
   columns = [
     {
       title: '分包商备案编码',
-      dataIndex: 'code',
+      dataIndex: 'subcontractorCode',
     },
     {
       title: '分包商全称',
@@ -568,7 +568,7 @@ class Resume extends Component {
                 filterMultiple={false}
                 rowKey={'id'}
                 data={data}
-                scroll={{x: '150%'}}
+                scroll={{x: '200%'}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
