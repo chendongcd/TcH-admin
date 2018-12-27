@@ -16,7 +16,8 @@ import {
   Modal,
   Upload,
   Divider,
-  message
+  message,
+  Badge
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable, PreFile} from 'components'
 import styles from './index.less'
@@ -46,12 +47,12 @@ const _setColor = function (time) {
   let num
   num = time.split(' ')[0]
   if (time.includes('前')) {
-    return '#F10200'
+    return 'error'
   } else {
     if (time.includes('天') || (num <= 3 && time.includes('月'))) {
-      return '#FBBD2C'
+      return 'warning'
     }
-    return 'green'
+    return 'success'
   }
 
 }
@@ -419,35 +420,45 @@ class CreateForm extends Component {
         </Row>
         <div className={styles.modalContent}>
           <Row gutter={8}>
+          <Col md={24} sm={24}>
+            <FormItem style={{marginLeft: 14 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="附件">
+              {form.getFieldDecorator('annex', {
+                rules: [{required: true, message: '请上传附件'}],
+                valuePropName: 'fileList',
+                getValueFromEvent: normFile,
+                initialValue: selectedValues.annex ? [selectedValues.annex] : [],
+              })(
+                <Upload.Dragger onChange={this.handleChange}
+                                accept={'.pdf'}
+                                showUploadList={false}
+                  // fileList={fileList}
+                                listType="picture"
+                                name="files"
+                                disabled={fileList.length > 0 || checkDetail}
+                                onSuccess={this.onSuccess}
+                                handleManualRemove={this.remove}
+                                onError={this.onError}
+                                onProgress={this.onProgress}
+                                customRequest={this.onUpload}>
+                  <p className="ant-upload-drag-icon">
+                    <Icon type="inbox"/>
+                  </p>
+                  <p className="ant-upload-text">点击或拖动附件进入</p>
+                </Upload.Dragger>
+              )}
+              <PreFile disabled={checkDetail} onClose={this.remove} onPreview={this.handlePreview} progress={progress}
+                       file={fileList[0]}/>
+              <span style={info_css}>备注：包含营业执照、资质证书、安全生产许可证、开户银行许可证、法人身份证等相关资质资料(盖鲜章),请以一份PDF格式文件上传。</span>
+            </FormItem>
+          </Col>
+        </Row>
+          <Row gutter={8}>
             <Col md={24} sm={24}>
-              <FormItem style={{marginLeft: 14 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="附件">
-                {form.getFieldDecorator('annex', {
-                  rules: [{required: true, message: '请上传附件'}],
-                  valuePropName: 'fileList',
-                  getValueFromEvent: normFile,
-                  initialValue: selectedValues.annex ? [selectedValues.annex] : [],
-                })(
-                  <Upload.Dragger onChange={this.handleChange}
-                                  accept={'.pdf'}
-                                  showUploadList={false}
-                    // fileList={fileList}
-                                  listType="picture"
-                                  name="files"
-                                  disabled={fileList.length > 0 || checkDetail}
-                                  onSuccess={this.onSuccess}
-                                  handleManualRemove={this.remove}
-                                  onError={this.onError}
-                                  onProgress={this.onProgress}
-                                  customRequest={this.onUpload}>
-                    <p className="ant-upload-drag-icon">
-                      <Icon type="inbox"/>
-                    </p>
-                    <p className="ant-upload-text">点击或拖动附件进入</p>
-                  </Upload.Dragger>
-                )}
-                <PreFile disabled={checkDetail} onClose={this.remove} onPreview={this.handlePreview} progress={progress}
-                         file={fileList[0]}/>
-                <span style={info_css}>备注：包含营业执照、资质证书、安全生产许可证、开户银行许可证、法人身份证等相关资质资料(盖鲜章),请以一份PDF格式文件上传。</span>
+              <FormItem style={{marginLeft: 18 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="备注">
+                {form.getFieldDecorator('remark', {
+                  rules: [{required: false}],
+                  initialValue: selectedValues.remark ? selectedValues.remark : testValue
+                })(<Input.TextArea disabled={checkDetail} width={'100%'} placeholder="请输入" rows={4}/>)}
               </FormItem>
             </Col>
           </Row>
@@ -766,12 +777,10 @@ class Qualification extends Component {
     },
     {
       title: '证件期限',
-      dataIndex: 'businessLicenseValidityPeriod',
-      render(val) {
-        let time = moment(val).format('YYYY/MM/DD')
-        let ss = moment(val).fromNow()
-        let color = _setColor(ss)
-        return <span style={{color: color}}>{val ? time : ''}</span>
+      key: 'period',
+      render:(val,record)=> {
+        let status= this.checkPeriod(record)
+        return <Badge offset={[5,0]} status={status} />
       }
     },
     {
@@ -841,6 +850,20 @@ class Qualification extends Component {
       }
     },
   ];
+
+  checkPeriod=(record)=>{
+    let status1 = _setColor(moment(record.businessLicenseValidityPeriod).fromNow())
+    let status2 = _setColor(moment(record.qualificationValidityPeriod).fromNow())
+    let status3 = _setColor(moment(record.safetyValidityPeriod).fromNow())
+    let status = [status1,status2,status3]
+    if(status.includes('error')){
+      return 'error'
+    }
+    if(status.includes('warning')){
+      return 'warning'
+    }
+    return 'success'
+  }
 
   componentDidMount() {
     this.getList()
@@ -958,11 +981,13 @@ class Qualification extends Component {
       qualificationFrom: fieldsValue.qualificationFrom,
       safetyCode: fieldsValue.safetyCode,
       safetyValidityPeriod: fieldsValue.safetyValidityPeriod,
+      safetyFrom:fieldsValue.safetyFrom,
       bank: fieldsValue.bank,
       bankAccount: fieldsValue.bankAccount,
       bankFrom: fieldsValue.bankFrom,
       annex: fieldsValue.annex,
-      createTime: fieldsValue.createTime
+      createTime: fieldsValue.createTime,
+      remark:fieldsValue.remark
     }
     if (updateModalVisible) {
       dispatch({

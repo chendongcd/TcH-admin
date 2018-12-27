@@ -15,6 +15,7 @@ export default {
   effects: {
     * fetch({payload,token}, {call, put}) {
       const response = yield call(queryPeopleList, payload);
+      console.log(response)
       if (response.code == '200') {
         yield put({
           type: 'save',

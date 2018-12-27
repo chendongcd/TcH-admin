@@ -72,7 +72,7 @@ export default {
       if(response.code=='200'){
         yield put({
           type:'saveProName',
-          payload:response.list
+          payload:response.entity
         })
       }
       if(global.checkToken(response)){

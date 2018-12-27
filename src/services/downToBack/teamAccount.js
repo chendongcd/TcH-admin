@@ -9,7 +9,13 @@ export async function queryTeamList(params,token) {
     body: params
   },token);
 }
-
+export async function queryContractCodes(params,token) {
+  console.log('请求主合同编码列表',`${api}/list/v1.1`)
+  return request(`${api}/list/v1.1`,{
+    method: 'GET',
+    body: params
+  },token);
+}
 export async function queryPerTeamList(params,token) {
   console.log('请求所属队伍列表',`${api}/only_list/v1.1`)
   return request(`${api}/only_list/v1.1`,{

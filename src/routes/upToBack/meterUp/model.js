@@ -42,6 +42,7 @@ export default {
             valuationAmountTax:a5,
             valuationAmountNotTax:Math.floor(a7) / 100,
             realAmountTax:a8,
+            realAmount:a9,
             alreadyPaidAmount:a10,
             unpaidAmount:a11,
             notCalculatedAmount:a14,

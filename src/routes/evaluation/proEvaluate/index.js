@@ -117,16 +117,17 @@ class CreateForm extends Component {
 
   onChange = (value, option) => {
     this.selectProject = option.props.item
+    console.log(this.selectProject)
+    if(!this.selectProject.contractEndTime){
+      return message.error('请先完善该项目工程信息卡');
+    }
     this.props.form.setFieldsValue({
       engineeringType: this.selectProject.projectType,
-      projectStatus: this.selectProject.statusStr,
-      contractEndTime:this.selectProject.contractEndTime,
-      contractStartTime:this.selectProject.contractStartTime,
+      engineeringStatus: this.selectProject.engineeringStatus,
+      contractEndTime:moment(this.selectProject.contractEndTime).format('YYYY-MM-DD'),
+      contractStartTime:moment(this.selectProject.contractStartTime).format('YYYY-MM-DD'),
       duration: this.selectProject.distanceTime
     });
-    if(!this.selectProject.contractEndTime){
-      message.error('请先完善该项目工程信息卡');
-    }
   }
 
   handleCancel = () => this.setState({previewVisible: false})
@@ -149,7 +150,6 @@ class CreateForm extends Component {
   render() {
     const {modalVisible, proNames, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
     let {previewVisible, evaluationAnnex, previewImage, responsibilityAnnex, resProgress, evaProgress, jointHearingAnnex, joinProgress,isSignRes} = this.state
-
     return (
       <Modal
         destroyOnClose
@@ -206,7 +206,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="工程状态">
                 {form.getFieldDecorator('engineeringStatus', {
                   rules: [{required: true,message:'请先选择项目'}],
-                  initialValue: selectedValues.engineeringStatus ? selectedValues.engineeringStatus : ''
+                  initialValue: (selectedValues.engineeringStatus||selectedValues.engineeringStatus==0) ? status[selectedValues.engineeringStatus].name : ''
                 })((<Select className={styles.customSelect} disabled={true} placeholder="自动带出"
                             style={{width: '100%'}}>
                   {status.map((item, index) => {
@@ -294,7 +294,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="工期(月)">
                 {form.getFieldDecorator('duration', {
                   rules: [{required: true,message:'请先完善该项目工程信息卡'}],
-                  initialValue: selectedValues.distanceTime ? selectedValues.distanceTime : ''
+                  initialValue: selectedValues.duration ? selectedValues.duration : ''
                 })(<Input disabled={true} placeholder='自动带出'/>)}
               </FormItem>
             </Col>
@@ -680,6 +680,13 @@ class ProEvaluate extends Component {
       dataIndex: 'engineeringStatus',
       render(val){
         return <span>{status[val].name}</span>
+      }
+    },
+    {
+      title: '评估状态',
+      dataIndex: 'evaluationStatus',
+      render(val){
+        return <span>{val}</span>
       }
     },
     {
@@ -1138,7 +1145,7 @@ class ProEvaluate extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '250%'}}
+                scroll={{x: '300%'}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

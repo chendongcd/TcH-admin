@@ -108,7 +108,7 @@ const CreateForm = Form.create()(props => {
             </FormItem>
           </Col>
           <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="项目部队伍名称">
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="项目队伍名称">
               {form.getFieldDecorator('laborAccountId', {
                 rules: [{required: true, message: '请输入项目部队伍名称'}],
                 initialValue: selectedValues.laborAccountId ? selectedValues.laborAccountId : ''

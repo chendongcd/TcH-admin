@@ -70,7 +70,7 @@ class CreateForm extends Component {
 
   render() {
     const {modalVisible, form, handleAdd, getProNames, getRoleNames, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail, proNames, roleNames} = this.props;
-
+    console.log(proNames)
     return (
       <Modal
         destroyOnClose
@@ -210,8 +210,6 @@ class User extends Component {
     },
     {
       title: '操作',
-      fixed: 'right',
-      width: 160,
       render: (val, record) => {
         const user = this.props.app.user
         if (!user.token) {

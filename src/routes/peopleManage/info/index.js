@@ -32,7 +32,7 @@ const getValue = obj =>
     .map(key => obj[key])
     .join(',');
 const pageButtons = menuData[16].buttons.map(a => a.permission)
-const testValue = ''
+const testValue = '155'
 const info_css = {
   color: '#fa541c',
   textAlign:'center',
@@ -415,7 +415,7 @@ class CreateForm extends Component {
               {form.getFieldDecorator('workExperience', {
                 rules: [{required: false}],
                 initialValue: selectedValues.workExperience ? selectedValues.workExperience : testValue,
-              })(<Input.TextArea disabled={checkDetail} width={'100%'} placeholder="工作经历" rows={4}/>)}
+              })(<Input.TextArea className={styles.customSelect} disabled={checkDetail} width={'100%'} placeholder="工作经历" rows={4}/>)}
             </FormItem>
           </Col>
           <Col md={12} sm={24}>
@@ -423,7 +423,7 @@ class CreateForm extends Component {
               {form.getFieldDecorator('certificate', {
                 rules: [{required: false}],
                 initialValue: selectedValues.certificate ? selectedValues.certificate : testValue,
-              })(<Input.TextArea disabled={checkDetail} width={'100%'} placeholder="职业资格证书取证情况" rows={4}/>)}
+              })(<Input.TextArea className={styles.customSelect} disabled={checkDetail} width={'100%'} placeholder="职业资格证书取证情况" rows={4}/>)}
             </FormItem>
           </Col>
         </Row>
@@ -433,7 +433,7 @@ class CreateForm extends Component {
               {form.getFieldDecorator('training', {
                 rules: [{required: false}],
                 initialValue: selectedValues.training? selectedValues.training : testValue,
-              })(<Input.TextArea disabled={checkDetail} width={'100%'} placeholder="学习及培训经历" rows={4}/>)}
+              })(<Input.TextArea className={styles.customSelect} disabled={checkDetail} width={'100%'} placeholder="学习及培训经历" rows={4}/>)}
             </FormItem>
           </Col>
           <Col md={12} sm={24}>
@@ -441,7 +441,7 @@ class CreateForm extends Component {
               {form.getFieldDecorator('award', {
                 rules: [{required: false}],
                 initialValue: selectedValues.award ? selectedValues.award : testValue,
-              })(<Input.TextArea disabled={checkDetail} width={'100%'} placeholder="获奖励和受表彰情况" rows={4}/>)}
+              })(<Input.TextArea className={styles.customSelect} disabled={checkDetail} width={'100%'} placeholder="获奖励和受表彰情况" rows={4}/>)}
             </FormItem>
           </Col>
         </Row>
@@ -449,7 +449,7 @@ class CreateForm extends Component {
           <Col md={24} sm={24}>
             <FormItem style={{marginLeft:0}} labelCol={{span: 3}} wrapperCol={{span: 15}} label="头像">
               {form.getFieldDecorator('headUrl', {
-                rules: [{required: true,message:'请上传照片'}],
+                rules: [{required: true,message:'必须上传照片'}],
                 valuePropName: 'fileList',
                 getValueFromEvent: normFile,
                 initialValue: selectedValues.annexUrl ? [selectedValues.annexUrl] : [],
@@ -473,7 +473,7 @@ class CreateForm extends Component {
                 </Upload.Dragger>
               )}
               <PreFile noPdf={true} disabled={checkDetail} onClose={this.remove} onPreview={this.handlePreview} progress={progress} file={fileList[0]}/>
-              <span style={info_css}>请上传照片</span>
+              <span style={info_css}>必须上传照片</span>
             </FormItem>
           </Col>
         </Row>
@@ -483,7 +483,7 @@ class CreateForm extends Component {
               {form.getFieldDecorator('remark', {
                 rules: [{required: false}],
                 initialValue: selectedValues.projectId ? selectedValues.projectId : testValue,
-              })(<Input.TextArea disabled={checkDetail} width={'100%'} placeholder="请输入" rows={4}/>)}
+              })(<Input.TextArea className={styles.customSelect} disabled={checkDetail} width={'100%'} placeholder="请输入" rows={4}/>)}
             </FormItem>
           </Col>
         </Row>
@@ -792,7 +792,7 @@ class PeopleInfo extends Component {
       phone: fieldsValue.phone,
       qqNumber: fieldsValue.qqNumber,
       homeAddress: fieldsValue.homeAddress,
-      projectName: fieldsValue.projectName,
+      projectId: fieldsValue.projectId,
       status: fieldsValue.status,
       firstDegreeSchool: fieldsValue.firstDegreeSchool,
       firstDegreeTime: fieldsValue.firstDegreeTime,
@@ -971,7 +971,7 @@ class PeopleInfo extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '200%'}}
+                scroll={{x: '300%'}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

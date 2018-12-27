@@ -1,4 +1,4 @@
-import {queryTeamList, addTeam, updateCompany, updateTeam} from '../../../services/downToBack/teamAccount'
+import {queryTeamList, addTeam, updateCompany, updateTeam,queryContractCodes} from '../../../services/downToBack/teamAccount'
 import {queryProPerList} from "../../../services/system/sys_project";
 import {querySubList} from "../../../services/sub/resume";
 
@@ -12,11 +12,13 @@ export default {
     },
     proNames: [],
     subNames: [],
+    contractCodes:[]
   },
 
   effects: {
     * fetch({payload, token}, {call, put}) {
       const response = yield call(queryTeamList, payload, token);
+      console.log(response)
       if (response.code == '200') {
         yield put({
           type: 'save',
@@ -66,7 +68,6 @@ export default {
     },
     * queryProNames({payload, token}, {call, put}) {
       const response = yield call(queryProPerList, payload, token);
-      console.log(response)
       if (response.code == '200') {
         yield put({
           type: 'saveProName',
@@ -80,10 +81,22 @@ export default {
     },
     * querySubNames({payload, token}, {call, put}) {
       const response = yield call(querySubList, payload, token);
-      console.log(response)
       if (response.code == '200') {
         yield put({
           type: 'saveSubName',
+          payload: response.entity
+        })
+      }
+      if (response.code == '401') {
+        yield put({type: 'app/logout'})
+        return false
+      }
+    },
+    * queryContractCodes({payload, token}, {call, put}) {
+      const response = yield call(queryContractCodes, payload, token);
+      if (response.code == '200') {
+        yield put({
+          type: 'saveContractCode',
           payload: response.entity
         })
       }
@@ -111,6 +124,12 @@ export default {
       return {
         ...state,
         subNames: action.payload
+      }
+    },
+    saveContractCode(state, action) {
+      return {
+        ...state,
+        contractCodes: action.payload
       }
     },
   },
