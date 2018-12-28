@@ -18,7 +18,7 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-import {getButtons, cleanObject,cloneObject} from 'utils'
+import {getButtons, cleanObject, cloneObject} from 'utils'
 import {apiDev} from 'utils/config'
 import {menuData} from 'common/menu'
 import {PRO_PDF, PRO_EXPORT} from 'common/urls'
@@ -42,7 +42,6 @@ const testValue = '123'
 class CreateForm extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
     this.manager = [{
       name: '',
       time: '',
@@ -61,28 +60,40 @@ class CreateForm extends Component {
     this.selectProject = {}
   }
 
+  componentDidMount() {
+
+  }
+
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (!prevProps.selectedValues.manager && this.props.selectedValues.manager) {
       this.manager = cloneObject(this.props.selectedValues.manager)
       this.engineer = cloneObject(this.props.selectedValues.engineer)
       this.secretary = cloneObject(this.props.selectedValues.secretary)
+      console.log(this.manager)
+      this.props.form.setFieldsValue({manager: this.manager});
     }
-    if(prevProps.modalVisible && !this.props.modalVisible){
-      this.manager = [{
-        name: '',
-        time: '',
-        phone: ''
-      }]
-      this.engineer = [{
-        name: '',
-        time: '',
-        phone: ''
-      }]
-      this.secretary = [{
-        name: '',
-        time: '',
-        phone: ''
-      }]
+    if (prevProps.modalVisible && !this.props.modalVisible) {
+      this.props.form.setFieldsValue({
+        manager: [{
+          name: '',
+          time: '',
+          phone: ''
+        }]
+      });
+      this.props.form.setFieldsValue({
+        engineer: [{
+          name: '',
+          time: '',
+          phone: ''
+        }]
+      });
+      this.props.form.setFieldsValue({
+        secretary: [{
+          name: '',
+          time: '',
+          phone: ''
+        }]
+      });
     }
   }
 
@@ -98,6 +109,14 @@ class CreateForm extends Component {
     return obj
   }
 
+  _setTime = (param) => {
+    if (!Array.isArray(param)) {
+      return param.split(',').map(a => moment(a))
+    }
+    return param
+
+  }
+
   remove = (k, type, form) => {
     // can use data-binding to get
     const keys = form.getFieldValue(type);
@@ -106,29 +125,28 @@ class CreateForm extends Component {
       return;
     }
     let object = {
-      manager: keys.filter((key,index) => index != k)
+      manager: keys.filter((key, index) => index != k)
     }
     if (type == 'secretary') {
       object = {
-        secretary: keys.filter((key,index) => index != k)
+        secretary: keys.filter((key, index) => index != k)
       }
-      this.secretary = this.secretary.filter((key,index) => index != k)
+      this.secretary = this.secretary.filter((key, index) => index != k)
     } else if (type == 'engineer') {
       object = {
-        engineer: keys.filter((key,index) => index != k)
+        engineer: keys.filter((key, index) => index != k)
       }
-      this.engineer = this.engineer.filter((key,index) => index != k)
+      this.engineer = this.engineer.filter((key, index) => index != k)
     } else {
-      this.manager = this.manager.filter((key,index) => index != k)
+      this.manager = this.manager.filter((key, index) => index != k)
     }
-    console.log(this.manager)
     // can use data-binding to set
     form.setFieldsValue(object);
   }
 
   add = (type, form) => {
     const keys = form.getFieldValue(type);
-    const nextKeys = keys.concat({name: '', time: [], phone: ''});
+    const nextKeys = keys.concat({name: '', time: '', phone: ''});
     uuid++;
 
     let object = {
@@ -165,33 +183,44 @@ class CreateForm extends Component {
 
   formManager = (managers, checkDetail, form, getFieldDecorator) => {
     if (managers) {
+      console.log(managers)
       return managers.map((key, index) => {
         let isLast = (managers.length == index + 1)
         return (<Row key={`manager${index}`} gutter={8}>
           <Col className={styles.colPeople} md={6} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="姓名">
-              <Input defaultValue={key.name ? key.name : ''}
-                     onChange={(e) =>{
-                       this.manager[index].name = e.target.value
-                     }}
-                     disabled={checkDetail} placeholder="请输入姓名"/>
+              {getFieldDecorator(`name[${index}]`, {
+                rules: [{required: 'true', message: '请输入姓名'}],
+                initialValue:key.name ? key.name : ''
+              })(<Input onChange={(e) => {
+                          this.manager[index].name = e.target.value
+                        }}
+                        disabled={checkDetail} placeholder="请输入姓名"/>)}
             </FormItem>
           </Col>
           <Col className={styles.colPeople} md={9} sm={24}>
-            <FormItem  labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
-              <DatePicker.RangePicker disabled={checkDetail}
-                                      required={true}
-                                      onChange={(e, dateString) => {
-                                        this.manager[index].time = this.handleRange(dateString)
-                                      }}
-                                      defaultValue={key.time.length > 0 ? key.time : []}
-                                      style={{width: '100%'}} placeholder="请选择任职时间"/>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
+              {getFieldDecorator(`time[${index}]`, {
+                rules: [{required: 'true', message: '请输入任职时间'}],
+                initialValue:key.time ? this._setTime(key.time) : []
+              })(<DatePicker.RangePicker disabled={checkDetail}
+                                         required={true}
+                                         onChange={(e, dateString) => {
+                                           this.manager[index].time = this.handleRange(dateString)
+                                         }}
+                                         style={{width: '100%'}} placeholder="请选择任职时间"/>)}
             </FormItem>
           </Col>
           <Col className={styles.colPeople} md={7} sm={24}>
-            <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系电话">
-              <Input disabled={checkDetail} onChange={(e) => this.manager[index].phone = e.target.value}
-                     defaultValue={key.phone ? key.phone : ''} placeholder="请输入联系电话"/>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系电话">
+              {getFieldDecorator(`phone[${index}]`, {
+                rules: [{required: 'true', message: '请输入联系电话'}],
+                initialValue:key.phone ? key.phone : ''
+              })(<Input disabled={checkDetail}
+                        onChange={(e) => {
+                this.manager[index].phone = e.target.value
+              }}
+                        placeholder="请输入联系电话"/>)}
             </FormItem>
           </Col>
           {checkDetail ? null : <Col className={styles.colPeople} md={2} sm={24}>
@@ -256,7 +285,7 @@ class CreateForm extends Component {
         let isLast = (chiefEngineer.length == index + 1)
         return (<Row key={`engineer${index}`} gutter={8}>
           <Col className={styles.colPeople} md={6} sm={24}>
-            <FormItem  labelCol={{span: 5}} wrapperCol={{span: 15}} label="姓名">
+            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="姓名">
               <Input defaultValue={key.name ? key.name : ''}
                      required={true}
                      onChange={(e) => this.engineer[index].name = e.target.value} disabled={checkDetail}
@@ -303,7 +332,7 @@ class CreateForm extends Component {
       fieldsValue.manager = this.handleRanges(this.manager)
       fieldsValue.secretary = this.handleRanges(this.secretary)
       fieldsValue.engineer = this.handleRanges(this.engineer)
-       console.log(fieldsValue)
+      console.log(fieldsValue)
       handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
   };
@@ -314,15 +343,9 @@ class CreateForm extends Component {
   }
 
   render() {
-    const {proNames, modalVisible,loading, form, handleAdd, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
-    const {getFieldDecorator} = this.props.form
-    getFieldDecorator('manager', {
-      initialValue: selectedValues.manager ? this.setTime(selectedValues.manager) : [{
-        name: '',
-        time: [],
-        phone: ''
-      }]
-    });
+    const {proNames, modalVisible, loading, form, handleAdd, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
+    const {getFieldDecorator, getFieldValue} = this.props.form
+    getFieldDecorator('manager');
     getFieldDecorator('secretary', {
       initialValue: selectedValues.secretary ? this.setTime(selectedValues.secretary) : [{
         name: '',
@@ -337,13 +360,9 @@ class CreateForm extends Component {
         phone: ''
       }]
     });
-    let managers = form.getFieldValue('manager');
-    let secretary = form.getFieldValue('secretary');
-    let chiefEngineer = form.getFieldValue('engineer');
-    if(selectedValues.manager) {
-      console.log(selectedValues.manager)
-      console.log(this.setTime(selectedValues.manager))
-    }
+    let managers = getFieldValue('manager');
+    let secretary = getFieldValue('secretary');
+    let chiefEngineer = getFieldValue('engineer');
     return (
       <Modal
         destroyOnClose
@@ -352,7 +371,7 @@ class CreateForm extends Component {
         visible={modalVisible}
         width={992}
         maskClosable={false}
-        okButtonProps={{loading:loading}}
+        okButtonProps={{loading: loading}}
         onOk={() => checkDetail ? handleCheckDetail() : this.okHandle(form, updateModalVisible, handleAdd, selectedValues)}
         onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
       >
@@ -1026,7 +1045,7 @@ class InfoCard extends Component {
       selectedValues: selectedValues,
       checkDetail: checkDetail,
       proNames: proNames,
-      loading:loading.effects[`pro_proInfo/${updateModalVisible?'update':'add'}`]
+      loading: loading.effects[`pro_proInfo/${updateModalVisible ? 'update' : 'add'}`]
     }
     const exportUrl = createURL(PRO_EXPORT, {...this.exportParams, ...{token: user.token}})
     return (

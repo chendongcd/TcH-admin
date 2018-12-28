@@ -477,7 +477,6 @@ class MeterUp extends Component {
         const button = user.permissionsMap.button
         let annex = JSON.parse(record.annexUrl)
         let href = annex.url + '?attname=' + annex.fileName
-
         return (
           <Fragment>
             {getButtons(button, pageButtons[1]) ?
