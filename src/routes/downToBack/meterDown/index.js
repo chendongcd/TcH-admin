@@ -167,7 +167,7 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="合同金额">
                 {form.getFieldDecorator('contractPrice', {
-                  rules: [{required: true}],
+                  rules: [{required: true,message:'请输入合同金额'}],
                   initialValue: selectedValues.contractPrice ? selectedValues.contractPrice : testValue,
                 })(<Input disabled={checkDetail} placehloder='请输入合同金额' addonAfter={'元'}/>)}
               </FormItem>
@@ -185,7 +185,7 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="计价日期">
                 {form.getFieldDecorator('valuationTime', {
-                  rules: [{required: true}],
+                  rules: [{required: true,message:'请选择日期'}],
                   initialValue: selectedValues.valuationTime ? moment(selectedValues.valuationPeriod) : null,
                 })(<DatePicker.MonthPicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
               </FormItem>
@@ -208,7 +208,7 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="计价负责人">
                 {form.getFieldDecorator('valuationPerson', {
-                  rules: [{required: true}],
+                  rules: [{required: true,message:'请输入计价负责人'}],
                   initialValue: selectedValues.valuationPerson ? selectedValues.valuationPerson : testValue,
                 })(<Input disabled={checkDetail} placehloder='请输入计价负责人'/>)}
               </FormItem>
@@ -670,10 +670,9 @@ class MeterDown extends Component {
       contractPrice: fields.contractPrice,
       warranty: fields.warranty,
       compensation: fields.compensation,
-      endedPrice: fields.endedPrice
+      endedPrice: fields.endedPrice,
+      performanceBond:fields.performanceBond
     }
-
-
     if (updateModalVisible) {
       dispatch({
         type: 'meterDown/update',

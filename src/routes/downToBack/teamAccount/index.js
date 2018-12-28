@@ -603,7 +603,7 @@ class TeamAccount extends Component {
         },
         {
           title: '结算金额',
-          key: 'settlementAmount'
+          dataIndex: 'settlementAmount'
         },
         {
           title: '附件（含同）',

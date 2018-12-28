@@ -34,10 +34,9 @@ export default {
           z = x==0?0:Math.floor(y / x * 100) / 100
           a15 = (a5 + a14 + a13)==0?0:Math.floor(a5 / (a5 + a14 + a13) * 100) / 100
           let sum = {
-            id: 'sum',
             payProportion: z,
             productionValue: a15,
-            code: '合计:',
+            id: '合计:',
             prepaymentAmount:aPre,
             valuationAmountTax:a5,
             valuationAmountNotTax:Math.floor(a7) / 100,

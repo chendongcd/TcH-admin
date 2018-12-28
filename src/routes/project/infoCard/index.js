@@ -18,7 +18,7 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-import {getButtons, cleanObject} from 'utils'
+import {getButtons, cleanObject,cloneObject} from 'utils'
 import {apiDev} from 'utils/config'
 import {menuData} from 'common/menu'
 import {PRO_PDF, PRO_EXPORT} from 'common/urls'
@@ -36,7 +36,7 @@ const status = [{id: 0, name: '在建'}, {id: 1, name: '完工未结算'}, {id: 
 const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/
 let uuid = 0;
 const pageButtons = menuData[6].buttons.map(a => a.permission)
-const testValue = ''
+const testValue = '123'
 
 @Form.create()
 class CreateForm extends Component {
@@ -63,20 +63,37 @@ class CreateForm extends Component {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (!prevProps.selectedValues.manager && this.props.selectedValues.manager) {
-      this.manager = this.props.selectedValues.manager
-      this.engineer = this.props.selectedValues.engineer
-      this.secretary = this.props.selectedValues.secretary
+      this.manager = cloneObject(this.props.selectedValues.manager)
+      this.engineer = cloneObject(this.props.selectedValues.engineer)
+      this.secretary = cloneObject(this.props.selectedValues.secretary)
+    }
+    if(prevProps.modalVisible && !this.props.modalVisible){
+      this.manager = [{
+        name: '',
+        time: '',
+        phone: ''
+      }]
+      this.engineer = [{
+        name: '',
+        time: '',
+        phone: ''
+      }]
+      this.secretary = [{
+        name: '',
+        time: '',
+        phone: ''
+      }]
     }
   }
 
-  setRange=(item,index,arr)=>{
-    if(item.time.length>0&&!isMoment(item.time[0])){
-    item.time = item.time.split(',').map(a=>moment(a))
+  setRange = (item, index, arr) => {
+    if (item.time.length > 0 && !isMoment(item.time[0])) {
+      item.time = item.time.split(',').map(a => moment(a))
     }
   }
 
-  setTime=(param)=>{
-    let obj = Object.assign(param)
+  setTime = (param) => {
+    let obj = JSON.parse(JSON.stringify(param))
     obj.forEach(this.setRange)
     return obj
   }
@@ -89,21 +106,22 @@ class CreateForm extends Component {
       return;
     }
     let object = {
-      manager: keys.filter(key => key !== k),
+      manager: keys.filter((key,index) => index != k)
     }
     if (type == 'secretary') {
       object = {
-        secretary: keys.filter(key => key !== k),
+        secretary: keys.filter((key,index) => index != k)
       }
-      this.secretary = this.secretary.filter(key => key !== k)
+      this.secretary = this.secretary.filter((key,index) => index != k)
     } else if (type == 'engineer') {
       object = {
-        engineer: keys.filter(key => key !== k),
+        engineer: keys.filter((key,index) => index != k)
       }
-      this.engineer = this.engineer.filter(key => key !== k)
+      this.engineer = this.engineer.filter((key,index) => index != k)
     } else {
-      this.manager = this.manager.filter(key => key !== k)
+      this.manager = this.manager.filter((key,index) => index != k)
     }
+    console.log(this.manager)
     // can use data-binding to set
     form.setFieldsValue(object);
   }
@@ -132,9 +150,9 @@ class CreateForm extends Component {
     form.setFieldsValue(object);
   }
 
-  handleRanges=(params)=>{
-    params.forEach((a)=>{
-      if(Array.isArray(a.time)){
+  handleRanges = (params) => {
+    params.forEach((a) => {
+      if (Array.isArray(a.time)) {
         a.time = this.handleRange(a.time)
       }
     })
@@ -142,7 +160,7 @@ class CreateForm extends Component {
   }
 
   handleRange = (param) => {
-    return param[0]+','+param[1]
+    return param[0] + ',' + param[1]
   }
 
   formManager = (managers, checkDetail, form, getFieldDecorator) => {
@@ -151,18 +169,22 @@ class CreateForm extends Component {
         let isLast = (managers.length == index + 1)
         return (<Row key={`manager${index}`} gutter={8}>
           <Col className={styles.colPeople} md={6} sm={24}>
-            <FormItem required={true} labelCol={{span: 5}} wrapperCol={{span: 15}} label="姓名">
-              <Input defaultValue={key.name ? key.name : ''} onChange={(e) => this.manager[index].name = e.target.value}
+            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="姓名">
+              <Input defaultValue={key.name ? key.name : ''}
+                     onChange={(e) =>{
+                       this.manager[index].name = e.target.value
+                     }}
                      disabled={checkDetail} placeholder="请输入姓名"/>
             </FormItem>
           </Col>
           <Col className={styles.colPeople} md={9} sm={24}>
-            <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
+            <FormItem  labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
               <DatePicker.RangePicker disabled={checkDetail}
+                                      required={true}
                                       onChange={(e, dateString) => {
-                this.manager[index].time = this.handleRange(dateString)
-              }}
-                                      defaultValue={key.time.length>0 ?key.time : []}
+                                        this.manager[index].time = this.handleRange(dateString)
+                                      }}
+                                      defaultValue={key.time.length > 0 ? key.time : []}
                                       style={{width: '100%'}} placeholder="请选择任职时间"/>
             </FormItem>
           </Col>
@@ -178,7 +200,7 @@ class CreateForm extends Component {
                       onClick={() => this.add('manager', form)}>
                 <Icon type="plus"/>
               </Button> : <Button style={{marginTop: 4 + 'px'}} shape="circle" type="danger"
-                                  onClick={() => this.remove(key, 'manager', form)}>
+                                  onClick={() => this.remove(index, 'manager', form)}>
                 <Icon type="minus"/>
               </Button>}
           </Col>}
@@ -203,7 +225,7 @@ class CreateForm extends Component {
             <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
               <DatePicker.RangePicker disabled={checkDetail}
                                       onChange={(e, dateString) => this.secretary[index].time = this.handleRange(dateString)}
-                                      defaultValue={key.time.length>0 ? key.time : []}
+                                      defaultValue={key.time.length > 0 ? key.time : []}
                                       style={{width: '100%'}} placeholder="请选择任职时间"/>
             </FormItem>
           </Col>
@@ -219,7 +241,7 @@ class CreateForm extends Component {
                       onClick={() => this.add('secretary', form)}>
                 <Icon type="plus"/>
               </Button> : <Button style={{marginTop: 4 + 'px'}} shape="circle" type="danger"
-                                  onClick={() => this.remove(key, 'secretary', form)}>
+                                  onClick={() => this.remove(index, 'secretary', form)}>
                 <Icon type="minus"/>
               </Button>}
           </Col>}
@@ -234,8 +256,9 @@ class CreateForm extends Component {
         let isLast = (chiefEngineer.length == index + 1)
         return (<Row key={`engineer${index}`} gutter={8}>
           <Col className={styles.colPeople} md={6} sm={24}>
-            <FormItem required={true} labelCol={{span: 5}} wrapperCol={{span: 15}} label="姓名">
+            <FormItem  labelCol={{span: 5}} wrapperCol={{span: 15}} label="姓名">
               <Input defaultValue={key.name ? key.name : ''}
+                     required={true}
                      onChange={(e) => this.engineer[index].name = e.target.value} disabled={checkDetail}
                      placeholder="请输入姓名"/>
             </FormItem>
@@ -244,7 +267,7 @@ class CreateForm extends Component {
             <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
               <DatePicker.RangePicker disabled={checkDetail}
                                       onChange={(e, dateString) => this.engineer[index].time = this.handleRange(dateString)}
-                                      defaultValue={key.time.length>0 ? key.time : null}
+                                      defaultValue={key.time.length > 0 ? key.time : null}
                                       style={{width: '100%'}} placeholder="请选择任职时间"/>
             </FormItem>
           </Col>
@@ -260,7 +283,7 @@ class CreateForm extends Component {
                       onClick={() => this.add('engineer', form)}>
                 <Icon type="plus"/>
               </Button> : <Button style={{marginTop: 4 + 'px'}} shape="circle" type="danger"
-                                  onClick={() => this.remove(key, 'engineer', form)}>
+                                  onClick={() => this.remove(index, 'engineer', form)}>
                 <Icon type="minus"/>
               </Button>}
           </Col>}
@@ -280,6 +303,7 @@ class CreateForm extends Component {
       fieldsValue.manager = this.handleRanges(this.manager)
       fieldsValue.secretary = this.handleRanges(this.secretary)
       fieldsValue.engineer = this.handleRanges(this.engineer)
+       console.log(fieldsValue)
       handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
   };
@@ -313,9 +337,13 @@ class CreateForm extends Component {
         phone: ''
       }]
     });
-    const managers = form.getFieldValue('manager');
-    const secretary = form.getFieldValue('secretary');
-    const chiefEngineer = form.getFieldValue('engineer');
+    let managers = form.getFieldValue('manager');
+    let secretary = form.getFieldValue('secretary');
+    let chiefEngineer = form.getFieldValue('engineer');
+    if(selectedValues.manager) {
+    //  console.log(managers)
+    //  console.log(this.setTime(selectedValues.manager))
+    }
     return (
       <Modal
         destroyOnClose
@@ -324,7 +352,7 @@ class CreateForm extends Component {
         visible={modalVisible}
         width={992}
         maskClosable={false}
-        onOk={()=>checkDetail ? handleCheckDetail(): this.okHandle(form, updateModalVisible, handleAdd, selectedValues)}
+        onOk={() => checkDetail ? handleCheckDetail() : this.okHandle(form, updateModalVisible, handleAdd, selectedValues)}
         onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
       >
         <div className={styles.modalContent}>
@@ -580,7 +608,7 @@ class CreateForm extends Component {
             <Col md={24} sm={24}>
               <FormItem style={{marginLeft: 12 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="工程概况">
                 {form.getFieldDecorator('description', {
-                  rules: [{required: true,message:'请输入工程概况'}],
+                  rules: [{required: true, message: '请输入工程概况'}],
                   initialValue: selectedValues.description ? selectedValues.description : testValue,
                 })(<Input.TextArea className={styles.customSelect} width={'100%'} disabled={checkDetail}
                                    placeholder="请输入" rows={4}/>)}
@@ -689,21 +717,21 @@ class InfoCard extends Component {
       title: '项目经理',
       dataIndex: 'manager',
       render(val) {
-        return <span>{val[val.length-1].name}</span>;
+        return <span>{val[val.length - 1].name}</span>;
       },
     },
     {
       title: '项目书记',
       dataIndex: 'secretary',
       render(val) {
-        return <span>{val[val.length-1].name}</span>;
+        return <span>{val[val.length - 1].name}</span>;
       },
     },
     {
       title: '总工',
       dataIndex: 'engineer',
       render(val) {
-        return <span>{val[val.length-1].name}</span>;
+        return <span>{val[val.length - 1].name}</span>;
       },
     },
     {
@@ -793,7 +821,6 @@ class InfoCard extends Component {
   };
 
   handleUpdateModalVisible = (flag, record) => {
-    console.log(record)
     this.setState({
       updateModalVisible: !!flag,
       modalVisible: !!flag,
@@ -999,7 +1026,7 @@ class InfoCard extends Component {
       checkDetail: checkDetail,
       proNames: proNames
     }
-    const exportUrl = createURL(PRO_EXPORT, {...this.exportParams,...{token:user.token}})
+    const exportUrl = createURL(PRO_EXPORT, {...this.exportParams, ...{token: user.token}})
     return (
       <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="工程项目信息卡">

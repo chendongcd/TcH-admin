@@ -161,3 +161,31 @@ export async function QiNiuOss(params) {
     })
   })
 }
+
+export function cloneObject(obj){
+  var newObj = null;
+  if( {}.toString.call(obj)=='[object Object]' ){
+    newObj = {};
+    for(var i in obj){
+      cloneIn(i,newObj,obj);
+    }
+  }else if( {}.toString.call(obj)=='[object Array]' ){
+    newObj = [];
+    for(var i=0;i<obj.length;i++){
+      cloneIn(i,newObj,obj);
+    }
+  }else{
+    newObj = obj;
+  }
+
+  function cloneIn(key,newObj,obj){
+    if( {}.toString.call(obj[key])=='[object Object]' ){
+      newObj[key] = cloneObject(obj[key])
+    }else if({}.toString.call(obj[key])=='[object Array]'){
+      newObj[key] = cloneObject(obj[key])
+    }else{
+      newObj[key]=obj[key];
+    }
+  }
+  return newObj;
+}

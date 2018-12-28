@@ -35,7 +35,7 @@ export default {
             a13 += a.shouldAmount
           })
 
-          z = Math.floor(x / (x + y) * 100) / 100
+          z = (x + y)!=0?Math.floor(x / (x + y) * 100) / 100:0
           let sum = {
             id: 'sum',
             valuationPrice: x,
