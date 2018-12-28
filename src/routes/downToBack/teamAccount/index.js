@@ -109,6 +109,7 @@ class CreateForm extends Component {
   }
 
   _onChange = (e, option) => {
+    console.log(option.props.item)
     this.setState({contractNum: option.props.item.contractNumber})
   }
 
@@ -187,23 +188,12 @@ class CreateForm extends Component {
                 </FormItem>
               </Col>
               <Col md={12} sm={24}>
-                {contractType === 0 ? <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同编码">
+                {contractType != -1 ? <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同编码">
                   {form.getFieldDecorator('contractCode', {
                     rules: [{required: true, message: '请选择项目'}],
                     initialValue: contractNum,
                   })(<Input disabled={true} placeholder="自动带入"/>)}
-                </FormItem> : <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同编码">
-                  {form.getFieldDecorator('contractCode', {
-                    rules: [{required: true, message: '请选择主合同编码'}],
-                    initialValue: contractNum ? contractNum : '',
-                  })(<Select onSelect={this._onSelect} className={styles.customSelect} disabled={checkDetail}
-                             placeholder="请选择主合同编码"
-                             style={{width: '100%'}}>
-                    {contractCodes.map((a, index) => {
-                      return <Option key={index} value={a}>{a}</Option>
-                    })}
-                  </Select>)}
-                </FormItem>
+                </FormItem> : null
                 }
               </Col>
             </Row>}
