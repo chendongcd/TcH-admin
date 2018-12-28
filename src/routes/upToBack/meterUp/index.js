@@ -467,7 +467,7 @@ class MeterUp extends Component {
     {
       title: '操作',
       render: (val, record) => {
-        if (record.id === 'sum') {
+        if (record.id === '合计:') {
           return null
         }
         const user = this.props.app.user

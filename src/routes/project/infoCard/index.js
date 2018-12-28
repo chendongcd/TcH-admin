@@ -341,8 +341,8 @@ class CreateForm extends Component {
     let secretary = form.getFieldValue('secretary');
     let chiefEngineer = form.getFieldValue('engineer');
     if(selectedValues.manager) {
-    //  console.log(managers)
-    //  console.log(this.setTime(selectedValues.manager))
+      console.log(selectedValues.manager)
+      console.log(this.setTime(selectedValues.manager))
     }
     return (
       <Modal
@@ -1044,15 +1044,6 @@ class InfoCard extends Component {
                   <Button href={exportUrl} icon="plus" type="primary">
                     导出
                   </Button> : null}
-                {/* {selectedRows.length > 0 && (
-                  <span>
-                  <Dropdown overlay={menu}>
-                    <Button>
-                     操作 <Icon type="down"/>
-                    </Button>
-                  </Dropdown>
-                </span>
-                )}*/}
               </div>
               <StandardTable
                 selectedRows={selectedRows}

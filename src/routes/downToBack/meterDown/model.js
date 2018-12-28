@@ -21,7 +21,6 @@ export default {
   effects: {
     * fetch({payload, token}, {call, put}) {
       const response = yield call(queryDownList, payload, token);
-      console.log(response)
       if (response.code == '200') {
         if (response.list.length > 0) {
           let x = 0, y = 0, z = 0, a9 = 0, a10 = 0, a11 = 0, a12 = 0, a13 = 0
