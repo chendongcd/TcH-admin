@@ -33,7 +33,7 @@ const testValue = ''
 const pageButtons = menuData[11].buttons.map(a => a.permission)
 
 const CreateForm = Form.create()(props => {
-  const {modalVisible, form, handleAdd, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail, subNames, teamList, proNames} = props;
+  const {modalVisible, form,loading, handleAdd, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail, subNames, teamList, proNames} = props;
 
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
@@ -54,6 +54,7 @@ const CreateForm = Form.create()(props => {
       visible={modalVisible}
       width={992}
       maskClosable={false}
+      okButtonProps={{loading:loading}}
       onOk={() => checkDetail ? handleCheckDetail() : okHandle()}
       onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
     >
@@ -142,7 +143,7 @@ const CreateForm = Form.create()(props => {
 });
 
 const CreateReview = Form.create()(props => {
-  const {modalVisible, form, handleReview, handleReviewModal, selectedValues} = props;
+  const {modalVisible, form,loading, handleReview, handleReviewModal, selectedValues} = props;
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -156,6 +157,7 @@ const CreateReview = Form.create()(props => {
       bodyStyle={{padding: 0 + 'px'}}
       visible={modalVisible}
       width={992}
+      okButtonProps={{loading:loading}}
       maskClosable={false}
       onOk={okHandle}
       onCancel={() => handleReviewModal()}
@@ -575,8 +577,8 @@ class Resume extends Component {
               />
             </div>
           </Card>
-          <CreateForm {...parentMethods} {...parentState}/>
-          <CreateReview {...parentMethods} selectedValues={selectedValues} modalVisible={reviewType}/>
+          <CreateForm loading={loading.effects[`sub_resume/${updateModalVisible?'update':'add'}`]} {...parentMethods} {...parentState}/>
+          <CreateReview loading={loading.effects[`sub_resume/update`]} {...parentMethods} selectedValues={selectedValues} modalVisible={reviewType}/>
         </PageHeaderWrapper>
       </Page>
     )

@@ -28,7 +28,7 @@ const getValue = obj =>
     .map(key => obj[key])
     .join(',');
 const CreateForm = Form.create()(props => {
-  const {modalVisible, form, handleAdd, handleModalVisible, handleUpdateModalVisible, updateModalVisible, selectedValues} = props;
+  const {modalVisible, form, handleAdd, handleModalVisible, handleUpdateModalVisible, updateModalVisible, selectedValues,loading} = props;
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -43,6 +43,7 @@ const CreateForm = Form.create()(props => {
       title={updateModalVisible ? "编辑角色" : "新增角色"}
       visible={modalVisible}
       onOk={okHandle}
+      okButtonProps={{loading:loading}}
       onCancel={() => updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
     >
       <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="角色名称">
@@ -473,7 +474,8 @@ class Permission extends Component {
     const parentState = {
       updateModalVisible: updateModalVisible,
       modalVisible: modalVisible,
-      selectedValues: selectedValues
+      selectedValues: selectedValues,
+      loading:loading.effects[`sys_per/${updateModalVisible?'updateRole':'addRole'}`]
     }
     return (
       <Page inner={true} >

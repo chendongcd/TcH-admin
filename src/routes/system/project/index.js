@@ -29,7 +29,7 @@ const statusMap = ['success', 'error'];
 const status = ['启用', '禁用'];
 const pageButtons = menuData[2].buttons.map(a=>a.permission)
 const CreateForm = Form.create()(props => {
-  const {modalVisible, form, handleAdd, handleModalVisible, handleUpdateModalVisible, updateModalVisible, selectedValues} = props;
+  const {modalVisible, form, handleAdd,loading, handleModalVisible, handleUpdateModalVisible, updateModalVisible, selectedValues} = props;
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -43,6 +43,7 @@ const CreateForm = Form.create()(props => {
       title={updateModalVisible ? "编辑项目" : "新增项目"}
       visible={modalVisible}
       onOk={okHandle}
+      okButtonProps={{loading:loading}}
       onCancel={() => updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
     >
       <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="项目名称">
@@ -77,7 +78,6 @@ class Project extends Component {
       selectedValues: {}
     }
     this.exportParams = {}
-    console.log('进入page')
   }
 
   columns = [
@@ -335,7 +335,8 @@ class Project extends Component {
     const parentState = {
       updateModalVisible: updateModalVisible,
       modalVisible: modalVisible,
-      selectedValues: selectedValues
+      selectedValues: selectedValues,
+      loading:loading.effects[`sys_pro/${updateModalVisible?'updatePro':'addPro'}`]
     }
     const exportUrl = createURL(SYS_PRO_EXPORT,this.exportParams)
 

@@ -79,7 +79,7 @@ class CreateForm extends Component {
   }
 
   render() {
-    const {modalVisible, checkDetail ,handleCheckDetail,form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, selectedValues} = this.props;
+    const {modalVisible, checkDetail ,loading,handleCheckDetail,form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, selectedValues} = this.props;
 
     let {fileList, progress} = this.state
 
@@ -88,6 +88,7 @@ class CreateForm extends Component {
         destroyOnClose
         title={checkDetail ? '文档详情' :updateModalVisible ? "编辑文档" : "新增文档"}
         visible={modalVisible}
+        okButtonProps={{loading:loading}}
         onOk={()=>checkDetail ? handleCheckDetail():this.okHandle()}
         onCancel={() => {
           this.cleanState()
@@ -473,7 +474,8 @@ class FileRead extends Component {
       updateModalVisible: updateModalVisible,
       modalVisible: modalVisible,
       selectedValues: selectedValues,
-      checkDetail:checkDetail
+      checkDetail:checkDetail,
+      loading:loading.effects[`fileRead/${updateModalVisible?'update':'add'}`]
     }
     return (
       <Page inner={true} loading={pageLoading}>

@@ -148,7 +148,7 @@ class CreateForm extends Component {
   }
 
   render() {
-    const {modalVisible, proNames, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
+    const {modalVisible, loading,proNames, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
     let {previewVisible, evaluationAnnex, previewImage, responsibilityAnnex, resProgress, evaProgress, jointHearingAnnex, joinProgress,isSignRes} = this.state
     return (
       <Modal
@@ -157,6 +157,7 @@ class CreateForm extends Component {
         bodyStyle={{padding: 0 + 'px'}}
         visible={modalVisible}
         width={992}
+        okButtonProps={{loading:loading}}
         maskClosable={false}
         onOk={()=>checkDetail ? handleCheckDetail():this.okHandle()}
         onCancel={() => {
@@ -1120,7 +1121,8 @@ class ProEvaluate extends Component {
       modalVisible: modalVisible,
       selectedValues: selectedValues,
       checkDetail: checkDetail,
-      proNames: proNames
+      proNames: proNames,
+      loading:loading.effects[`proEvaluate/${updateModalVisible?'update':'add'}`]
     }
     const exportUrl = createURL(EVAL_EXPORT, {...this.exportParams, ...{token: user.token}})
 

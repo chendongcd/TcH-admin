@@ -12,9 +12,6 @@ class Login extends Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      loginLoading: false
-    }
   }
 
   componentDidMount() {
@@ -29,10 +26,8 @@ class Login extends Component {
         return
       }
       //{account:values.username,password:values.password}
-      this.setState({loginLoading: true})
       await this.props.dispatch({type: 'app/login', payload: {account: values.username, password: values.password}})
       // await this.props.dispatch({ type: 'app/login', payload: values })
-      this.setState({loginLoading: false})
     })
   }
 
@@ -41,9 +36,9 @@ class Login extends Component {
       form: {
         getFieldDecorator,
         validateFieldsAndScroll
-      }
+      },
+      loading
     } = this.props
-    const {loginLoading} = this.state
     return (
       <Layout style={{height: '100vh', backgroundColor: '#FFFFFF'}} id="mainContainer">
         <Content>
@@ -75,7 +70,7 @@ class Login extends Component {
                         placeholder="Password"/>)}
             </FormItem>
             <Row>
-              <Button type="primary" onClick={() => this.handleOk(validateFieldsAndScroll)} loading={loginLoading}>
+              <Button type="primary" onClick={() => this.handleOk(validateFieldsAndScroll)} loading={loading.effects[`app/login`]}>
                 登录
               </Button>
               {/*<p>
@@ -100,4 +95,4 @@ Login.propTypes = {
   app: PropTypes.object,
 }
 
-export default connect(({app}) => ({app}))(Form.create()(Login))
+export default connect(({app,loading}) => ({app,loading}))(Form.create()(Login))

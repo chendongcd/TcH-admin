@@ -121,7 +121,7 @@ class CreateForm extends Component {
   }
 
   render() {
-    const {modalVisible, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
+    const {modalVisible, loading,form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
     let {previewVisible, previewImage, fileList, progress} = this.state
     return (
       <Modal
@@ -130,6 +130,7 @@ class CreateForm extends Component {
         bodyStyle={{padding: 0 + 'px'}}
         visible={modalVisible}
         width={992}
+        okButtonProps={{loading:loading}}
         maskClosable={false}
         onOk={() => checkDetail ? handleCheckDetail() : this.okHandle()}
         onCancel={() => {
@@ -562,7 +563,7 @@ const SubResume = Form.create()(props => {
 });
 
 const CreateReview = Form.create()(props => {
-  let {modalVisible, form, handleReview, handleReviewModal, selectedValues} = props;
+  let {modalVisible, form, loading,handleReview, handleReviewModal, selectedValues} = props;
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -695,6 +696,7 @@ const CreateReview = Form.create()(props => {
       bodyStyle={{padding: 0 + 'px'}}
       visible={modalVisible > -1}
       width={992}
+      okButtonProps={{loading:loading}}
       maskClosable={false}
       onOk={okHandle}
       onCancel={() => handleReviewModal()}
@@ -1170,11 +1172,11 @@ class Qualification extends Component {
               />
             </div>
           </Card>
-          <CreateForm {...parentMethods} {...parentState}/>
+          <CreateForm loading={loading.effects[`sub_qua/${updateModalVisible?'update':'add'}`]} {...parentMethods} {...parentState}/>
           {/*
           <SubResume handleResumeModal={this.handleResumeModal} checkResume={checkResume} subResume={subResume}/>
 */}
-          <CreateReview {...parentMethods} selectedValues={selectedValues} modalVisible={reviewType}/>
+          <CreateReview loading={loading.effects[`sub_qua/update'}`]} {...parentMethods} selectedValues={selectedValues} modalVisible={reviewType}/>
         </PageHeaderWrapper>
       </Page>
     )

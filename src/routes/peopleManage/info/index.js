@@ -107,7 +107,7 @@ class CreateForm extends Component {
   }
 
   render() {
-    const {modalVisible, proNames, form, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail, normFile} = this.props;
+    const {modalVisible, loading,proNames, form, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail, normFile} = this.props;
     let {previewVisible, previewImage, fileList, progress} = this.state
     return (
       <Modal
@@ -117,6 +117,7 @@ class CreateForm extends Component {
         visible={modalVisible}
         width={992}
         maskClosable={false}
+        okButtonProps={{loading:loading}}
         onOk={() => checkDetail ? handleCheckDetail() : this.okHandle()}
         onCancel={() => {
           this.cleanState()
@@ -973,7 +974,8 @@ class PeopleInfo extends Component {
       modalVisible: modalVisible,
       selectedValues: selectedValues,
       checkDetail: checkDetail,
-      proNames: proNames
+      proNames: proNames,
+      loading:loading.effects[`peopleManage/${updateModalVisible?'update':'add'}`]
     }
     const exportUrl = createURL(PEOPLE_EXPORT, {...this.exportParams, ...{token: user.token}})
     return (

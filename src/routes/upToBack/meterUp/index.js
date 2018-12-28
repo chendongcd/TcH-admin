@@ -99,7 +99,7 @@ class CreateForm extends Component {
   }
 
   render() {
-    const {proNames, modalVisible, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
+    const {proNames, modalVisible,loading, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
     let {previewVisible, previewImage, fileList, progress} = this.state
     return (
       <Modal
@@ -108,6 +108,7 @@ class CreateForm extends Component {
         bodyStyle={{padding: 0 + 'px'}}
         visible={modalVisible}
         width={992}
+        okButtonProps={{loading:loading}}
         maskClosable={false}
         onOk={() => checkDetail ? handleCheckDetail() : this.okHandle()}
         onCancel={() => {
@@ -364,7 +365,6 @@ class MeterUp extends Component {
       page: 1,
       pageSize: 10
     }
-    console.log('进入page')
   }
 
   columns = [
@@ -733,7 +733,8 @@ class MeterUp extends Component {
       modalVisible: modalVisible,
       selectedValues: selectedValues,
       checkDetail: checkDetail,
-      proNames: proNames
+      proNames: proNames,
+      loading:loading.effects[`meterUp/${updateModalVisible?'update':'add'}`]
     }
     const exportUrl = createURL(METER_EXPORT, {...this.exportParams, ...{token: user.token}})
     return (

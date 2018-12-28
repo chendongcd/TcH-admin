@@ -102,7 +102,7 @@ class CreateForm extends Component {
   }
 
   render() {
-    const {modalVisible, proNames,teamList, subNames, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
+    const {modalVisible,loading, proNames,teamList, subNames, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
     let {previewVisible, previewImage, fileList, progress} = this.state
 
     return (
@@ -112,6 +112,7 @@ class CreateForm extends Component {
         bodyStyle={{padding: 0 + 'px'}}
         visible={modalVisible}
         width={992}
+        okButtonProps={{loading:loading}}
         maskClosable={false}
         onOk={()=>checkDetail ? handleCheckDetail():this.okHandle()}
         onCancel={() =>{
@@ -797,7 +798,8 @@ class MeterDown extends Component {
       checkDetail: checkDetail,
       proNames: proNames,
       subNames: subNames,
-      teamList:teamList
+      teamList:teamList,
+      loading:loading.effects[`meterDown/${updateModalVisible?'update':'add'}`]
     }
     const exportUrl = createURL(DOWN_EXPORT,{...this.exportParams,...{token:user.token}})
 

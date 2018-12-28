@@ -38,7 +38,6 @@ const contractType = ['主合同', '补充合同']
 const testValue = ''
 const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
 
-
 @Form.create()
 class CreateForm extends Component {
 
@@ -113,7 +112,7 @@ class CreateForm extends Component {
   }
 
   render() {
-    const {modalVisible, proNames, subNames, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
+    const {modalVisible, proNames, loading,subNames, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
     let {previewVisible, previewImage, fileList, progress, contractType, contractNum} = this.state
     return (
       <Modal
@@ -122,6 +121,7 @@ class CreateForm extends Component {
         bodyStyle={{padding: 0 + 'px'}}
         visible={modalVisible}
         width={992}
+        okButtonProps={{loading:loading}}
         maskClosable={false}
         onOk={() => checkDetail ? handleCheckDetail() : this.okHandle()}
         onCancel={() => {
@@ -419,9 +419,8 @@ class CreateForm extends Component {
   }
 }
 
-
 const CreateCompForm = Form.create()(props => {
-  const {modalVisible, form, companyUpdate, handleComModalVisible, selectedValues} = props;
+  const {modalVisible, form,loading, companyUpdate, handleComModalVisible, selectedValues} = props;
 
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
@@ -437,6 +436,7 @@ const CreateCompForm = Form.create()(props => {
       bodyStyle={{padding: 0 + 'px'}}
       visible={modalVisible}
       width={992}
+      okButtonProps={{loading:loading}}
       maskClosable={false}
       onOk={okHandle}
       onCancel={() => handleComModalVisible()}
@@ -1022,8 +1022,8 @@ class TeamAccount extends Component {
               />
             </div>
           </Card>
-          <CreateForm {...parentMethods} {...parentState}/>
-          <CreateCompForm {...parentMethods} selectedValues={selectedValues} modalVisible={comModal}/>
+          <CreateForm loading={loading.effects[`teamAccount/${updateModalVisible?'update':'add'}`]} {...parentMethods} {...parentState}/>
+          <CreateCompForm loading={loading.effects[`teamAccount/updateCompany`]} {...parentMethods} selectedValues={selectedValues} modalVisible={comModal}/>
         </PageHeaderWrapper>
       </Page>
     )

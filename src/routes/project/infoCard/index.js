@@ -36,7 +36,7 @@ const status = [{id: 0, name: '在建'}, {id: 1, name: '完工未结算'}, {id: 
 const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/
 let uuid = 0;
 const pageButtons = menuData[6].buttons.map(a => a.permission)
-const testValue = ''
+const testValue = '123'
 
 @Form.create()
 class CreateForm extends Component {
@@ -314,7 +314,7 @@ class CreateForm extends Component {
   }
 
   render() {
-    const {proNames, modalVisible, form, handleAdd, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
+    const {proNames, modalVisible,loading, form, handleAdd, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
     const {getFieldDecorator} = this.props.form
     getFieldDecorator('manager', {
       initialValue: selectedValues.manager ? this.setTime(selectedValues.manager) : [{
@@ -352,6 +352,7 @@ class CreateForm extends Component {
         visible={modalVisible}
         width={992}
         maskClosable={false}
+        okButtonProps={{loading:loading}}
         onOk={() => checkDetail ? handleCheckDetail() : this.okHandle(form, updateModalVisible, handleAdd, selectedValues)}
         onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
       >
@@ -1024,7 +1025,8 @@ class InfoCard extends Component {
       modalVisible: modalVisible,
       selectedValues: selectedValues,
       checkDetail: checkDetail,
-      proNames: proNames
+      proNames: proNames,
+      loading:loading.effects[`pro_proInfo/${updateModalVisible?'update':'add'}`]
     }
     const exportUrl = createURL(PRO_EXPORT, {...this.exportParams, ...{token: user.token}})
     return (

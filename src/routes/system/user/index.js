@@ -69,7 +69,7 @@ class CreateForm extends Component {
   }
 
   render() {
-    const {modalVisible, form, handleAdd, getProNames, getRoleNames, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail, proNames, roleNames} = this.props;
+    const {modalVisible,loading, form, handleAdd, getProNames, getRoleNames, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail, proNames, roleNames} = this.props;
     return (
       <Modal
         destroyOnClose
@@ -77,6 +77,7 @@ class CreateForm extends Component {
         title={checkDetail ? '用户详情' : updateModalVisible ? "编辑用户" : "新建用户"}
         visible={modalVisible}
         className={styles.modalContent}
+        okButtonProps={{loading:loading}}
         onOk={() => checkDetail ? handleCheckDetail() : this.okHandle(handleAdd, form, updateModalVisible, selectedValues)}
         onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
       >
@@ -422,7 +423,7 @@ class User extends Component {
       checkDetail: checkDetail,
       proNames: proNames,
       roleNames: roleNames,
-      loading: loading
+      loading:loading.effects[`sys_user/${updateModalVisible?'updateUser':'addUser'}`]
     }
     const exportUrl = createURL(SYS_USER_EXPORT,this.exportParams)
 
