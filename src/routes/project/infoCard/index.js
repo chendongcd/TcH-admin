@@ -36,7 +36,7 @@ const status = [{id: 0, name: '在建'}, {id: 1, name: '完工未结算'}, {id: 
 const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/
 let uuid = 0;
 const pageButtons = menuData[6].buttons.map(a => a.permission)
-const testValue = '123'
+const testValue = ''
 
 @Form.create()
 class CreateForm extends Component {
@@ -457,7 +457,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('contractDay', {
                   rules: [{required: true, message: '请输入合同工期', pattern: reg}],
                   initialValue: selectedValues.contractDay ? selectedValues.contractDay : testValue,
-                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入合同工期" addonAfter="天"/>)}
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入合同工期" addonAfter="月"/>)}
               </FormItem>
             </Col>
             <Col md={8} sm={24}>
@@ -483,7 +483,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('realContractDay', {
                   rules: [{required: true, message: '请输入实际工期', pattern: reg}],
                   initialValue: selectedValues.realContractDay ? selectedValues.realContractDay : testValue,
-                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入实际工期" addonAfter="天"/>)}
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入实际工期" addonAfter="月"/>)}
               </FormItem>
             </Col>
             <Col md={8} sm={24}>

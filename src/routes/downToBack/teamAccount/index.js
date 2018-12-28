@@ -109,12 +109,11 @@ class CreateForm extends Component {
   }
 
   _onChange = (e, option) => {
-    console.log(option.props.item)
     this.setState({contractNum: option.props.item.contractNumber})
   }
 
   render() {
-    const {modalVisible, contractCodes, proNames, subNames, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
+    const {modalVisible, proNames, subNames, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
     let {previewVisible, previewImage, fileList, progress, contractType, contractNum} = this.state
     return (
       <Modal
@@ -153,8 +152,7 @@ class CreateForm extends Component {
                 <Col md={12} sm={24}>
                   <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同类型">
                     {form.getFieldDecorator('contractType', {
-                      rules: [{required: true, message: '请选择合同类型'}],
-                      initialValue: selectedValues.contractType,
+                      initialValue: 0,
                     })(<Select onSelect={this._onSelect} className={styles.customSelect} disabled={checkDetail}
                                placeholder="请选择"
                                style={{width: '100%'}}>
@@ -166,12 +164,32 @@ class CreateForm extends Component {
                 <Col md={12} sm={24}>
                   <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同编码">
                     {form.getFieldDecorator('contractCode', {
-                      rules: [{required: true, message: '请选择项目'}],
-                      initialValue: contractNum,
-                    })(<Input disabled={true} placeholder="自动带入"/>)}
+                      initialValue: selectedValues.contractNumber,
+                    })(<Input disabled={true} />)}
                   </FormItem>
                 </Col>
               </Row>
+              {selectedValues.contractType==1? <Row gutter={8}>
+                <Col md={12} sm={24}>
+                  <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同类型">
+                    {form.getFieldDecorator('contractType1', {
+                      initialValue: 1,
+                    })(<Select onSelect={this._onSelect} className={styles.customSelect} disabled={checkDetail}
+                               placeholder="请选择"
+                               style={{width: '100%'}}>
+                      <Option name={'主合同'} value={0}>主合同</Option>
+                      <Option name={'补充合同'} value={1}>补充合同</Option>
+                    </Select>)}
+                  </FormItem>
+                </Col>
+                <Col md={12} sm={24}>
+                  <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同编码">
+                    {form.getFieldDecorator('contractCode1', {
+                      initialValue: selectedValues.contractCode,
+                    })(<Input disabled={true} placeholder="自动带入"/>)}
+                  </FormItem>
+                </Col>
+              </Row>:null}
             </Fragment>
             : <Row gutter={8}>
               <Col md={12} sm={24}>
@@ -188,10 +206,10 @@ class CreateForm extends Component {
                 </FormItem>
               </Col>
               <Col md={12} sm={24}>
-                {contractType != -1 ? <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同编码">
+                {contractType != -1||(selectedValues.contractType!=undefined) ? <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同编码">
                   {form.getFieldDecorator('contractCode', {
                     rules: [{required: true, message: '请选择项目'}],
-                    initialValue: contractNum,
+                    initialValue: selectedValues.contractNumber?selectedValues.contractNumber:contractNum,
                   })(<Input disabled={true} placeholder="自动带入"/>)}
                 </FormItem> : null
                 }
