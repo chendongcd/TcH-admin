@@ -36,7 +36,7 @@ const status = [{id: 0, name: '在建'}, {id: 1, name: '完工未结算'}, {id: 
 const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/
 let uuid = 0;
 const pageButtons = menuData[6].buttons.map(a => a.permission)
-const testValue = '123'
+const testValue = ''
 
 @Form.create()
 class CreateForm extends Component {
@@ -69,8 +69,9 @@ class CreateForm extends Component {
       this.manager = cloneObject(this.props.selectedValues.manager)
       this.engineer = cloneObject(this.props.selectedValues.engineer)
       this.secretary = cloneObject(this.props.selectedValues.secretary)
-      console.log(this.manager)
       this.props.form.setFieldsValue({manager: this.manager});
+      this.props.form.setFieldsValue({engineer:  this.engineer});
+      this.props.form.setFieldsValue({secretary: this.secretary});
     }
     if (prevProps.modalVisible && !this.props.modalVisible) {
       this.props.form.setFieldsValue({
@@ -156,14 +157,14 @@ class CreateForm extends Component {
       object = {
         secretary: nextKeys,
       }
-      this.secretary = this.secretary.concat({name: '', time: [], phone: ''})
+      this.secretary = this.secretary.concat({name: '', time: '', phone: ''})
     } else if (type == 'engineer') {
       object = {
         engineer: nextKeys,
       }
       this.secretary = this.engineer.concat({name: '', time: '', phone: ''})
     } else {
-      this.manager = this.manager.concat({name: '', time: [], phone: ''})
+      this.manager = this.manager.concat({name: '', time: '', phone: ''})
     }
     form.setFieldsValue(object);
   }
@@ -244,24 +245,35 @@ class CreateForm extends Component {
         let isLast = (secretary.length == index + 1)
         return (<Row key={`secretary${index}`} gutter={8}>
           <Col className={styles.colPeople} md={6} sm={24}>
-            <FormItem required={true} labelCol={{span: 5}} wrapperCol={{span: 15}} label="姓名">
-              <Input defaultValue={key.name ? key.name : ''}
-                     onChange={(e) => this.secretary[index].name = e.target.value} disabled={checkDetail}
-                     placeholder="请输入姓名"/>
+            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="姓名">
+              {getFieldDecorator(`name[${index}]`, {
+                rules: [{required: 'true', message: '请输入姓名'}],
+                initialValue:key.name ? key.name : ''
+              })(<Input onChange={(e) => {
+                this.secretary[index].name = e.target.value
+              }}
+                        disabled={checkDetail} placeholder="请输入姓名"/>)}
             </FormItem>
           </Col>
           <Col className={styles.colPeople} md={9} sm={24}>
-            <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
-              <DatePicker.RangePicker disabled={checkDetail}
-                                      onChange={(e, dateString) => this.secretary[index].time = this.handleRange(dateString)}
-                                      defaultValue={key.time.length > 0 ? key.time : []}
-                                      style={{width: '100%'}} placeholder="请选择任职时间"/>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
+              {getFieldDecorator(`time[${index}]`, {
+                rules: [{required: 'true', message: '请输入任职时间'}],
+                initialValue:key.time ? this._setTime(key.time) : []
+              })(<DatePicker.RangePicker disabled={checkDetail}
+                                         required={true}
+                                         onChange={(e, dateString) => this.secretary[index].time = this.handleRange(dateString)}
+                                         style={{width: '100%'}} placeholder="请选择任职时间"/>)}
             </FormItem>
           </Col>
           <Col className={styles.colPeople} md={7} sm={24}>
-            <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系电话">
-              <Input disabled={checkDetail} onChange={(e) => this.secretary[index].phone = e.target.value}
-                     defaultValue={key.phone ? key.phone : ''} placeholder="请输入联系电话"/>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系电话">
+              {getFieldDecorator(`phone[${index}]`, {
+                rules: [{required: 'true', message: '请输入联系电话'}],
+                initialValue:key.phone ? key.phone : ''
+              })(<Input disabled={checkDetail}
+                        onChange={(e) => this.secretary[index].phone = e.target.value}
+                        placeholder="请输入联系电话"/>)}
             </FormItem>
           </Col>
           {checkDetail ? null : <Col className={styles.colPeople} md={2} sm={24}>
@@ -286,24 +298,32 @@ class CreateForm extends Component {
         return (<Row key={`engineer${index}`} gutter={8}>
           <Col className={styles.colPeople} md={6} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="姓名">
-              <Input defaultValue={key.name ? key.name : ''}
-                     required={true}
-                     onChange={(e) => this.engineer[index].name = e.target.value} disabled={checkDetail}
-                     placeholder="请输入姓名"/>
+              {getFieldDecorator(`name[${index}]`, {
+                rules: [{required: 'true', message: '请输入姓名'}],
+                initialValue:key.name ? key.name : ''
+              })(<Input onChange={(e) => this.engineer[index].name = e.target.value}
+                        disabled={checkDetail} placeholder="请输入姓名"/>)}
             </FormItem>
           </Col>
           <Col className={styles.colPeople} md={9} sm={24}>
-            <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
-              <DatePicker.RangePicker disabled={checkDetail}
-                                      onChange={(e, dateString) => this.engineer[index].time = this.handleRange(dateString)}
-                                      defaultValue={key.time.length > 0 ? key.time : null}
-                                      style={{width: '100%'}} placeholder="请选择任职时间"/>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
+              {getFieldDecorator(`time[${index}]`, {
+                rules: [{required: 'true', message: '请输入任职时间'}],
+                initialValue:key.time ? this._setTime(key.time) : []
+              })(<DatePicker.RangePicker disabled={checkDetail}
+                                         required={true}
+                                         onChange={(e, dateString) => this.engineer[index].time = this.handleRange(dateString)}
+                                         style={{width: '100%'}} placeholder="请选择任职时间"/>)}
             </FormItem>
           </Col>
           <Col className={styles.colPeople} md={7} sm={24}>
-            <FormItem required={true} labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系电话">
-              <Input disabled={checkDetail} onChange={(e) => this.engineer[index].phone = e.target.value}
-                     defaultValue={key.phone ? key.phone : ''} placeholder="请输入联系电话"/>
+            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系电话">
+              {getFieldDecorator(`phone[${index}]`, {
+                rules: [{required: 'true', message: '请输入联系电话'}],
+                initialValue:key.phone ? key.phone : ''
+              })(<Input disabled={checkDetail}
+                        onChange={(e) => this.engineer[index].phone = e.target.value}
+                        placeholder="请输入联系电话"/>)}
             </FormItem>
           </Col>
           {checkDetail ? null : <Col className={styles.colPeople} md={2} sm={24}>
@@ -346,20 +366,8 @@ class CreateForm extends Component {
     const {proNames, modalVisible, loading, form, handleAdd, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
     const {getFieldDecorator, getFieldValue} = this.props.form
     getFieldDecorator('manager');
-    getFieldDecorator('secretary', {
-      initialValue: selectedValues.secretary ? this.setTime(selectedValues.secretary) : [{
-        name: '',
-        time: [],
-        phone: ''
-      }]
-    });
-    getFieldDecorator('engineer', {
-      initialValue: selectedValues.engineer ? this.setTime(selectedValues.engineer) : [{
-        name: '',
-        time: [],
-        phone: ''
-      }]
-    });
+    getFieldDecorator('secretary');
+    getFieldDecorator('engineer');
     let managers = getFieldValue('manager');
     let secretary = getFieldValue('secretary');
     let chiefEngineer = getFieldValue('engineer');
@@ -394,7 +402,7 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="工程类别">
                 {form.getFieldDecorator('projectType', {
-                  rules: [{required: true}],
+                  rules: [{required: true,message:'请选择项目'}],
                   initialValue: selectedValues.projectType ? selectedValues.projectType : '',
                 })(<Input disabled={checkDetail} placeholder="自动带出"/>)}
               </FormItem>

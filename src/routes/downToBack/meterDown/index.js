@@ -289,16 +289,6 @@ class CreateForm extends Component {
         <div className={styles.modalContent}>
           <Row gutter={8}>
             <Col md={24} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="备注">
-                {form.getFieldDecorator('remark', {
-                  rules: [{required: false}],
-                  initialValue: selectedValues.remark ? selectedValues.remark : testValue,
-                })(<Input.TextArea disabled={checkDetail} width={'100%'} placeholder="请输入" rows={4}/>)}
-              </FormItem>
-            </Col>
-          </Row>
-          <Row gutter={8}>
-            <Col md={24} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="附件">
                 {form.getFieldDecorator('annexUrl', {
                   rules: [{required: true, message: '请上传附件'}],
@@ -327,6 +317,16 @@ class CreateForm extends Component {
                 <PreFile disabled={checkDetail} onClose={this.remove} onPreview={this.handlePreview} progress={progress} file={fileList[0]}/>
                 <span style={info_css}>备注：中期计价附件（封面、验工计价批复表、汇总表）；</span>
                 <span  style={info_css}>末次计价附件（公司批复的《劳务结算审批》、结算资料），请以一份PDF格式文件上传</span>
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={24} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="备注">
+                {form.getFieldDecorator('remark', {
+                  rules: [{required: false}],
+                  initialValue: selectedValues.remark ? selectedValues.remark : testValue,
+                })(<Input.TextArea disabled={checkDetail} width={'100%'} placeholder="请输入" rows={4}/>)}
               </FormItem>
             </Col>
           </Row>
