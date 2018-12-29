@@ -4,8 +4,6 @@ import config from 'config'
 import {menuData} from '../common/menu'
 import {getMenus} from 'utils'
 import {setStorage, getStorage} from 'utils/localStorage'
-
-const delay = timeout => new Promise(resolve => setTimeout(resolve, timeout));
 const {prefix} = config
 function getMenu(user) {
   if (user && user.id) {
@@ -35,8 +33,6 @@ export default {
   subscriptions: {
     setupHistory({dispatch, history}) {
       history.listen((location) => {
-        //console.log(getStorage('userInfo'))
-
         console.log(location)
         dispatch({
           type: 'checkRouter',
@@ -49,34 +45,27 @@ export default {
       })
     },
     setup({dispatch, history}) {  // eslint-disable-line
-      // console.log(history)
     },
   },
 
   effects: {
     * showLoading({payload}, {call, put}) {
-      //yield call(delay, 500)
       yield put({type: 'updateState', payload: payload})
     },
     * login({payload}, {call, put}) {
       const res = yield call(signIn, payload)
       if (res.code == 200) {
         let menu = getMenus([...res.entity.permissionsMap.menu, ...[menuData[0].permission]])
-        // console.log(res)
-        // console.log(getMenus([...res.entity.permissionsMap.menu,...[menuData[0].permission]]))
+
         setStorage('userInfo', res.entity)
-        // console.log(menu)
         yield put({type: 'updateState', payload: {user: res.entity, loading: true, menu: menu}})
         yield put(routerRedux.push('/home'))
-        yield call(delay, 500)
         yield put({type: 'updateState', payload: {loading: false}})
       }
-      // yield put({ type: 'updateState',payload:payload })
     },
 
     * logout(_, {call, put}) {
       yield put({type: 'updateState', payload: {loading: true, user: {}}})
-      yield call(delay, 500)
       const response = yield call(signOut);
       if (response) {
         yield put(routerRedux.push('/login'));
