@@ -14,7 +14,6 @@ export default {
     *query({ payload ,token}, { call, put }) {
       const response = yield call(queryRoleList, payload,token);
       if(response.code=='200'){
-      //  let data = {list:response.list,pagination:response.pagination}
         yield put({
           type: 'save',
           payload: response,
@@ -35,10 +34,6 @@ export default {
       }
       message.info('获取角色权限失败')
       return false
-      // yield put({
-      //   type: 'save',
-      //   payload: response,
-      // });
     },
 
     *addRole({ payload ,token}, { call, put }){

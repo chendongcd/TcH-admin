@@ -40,7 +40,6 @@ const info_css = {
   marginLeft: 18
 }
 const degree = ['专科', '本科', '研究生']
-
 @Form.create()
 class CreateForm extends Component {
 
@@ -990,7 +989,7 @@ class PeopleInfo extends Component {
                     新增
                   </Button> : null}
                 {user.token && getButtons(user.permissionsMap.button, pageButtons[3]) ?
-                  <Button href={exportUrl} icon="plus" type="primary">
+                  <Button href={exportUrl} icon="export" type="primary">
                     导出
                   </Button> : null}
               </div>

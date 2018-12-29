@@ -17,7 +17,7 @@ import {
   Divider,
   message
 } from 'antd';
-import {Page, PageHeaderWrapper, StandardTable, PreFile} from 'components'
+import {Page, PageHeaderWrapper, StandardTable, PreFile,ExportModal} from 'components'
 import styles from './index.less'
 import {QiNiuOss, ImageUrl, cleanObject, getButtons} from 'utils'
 import {menuData} from "../../../common/menu";
@@ -39,7 +39,12 @@ const info_css = {
   color: '#fa541c'
 }
 const pageButtons = menuData[18].buttons.map(a => a.permission)
-
+const plainOptions = [
+  { label: '项目信息', value: '1' },
+  { label: '经管部评估', value: '2' },
+  { label: '会审情况', value: '3' },
+  { label: '责任状签订', value: '4' },
+]
 @Form.create()
 class CreateForm extends Component {
 
@@ -655,13 +660,13 @@ class ProEvaluate extends Component {
       formValues: {},
       pageLoading: false,
       selectedValues: {},
-      checkDetail: false
+      checkDetail: false,
+      exportModalVisible:false
     }
     this.exportParams = {
       page: 1,
       pageSize: 10
     }
-    console.log('进入page')
   }
 
   columns = [
@@ -945,6 +950,12 @@ class ProEvaluate extends Component {
     });
   };
 
+  handleExportModalVisible = (flag=false) =>{
+    this.setState({
+      exportModalVisible: !!flag,
+    });
+  }
+
   handleUpdateModalVisible = (flag, record) => {
     this.setState({
       updateModalVisible: !!flag,
@@ -1108,7 +1119,7 @@ class ProEvaluate extends Component {
       loading,
       app: {user}
     } = this.props;
-    const {selectedRows, modalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail} = this.state;
+    const {selectedRows, modalVisible,exportModalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail} = this.state;
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
@@ -1124,7 +1135,13 @@ class ProEvaluate extends Component {
       proNames: proNames,
       loading:loading.effects[`proEvaluate/${updateModalVisible?'update':'add'}`]
     }
-    const exportUrl = createURL(EVAL_EXPORT, {...this.exportParams, ...{token: user.token}})
+    const exportUrl = createURL(EVAL_EXPORT, {...this.exportParams, ...{token: user.token,exportType:'projectEvalutionExportType'}})
+    const exportProps={
+      exportModalVisible:exportModalVisible,
+      handleExportModalVisible:this.handleExportModalVisible,
+      exportUrl:exportUrl,
+      plainOptions:plainOptions
+    }
 
     return (
       <Page inner={true} loading={pageLoading}>
@@ -1138,7 +1155,7 @@ class ProEvaluate extends Component {
                     新增
                   </Button> : null}
                 {user.token && getButtons(user.permissionsMap.button, pageButtons[3]) ?
-                  <Button href={exportUrl} icon="plus" type="primary">
+                  <Button onClick={() => this.handleExportModalVisible(true)} icon="export" type="primary">
                     导出
                   </Button> : null}
               </div>
@@ -1156,6 +1173,7 @@ class ProEvaluate extends Component {
             </div>
           </Card>
           <CreateForm {...parentMethods} {...parentState}/>
+          <ExportModal {...exportProps}/>
         </PageHeaderWrapper>
       </Page>
     )

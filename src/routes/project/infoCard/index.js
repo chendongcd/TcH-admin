@@ -16,7 +16,7 @@ import {
   Badge,
   Divider
 } from 'antd';
-import {Page, PageHeaderWrapper, StandardTable} from 'components'
+import {Page, PageHeaderWrapper, StandardTable,ExportModal} from 'components'
 import styles from './index.less'
 import {getButtons, cleanObject, cloneObject} from 'utils'
 import {apiDev} from 'utils/config'
@@ -37,7 +37,9 @@ const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/
 let uuid = 0;
 const pageButtons = menuData[6].buttons.map(a => a.permission)
 const testValue = ''
-
+const plainOptions = [{ label: '项目工期', value: '1' },
+  { label: '项目主要人员', value: '2' },
+]
 @Form.create()
 class CreateForm extends Component {
   constructor(props) {
@@ -662,7 +664,8 @@ class InfoCard extends Component {
       formValues: {},
       pageLoading: false,
       selectedValues: {},
-      checkDetail: false
+      checkDetail: false,
+      exportModalVisible:false
     }
     this.exportParams = {
       page: 1,
@@ -847,6 +850,12 @@ class InfoCard extends Component {
       modalVisible: !!flag,
     });
   };
+
+  handleExportModalVisible = (flag=false) =>{
+    this.setState({
+      exportModalVisible: !!flag,
+    });
+  }
 
   handleUpdateModalVisible = (flag, record) => {
     this.setState({
@@ -1039,7 +1048,7 @@ class InfoCard extends Component {
       loading,
       app: {user}
     } = this.props;
-    const {selectedRows, modalVisible, updateModalVisible, selectedValues, pageLoading, checkDetail} = this.state;
+    const {selectedRows,exportModalVisible, modalVisible, updateModalVisible, selectedValues, pageLoading, checkDetail} = this.state;
 
     const parentMethods = {
       handleAdd: this.handleAdd,
@@ -1055,7 +1064,13 @@ class InfoCard extends Component {
       proNames: proNames,
       loading: loading.effects[`pro_proInfo/${updateModalVisible ? 'update' : 'add'}`]
     }
-    const exportUrl = createURL(PRO_EXPORT, {...this.exportParams, ...{token: user.token}})
+    const exportUrl = createURL(PRO_EXPORT, {...this.exportParams, ...{token: user.token,exportType:'projectExportType'}})
+    const exportProps={
+      exportModalVisible:exportModalVisible,
+      handleExportModalVisible:this.handleExportModalVisible,
+      exportUrl:exportUrl,
+      plainOptions:plainOptions
+    }
     return (
       <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="工程项目信息卡">
@@ -1068,7 +1083,7 @@ class InfoCard extends Component {
                     新增
                   </Button> : null}
                 {user.token && getButtons(user.permissionsMap.button, pageButtons[3]) ?
-                  <Button href={exportUrl} icon="plus" type="primary">
+                  <Button icon="export" type="primary" onClick={() => this.handleExportModalVisible(true)}>
                     导出
                   </Button> : null}
               </div>
@@ -1086,6 +1101,7 @@ class InfoCard extends Component {
             </div>
           </Card>
           <CreateForm {...parentMethods} {...parentState}/>
+          <ExportModal {...exportProps}/>
         </PageHeaderWrapper>
       </Page>
     )

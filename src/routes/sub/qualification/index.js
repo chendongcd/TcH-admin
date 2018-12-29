@@ -19,7 +19,7 @@ import {
   message,
   Badge
 } from 'antd';
-import {Page, PageHeaderWrapper, StandardTable, PreFile} from 'components'
+import {Page, PageHeaderWrapper, StandardTable, PreFile,ExportModal} from 'components'
 import styles from './index.less'
 import {getButtons, cleanObject, QiNiuOss, ImageUrl} from 'utils'
 import {menuData} from 'common/menu'
@@ -41,8 +41,14 @@ const info_css = {
   color: '#fa541c'
 }
 const testValue = ''
-
 const TenW = 1000000
+const plainOptions = [
+  { label: '分包商类型', value: '1' },
+  { label: '法定代表人', value: '2' },
+  { label: '注册资本金', value: '3' },
+  { label: '资质信息', value: '4' },
+  { label: '信誉评价', value: '5' },
+]
 const _setColor = function (time) {
   let num
   num = time.split(' ')[0]
@@ -721,7 +727,8 @@ class Qualification extends Component {
       reviewType: -1,
       selectedValues: {},
       checkDetail: false,
-      checkResume: false
+      checkResume: false,
+      exportModalVisible:false
     }
     this.exportParams = {
       page: 1,
@@ -929,6 +936,12 @@ class Qualification extends Component {
     });
   };
 
+  handleExportModalVisible = (flag=false) =>{
+    this.setState({
+      exportModalVisible: !!flag,
+    });
+  }
+
   handleReviewModal = (flag = -1, selectedValues = {}) => {
     this.setState({
       reviewType: flag,
@@ -1124,7 +1137,7 @@ class Qualification extends Component {
       loading,
       app: {user}
     } = this.props;
-    const {selectedRows, modalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail, reviewType} = this.state;
+    const {selectedRows,exportModalVisible, modalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail, reviewType} = this.state;
 
     const parentMethods = {
       handleAdd: this.handleAdd,
@@ -1142,7 +1155,13 @@ class Qualification extends Component {
       checkDetail: checkDetail,
       selectedRows: selectedRows
     }
-    const exportUrl = createURL(SUB_QUA_EXPORT, {...this.exportParams, ...{token: user.token}})
+    const exportUrl = createURL(SUB_QUA_EXPORT, {...this.exportParams, ...{token: user.token,exportType:'subcontractorExportType'}})
+    const exportProps={
+      exportModalVisible:exportModalVisible,
+      handleExportModalVisible:this.handleExportModalVisible,
+      exportUrl:exportUrl,
+      plainOptions:plainOptions
+    }
     return (
       <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="分包商资质信息">
@@ -1155,7 +1174,7 @@ class Qualification extends Component {
                     新增
                   </Button> : null}
                 {user.token && getButtons(user.permissionsMap.button, pageButtons[3]) ?
-                  <Button href={exportUrl} icon="plus" type="primary">
+                  <Button onClick={() => this.handleExportModalVisible(true)} icon="export" type="primary">
                     导出
                   </Button> : null}
               </div>
@@ -1177,6 +1196,7 @@ class Qualification extends Component {
           <SubResume handleResumeModal={this.handleResumeModal} checkResume={checkResume} subResume={subResume}/>
 */}
           <CreateReview loading={loading.effects[`sub_qua/update'}`]} {...parentMethods} selectedValues={selectedValues} modalVisible={reviewType}/>
+          <ExportModal {...exportProps}/>
         </PageHeaderWrapper>
       </Page>
     )

@@ -16,7 +16,7 @@ import {
   Upload,
   Divider
 } from 'antd';
-import {Page, PageHeaderWrapper, StandardTable, PreFile} from 'components'
+import {Page, PageHeaderWrapper, StandardTable, PreFile, ExportModal} from 'components'
 import styles from './index.less'
 import {getButtons, cleanObject, QiNiuOss, ImageUrl} from 'utils'
 import {menuData} from 'common/menu'
@@ -35,6 +35,14 @@ const info_css = {
   color: '#fa541c'
 }
 const testValue = ''
+const plainOptions = [
+  {label: '预付款', value: '1'},
+  {label: '计价金额', value: '2'},
+  {label: '实际支付', value: '3'},
+  {label: '资金拨付情况', value: '4'},
+  {label: '其它计价', value: '5'},
+  {label: '产值计价率', value: '6'}
+]
 
 @Form.create()
 class CreateForm extends Component {
@@ -99,7 +107,7 @@ class CreateForm extends Component {
   }
 
   render() {
-    const {proNames, modalVisible,loading, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
+    const {proNames, modalVisible, loading, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
     let {previewVisible, previewImage, fileList, progress} = this.state
     return (
       <Modal
@@ -108,7 +116,7 @@ class CreateForm extends Component {
         bodyStyle={{padding: 0 + 'px'}}
         visible={modalVisible}
         width={992}
-        okButtonProps={{loading:loading}}
+        okButtonProps={{loading: loading}}
         maskClosable={false}
         onOk={() => checkDetail ? handleCheckDetail() : this.okHandle()}
         onCancel={() => {
@@ -359,7 +367,8 @@ class MeterUp extends Component {
       formValues: {},
       pageLoading: false,
       selectedValues: {},
-      checkDetail: false
+      checkDetail: false,
+      exportModalVisible:false
     }
     this.exportParams = {
       page: 1,
@@ -569,6 +578,12 @@ class MeterUp extends Component {
     });
   };
 
+  handleExportModalVisible = (flag=false) =>{
+    this.setState({
+      exportModalVisible: !!flag,
+    });
+  }
+
   handleUpdateModalVisible = (flag, record) => {
     this.setState({
       updateModalVisible: !!flag,
@@ -718,7 +733,7 @@ class MeterUp extends Component {
       loading,
       app: {user}
     } = this.props;
-    const {selectedRows, modalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail} = this.state;
+    const {selectedRows, modalVisible,exportModalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail} = this.state;
 
     const parentMethods = {
       handleAdd: this.handleAdd,
@@ -733,14 +748,19 @@ class MeterUp extends Component {
       selectedValues: selectedValues,
       checkDetail: checkDetail,
       proNames: proNames,
-      loading:loading.effects[`meterUp/${updateModalVisible?'update':'add'}`]
+      loading: loading.effects[`meterUp/${updateModalVisible ? 'update' : 'add'}`]
     }
-    const exportUrl = createURL(METER_EXPORT, {...this.exportParams, ...{token: user.token}})
+    const exportUrl = createURL(METER_EXPORT, {...this.exportParams, ...{token: user.token,exportType:'forUpExportType'}})
+    const exportProps={
+      exportModalVisible:exportModalVisible,
+      handleExportModalVisible:this.handleExportModalVisible,
+      exportUrl:exportUrl,
+      plainOptions:plainOptions
+    }
+
     return (
       <Page inner={true} loading={pageLoading}>
         <PageHeaderWrapper title="对上计量台账">
-          {/*          <iframe width={50} style={{height: 50, zoom: '70%'}} scrolling={'no'} frameBorder={0}
-                  src={'http://pjno2bd7f.bkt.clouddn.com/rc-upload-1545408599943-2'}/>*/}
           <Card bordered={false}>
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
@@ -750,18 +770,9 @@ class MeterUp extends Component {
                     新增
                   </Button> : null}
                 {user.token && getButtons(user.permissionsMap.button, pageButtons[3]) ?
-                  <Button href={exportUrl} icon="plus" type="primary">
+                  <Button onClick={() => this.handleExportModalVisible(true)} icon="export" type="primary">
                     导出
                   </Button> : null}
-                {/* {selectedRows.length > 0 && (
-                  <span>
-                  <Dropdown overlay={menu}>
-                    <Button>
-                     操作 <Icon type="down"/>
-                    </Button>
-                  </Dropdown>
-                </span>
-                )}*/}
               </div>
               <StandardTable
                 selectedRows={selectedRows}
@@ -777,6 +788,7 @@ class MeterUp extends Component {
             </div>
           </Card>
           <CreateForm {...parentMethods} {...parentState}/>
+          <ExportModal {...exportProps}/>
         </PageHeaderWrapper>
       </Page>
     )

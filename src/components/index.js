@@ -7,6 +7,7 @@ import PageHeader from './PageHeader'
 import PageHeaderWrapper from './PageHeaderWrapper'
 import StandardTable from './StandardTable'
 import PreFile from './preFile'
+import ExportModal from './exportModal'
 export {
   MyLayout,
   Iconfont,
@@ -15,5 +16,6 @@ export {
   PageHeader,
   PageHeaderWrapper,
   StandardTable,
-  PreFile
+  PreFile,
+  ExportModal
 }

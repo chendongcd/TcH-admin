@@ -559,7 +559,7 @@ class Resume extends Component {
                     新增
                   </Button> : null}
                 {user.token && getButtons(user.permissionsMap.button, pageButtons[3]) ?
-                  <Button href={exportUrl} icon="plus" type="primary">
+                  <Button href={exportUrl} icon="export" type="primary">
                     导出
                   </Button> : null}
               </div>
@@ -640,7 +640,6 @@ class Resume extends Component {
         projectEvaluation: fieldsValue.projectEvaluation,
       }
       cleanObject(payload)
-      //  form.resetFields();
       this.props.dispatch({
         type: 'sub_resume/fetch',
         payload: payload,
