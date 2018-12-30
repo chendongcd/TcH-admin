@@ -14,7 +14,7 @@ export const SUB_RES_EXPORT = '/subcontractor_resume/export/v1.1'
 
 export const TEAM_EXPORT = '/team/export/v1.1'
 
-export const DOWN_EXPORT = '/inspection/export/v1.1 '
+export const DOWN_EXPORT = '/inspection/export/v1.1'
 
 export const PEOPLE_EXPORT = '/people/export/v1.1'
 

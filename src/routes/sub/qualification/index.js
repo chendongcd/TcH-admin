@@ -1160,7 +1160,8 @@ class Qualification extends Component {
       exportModalVisible:exportModalVisible,
       handleExportModalVisible:this.handleExportModalVisible,
       exportUrl:exportUrl,
-      plainOptions:plainOptions
+      plainOptions:plainOptions,
+      must:true
     }
     return (
       <Page inner={true} loading={pageLoading}>

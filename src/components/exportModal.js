@@ -1,7 +1,5 @@
 import React, {Component} from 'react'
 import {Checkbox, Modal, Row, Col} from 'antd'
-import {createURL} from 'services/app'
-import {cleanObject} from 'utils'
 
 const CheckboxGroup = Checkbox.Group;
 
@@ -23,25 +21,28 @@ class ExportModal extends Component {
     this.setState({checked: checkedValues})
   }
 
+  createUrl=(url,sort)=>{
+    return url +'&'+'sort='+sort.join(',')
+  }
+
   render() {
-    const {exportModalVisible, exportUrl, plainOptions, handleExportModalVisible} = this.props;
+    const {exportModalVisible, exportUrl, plainOptions, handleExportModalVisible,must,span} = this.props;
     const sort = this.state.checked
-    const href = sort.length > 0 ? createURL(exportUrl, {...{sort: this.state.checked}}) : exportUrl
+    const href = sort.length||must > 0 ? this.createUrl(exportUrl,must?[...sort,0]:sort) : exportUrl
     return <Modal
       destroyOnClose
       title={'请选择导出模块'}
       visible={exportModalVisible}
-      onOk={(res) => {
-        console.log(res)
-        handleExportModalVisible()
-      }}
+      afterClose={()=> this.setState({checked:[]})
+      }
+      onOk={(res) => handleExportModalVisible()}
       okText={'导出'}
-      okButtonProps={{href, icon: "export", type: "primary"}}
-      onCancel={() => handleExportModalVisible()}
+      okButtonProps={{href, icon: "export", type: "primary",disabled:!(sort.length||must > 0)}}
+      onCancel={() =>handleExportModalVisible()}
     >
-      <CheckboxGroup  onChange={this.onChange}>
+      <CheckboxGroup style={{width:'100%'}} onChange={this.onChange}>
         <Row>
-          {plainOptions.map((item, index) => <Col key={index} span={8}><Checkbox value={item.value}>{item.label}</Checkbox></Col>)}
+          {plainOptions.map((item, index) => <Col key={index} span={span?span:8}><Checkbox value={item.value}>{item.label}</Checkbox></Col>)}
         </Row>
       </CheckboxGroup>
     </Modal>

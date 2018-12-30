@@ -16,7 +16,7 @@ import {
   Upload,
   Divider,
 } from 'antd';
-import {Page, PageHeaderWrapper, StandardTable, PreFile} from 'components'
+import {Page, PageHeaderWrapper, StandardTable, ExportModal,PreFile} from 'components'
 import styles from './index.less'
 import {getButtons, cleanObject, QiNiuOss, ImageUrl} from 'utils'
 import {menuData} from 'common/menu'
@@ -37,7 +37,9 @@ const teamStatus = ['正在施工', '完工待结算', '已结算']
 const contractType = ['主合同', '补充合同']
 const testValue = ''
 const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
-
+const plainOptions = [{ label: '劳务队伍统计', value: '0' },
+  { label: '备案情况', value: '1' },
+]
 @Form.create()
 class CreateForm extends Component {
 
@@ -524,7 +526,8 @@ class TeamAccount extends Component {
       pageLoading: false,
       comModal: false,
       selectedValues: {},
-      checkDetail: false
+      checkDetail: false,
+      exportModalVisible:false
     }
     this.exportParams = {
       page: 1,
@@ -806,6 +809,12 @@ class TeamAccount extends Component {
     });
   };
 
+  handleExportModalVisible = (flag=false) =>{
+    this.setState({
+      exportModalVisible: !!flag,
+    });
+  }
+
   handleComModalVisible = (flag, record = {}) => {
     this.setState({
       comModal: !!flag,
@@ -971,7 +980,7 @@ class TeamAccount extends Component {
       loading,
       app: {user}
     } = this.props;
-    const {selectedRows, modalVisible, pageLoading, comModal, selectedValues, updateModalVisible, checkDetail} = this.state;
+    const {selectedRows,exportModalVisible, modalVisible, pageLoading, comModal, selectedValues, updateModalVisible, checkDetail} = this.state;
 
     const parentMethods = {
       handleAdd: this.handleAdd,
@@ -991,7 +1000,13 @@ class TeamAccount extends Component {
       subNames: subNames,
       contractCodes: contractCodes
     }
-    const exportUrl = createURL(TEAM_EXPORT, {...this.exportParams, ...{token: user.token}})
+    const exportUrl = createURL(TEAM_EXPORT, {...this.exportParams, ...{token: user.token,exportType:'teamExportType'}})
+    const exportProps={
+      exportModalVisible:exportModalVisible,
+      handleExportModalVisible:this.handleExportModalVisible,
+      exportUrl:exportUrl,
+      plainOptions:plainOptions
+    }
 
     return (
       <Page inner={true} loading={pageLoading}>
@@ -1005,7 +1020,7 @@ class TeamAccount extends Component {
                     新增
                   </Button> : null}
                 {user.token && getButtons(user.permissionsMap.button, pageButtons[4]) ?
-                  <Button href={exportUrl} icon="plus" type="primary">
+                  <Button onClick={() => this.handleExportModalVisible(true)} icon="export" type="primary">
                     导出
                   </Button> : null}
               </div>
@@ -1024,6 +1039,7 @@ class TeamAccount extends Component {
           </Card>
           <CreateForm loading={loading.effects[`teamAccount/${updateModalVisible?'update':'add'}`]} {...parentMethods} {...parentState}/>
           <CreateCompForm loading={loading.effects[`teamAccount/updateCompany`]} {...parentMethods} selectedValues={selectedValues} modalVisible={comModal}/>
+          <ExportModal {...exportProps}/>
         </PageHeaderWrapper>
       </Page>
     )

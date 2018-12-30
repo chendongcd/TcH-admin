@@ -1069,7 +1069,9 @@ class InfoCard extends Component {
       exportModalVisible:exportModalVisible,
       handleExportModalVisible:this.handleExportModalVisible,
       exportUrl:exportUrl,
-      plainOptions:plainOptions
+      plainOptions:plainOptions,
+      must:true,
+      span:10
     }
     return (
       <Page inner={true} loading={pageLoading}>
