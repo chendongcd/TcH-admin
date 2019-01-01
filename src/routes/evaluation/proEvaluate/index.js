@@ -741,8 +741,8 @@ class ProEvaluate extends Component {
         },
       }, {
         title: '工期(月)',
-        key: 'distanceTime',
-        dataIndex: 'distanceTime',
+        key: 'duration',
+        dataIndex: 'duration',
       }]
     },
     {

@@ -56,7 +56,7 @@ class Login extends Component {
                     message: '请输入用户名'
                   },
                 ],
-              })(<Input onPressEnter={() => this.handleOk(validateFieldsAndScroll)} placeholder="Username"/>)}
+              })(<Input onPressEnter={() => this.handleOk(validateFieldsAndScroll)} placeholder="用户名"/>)}
             </FormItem>
             <FormItem hasFeedback>
               {getFieldDecorator('password', {

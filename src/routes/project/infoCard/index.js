@@ -16,7 +16,7 @@ import {
   Badge,
   Divider
 } from 'antd';
-import {Page, PageHeaderWrapper, StandardTable,ExportModal} from 'components'
+import {Page, PageHeaderWrapper, StandardTable, ExportModal} from 'components'
 import styles from './index.less'
 import {getButtons, cleanObject, cloneObject} from 'utils'
 import {apiDev} from 'utils/config'
@@ -37,9 +37,10 @@ const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/
 let uuid = 0;
 const pageButtons = menuData[6].buttons.map(a => a.permission)
 const testValue = ''
-const plainOptions = [{ label: '项目工期', value: '1' },
-  { label: '项目主要人员', value: '2' },
+const plainOptions = [{label: '项目工期', value: '1'},
+  {label: '项目主要人员', value: '2'},
 ]
+
 @Form.create()
 class CreateForm extends Component {
   constructor(props) {
@@ -72,7 +73,7 @@ class CreateForm extends Component {
       this.engineer = cloneObject(this.props.selectedValues.engineer)
       this.secretary = cloneObject(this.props.selectedValues.secretary)
       this.props.form.setFieldsValue({manager: this.manager});
-      this.props.form.setFieldsValue({engineer:  this.engineer});
+      this.props.form.setFieldsValue({engineer: this.engineer});
       this.props.form.setFieldsValue({secretary: this.secretary});
     }
     if (prevProps.modalVisible && !this.props.modalVisible) {
@@ -186,26 +187,26 @@ class CreateForm extends Component {
 
   formManager = (managers, checkDetail, form, getFieldDecorator) => {
     if (managers) {
-      console.log(managers)
+     // console.log(managers)
       return managers.map((key, index) => {
         let isLast = (managers.length == index + 1)
         return (<Row key={`manager${index}`} gutter={8}>
           <Col className={styles.colPeople} md={6} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="姓名">
-              {getFieldDecorator(`name[${index}]`, {
+              {getFieldDecorator(`Mname[${index}]`, {
                 rules: [{required: 'true', message: '请输入姓名'}],
-                initialValue:key.name ? key.name : ''
+                initialValue: key.name ? key.name : ''
               })(<Input onChange={(e) => {
-                          this.manager[index].name = e.target.value
-                        }}
+                this.manager[index].name = e.target.value
+              }}
                         disabled={checkDetail} placeholder="请输入姓名"/>)}
             </FormItem>
           </Col>
           <Col className={styles.colPeople} md={9} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
-              {getFieldDecorator(`time[${index}]`, {
+              {getFieldDecorator(`Mtime[${index}]`, {
                 rules: [{required: 'true', message: '请输入任职时间'}],
-                initialValue:key.time ? this._setTime(key.time) : []
+                initialValue: key.time ? this._setTime(key.time) : []
               })(<DatePicker.RangePicker disabled={checkDetail}
                                          required={true}
                                          onChange={(e, dateString) => {
@@ -216,13 +217,13 @@ class CreateForm extends Component {
           </Col>
           <Col className={styles.colPeople} md={7} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系电话">
-              {getFieldDecorator(`phone[${index}]`, {
+              {getFieldDecorator(`Mphone[${index}]`, {
                 rules: [{required: 'true', message: '请输入联系电话'}],
-                initialValue:key.phone ? key.phone : ''
+                initialValue: key.phone ? key.phone : ''
               })(<Input disabled={checkDetail}
                         onChange={(e) => {
-                this.manager[index].phone = e.target.value
-              }}
+                          this.manager[index].phone = e.target.value
+                        }}
                         placeholder="请输入联系电话"/>)}
             </FormItem>
           </Col>
@@ -248,9 +249,9 @@ class CreateForm extends Component {
         return (<Row key={`secretary${index}`} gutter={8}>
           <Col className={styles.colPeople} md={6} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="姓名">
-              {getFieldDecorator(`name[${index}]`, {
+              {getFieldDecorator(`Sname[${index}]`, {
                 rules: [{required: 'true', message: '请输入姓名'}],
-                initialValue:key.name ? key.name : ''
+                initialValue: key.name ? key.name : ''
               })(<Input onChange={(e) => {
                 this.secretary[index].name = e.target.value
               }}
@@ -259,9 +260,9 @@ class CreateForm extends Component {
           </Col>
           <Col className={styles.colPeople} md={9} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
-              {getFieldDecorator(`time[${index}]`, {
+              {getFieldDecorator(`Stime[${index}]`, {
                 rules: [{required: 'true', message: '请输入任职时间'}],
-                initialValue:key.time ? this._setTime(key.time) : []
+                initialValue: key.time ? this._setTime(key.time) : []
               })(<DatePicker.RangePicker disabled={checkDetail}
                                          required={true}
                                          onChange={(e, dateString) => this.secretary[index].time = this.handleRange(dateString)}
@@ -270,9 +271,9 @@ class CreateForm extends Component {
           </Col>
           <Col className={styles.colPeople} md={7} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系电话">
-              {getFieldDecorator(`phone[${index}]`, {
+              {getFieldDecorator(`Sphone[${index}]`, {
                 rules: [{required: 'true', message: '请输入联系电话'}],
-                initialValue:key.phone ? key.phone : ''
+                initialValue: key.phone ? key.phone : ''
               })(<Input disabled={checkDetail}
                         onChange={(e) => this.secretary[index].phone = e.target.value}
                         placeholder="请输入联系电话"/>)}
@@ -300,18 +301,18 @@ class CreateForm extends Component {
         return (<Row key={`engineer${index}`} gutter={8}>
           <Col className={styles.colPeople} md={6} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="姓名">
-              {getFieldDecorator(`name[${index}]`, {
+              {getFieldDecorator(`Ename[${index}]`, {
                 rules: [{required: 'true', message: '请输入姓名'}],
-                initialValue:key.name ? key.name : ''
+                initialValue: key.name ? key.name : ''
               })(<Input onChange={(e) => this.engineer[index].name = e.target.value}
                         disabled={checkDetail} placeholder="请输入姓名"/>)}
             </FormItem>
           </Col>
           <Col className={styles.colPeople} md={9} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
-              {getFieldDecorator(`time[${index}]`, {
+              {getFieldDecorator(`Etime[${index}]`, {
                 rules: [{required: 'true', message: '请输入任职时间'}],
-                initialValue:key.time ? this._setTime(key.time) : []
+                initialValue: key.time ? this._setTime(key.time) : []
               })(<DatePicker.RangePicker disabled={checkDetail}
                                          required={true}
                                          onChange={(e, dateString) => this.engineer[index].time = this.handleRange(dateString)}
@@ -320,9 +321,9 @@ class CreateForm extends Component {
           </Col>
           <Col className={styles.colPeople} md={7} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系电话">
-              {getFieldDecorator(`phone[${index}]`, {
+              {getFieldDecorator(`Ephone[${index}]`, {
                 rules: [{required: 'true', message: '请输入联系电话'}],
-                initialValue:key.phone ? key.phone : ''
+                initialValue: key.phone ? key.phone : ''
               })(<Input disabled={checkDetail}
                         onChange={(e) => this.engineer[index].phone = e.target.value}
                         placeholder="请输入联系电话"/>)}
@@ -367,9 +368,33 @@ class CreateForm extends Component {
   render() {
     const {proNames, modalVisible, loading, form, handleAdd, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
     const {getFieldDecorator, getFieldValue} = this.props.form
-    getFieldDecorator('manager');
-    getFieldDecorator('secretary');
-    getFieldDecorator('engineer');
+    if (selectedValues.manager) {
+      getFieldDecorator('manager');
+      getFieldDecorator('secretary');
+      getFieldDecorator('engineer');
+    } else {
+      getFieldDecorator('manager', {
+        initialValue: [{
+          name: '',
+          time: [],
+          phone: ''
+        }]
+      });
+      getFieldDecorator('secretary', {
+        initialValue: [{
+          name: '',
+          time: [],
+          phone: ''
+        }]
+      });
+      getFieldDecorator('engineer', {
+        initialValue: [{
+          name: '',
+          time: [],
+          phone: ''
+        }]
+      });
+    }
     let managers = getFieldValue('manager');
     let secretary = getFieldValue('secretary');
     let chiefEngineer = getFieldValue('engineer');
@@ -404,7 +429,7 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="工程类别">
                 {form.getFieldDecorator('projectType', {
-                  rules: [{required: true,message:'请选择项目'}],
+                  rules: [{required: true, message: '请选择项目'}],
                   initialValue: selectedValues.projectType ? selectedValues.projectType : '',
                 })(<Input disabled={checkDetail} placeholder="自动带出"/>)}
               </FormItem>
@@ -665,7 +690,7 @@ class InfoCard extends Component {
       pageLoading: false,
       selectedValues: {},
       checkDetail: false,
-      exportModalVisible:false
+      exportModalVisible: false
     }
     this.exportParams = {
       page: 1,
@@ -851,7 +876,7 @@ class InfoCard extends Component {
     });
   };
 
-  handleExportModalVisible = (flag=false) =>{
+  handleExportModalVisible = (flag = false) => {
     this.setState({
       exportModalVisible: !!flag,
     });
@@ -1048,7 +1073,7 @@ class InfoCard extends Component {
       loading,
       app: {user}
     } = this.props;
-    const {selectedRows,exportModalVisible, modalVisible, updateModalVisible, selectedValues, pageLoading, checkDetail} = this.state;
+    const {selectedRows, exportModalVisible, modalVisible, updateModalVisible, selectedValues, pageLoading, checkDetail} = this.state;
 
     const parentMethods = {
       handleAdd: this.handleAdd,
@@ -1064,14 +1089,19 @@ class InfoCard extends Component {
       proNames: proNames,
       loading: loading.effects[`pro_proInfo/${updateModalVisible ? 'update' : 'add'}`]
     }
-    const exportUrl = createURL(PRO_EXPORT, {...this.exportParams, ...{token: user.token,exportType:'projectExportType'}})
-    const exportProps={
-      exportModalVisible:exportModalVisible,
-      handleExportModalVisible:this.handleExportModalVisible,
-      exportUrl:exportUrl,
-      plainOptions:plainOptions,
-      must:true,
-      span:10
+    const exportUrl = createURL(PRO_EXPORT, {
+      ...this.exportParams, ...{
+        token: user.token,
+        exportType: 'projectExportType'
+      }
+    })
+    const exportProps = {
+      exportModalVisible: exportModalVisible,
+      handleExportModalVisible: this.handleExportModalVisible,
+      exportUrl: exportUrl,
+      plainOptions: plainOptions,
+      must: true,
+      span: 10
     }
     return (
       <Page inner={true} loading={pageLoading}>
@@ -1140,6 +1170,7 @@ class InfoCard extends Component {
         projectManager: fieldsValue.manager,
         projectSecretary: fieldsValue.secretary,
         projectEngineer: fieldsValue.engineer,
+        status: fieldsValue.status
       }
       cleanObject(payload)
       this.exportParams = payload

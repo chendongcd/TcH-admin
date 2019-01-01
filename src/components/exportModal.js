@@ -33,8 +33,7 @@ class ExportModal extends Component {
       destroyOnClose
       title={'请选择导出模块'}
       visible={exportModalVisible}
-      afterClose={()=> this.setState({checked:[]})
-      }
+      afterClose={()=> this.setState({checked:[]})}
       onOk={(res) => handleExportModalVisible()}
       okText={'导出'}
       okButtonProps={{href, icon: "export", type: "primary",disabled:!(sort.length||must > 0)}}

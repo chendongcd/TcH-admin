@@ -478,6 +478,7 @@ class MeterDown extends Component {
           },
         }, {
           title: '已完成未计',
+          dataIndex:'endedPrice',
           key: 'endedPrice',
         }]
     },

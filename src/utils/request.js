@@ -82,23 +82,24 @@ export default function request(url, options, token) {
     }
     req.setRequestHeader('Content-Type', 'application/json')
     if (token) {
-       console.log(token)
+      // console.log(token)
       // console.log(url)
       req.setRequestHeader('Authorization', `${token}`)
     }
 
     req.onload = function () {
-      //if (!isExport) {
         if (req.readyState === 4 && (req.status == 200||req.status == 401||req.status == 402)) {
           checkStatus(JSON.parse(req.response))
           resolve(JSON.parse(req.response))
         } else {
           reject(Error(req.statusText))
         }
-     // }
     }
-    req.onerror = function () {
-      reject(Error('Network Error'))
+    req.onerror = function (e) {
+      message.error('请求错误')
+      req.abort()
+      resolve({error: true})
+      //reject(Error('Network Error'))
     }
     req.timeout = 20000;
     req.ontimeout = function () {
