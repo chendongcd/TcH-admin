@@ -218,7 +218,8 @@ class Resume extends Component {
       pageLoading: false,
       reviewType: false,
       selectedValues: {},
-      checkDetail: false
+      checkDetail: false,
+      locationPath:''
     }
     this.exportParams = {
       page: 1,
@@ -312,11 +313,28 @@ class Resume extends Component {
   ];
 
   componentDidMount() {
-    if (this.props.app.user.token) {
+    const {
+      app: {location,user},
+      dispatch
+    } = this.props;
+    if (user.token) {
       this.getSubNames()
       this.getTeamNames()
       this.getProNames()
       this.getList()
+      if(location.state&&location.state.subcontractorName){
+        this.setState({locationPath:location.state.subcontractorName})
+        let payload = {
+          page: 1,
+          pageSize: 10,
+          subcontractorName: location.state.subcontractorName,
+        }
+        dispatch({
+          type: 'sub_resume/fetch',
+          payload: payload,
+          token: this.props.app.user.token
+        });
+      }
     }
   }
 
@@ -351,6 +369,7 @@ class Resume extends Component {
     form.resetFields();
     this.setState({
       formValues: {},
+      locationPath:''
     });
     this.getList()
   };
@@ -474,12 +493,15 @@ class Resume extends Component {
     const {
       form: {getFieldDecorator},
     } = this.props;
+    const {locationPath} = this.state
     return (
       <Form onSubmit={this.searchList} layout="inline">
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={8} sm={24}>
             <FormItem label="分包商全称">
-              {getFieldDecorator('subcontractorName')(<Input/>)}
+              {getFieldDecorator('subcontractorName',{
+                initialValue: locationPath ?locationPath : '',
+              })(<Input />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
@@ -629,7 +651,7 @@ class Resume extends Component {
   }
 
   searchList = (e, page = 1, pageSize = 10) => {
-    e.preventDefault()
+    e?e.preventDefault():null
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
       let payload = {

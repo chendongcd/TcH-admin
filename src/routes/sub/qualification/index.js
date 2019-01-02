@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react'
 import {connect} from 'dva'
-
+import {routerRedux} from 'dva/router'
 import {
   Row,
   Col,
@@ -16,7 +16,6 @@ import {
   Modal,
   Upload,
   Divider,
-  message,
   Badge
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable, PreFile,ExportModal} from 'components'
@@ -87,7 +86,6 @@ class CreateForm extends Component {
         }
       }
       fieldsValue.annex = `{"url":"${this.state.fileList[0].url}","fileName":"${this.state.fileList[0].name}"}`
-      // form.resetFields();
       handleAdd(fieldsValue, updateModalVisible, selectedValues, this.cleanState);
     });
   };
@@ -465,7 +463,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('remark', {
                   rules: [{required: false}],
                   initialValue: selectedValues.remark ? selectedValues.remark : testValue
-                })(<Input.TextArea disabled={checkDetail} width={'100%'} placeholder="请输入" rows={4}/>)}
+                })(<Input.TextArea className={styles.customSelect} disabled={checkDetail} width={'100%'} placeholder="请输入" rows={4}/>)}
               </FormItem>
             </Col>
           </Row>
@@ -595,36 +593,13 @@ const CreateReview = Form.create()(props => {
         <Col md={12} sm={24}>
           <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="股份公司综合信誉评价">
             {form.getFieldDecorator('shareEvaluation', {
-              rules: [{required: true, message: '请选择'}],
+              rules: [{required: false}],
               initialValue: selectedValues.shareEvaluation ? selectedValues.shareEvaluation : ''
             })(<Select className={styles.customSelect} placeholder="请选择" style={{width: '100%'}}>
               <Option value="优秀">优秀</Option>
               <Option value="合格">合格</Option>
               <Option value="不合格">不合格</Option>
             </Select>)}
-          </FormItem>
-        </Col>
-      </Row>
-      <Row gutter={8}>
-        <Col md={12} sm={24}>
-          <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="资质是否齐全">
-            {form.getFieldDecorator('qualification', {
-              rules: [{required: true, message: '请选择'}],
-              initialValue: selectedValues.qualification ? selectedValues.qualification : ''
-            })(<Select className={styles.customSelect} placeholder="请选择" style={{width: '100%'}}>
-              <Option value="是">是</Option>
-              <Option value="否">否</Option>
-            </Select>)}
-          </FormItem>
-        </Col>
-      </Row>
-      <Row gutter={8}>
-        <Col md={24} sm={24}>
-          <FormItem style={{marginLeft: 21 + 'px'}} labelCol={{span: 4}} wrapperCol={{span: 15}} label="备注">
-            {form.getFieldDecorator('shareRemark', {
-              rules: [{required: false}],
-              initialValue: selectedValues.shareRemark ? selectedValues.shareRemark : ''
-            })(<Input.TextArea width={'100%'} placeholder="请输入" rows={4}/>)}
           </FormItem>
         </Col>
       </Row>
@@ -636,23 +611,13 @@ const CreateReview = Form.create()(props => {
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 11}} wrapperCol={{span: 12}} label="集团公司综合信誉评价">
               {form.getFieldDecorator('groupEvaluation', {
-                rules: [{required: true, message: '请选择'}],
+                rules: [{required: false}],
                 initialValue: selectedValues.groupEvaluation ? selectedValues.groupEvaluation : ''
               })(<Select placeholder="请选择" style={{width: '100%'}}>
                 <Option value="优秀">优秀</Option>
                 <Option value="合格">合格</Option>
                 <Option value="不合格">不合格</Option>
               </Select>)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={24} sm={24}>
-            <FormItem style={{marginLeft: 21 + 'px'}} labelCol={{span: 5}} wrapperCol={{span: 15}} label="备注">
-              {form.getFieldDecorator('groupRemark', {
-                rules: [{required: false}],
-                initialValue: selectedValues.groupRemark ? selectedValues.groupRemark : ''
-              })(<Input.TextArea width={'100%'} placeholder="请输入" rows={4}/>)}
             </FormItem>
           </Col>
         </Row>
@@ -665,7 +630,7 @@ const CreateReview = Form.create()(props => {
           <Col md={8} sm={24}>
             <FormItem labelCol={{span: 11}} wrapperCol={{span: 12}} label="公司信誉评价">
               {form.getFieldDecorator('companyEvaluation', {
-                rules: [{required: true, message: '请选择'}],
+                rules: [{required: false}],
                 initialValue: selectedValues.companyEvaluation ? selectedValues.companyEvaluation : ''
               })(<Select placeholder="请选择" style={{width: '100%'}}>
                 <Option value="优秀">优秀</Option>
@@ -679,14 +644,13 @@ const CreateReview = Form.create()(props => {
         </Row>
         <Row gutter={8}>
           <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 11}} wrapperCol={{span: 12}} label="集团公司信誉评价">
-              {form.getFieldDecorator('groupEvaluation', {
-                rules: [{required: true, message: '请选择'}],
-                initialValue: selectedValues.groupEvaluation ? selectedValues.groupEvaluation : ''
-              })(<Select disabled={true} className={styles.customSelect} placeholder="请选择" style={{width: '100%'}}>
-                <Option value="优秀">优秀</Option>
-                <Option value="合格">合格</Option>
-                <Option value="不合格">不合格</Option>
+            <FormItem labelCol={{span: 11}} wrapperCol={{span: 12}} label="资质是否齐全">
+              {form.getFieldDecorator('qualification', {
+                rules: [{required: false}],
+                initialValue: selectedValues.qualification ? selectedValues.qualification : ''
+              })(<Select className={styles.customSelect} placeholder="请选择" style={{width: '100%'}}>
+                <Option value="是">是</Option>
+                <Option value="否">否</Option>
               </Select>)}
             </FormItem>
           </Col>
@@ -745,9 +709,9 @@ class Qualification extends Component {
     {
       title: '分包商全称',
       dataIndex: 'name',
-      // render:(val,record)=>{
-      //   return <a onClick={()=>this.getResume(record.id)}>{val}</a>
-      // }
+      render:(val,record)=>{
+        return <a onClick={()=>this.getResume(val)}>{val}</a>
+      }
     },
     {
       title: '分包商类型',
@@ -1207,16 +1171,10 @@ class Qualification extends Component {
     this.setState({checkResume: !!flag})
   }
 
-  getResume = (id) => {
-    let payload = {subcontractorId: id}
-    this.props.dispatch({type: 'sub_qua/querySubResume', payload: payload}).then(res => {
-      if (res) {
-        if (this.props.sub_qua.subResume.length > 0) {
-          this.handleResumeModal(true)
-        }
-        message.error('该分包商还未完善履历')
-      }
-    })
+  getResume = (name) => {
+  //  routerRedux.push('/sub/resume',{subcontractorName:name})
+    let payload = {subcontractorName: name}
+    this.props.dispatch({type: 'sub_qua/getResume', payload: payload})
   }
 
   getList = (page = 1, pageSize = 10) => {

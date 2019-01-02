@@ -1,6 +1,7 @@
 import {addSubQua, querySubQuaList, updateSubQua,querySubQuaResume} from '../../../services/sub/qualification'
 import {queryProPerList} from "../../../services/system/sys_project";
 import {message} from "antd";
+import * as routerRedux from "react-router-redux";
 
 
 
@@ -66,20 +67,8 @@ export default {
       }
       return false
     },
-    * querySubResume({payload, token}, {call, put}) {
-      const response = yield call(querySubQuaResume, payload, token);
-      if (response.code == '200') {
-        yield put({
-          type: 'saveSubResume',
-          payload: response.entity
-        })
-        return true
-      }
-      if(global.checkToken(response)){
-        yield put({type:'app/logout'})
-        return false
-      }
-      return false
+    * getResume({payload}, {call, put}) {
+      yield put(routerRedux.push('/sub/resume',payload));
     },
 
   },
