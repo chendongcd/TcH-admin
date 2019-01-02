@@ -70,7 +70,7 @@ export default {
       if (response.code == '200') {
         yield put({
           type: 'saveProName',
-          payload: response.entity
+          payload: response.entity?response.entity:[]
         })
       }
       if (response.code == '401') {

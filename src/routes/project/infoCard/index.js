@@ -397,6 +397,7 @@ class CreateForm extends Component {
     let managers = getFieldValue('manager');
     let secretary = getFieldValue('secretary');
     let chiefEngineer = getFieldValue('engineer');
+    console.log(proNames)
     return (
       <Modal
         destroyOnClose
