@@ -485,6 +485,9 @@ class MeterDown extends Component {
     {
       title: '对下计价率',
       dataIndex: 'underRate',
+      render:(val)=>{
+        return <span>{Math.floor(val * 100)+'%'}</span>
+      }
     },
     {
       title: '计价负责人',

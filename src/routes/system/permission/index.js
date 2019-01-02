@@ -28,7 +28,7 @@ const getValue = obj =>
     .map(key => obj[key])
     .join(',');
 const CreateForm = Form.create()(props => {
-  const {modalVisible, form, handleAdd, handleModalVisible, handleUpdateModalVisible, updateModalVisible, selectedValues,loading} = props;
+  const {modalVisible, form, handleAdd, handleModalVisible, handleUpdateModalVisible, updateModalVisible, selectedValues, loading} = props;
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -43,7 +43,7 @@ const CreateForm = Form.create()(props => {
       title={updateModalVisible ? "编辑角色" : "新增角色"}
       visible={modalVisible}
       onOk={okHandle}
-      okButtonProps={{loading:loading}}
+      okButtonProps={{loading: loading}}
       onCancel={() => updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
     >
       <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="角色名称">
@@ -106,10 +106,13 @@ class CreatDrawer extends Component {
 
   onCertain = (setPermission, selectedValues) => {
     const res = this.resouces.length === 0 ? selectedValues.resouces : this.resouces
-    setPermission({id: selectedValues.id, resouces: res.map(a => JSON.parse(`{"permission":"${a}"}`))},this.cleanCheckedKeys)
+    setPermission({
+      id: selectedValues.id,
+      resouces: res.map(a => JSON.parse(`{"permission":"${a}"}`))
+    }, this.cleanCheckedKeys)
   }
 
-  cleanCheckedKeys=()=>{
+  cleanCheckedKeys = () => {
     this.setState({checkedKeys: []})
   }
 
@@ -252,17 +255,16 @@ class Permission extends Component {
     {
       title: '创建时间',
       dataIndex: 'createdTime',
-      render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
+      render: val => <span>{moment(val).format('YYYY/MM/DD')}</span>,
     },
     {
       title: '最新修改人',
-      dataIndex: 'updateUser',
-      render: val => <span>没有</span>,
+      dataIndex: 'updateUserStr',
     },
     {
       title: '最新修改时间',
       dataIndex: 'updateTime',
-      render: val => <span>没有</span>,
+      render: val => <span>{val?moment(val).format('YYYY/MM/DD'):''}</span>,
     },
     {
       title: '操作',
@@ -377,9 +379,6 @@ class Permission extends Component {
         }
       })
     }
-    //
-    // message.success('添加成功');
-    // this.handleModalVisible();
   };
 
   renderSimpleForm() {
@@ -428,13 +427,13 @@ class Permission extends Component {
     });
   }
 
-  setPermission = (payload,cleanState) => {
+  setPermission = (payload, cleanState) => {
     this.props.dispatch({
       type: 'sys_per/updateRolePer',
       payload: payload,
       token: this.props.app.user.token
-    }).then(res=>{
-      if(res){
+    }).then(res => {
+      if (res) {
         this.onDrawClose()
         cleanState()
       }
@@ -475,10 +474,10 @@ class Permission extends Component {
       updateModalVisible: updateModalVisible,
       modalVisible: modalVisible,
       selectedValues: selectedValues,
-      loading:loading.effects[`sys_per/${updateModalVisible?'updateRole':'addRole'}`]
+      loading: loading.effects[`sys_per/${updateModalVisible ? 'updateRole' : 'addRole'}`]
     }
     return (
-      <Page inner={true} >
+      <Page inner={true}>
         <PageHeaderWrapper title="权限管理">
           <Card bordered={false}>
             <div className={styles.tableList}>
@@ -509,6 +508,7 @@ class Permission extends Component {
   }
 
   getList = (page = 1, pageSize = 10) => {
+    console.log(1)
     this.props.dispatch({
       type: 'sys_per/query',
       payload: {page: page, pageSize: pageSize},
