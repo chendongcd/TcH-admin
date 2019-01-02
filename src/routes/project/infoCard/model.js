@@ -1,6 +1,6 @@
 import {queryProInfoList, queryProInfoDetail, addProInfo, updateProInfo} from '../../../services/project/project'
 import {queryProPerList} from "../../../services/system/sys_project";
-import {message} from "antd/lib/index";
+import {message} from "antd";
 
 export default {
   namespace: 'pro_proInfo',

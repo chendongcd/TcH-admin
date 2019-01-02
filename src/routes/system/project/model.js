@@ -1,5 +1,5 @@
 import {addPro, updatePro, queryProDetail, queryProList,updateProStatus} from '../../../services/system/sys_project'
-import {message} from "antd/lib/index";
+import {message} from "antd";
 export default {
   namespace: 'sys_pro',
 

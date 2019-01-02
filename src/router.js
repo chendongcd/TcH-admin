@@ -5,17 +5,16 @@ import zhCN from 'antd/lib/locale-provider/zh_CN';
 import App from './routes/Index'
 import dynamic from 'dva/dynamic';
 import Project from './routes/system/project/index'
-import appModel from './models/app'
 
 const Routers = function ({history, app}) {
   const Login = dynamic({
     app,
-    models: [appModel],
+    models: [],
     component: () => import(/* webpackChunkName: "Login" */'./routes/login/index'),
   })
   const Home = dynamic({
     app,
-    models: [appModel],
+    models: [],
     component: () => import(/* webpackChunkName: "Home" */'./routes/home/index'),
   })
 /*  const Sys_Project = dynamic({
@@ -85,7 +84,7 @@ const Routers = function ({history, app}) {
   })
   const NotFound = dynamic({
     app,
-    models: [appModel],
+    models: [],
     component: () => import(/* webpackChunkName: "404" */'./routes/error/404')
   })
 

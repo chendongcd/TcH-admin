@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Breadcrumb, Icon } from 'antd'
+import { Breadcrumb} from 'antd'
 import { Link } from 'react-router-dom'
 import pathToRegexp from 'path-to-regexp'
 import { queryArray } from 'utils'

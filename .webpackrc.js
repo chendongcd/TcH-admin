@@ -17,7 +17,21 @@ export default {
       'antd/lib/input',
       'antd/lib/row',
       'antd/lib/col',
-      'antd/lib/card'
+      'antd/lib/card',
+      'antd/lib/back-top',
+      'antd/lib/breadcrumb',
+      'antd/lib/calendar',
+      'antd/lib/checkbox',
+      'antd/lib/collapse',
+      'antd/lib/divider',
+      'antd/lib/drawer',
+      'antd/lib/layout',
+      'antd/lib/message',
+      'antd/lib/pagination',
+      'antd/lib/progress',
+      'antd/lib/select',
+      'antd/lib/tree',
+      'antd/lib/upload'
     ],
   },
   commons: [{

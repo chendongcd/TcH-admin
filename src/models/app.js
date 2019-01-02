@@ -54,7 +54,6 @@ export default {
     },
     * login({payload}, {call, put}) {
       const res = yield call(signIn, payload)
-      console.log(res)
       if (res.code == 200) {
         let menu = getMenus([...res.entity.permissionsMap.menu, ...[menuData[0].permission]])
 

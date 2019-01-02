@@ -1,6 +1,6 @@
 import {addSubQua, querySubQuaList, updateSubQua,querySubQuaResume} from '../../../services/sub/qualification'
 import {queryProPerList} from "../../../services/system/sys_project";
-import {message} from "antd/lib/index";
+import {message} from "antd";
 
 
 

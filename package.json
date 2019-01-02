@@ -9,7 +9,7 @@
   "dependencies": {
     "antd": "^3.10.1",
     "axios": "^0.18.0",
-    "babel-plugin-import": "^1.9.1",
+    "babel-plugin-import": "*",
     "classnames": "~2.2.5",
     "dva": "^2.4.0",
     "dva-loading": "^2.0.6",

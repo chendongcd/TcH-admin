@@ -1,6 +1,6 @@
 import {updateUp,addUp,queryUpDetail,queryUpList} from '../../../services/upToBack/meterUp';
 import {queryProPerList} from "../../../services/system/sys_project";
-import {message} from "antd/lib/index";
+import {message} from "antd";
 export default {
   namespace: 'meterUp',
 
