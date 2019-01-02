@@ -201,7 +201,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('phone', {
                   rules: [{required: true, message: '请输入联系电话'}],
                   initialValue: selectedValues.phone ? selectedValues.phone : testValue,
-                })(<Input placehloder='请输入联系电话'/>)}
+                })(<Input disabled={checkDetail} placehloder='请输入联系电话'/>)}
               </FormItem>
             </Col>
             <Col md={8} sm={24}>
@@ -355,7 +355,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('firstDegreeTime', {
                   rules: [{required: true, message: '请输入毕业时间'}],
                   initialValue: selectedValues.firstDegreeTime ? moment(selectedValues.firstDegreeTime) : null,
-                })(<DatePicker style={{width: '100%'}} placeholder="请选择毕业时间"/>)}
+                })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择毕业时间"/>)}
               </FormItem>
             </Col>
           </Row>

@@ -303,7 +303,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="工期(月)">
                 {form.getFieldDecorator('duration', {
                   rules: [{required: true,message:'请先完善该项目工程信息卡'}],
-                  initialValue: selectedValues.duration ? selectedValues.duration : ''
+                  initialValue: selectedValues.duration||selectedValues.duration==0 ? selectedValues.duration : ''
                 })(<Input disabled={true} placeholder='自动带出'/>)}
               </FormItem>
             </Col>

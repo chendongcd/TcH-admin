@@ -272,7 +272,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="队伍状态">
                 {form.getFieldDecorator('status', {
                   rules: [{required: true, message: '请选择队伍状态'}],
-                  initialValue: selectedValues.status ? selectedValues.status : ''
+                  initialValue: selectedValues.status||selectedValues.status==0 ? selectedValues.status : ''
                 })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择队伍状态"
                            style={{width: '100%'}}>
                   <Option value="0">正在施工</Option>

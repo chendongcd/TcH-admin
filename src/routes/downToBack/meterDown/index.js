@@ -197,12 +197,12 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="计价类型">
                 {form.getFieldDecorator('valuationType', {
                   rules: [{required: true, message: '请选择计价类型'}],
-                  initialValue: selectedValues.valuationType ? selectedValues.valuationType : testValue,
+                  initialValue: selectedValues.valuationType||selectedValues.valuationType==0 ? selectedValues.valuationType : '',
                 })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择"
                            style={{width: '100%'}}>
-                  <Option value="0">过程结算</Option>
-                  <Option value="1">中期结算</Option>
-                  <Option value="2">末次结算</Option>
+                  <Option value={0}>过程结算</Option>
+                  <Option value={1}>中期结算</Option>
+                  <Option value={2}>末次结算</Option>
                 </Select>)}
               </FormItem>
             </Col>
