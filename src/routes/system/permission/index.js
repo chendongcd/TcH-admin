@@ -428,7 +428,6 @@ class Permission extends Component {
   }
 
   setPermission = (payload, cleanState) => {
-    console.log(payload)
     this.props.dispatch({
       type: 'sys_per/updateRolePer',
       payload: payload,

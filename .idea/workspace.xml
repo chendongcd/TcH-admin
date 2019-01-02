@@ -5,12 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f9cf8453-fce7-4f76-8b42-acb0ec5757a4" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Layout/Sider.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Layout/Sider.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/downToBack/meterDown/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/downToBack/meterDown/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/downToBack/teamAccount/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/downToBack/teamAccount/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/evaluation/proEvaluate/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/evaluation/proEvaluate/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/peopleManage/info/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/peopleManage/info/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/system/permission/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/system/permission/index.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -27,8 +21,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/routes/system/permission/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="266">
-              <caret line="431" column="25" lean-forward="true" selection-start-line="431" selection-start-column="25" selection-end-line="431" selection-end-column="25" />
+            <state relative-caret-position="251">
+              <caret line="430" selection-start-line="430" selection-end-line="430" />
               <folding>
                 <element signature="e#650#1612#0" />
                 <element signature="e#817#997#0" />
@@ -152,8 +146,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/common/menu.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="193">
-              <caret line="172" column="27" lean-forward="true" selection-start-line="172" selection-start-column="27" selection-end-line="172" selection-end-column="27" />
+            <state relative-caret-position="252">
+              <caret line="173" column="48" lean-forward="true" selection-start-line="173" selection-start-column="48" selection-end-line="173" selection-end-column="48" />
             </state>
           </provider>
         </entry>
@@ -481,18 +475,18 @@
       <workItem from="1546051922743" duration="12645000" />
       <workItem from="1546178575916" duration="5988000" />
       <workItem from="1546354908748" duration="3310000" />
-      <workItem from="1546415409685" duration="19716000" />
+      <workItem from="1546415409685" duration="19928000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="838577000" />
+    <option name="totallyTimeSpent" value="838789000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="173" y="23" width="1246" height="820" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.8150573" visible="true" weight="0.21632653" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.8150573" visible="true" weight="0.21632653" />
       <window_info id="Structure" order="1" weight="0.24964337" />
       <window_info id="npm" order="2" sideWeight="0.18494272" side_tool="true" visible="true" weight="0.21632653" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -506,7 +500,7 @@
       <window_info anchor="bottom" id="TypeScript" order="7" />
       <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.3289256" />
-      <window_info anchor="bottom" id="Terminal" order="10" visible="true" weight="0.16071428" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.16071428" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -2008,15 +2002,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/common/menu.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="193">
-          <caret line="172" column="27" lean-forward="true" selection-start-line="172" selection-start-column="27" selection-end-line="172" selection-end-column="27" />
+        <state relative-caret-position="252">
+          <caret line="173" column="48" lean-forward="true" selection-start-line="173" selection-start-column="48" selection-end-line="173" selection-end-column="48" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/routes/system/permission/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="431" column="25" lean-forward="true" selection-start-line="431" selection-start-column="25" selection-end-line="431" selection-end-column="25" />
+        <state relative-caret-position="251">
+          <caret line="430" selection-start-line="430" selection-end-line="430" />
           <folding>
             <element signature="e#650#1612#0" />
             <element signature="e#817#997#0" />
