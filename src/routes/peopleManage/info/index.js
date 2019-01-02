@@ -71,6 +71,7 @@ class CreateForm extends Component {
     const {form, handleAdd, updateModalVisible, selectedValues} = this.props;
 
     form.validateFields((err, fieldsValue) => {
+      console.log(fieldsValue)
       if (err) return;
       for (let prop in fieldsValue) {
         if (fieldsValue[prop] instanceof moment) {
@@ -472,7 +473,7 @@ class CreateForm extends Component {
                   rules: [{required: true, message: '必须上传照片'}],
                   valuePropName: 'fileList',
                   getValueFromEvent: normFile,
-                  initialValue: selectedValues.annexUrl ? [selectedValues.annexUrl] : [],
+                  initialValue: selectedValues.headUrl ? [selectedValues.headUrl] : [],
                 })(
                   <Upload.Dragger onChange={this.handleChange}
                                   accept={'image/*'}

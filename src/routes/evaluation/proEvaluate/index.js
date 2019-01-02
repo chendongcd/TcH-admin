@@ -59,13 +59,16 @@ class CreateForm extends Component {
       resProgress: 0,
       previewVisible: false,
       previewImage: '',
-      isSignRes: '1'
+      isSignRes: '-1'
     };
     this.selectProject = {}
     this.upload = []
   }
 
   componentDidUpdate(preProp, preState) {
+    if (preProp.selectedValues.isResponsibility==undefined&&(this.props.selectedValues.isResponsibility||this.props.selectedValues.isResponsibility==0)) {
+      this.setState({isSignRes:this.props.selectedValues.isResponsibility})
+    }
     if (!preProp.selectedValues.jointHearingAnnex && this.props.selectedValues.jointHearingAnnex && this.state.jointHearingAnnex.length == 0) {
       let pdf = JSON.parse(this.props.selectedValues.jointHearingAnnex)
       let file = {
@@ -96,6 +99,7 @@ class CreateForm extends Component {
       }
       this.setState({evaluationAnnex: [file]})
     }
+
   }
 
   okHandle = () => {
@@ -117,12 +121,11 @@ class CreateForm extends Component {
 
   cleanState=()=>{
     this.selectProject = {}
-    this.setState({isSignRes:'',previewImage:'',responsibilityAnnex:[],jointHearingAnnex:[],evaluationAnnex:[]})
+    this.setState({isSignRes:'-1',previewImage:'',responsibilityAnnex:[],jointHearingAnnex:[],evaluationAnnex:[]})
   }
 
   onChange = (value, option) => {
     this.selectProject = option.props.item
-    console.log(this.selectProject)
     if(!this.selectProject.contractEndTime){
       return message.error('请先完善该项目工程信息卡');
     }
@@ -457,19 +460,19 @@ class CreateForm extends Component {
           <Row>
             <Col md={12} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 8}} label="责任状是否签订">
-              {form.getFieldDecorator('isSignRes', {
+              {form.getFieldDecorator('isResponsibility', {
                 rules: [{required: true, message: '请选择责任状是否签订'}],
-                initialValue: selectedValues.responsibilityBenefiy ? '0' : '1'
+                initialValue: selectedValues.isResponsibility=='0'||!selectedValues.isResponsibility ? '0' : '1'
               })(<Select onSelect={this._onSelect} className={styles.customSelect} disabled={checkDetail}
                          placeholder="请选择"
                          style={{width: '100%'}}>
-                <Option value="0">是</Option>
-                <Option value="1">否</Option>
+                <Option value="1">是</Option>
+                <Option value="0">否</Option>
               </Select>)}
             </FormItem>
           </Col>
           </Row>
-          {isSignRes=='0'? <Fragment>
+          {isSignRes=='1'? <Fragment>
             <Row gutter={8}>
               <Col md={8} sm={24}>
                 <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="效益点">
@@ -538,7 +541,7 @@ class CreateForm extends Component {
                   )}
                   <PreFile disabled={checkDetail} index={2} onClose={this.remove} onPreview={this.handlePreview} progress={resProgress}
                            file={responsibilityAnnex[0]}/>
-                  <span style={info_css}>备注：请以一份图片格式文件上传</span>
+                  <span style={info_css}>备注：请以一份PDF格式文件上传</span>
                 </FormItem>
               </Col>
             </Row>
@@ -811,9 +814,10 @@ class ProEvaluate extends Component {
       title: '责任状签订',
       children: [{
         title: '责任状是否签订',
-        key: 'isSigns',
+        dataIndex:'isResponsibility',
+        key: 'isResponsibility',
         render(val,record){
-          return<span>{record.responsibilityTime?'是':'否'}</span>
+          return<span>{val==1?'是':'否'}</span>
         }
       },{
         title: '效益点',
@@ -1007,6 +1011,7 @@ class ProEvaluate extends Component {
       responsibilityPeople: fields.responsibilityPeople,
       responsibilitySecretary: fields.responsibilitySecretary,
       responsibilityAnnex: fields.responsibilityAnnex,
+      isResponsibility:fields.isResponsibility
     }
     if (updateModalVisible) {
       dispatch({
@@ -1214,7 +1219,6 @@ class ProEvaluate extends Component {
       }
       cleanObject(payload)
       this.exportParams = payload
-      //  form.resetFields();
       this.props.dispatch({
         type: 'proEvaluate/fetch',
         payload: payload,

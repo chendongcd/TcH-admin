@@ -659,6 +659,7 @@ const CreateReview = Form.create()(props => {
     }
     return content
   }
+
   return (
     <Modal
       destroyOnClose
@@ -698,7 +699,6 @@ class Qualification extends Component {
       page: 1,
       pageSize: 10
     }
-    console.log('进入page')
   }
 
   columns = [

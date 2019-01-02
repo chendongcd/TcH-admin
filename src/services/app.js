@@ -4,7 +4,6 @@ import {request, config} from 'utils';
 const { apiDev} = config
 
 export async function signIn(params) {
-  console.log('请求服务了', `${apiDev}/user/login/v1.1`)
   return request(`${apiDev}/user/login/v1.1`, {
     method: 'POST',
     body: params
@@ -20,7 +19,6 @@ export async function signOut() {
 
 //获取文件上传token
 export async function upLoad() {
-  //console.log(`${apiDev}/file/qiniu_auth/v1.1`)
   return request(`${apiDev}/file/qiniu_auth/v1.1`, {
     method: 'GET'
   })

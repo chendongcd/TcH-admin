@@ -165,7 +165,7 @@ class CreateForm extends Component {
       object = {
         engineer: nextKeys,
       }
-      this.secretary = this.engineer.concat({name: '', time: '', phone: ''})
+      this.engineer = this.engineer.concat({name: '', time: '', phone: ''})
     } else {
       this.manager = this.manager.concat({name: '', time: '', phone: ''})
     }
@@ -345,6 +345,7 @@ class CreateForm extends Component {
 
   okHandle = (form, updateModalVisible, handleAdd, selectedValues) => {
     form.validateFields((err, fieldsValue) => {
+      console.log(this.engineer)
       if (err) return;
       for (let prop in fieldsValue) {
         if (fieldsValue[prop] instanceof moment) {
@@ -446,7 +447,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="工程状态">
                 {form.getFieldDecorator('status', {
                   rules: [{required: true, message: '请选择工程状态'}],
-                  initialValue: selectedValues.status ? selectedValues.status : '',
+                  initialValue: selectedValues.status||selectedValues.status==0 ? selectedValues.status : '',
                 })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择"
                            style={{width: '100%'}}>
                   {status.map((item, index) => {
@@ -771,21 +772,21 @@ class InfoCard extends Component {
       title: '项目经理',
       dataIndex: 'manager',
       render(val) {
-        return <span>{val[val.length - 1].name}</span>;
+        return <span>{val.length>0?val[val.length - 1].name:''}</span>;
       },
     },
     {
       title: '项目书记',
       dataIndex: 'secretary',
       render(val) {
-        return <span>{val[val.length - 1].name}</span>;
+        return <span>{val.length>0?val[val.length - 1].name:''}</span>;
       },
     },
     {
       title: '总工',
       dataIndex: 'engineer',
       render(val) {
-        return <span>{val[val.length - 1].name}</span>;
+        return <span>{val.length>0?val[val.length - 1].name:''}</span>;
       },
     },
     {

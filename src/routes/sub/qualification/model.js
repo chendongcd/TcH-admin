@@ -1,9 +1,7 @@
-import {addSubQua, querySubQuaList, updateSubQua,querySubQuaResume} from '../../../services/sub/qualification'
+import {addSubQua, querySubQuaList, updateSubQua} from '../../../services/sub/qualification'
 import {queryProPerList} from "../../../services/system/sys_project";
 import {message} from "antd";
 import * as routerRedux from "react-router-redux";
-
-
 
 export default {
   namespace: 'sub_qua',

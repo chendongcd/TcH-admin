@@ -321,7 +321,6 @@ class Resume extends Component {
       this.getSubNames()
       this.getTeamNames()
       this.getProNames()
-      this.getList()
       if(location.state&&location.state.subcontractorName){
         this.setState({locationPath:location.state.subcontractorName})
         let payload = {
@@ -334,6 +333,8 @@ class Resume extends Component {
           payload: payload,
           token: this.props.app.user.token
         });
+      }else {
+        this.getList()
       }
     }
   }

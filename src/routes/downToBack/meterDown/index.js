@@ -238,21 +238,21 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="扣除保质金">
+              <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="扣除质保金">
                 {form.getFieldDecorator('warranty', {
-                  rules: [{required: true, message: '请输入扣除保质金'}],
+                  rules: [{required: true, message: '请输入扣除质保金'}],
                   initialValue: selectedValues.warranty ? selectedValues.warranty : testValue,
-                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入扣除保质金" addonAfter="元"/>)}
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入扣除质保金" addonAfter="元"/>)}
               </FormItem>
             </Col>
           </Row>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="扣除覆约保质金">
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="扣除覆约保证金">
                 {form.getFieldDecorator('performanceBond', {
-                  rules: [{required: true, message: '请输入预付款'}],
+                  rules: [{required: true, message: '请输入保证金'}],
                   initialValue: selectedValues.performanceBond ? selectedValues.performanceBond : testValue,
-                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入扣除覆约保质金" addonAfter="元"/>)}
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入扣除覆约保证金" addonAfter="元"/>)}
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
@@ -397,7 +397,7 @@ class MeterDown extends Component {
   columns = [
     {
       title: '序号',
-      dataIndex: 'code',
+      dataIndex: 'id',
     },
     {
       title: '项目名称',
@@ -460,7 +460,7 @@ class MeterDown extends Component {
           key: 'warranty',
         },
         {
-          title: '扣除覆约保质金',
+          title: '扣除覆约保证金',
           dataIndex: 'performanceBond',
           key: 'performanceBond',
         },
@@ -532,7 +532,7 @@ class MeterDown extends Component {
     {
       title: '操作',
       render: (val, record) => {
-        if(record.id=='sum'){
+        if(record.id=='合计:'){
           return null
         }
         const user = this.props.app.user
