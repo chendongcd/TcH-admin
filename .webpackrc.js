@@ -1,7 +1,32 @@
 import {resolve} from 'path';
 
 export default {
+  hash: true,
   theme: "./theme.config.js",
+  entry: {
+    index: './src/index.js',
+    vendor: ['moment', 'react', 'react-dom', 'lodash', 'react-helmet', 'classnames'],
+    antd: [
+      'antd/lib/button',
+      'antd/lib/icon',
+      'antd/lib/table',
+      'antd/lib/date-picker',
+      'antd/lib/form',
+      'antd/lib/modal',
+      'antd/lib/grid',
+      'antd/lib/input',
+      'antd/lib/row',
+      'antd/lib/col',
+      'antd/lib/card'
+    ],
+  },
+  commons: [{
+    names: ['vendor', 'antd'],
+    minChunks: Infinity,
+  }],
+  html: {
+    "template": "./public/index.ejs"
+  },
   publicPath: "/",
   extraBabelPlugins: [
     ["import", {
@@ -25,7 +50,7 @@ export default {
     services: resolve(__dirname, "./src/services"),
     models: resolve(__dirname, "./src/models"),
     routes: resolve(__dirname, "./src/routes"),
-    common:resolve(__dirname,'./src/common')
+    common: resolve(__dirname, './src/common')
   },
   urlLoaderExcludes: [
     /\.svg$/,

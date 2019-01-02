@@ -187,7 +187,6 @@ class CreateForm extends Component {
 
   formManager = (managers, checkDetail, form, getFieldDecorator) => {
     if (managers) {
-     // console.log(managers)
       return managers.map((key, index) => {
         let isLast = (managers.length == index + 1)
         return (<Row key={`manager${index}`} gutter={8}>
@@ -355,7 +354,6 @@ class CreateForm extends Component {
       fieldsValue.manager = this.handleRanges(this.manager)
       fieldsValue.secretary = this.handleRanges(this.secretary)
       fieldsValue.engineer = this.handleRanges(this.engineer)
-      console.log(fieldsValue)
       handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
   };
