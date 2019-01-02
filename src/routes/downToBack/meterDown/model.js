@@ -110,7 +110,6 @@ export default {
     },
     * queryTeams({payload, token}, {call, put}) {
       const response = yield call(queryTeamList, payload, token);
-      console.log(response)
       if (response.code == '200') {
 
         yield put({

@@ -930,13 +930,6 @@ class Qualification extends Component {
   };
 
   handleAdd = (fieldsValue, updateModalVisible, selectedValues, cleanState) => {
-    // const {dispatch} = this.props;
-    // dispatch({
-    //   type: 'rule/add',
-    //   payload: {
-    //     desc: fields.desc,
-    //   },
-    // });
     const {dispatch, app: {user}} = this.props;
     const payload = {
       name: fieldsValue.name,
@@ -1219,19 +1212,18 @@ class Qualification extends Component {
     const {dispatch, app: {user}} = this.props;
     const payload = type == 0 ? {
       shareEvaluation: fieldsValue.shareEvaluation,
-      qualification: fieldsValue.qualification,
       shareRemark: fieldsValue.shareRemark
     } : type == 1 ? {
       groupEvaluation: fieldsValue.groupEvaluation,
       groupRemark: fieldsValue.groupRemark
     } : {
+      qualification:fieldsValue.qualification,
       companyEvaluation: fieldsValue.companyEvaluation,
-      groupEvaluation: fieldsValue.groupEvaluation
     }
     this.exportParams = payload
     dispatch({
       type: 'sub_qua/update',
-      payload: {...payload, ...{id: selectedValues.id,}},
+      payload: {...payload, ...{id: selectedValues.id}},
       token: user.token
     }).then(res => {
       if (res) {

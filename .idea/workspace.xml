@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f9cf8453-fce7-4f76-8b42-acb0ec5757a4" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/routes/system/permission/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/system/permission/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/downToBack/meterDown/model.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/downToBack/meterDown/model.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/sub/qualification/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/sub/qualification/index.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -18,11 +19,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/routes/system/permission/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="251">
-              <caret line="430" selection-start-line="430" selection-end-line="430" />
+            <state relative-caret-position="341">
+              <caret line="439" column="6" selection-start-line="439" selection-start-column="6" selection-end-line="439" selection-end-column="6" />
               <folding>
                 <element signature="e#650#1612#0" />
                 <element signature="e#817#997#0" />
@@ -144,10 +145,233 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/routes/sub/qualification/index.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="58">
+              <caret line="475" column="5" lean-forward="true" selection-start-line="475" selection-start-column="5" selection-end-line="475" selection-end-column="5" />
+              <folding>
+                <element signature="e#950#972#0" />
+                <element signature="e#1036#1207#0" />
+                <element signature="e#1242#1461#0" />
+                <element signature="e#1307#1331#0" />
+                <element signature="e#1337#1458#0" />
+                <element signature="e#1403#1433#0" />
+                <element signature="n#!!block;n#constructor#0;n#CreateForm#0" />
+                <element signature="e#1572#1670#0" />
+                <element signature="e#1719#2253#0" />
+                <element signature="e#1846#2247#0" />
+                <element signature="e#1907#2046#0" />
+                <element signature="e#1958#2038#0" />
+                <element signature="n#!!block;n#componentDidUpdate#0;n#CreateForm#0" />
+                <element signature="e#2434#2661#0" />
+                <element signature="e#2513#2615#0" />
+                <element signature="e#2751#2808#0" />
+                <element signature="e#2838#2946#0" />
+                <element signature="e#2858#2940#0" />
+                <element signature="n#!!block;n#componentWillUnmount#0;n#CreateForm#0" />
+                <element signature="e#3036#3071#0" />
+                <element signature="e#3735#3891#0" />
+                <element signature="e#3918#9359#0" />
+                <element signature="e#3966#4440#0" />
+                <element signature="e#3995#4423#0" />
+                <element signature="e#4031#4404#0" />
+                <element signature="e#4149#4320#0" />
+                <element signature="e#4451#6125#0" />
+                <element signature="e#4480#4952#0" />
+                <element signature="e#4515#4933#0" />
+                <element signature="e#4638#4823#0" />
+                <element signature="e#4965#5613#0" />
+                <element signature="e#5000#5594#0" />
+                <element signature="e#5126#5306#0" />
+                <element signature="e#5308#5566#0" />
+                <element signature="e#5626#6108#0" />
+                <element signature="e#5661#6089#0" />
+                <element signature="e#5792#5989#0" />
+                <element signature="e#6136#7675#0" />
+                <element signature="e#6165#6784#0" />
+                <element signature="e#6200#6765#0" />
+                <element signature="e#6318#6482#0" />
+                <element signature="e#6484#6737#0" />
+                <element signature="e#6797#7218#0" />
+                <element signature="e#6832#7199#0" />
+                <element signature="e#6948#7118#0" />
+                <element signature="e#7231#7658#0" />
+                <element signature="e#7266#7639#0" />
+                <element signature="e#7384#7556#0" />
+                <element signature="e#7686#8638#0" />
+                <element signature="e#7715#8181#0" />
+                <element signature="e#7751#8162#0" />
+                <element signature="e#7903#8079#0" />
+                <element signature="e#8194#8621#0" />
+                <element signature="e#8229#8602#0" />
+                <element signature="e#8347#8521#0" />
+                <element signature="e#8649#9344#0" />
+                <element signature="e#8678#9327#0" />
+                <element signature="e#8713#9308#0" />
+                <element signature="e#8840#9023#0" />
+                <element signature="e#9025#9280#0" />
+                <element signature="e#9368#9497#0" />
+                <element signature="e#9506#12157#0" />
+                <element signature="e#9554#11067#0" />
+                <element signature="e#9583#10057#0" />
+                <element signature="e#9618#10038#0" />
+                <element signature="e#9744#9934#0" />
+                <element signature="e#10070#10556#0" />
+                <element signature="e#10105#10537#0" />
+                <element signature="e#10235#10433#0" />
+                <element signature="e#10569#11050#0" />
+                <element signature="e#10604#11031#0" />
+                <element signature="e#10733#10926#0" />
+                <element signature="e#11078#12142#0" />
+                <element signature="e#11107#11590#0" />
+                <element signature="e#11142#11571#0" />
+                <element signature="e#11271#11465#0" />
+                <element signature="e#11603#12125#0" />
+                <element signature="e#11639#12106#0" />
+                <element signature="e#11802#12000#0" />
+                <element signature="e#12166#12294#0" />
+                <element signature="e#12303#13996#0" />
+                <element signature="e#12376#13981#0" />
+                <element signature="e#12405#12887#0" />
+                <element signature="e#12441#12868#0" />
+                <element signature="e#12577#12781#0" />
+                <element signature="e#12900#13459#0" />
+                <element signature="e#12935#13440#0" />
+                <element signature="e#13109#13330#0" />
+                <element signature="e#13472#13964#0" />
+                <element signature="e#13507#13945#0" />
+                <element signature="e#13639#13839#0" />
+                <element signature="e#14006#14134#0" />
+                <element signature="e#14143#15748#0" />
+                <element signature="e#14191#15733#0" />
+                <element signature="e#14220#14683#0" />
+                <element signature="e#14255#14664#0" />
+                <element signature="e#14385#14581#0" />
+                <element signature="e#14696#15217#0" />
+                <element signature="e#14731#15198#0" />
+                <element signature="e#14871#15088#0" />
+                <element signature="e#15230#15716#0" />
+                <element signature="e#15265#15697#0" />
+                <element signature="e#15395#15591#0" />
+                <element signature="e#15758#15889#0" />
+                <element signature="e#15898#17434#0" />
+                <element signature="e#15946#17419#0" />
+                <element signature="e#15975#16411#0" />
+                <element signature="e#16010#16392#0" />
+                <element signature="e#16131#16311#0" />
+                <element signature="e#16424#16924#0" />
+                <element signature="e#16459#16905#0" />
+                <element signature="e#16592#16795#0" />
+                <element signature="e#16937#17402#0" />
+                <element signature="e#16972#17383#0" />
+                <element signature="e#17095#17277#0" />
+                <element signature="e#17444#17575#0" />
+                <element signature="e#17584#19047#0" />
+                <element signature="e#17632#19032#0" />
+                <element signature="e#17661#18085#0" />
+                <element signature="e#17696#18066#0" />
+                <element signature="e#17813#17983#0" />
+                <element signature="e#18098#18543#0" />
+                <element signature="e#18133#18524#0" />
+                <element signature="e#18257#18441#0" />
+                <element signature="e#18556#19015#0" />
+                <element signature="e#18591#18996#0" />
+                <element signature="e#18712#18890#0" />
+                <element signature="e#19056#19182#0" />
+                <element signature="e#19191#21513#0" />
+                <element signature="e#19239#20938#0" />
+                <element signature="e#19266#20923#0" />
+                <element signature="e#19300#20906#0" />
+                <element signature="e#19446#19694#0" />
+                <element signature="e#19713#20594#0" />
+                <element signature="e#20397#20497#0" />
+                <element signature="e#20626#20774#0" />
+                <element signature="e#20949#21498#0" />
+                <element signature="e#20978#21481#0" />
+                <element signature="e#21014#21462#0" />
+                <element signature="e#21163#21318#0" />
+                <element signature="e#21522#21802#0" />
+                <element signature="e#21854#21925#0" />
+                <element signature="e#21889#21920#0" />
+                <element signature="e#21949#22011#0" />
+                <element signature="e#22097#22376#0" />
+                <element signature="e#22163#22281#0" />
+                <element signature="e#22398#22571#0" />
+                <element signature="e#22430#22488#0" />
+                <element signature="e#22494#22533#0" />
+                <element signature="e#22616#24070#0" />
+                <element signature="e#22695#24063#0" />
+                <element signature="e#22904#24050#0" />
+                <element signature="e#22950#23137#0" />
+                <element signature="e#22977#23122#0" />
+                <element signature="e#23011#23105#0" />
+                <element signature="e#23146#23486#0" />
+                <element signature="e#23173#23317#0" />
+                <element signature="e#23207#23300#0" />
+                <element signature="e#23328#23471#0" />
+                <element signature="e#23362#23454#0" />
+                <element signature="e#23495#23842#0" />
+                <element signature="e#23522#23670#0" />
+                <element signature="e#23556#23653#0" />
+                <element signature="e#23681#23827#0" />
+                <element signature="e#23715#23810#0" />
+                <element signature="e#23851#24037#0" />
+                <element signature="e#23878#24022#0" />
+                <element signature="e#23912#24005#0" />
+                <element signature="e#24414#24570#0" />
+                <element signature="e#24464#24497#0" />
+                <element signature="e#24517#24550#0" />
+                <element signature="e#24606#27523#0" />
+                <element signature="e#24627#25318#0" />
+                <element signature="e#24671#25307#0" />
+                <element signature="e#24696#25294#0" />
+                <element signature="e#24728#25279#0" />
+                <element signature="e#24858#25012#0" />
+                <element signature="e#25014#25255#0" />
+                <element signature="e#25340#26056#0" />
+                <element signature="e#25359#26049#0" />
+                <element signature="e#25405#26036#0" />
+                <element signature="e#25432#26021#0" />
+                <element signature="e#25466#26004#0" />
+                <element signature="e#25599#25759#0" />
+                <element signature="e#25761#25978#0" />
+                <element signature="e#26096#27493#0" />
+                <element signature="e#26142#26872#0" />
+                <element signature="e#26169#26857#0" />
+                <element signature="e#26202#26840#0" />
+                <element signature="e#26333#26497#0" />
+                <element signature="e#26499#26814#0" />
+                <element signature="e#26881#27480#0" />
+                <element signature="e#26908#27465#0" />
+                <element signature="e#26941#27448#0" />
+                <element signature="n#!!block;n#constructor#0;n#Qualification#0" />
+                <element signature="n#!!block;n#componentDidMount#0;n#Qualification#0" />
+                <element signature="e#34138#36325#0" />
+                <element signature="n#!!block;n#renderAdvancedForm#0;n#Qualification#0" />
+                <element signature="n#!!block;n#renderForm#0;n#Qualification#0" />
+                <element signature="n#!!block;n#render#0;n#Qualification#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/routes/downToBack/meterDown/model.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="178">
+              <caret line="112" selection-start-line="112" selection-end-line="112" />
+              <folding>
+                <element signature="e#0#90#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/common/menu.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="252">
-              <caret line="173" column="48" lean-forward="true" selection-start-line="173" selection-start-column="48" selection-end-line="173" selection-end-column="48" />
+              <caret line="173" column="48" selection-start-line="173" selection-start-column="48" selection-end-line="173" selection-end-column="48" />
             </state>
           </provider>
         </entry>
@@ -163,7 +387,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>contractNum</find>
       <find>天</find>
       <find>loading</find>
       <find>loginLoading</find>
@@ -181,7 +404,6 @@
       <find>isSig</find>
       <find>isResponsibility</find>
       <find>工程状态</find>
-      <find>conso</find>
       <find>id</find>
       <find>isSignRes</find>
       <find>underRate</find>
@@ -193,6 +415,8 @@
       <find>队伍状态</find>
       <find>setPermission</find>
       <find>onCertain</find>
+      <find>资质是否齐全</find>
+      <find>conso</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -234,9 +458,7 @@
         <option value="$PROJECT_DIR$/.webpackrc.js" />
         <option value="$PROJECT_DIR$/src/services/sub/qualification.js" />
         <option value="$PROJECT_DIR$/src/routes/sub/resume/index.js" />
-        <option value="$PROJECT_DIR$/src/routes/sub/qualification/index.js" />
         <option value="$PROJECT_DIR$/src/routes/sub/qualification/model.js" />
-        <option value="$PROJECT_DIR$/src/routes/downToBack/meterDown/model.js" />
         <option value="$PROJECT_DIR$/src/routes/project/infoCard/index.js" />
         <option value="$PROJECT_DIR$/src/routes/project/infoCard/model.js" />
         <option value="$PROJECT_DIR$/src/services/document/fileRead.js" />
@@ -261,6 +483,8 @@
         <option value="$PROJECT_DIR$/src/routes/downToBack/teamAccount/index.js" />
         <option value="$PROJECT_DIR$/src/routes/downToBack/meterDown/index.js" />
         <option value="$PROJECT_DIR$/src/routes/system/permission/index.js" />
+        <option value="$PROJECT_DIR$/src/routes/sub/qualification/index.js" />
+        <option value="$PROJECT_DIR$/src/routes/downToBack/meterDown/model.js" />
       </list>
     </option>
   </component>
@@ -299,13 +523,37 @@
               <item name="TcH-admin" type="b2602c69:ProjectViewProjectNode" />
               <item name="TcH-admin" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="common" type="462c0819:PsiDirectoryNode" />
+              <item name="routes" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="TcH-admin" type="b2602c69:ProjectViewProjectNode" />
               <item name="TcH-admin" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="routes" type="462c0819:PsiDirectoryNode" />
+              <item name="downToBack" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TcH-admin" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TcH-admin" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="routes" type="462c0819:PsiDirectoryNode" />
+              <item name="downToBack" type="462c0819:PsiDirectoryNode" />
+              <item name="meterDown" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TcH-admin" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TcH-admin" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="routes" type="462c0819:PsiDirectoryNode" />
+              <item name="sub" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TcH-admin" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TcH-admin" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="routes" type="462c0819:PsiDirectoryNode" />
+              <item name="sub" type="462c0819:PsiDirectoryNode" />
+              <item name="qualification" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="TcH-admin" type="b2602c69:ProjectViewProjectNode" />
@@ -475,18 +723,18 @@
       <workItem from="1546051922743" duration="12645000" />
       <workItem from="1546178575916" duration="5988000" />
       <workItem from="1546354908748" duration="3310000" />
-      <workItem from="1546415409685" duration="19928000" />
+      <workItem from="1546415409685" duration="21088000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="838789000" />
+    <option name="totallyTimeSpent" value="839949000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="173" y="23" width="1246" height="820" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.8150573" visible="true" weight="0.21632653" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.8150573" visible="true" weight="0.21632653" />
       <window_info id="Structure" order="1" weight="0.24964337" />
       <window_info id="npm" order="2" sideWeight="0.18494272" side_tool="true" visible="true" weight="0.21632653" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -500,7 +748,7 @@
       <window_info anchor="bottom" id="TypeScript" order="7" />
       <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.3289256" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.16071428" />
+      <window_info anchor="bottom" id="Terminal" order="10" visible="true" weight="0.16071428" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -702,216 +950,6 @@
             <element signature="e#2843#2903#0" />
             <element signature="e#2943#3024#0" />
             <element signature="e#2958#3018#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/routes/sub/qualification/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="487" lean-forward="true" selection-start-line="487" selection-end-line="487" />
-          <folding>
-            <element signature="e#950#972#0" />
-            <element signature="e#1036#1207#0" />
-            <element signature="e#1242#1461#0" />
-            <element signature="e#1307#1331#0" />
-            <element signature="e#1337#1458#0" />
-            <element signature="e#1403#1433#0" />
-            <element signature="n#!!block;n#constructor#0;n#CreateForm#0" />
-            <element signature="e#1572#1670#0" />
-            <element signature="e#1719#2253#0" />
-            <element signature="e#1846#2247#0" />
-            <element signature="e#1907#2046#0" />
-            <element signature="e#1958#2038#0" />
-            <element signature="n#!!block;n#componentDidUpdate#0;n#CreateForm#0" />
-            <element signature="e#2434#2661#0" />
-            <element signature="e#2513#2615#0" />
-            <element signature="e#2751#2808#0" />
-            <element signature="e#2838#2946#0" />
-            <element signature="e#2858#2940#0" />
-            <element signature="n#!!block;n#componentWillUnmount#0;n#CreateForm#0" />
-            <element signature="e#3036#3071#0" />
-            <element signature="e#3735#3891#0" />
-            <element signature="e#3918#9359#0" />
-            <element signature="e#3966#4440#0" />
-            <element signature="e#3995#4423#0" />
-            <element signature="e#4031#4404#0" />
-            <element signature="e#4149#4320#0" />
-            <element signature="e#4451#6125#0" />
-            <element signature="e#4480#4952#0" />
-            <element signature="e#4515#4933#0" />
-            <element signature="e#4638#4823#0" />
-            <element signature="e#4965#5613#0" />
-            <element signature="e#5000#5594#0" />
-            <element signature="e#5126#5306#0" />
-            <element signature="e#5308#5566#0" />
-            <element signature="e#5626#6108#0" />
-            <element signature="e#5661#6089#0" />
-            <element signature="e#5792#5989#0" />
-            <element signature="e#6136#7675#0" />
-            <element signature="e#6165#6784#0" />
-            <element signature="e#6200#6765#0" />
-            <element signature="e#6318#6482#0" />
-            <element signature="e#6484#6737#0" />
-            <element signature="e#6797#7218#0" />
-            <element signature="e#6832#7199#0" />
-            <element signature="e#6948#7118#0" />
-            <element signature="e#7231#7658#0" />
-            <element signature="e#7266#7639#0" />
-            <element signature="e#7384#7556#0" />
-            <element signature="e#7686#8638#0" />
-            <element signature="e#7715#8181#0" />
-            <element signature="e#7751#8162#0" />
-            <element signature="e#7903#8079#0" />
-            <element signature="e#8194#8621#0" />
-            <element signature="e#8229#8602#0" />
-            <element signature="e#8347#8521#0" />
-            <element signature="e#8649#9344#0" />
-            <element signature="e#8678#9327#0" />
-            <element signature="e#8713#9308#0" />
-            <element signature="e#8840#9023#0" />
-            <element signature="e#9025#9280#0" />
-            <element signature="e#9368#9497#0" />
-            <element signature="e#9506#12157#0" />
-            <element signature="e#9554#11067#0" />
-            <element signature="e#9583#10057#0" />
-            <element signature="e#9618#10038#0" />
-            <element signature="e#9744#9934#0" />
-            <element signature="e#10070#10556#0" />
-            <element signature="e#10105#10537#0" />
-            <element signature="e#10235#10433#0" />
-            <element signature="e#10569#11050#0" />
-            <element signature="e#10604#11031#0" />
-            <element signature="e#10733#10926#0" />
-            <element signature="e#11078#12142#0" />
-            <element signature="e#11107#11590#0" />
-            <element signature="e#11142#11571#0" />
-            <element signature="e#11271#11465#0" />
-            <element signature="e#11603#12125#0" />
-            <element signature="e#11639#12106#0" />
-            <element signature="e#11802#12000#0" />
-            <element signature="e#12166#12294#0" />
-            <element signature="e#12303#13996#0" />
-            <element signature="e#12376#13981#0" />
-            <element signature="e#12405#12887#0" />
-            <element signature="e#12441#12868#0" />
-            <element signature="e#12577#12781#0" />
-            <element signature="e#12900#13459#0" />
-            <element signature="e#12935#13440#0" />
-            <element signature="e#13109#13330#0" />
-            <element signature="e#13472#13964#0" />
-            <element signature="e#13507#13945#0" />
-            <element signature="e#13639#13839#0" />
-            <element signature="e#14006#14134#0" />
-            <element signature="e#14143#15748#0" />
-            <element signature="e#14191#15733#0" />
-            <element signature="e#14220#14683#0" />
-            <element signature="e#14255#14664#0" />
-            <element signature="e#14385#14581#0" />
-            <element signature="e#14696#15217#0" />
-            <element signature="e#14731#15198#0" />
-            <element signature="e#14871#15088#0" />
-            <element signature="e#15230#15716#0" />
-            <element signature="e#15265#15697#0" />
-            <element signature="e#15395#15591#0" />
-            <element signature="e#15758#15889#0" />
-            <element signature="e#15898#17434#0" />
-            <element signature="e#15946#17419#0" />
-            <element signature="e#15975#16411#0" />
-            <element signature="e#16010#16392#0" />
-            <element signature="e#16131#16311#0" />
-            <element signature="e#16424#16924#0" />
-            <element signature="e#16459#16905#0" />
-            <element signature="e#16592#16795#0" />
-            <element signature="e#16937#17402#0" />
-            <element signature="e#16972#17383#0" />
-            <element signature="e#17095#17277#0" />
-            <element signature="e#17444#17575#0" />
-            <element signature="e#17584#19047#0" />
-            <element signature="e#17632#19032#0" />
-            <element signature="e#17661#18085#0" />
-            <element signature="e#17696#18066#0" />
-            <element signature="e#17813#17983#0" />
-            <element signature="e#18098#18543#0" />
-            <element signature="e#18133#18524#0" />
-            <element signature="e#18257#18441#0" />
-            <element signature="e#18556#19015#0" />
-            <element signature="e#18591#18996#0" />
-            <element signature="e#18712#18890#0" />
-            <element signature="e#19056#19182#0" />
-            <element signature="e#19191#21513#0" />
-            <element signature="e#19239#20938#0" />
-            <element signature="e#19266#20923#0" />
-            <element signature="e#19300#20906#0" />
-            <element signature="e#19446#19694#0" />
-            <element signature="e#19713#20594#0" />
-            <element signature="e#20397#20497#0" />
-            <element signature="e#20626#20774#0" />
-            <element signature="e#20949#21498#0" />
-            <element signature="e#20978#21481#0" />
-            <element signature="e#21014#21462#0" />
-            <element signature="e#21163#21318#0" />
-            <element signature="e#21522#21802#0" />
-            <element signature="e#21854#21925#0" />
-            <element signature="e#21889#21920#0" />
-            <element signature="e#21949#22011#0" />
-            <element signature="e#22097#22376#0" />
-            <element signature="e#22163#22281#0" />
-            <element signature="e#22398#22571#0" />
-            <element signature="e#22430#22488#0" />
-            <element signature="e#22494#22533#0" />
-            <element signature="e#22616#24070#0" />
-            <element signature="e#22695#24063#0" />
-            <element signature="e#22904#24050#0" />
-            <element signature="e#22950#23137#0" />
-            <element signature="e#22977#23122#0" />
-            <element signature="e#23011#23105#0" />
-            <element signature="e#23146#23486#0" />
-            <element signature="e#23173#23317#0" />
-            <element signature="e#23207#23300#0" />
-            <element signature="e#23328#23471#0" />
-            <element signature="e#23362#23454#0" />
-            <element signature="e#23495#23842#0" />
-            <element signature="e#23522#23670#0" />
-            <element signature="e#23556#23653#0" />
-            <element signature="e#23681#23827#0" />
-            <element signature="e#23715#23810#0" />
-            <element signature="e#23851#24037#0" />
-            <element signature="e#23878#24022#0" />
-            <element signature="e#23912#24005#0" />
-            <element signature="e#24414#24570#0" />
-            <element signature="e#24464#24497#0" />
-            <element signature="e#24517#24550#0" />
-            <element signature="e#24606#27523#0" />
-            <element signature="e#24627#25318#0" />
-            <element signature="e#24671#25307#0" />
-            <element signature="e#24696#25294#0" />
-            <element signature="e#24728#25279#0" />
-            <element signature="e#24858#25012#0" />
-            <element signature="e#25014#25255#0" />
-            <element signature="e#25340#26056#0" />
-            <element signature="e#25359#26049#0" />
-            <element signature="e#25405#26036#0" />
-            <element signature="e#25432#26021#0" />
-            <element signature="e#25466#26004#0" />
-            <element signature="e#25599#25759#0" />
-            <element signature="e#25761#25978#0" />
-            <element signature="e#26096#27493#0" />
-            <element signature="e#26142#26872#0" />
-            <element signature="e#26169#26857#0" />
-            <element signature="e#26202#26840#0" />
-            <element signature="e#26333#26497#0" />
-            <element signature="e#26499#26814#0" />
-            <element signature="e#26881#27480#0" />
-            <element signature="e#26908#27465#0" />
-            <element signature="e#26941#27448#0" />
-            <element signature="e#27068#27224#0" />
-            <element signature="e#27226#27422#0" />
-            <element signature="n#!!block;n#constructor#0;n#Qualification#0" />
-            <element signature="n#!!block;n#componentDidMount#0;n#Qualification#0" />
-            <element signature="n#!!block;n#renderAdvancedForm#0;n#Qualification#0" />
-            <element signature="n#!!block;n#renderForm#0;n#Qualification#0" />
-            <element signature="n#!!block;n#render#0;n#Qualification#0" />
           </folding>
         </state>
       </provider>
@@ -1501,16 +1539,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/routes/downToBack/meterDown/model.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="41" column="25" lean-forward="true" selection-start-line="41" selection-start-column="25" selection-end-line="41" selection-end-column="25" />
-          <folding>
-            <element signature="e#0#90#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/utils/config.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
@@ -2003,14 +2031,14 @@
     <entry file="file://$PROJECT_DIR$/src/common/menu.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="252">
-          <caret line="173" column="48" lean-forward="true" selection-start-line="173" selection-start-column="48" selection-end-line="173" selection-end-column="48" />
+          <caret line="173" column="48" selection-start-line="173" selection-start-column="48" selection-end-line="173" selection-end-column="48" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/routes/system/permission/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="251">
-          <caret line="430" selection-start-line="430" selection-end-line="430" />
+        <state relative-caret-position="341">
+          <caret line="439" column="6" selection-start-line="439" selection-start-column="6" selection-end-line="439" selection-end-column="6" />
           <folding>
             <element signature="e#650#1612#0" />
             <element signature="e#817#997#0" />
@@ -2126,6 +2154,225 @@
             <element signature="e#13773#14103#0" />
             <element signature="e#13832#14097#0" />
             <element signature="e#14023#14088#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/routes/sub/qualification/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="58">
+          <caret line="475" column="5" lean-forward="true" selection-start-line="475" selection-start-column="5" selection-end-line="475" selection-end-column="5" />
+          <folding>
+            <element signature="e#950#972#0" />
+            <element signature="e#1036#1207#0" />
+            <element signature="e#1242#1461#0" />
+            <element signature="e#1307#1331#0" />
+            <element signature="e#1337#1458#0" />
+            <element signature="e#1403#1433#0" />
+            <element signature="n#!!block;n#constructor#0;n#CreateForm#0" />
+            <element signature="e#1572#1670#0" />
+            <element signature="e#1719#2253#0" />
+            <element signature="e#1846#2247#0" />
+            <element signature="e#1907#2046#0" />
+            <element signature="e#1958#2038#0" />
+            <element signature="n#!!block;n#componentDidUpdate#0;n#CreateForm#0" />
+            <element signature="e#2434#2661#0" />
+            <element signature="e#2513#2615#0" />
+            <element signature="e#2751#2808#0" />
+            <element signature="e#2838#2946#0" />
+            <element signature="e#2858#2940#0" />
+            <element signature="n#!!block;n#componentWillUnmount#0;n#CreateForm#0" />
+            <element signature="e#3036#3071#0" />
+            <element signature="e#3735#3891#0" />
+            <element signature="e#3918#9359#0" />
+            <element signature="e#3966#4440#0" />
+            <element signature="e#3995#4423#0" />
+            <element signature="e#4031#4404#0" />
+            <element signature="e#4149#4320#0" />
+            <element signature="e#4451#6125#0" />
+            <element signature="e#4480#4952#0" />
+            <element signature="e#4515#4933#0" />
+            <element signature="e#4638#4823#0" />
+            <element signature="e#4965#5613#0" />
+            <element signature="e#5000#5594#0" />
+            <element signature="e#5126#5306#0" />
+            <element signature="e#5308#5566#0" />
+            <element signature="e#5626#6108#0" />
+            <element signature="e#5661#6089#0" />
+            <element signature="e#5792#5989#0" />
+            <element signature="e#6136#7675#0" />
+            <element signature="e#6165#6784#0" />
+            <element signature="e#6200#6765#0" />
+            <element signature="e#6318#6482#0" />
+            <element signature="e#6484#6737#0" />
+            <element signature="e#6797#7218#0" />
+            <element signature="e#6832#7199#0" />
+            <element signature="e#6948#7118#0" />
+            <element signature="e#7231#7658#0" />
+            <element signature="e#7266#7639#0" />
+            <element signature="e#7384#7556#0" />
+            <element signature="e#7686#8638#0" />
+            <element signature="e#7715#8181#0" />
+            <element signature="e#7751#8162#0" />
+            <element signature="e#7903#8079#0" />
+            <element signature="e#8194#8621#0" />
+            <element signature="e#8229#8602#0" />
+            <element signature="e#8347#8521#0" />
+            <element signature="e#8649#9344#0" />
+            <element signature="e#8678#9327#0" />
+            <element signature="e#8713#9308#0" />
+            <element signature="e#8840#9023#0" />
+            <element signature="e#9025#9280#0" />
+            <element signature="e#9368#9497#0" />
+            <element signature="e#9506#12157#0" />
+            <element signature="e#9554#11067#0" />
+            <element signature="e#9583#10057#0" />
+            <element signature="e#9618#10038#0" />
+            <element signature="e#9744#9934#0" />
+            <element signature="e#10070#10556#0" />
+            <element signature="e#10105#10537#0" />
+            <element signature="e#10235#10433#0" />
+            <element signature="e#10569#11050#0" />
+            <element signature="e#10604#11031#0" />
+            <element signature="e#10733#10926#0" />
+            <element signature="e#11078#12142#0" />
+            <element signature="e#11107#11590#0" />
+            <element signature="e#11142#11571#0" />
+            <element signature="e#11271#11465#0" />
+            <element signature="e#11603#12125#0" />
+            <element signature="e#11639#12106#0" />
+            <element signature="e#11802#12000#0" />
+            <element signature="e#12166#12294#0" />
+            <element signature="e#12303#13996#0" />
+            <element signature="e#12376#13981#0" />
+            <element signature="e#12405#12887#0" />
+            <element signature="e#12441#12868#0" />
+            <element signature="e#12577#12781#0" />
+            <element signature="e#12900#13459#0" />
+            <element signature="e#12935#13440#0" />
+            <element signature="e#13109#13330#0" />
+            <element signature="e#13472#13964#0" />
+            <element signature="e#13507#13945#0" />
+            <element signature="e#13639#13839#0" />
+            <element signature="e#14006#14134#0" />
+            <element signature="e#14143#15748#0" />
+            <element signature="e#14191#15733#0" />
+            <element signature="e#14220#14683#0" />
+            <element signature="e#14255#14664#0" />
+            <element signature="e#14385#14581#0" />
+            <element signature="e#14696#15217#0" />
+            <element signature="e#14731#15198#0" />
+            <element signature="e#14871#15088#0" />
+            <element signature="e#15230#15716#0" />
+            <element signature="e#15265#15697#0" />
+            <element signature="e#15395#15591#0" />
+            <element signature="e#15758#15889#0" />
+            <element signature="e#15898#17434#0" />
+            <element signature="e#15946#17419#0" />
+            <element signature="e#15975#16411#0" />
+            <element signature="e#16010#16392#0" />
+            <element signature="e#16131#16311#0" />
+            <element signature="e#16424#16924#0" />
+            <element signature="e#16459#16905#0" />
+            <element signature="e#16592#16795#0" />
+            <element signature="e#16937#17402#0" />
+            <element signature="e#16972#17383#0" />
+            <element signature="e#17095#17277#0" />
+            <element signature="e#17444#17575#0" />
+            <element signature="e#17584#19047#0" />
+            <element signature="e#17632#19032#0" />
+            <element signature="e#17661#18085#0" />
+            <element signature="e#17696#18066#0" />
+            <element signature="e#17813#17983#0" />
+            <element signature="e#18098#18543#0" />
+            <element signature="e#18133#18524#0" />
+            <element signature="e#18257#18441#0" />
+            <element signature="e#18556#19015#0" />
+            <element signature="e#18591#18996#0" />
+            <element signature="e#18712#18890#0" />
+            <element signature="e#19056#19182#0" />
+            <element signature="e#19191#21513#0" />
+            <element signature="e#19239#20938#0" />
+            <element signature="e#19266#20923#0" />
+            <element signature="e#19300#20906#0" />
+            <element signature="e#19446#19694#0" />
+            <element signature="e#19713#20594#0" />
+            <element signature="e#20397#20497#0" />
+            <element signature="e#20626#20774#0" />
+            <element signature="e#20949#21498#0" />
+            <element signature="e#20978#21481#0" />
+            <element signature="e#21014#21462#0" />
+            <element signature="e#21163#21318#0" />
+            <element signature="e#21522#21802#0" />
+            <element signature="e#21854#21925#0" />
+            <element signature="e#21889#21920#0" />
+            <element signature="e#21949#22011#0" />
+            <element signature="e#22097#22376#0" />
+            <element signature="e#22163#22281#0" />
+            <element signature="e#22398#22571#0" />
+            <element signature="e#22430#22488#0" />
+            <element signature="e#22494#22533#0" />
+            <element signature="e#22616#24070#0" />
+            <element signature="e#22695#24063#0" />
+            <element signature="e#22904#24050#0" />
+            <element signature="e#22950#23137#0" />
+            <element signature="e#22977#23122#0" />
+            <element signature="e#23011#23105#0" />
+            <element signature="e#23146#23486#0" />
+            <element signature="e#23173#23317#0" />
+            <element signature="e#23207#23300#0" />
+            <element signature="e#23328#23471#0" />
+            <element signature="e#23362#23454#0" />
+            <element signature="e#23495#23842#0" />
+            <element signature="e#23522#23670#0" />
+            <element signature="e#23556#23653#0" />
+            <element signature="e#23681#23827#0" />
+            <element signature="e#23715#23810#0" />
+            <element signature="e#23851#24037#0" />
+            <element signature="e#23878#24022#0" />
+            <element signature="e#23912#24005#0" />
+            <element signature="e#24414#24570#0" />
+            <element signature="e#24464#24497#0" />
+            <element signature="e#24517#24550#0" />
+            <element signature="e#24606#27523#0" />
+            <element signature="e#24627#25318#0" />
+            <element signature="e#24671#25307#0" />
+            <element signature="e#24696#25294#0" />
+            <element signature="e#24728#25279#0" />
+            <element signature="e#24858#25012#0" />
+            <element signature="e#25014#25255#0" />
+            <element signature="e#25340#26056#0" />
+            <element signature="e#25359#26049#0" />
+            <element signature="e#25405#26036#0" />
+            <element signature="e#25432#26021#0" />
+            <element signature="e#25466#26004#0" />
+            <element signature="e#25599#25759#0" />
+            <element signature="e#25761#25978#0" />
+            <element signature="e#26096#27493#0" />
+            <element signature="e#26142#26872#0" />
+            <element signature="e#26169#26857#0" />
+            <element signature="e#26202#26840#0" />
+            <element signature="e#26333#26497#0" />
+            <element signature="e#26499#26814#0" />
+            <element signature="e#26881#27480#0" />
+            <element signature="e#26908#27465#0" />
+            <element signature="e#26941#27448#0" />
+            <element signature="n#!!block;n#constructor#0;n#Qualification#0" />
+            <element signature="n#!!block;n#componentDidMount#0;n#Qualification#0" />
+            <element signature="e#34138#36325#0" />
+            <element signature="n#!!block;n#renderAdvancedForm#0;n#Qualification#0" />
+            <element signature="n#!!block;n#renderForm#0;n#Qualification#0" />
+            <element signature="n#!!block;n#render#0;n#Qualification#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/routes/downToBack/meterDown/model.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="178">
+          <caret line="112" selection-start-line="112" selection-end-line="112" />
+          <folding>
+            <element signature="e#0#90#0" expanded="true" />
           </folding>
         </state>
       </provider>
