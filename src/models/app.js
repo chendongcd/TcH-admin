@@ -33,7 +33,6 @@ export default {
   subscriptions: {
     setupHistory({dispatch, history}) {
       history.listen((location) => {
-        console.log(location)
         dispatch({
           type: 'checkRouter',
           payload: {

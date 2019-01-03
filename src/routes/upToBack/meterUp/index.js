@@ -79,7 +79,7 @@ class CreateForm extends Component {
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      fieldsValue.meteringTime = fieldsValue.meteringTime.format('YYYY-MM-DD')
+      fieldsValue.meteringTime = fieldsValue.meteringTime.format('YYYY-MM')
       fieldsValue.annexUrl = `{"url":"${this.state.fileList[0].url}","fileName":"${this.state.fileList[0].name}"}`
       handleAdd(fieldsValue, updateModalVisible, selectedValues, this.cleanState);
     });
@@ -306,7 +306,7 @@ class CreateForm extends Component {
                 )}
                 <PreFile disabled={checkDetail} onClose={this.remove} onPreview={this.handlePreview} progress={progress}
                          file={fileList[0]}/>
-                <span style={info_css}>备注：请以一份PDF格式文件上传封面和汇总表</span>
+                <span style={info_css}>备注：请以一份PDF格式文件上传封面、汇总表、清单计量表</span>
               </FormItem>
             </Col>
           </Row>
@@ -831,7 +831,6 @@ class MeterUp extends Component {
         meteringTime: time
       }
       cleanObject(payload)
-
       this.exportParams = payload
       this.props.dispatch({
         type: 'meterUp/fetch',
