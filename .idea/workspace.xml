@@ -5,15 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f9cf8453-fce7-4f76-8b42-acb0ec5757a4" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/downToBack/meterDown/model.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/downToBack/meterDown/model.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/downToBack/teamAccount/model.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/downToBack/teamAccount/model.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/evaluation/proEvaluate/model.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/evaluation/proEvaluate/model.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/peopleManage/info/model.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/peopleManage/info/model.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/project/infoCard/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/project/infoCard/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/project/infoCard/model.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/project/infoCard/model.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/sub/resume/model.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/sub/resume/model.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/upToBack/meterUp/model.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/upToBack/meterUp/model.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/system/user/model.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/system/user/model.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -419,7 +412,7 @@
         <entry file="file://$PROJECT_DIR$/src/routes/sub/resume/index.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="320">
-              <caret line="237" column="6" lean-forward="true" selection-start-line="237" selection-start-column="6" selection-end-line="237" selection-end-column="6" />
+              <caret line="237" column="6" selection-start-line="237" selection-start-column="6" selection-end-line="237" selection-end-column="6" />
               <folding>
                 <element signature="e#759#6061#0" />
                 <element signature="e#988#1314#0" />
@@ -507,7 +500,7 @@
         <entry file="file://$PROJECT_DIR$/src/routes/sub/resume/model.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="301">
-              <caret line="84" column="19" lean-forward="true" selection-start-line="84" selection-start-column="19" selection-end-line="84" selection-end-column="19" />
+              <caret line="84" column="19" selection-start-line="84" selection-start-column="19" selection-end-line="84" selection-end-column="19" />
               <folding>
                 <element signature="e#316#429#0" />
                 <element signature="e#328#373#0" />
@@ -542,10 +535,22 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/routes/downToBack/meterDown/model.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
-              <caret line="89" selection-start-line="89" selection-end-line="89" />
+            <state relative-caret-position="217">
+              <caret line="98" column="35" selection-start-line="98" selection-start-column="35" selection-end-line="98" selection-end-column="35" />
               <folding>
                 <element signature="e#0#90#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/routes/system/user/model.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="165">
+              <caret line="76" column="7" lean-forward="true" selection-start-line="76" selection-start-column="7" selection-end-line="76" selection-end-column="7" />
+              <folding>
+                <element signature="e#0#113#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -567,7 +572,7 @@
         <entry file="file://$PROJECT_DIR$/src/routes/peopleManage/info/model.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="254">
-              <caret line="57" column="53" lean-forward="true" selection-start-line="57" selection-start-column="53" selection-end-line="57" selection-end-column="53" />
+              <caret line="57" column="53" selection-start-line="57" selection-start-column="53" selection-end-line="57" selection-end-column="53" />
               <folding>
                 <element signature="e#0#99#0" expanded="true" />
               </folding>
@@ -575,11 +580,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/routes/evaluation/proEvaluate/model.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="206">
-              <caret line="54" column="19" lean-forward="true" selection-start-line="54" selection-start-column="19" selection-end-line="54" selection-end-column="19" />
+            <state relative-caret-position="403">
+              <caret line="51" column="47" lean-forward="true" selection-start-line="51" selection-start-column="47" selection-end-line="51" selection-end-column="47" />
               <folding>
                 <element signature="e#0#87#0" expanded="true" />
               </folding>
@@ -645,7 +650,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/routes/system/user/index.js" />
         <option value="$PROJECT_DIR$/src/routes/system/project/index.js" />
         <option value="$PROJECT_DIR$/src/routes/document/fileRead/index.js" />
         <option value="$PROJECT_DIR$/src/routes/document/fileReference/index.js" />
@@ -692,10 +696,11 @@
         <option value="$PROJECT_DIR$/src/routes/upToBack/meterUp/model.js" />
         <option value="$PROJECT_DIR$/src/routes/project/infoCard/model.js" />
         <option value="$PROJECT_DIR$/src/routes/sub/resume/model.js" />
-        <option value="$PROJECT_DIR$/src/routes/downToBack/meterDown/model.js" />
         <option value="$PROJECT_DIR$/src/routes/downToBack/teamAccount/model.js" />
         <option value="$PROJECT_DIR$/src/routes/peopleManage/info/model.js" />
         <option value="$PROJECT_DIR$/src/routes/evaluation/proEvaluate/model.js" />
+        <option value="$PROJECT_DIR$/src/routes/downToBack/meterDown/model.js" />
+        <option value="$PROJECT_DIR$/src/routes/system/user/model.js" />
       </list>
     </option>
   </component>
@@ -706,7 +711,7 @@
     <auto-save>true</auto-save>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="173" />
+    <option name="x" value="548" />
     <option name="y" value="23" />
     <option name="width" value="1246" />
     <option name="height" value="820" />
@@ -740,15 +745,15 @@
               <item name="TcH-admin" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="routes" type="462c0819:PsiDirectoryNode" />
-              <item name="evaluation" type="462c0819:PsiDirectoryNode" />
+              <item name="system" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="TcH-admin" type="b2602c69:ProjectViewProjectNode" />
               <item name="TcH-admin" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="routes" type="462c0819:PsiDirectoryNode" />
-              <item name="evaluation" type="462c0819:PsiDirectoryNode" />
-              <item name="proEvaluate" type="462c0819:PsiDirectoryNode" />
+              <item name="system" type="462c0819:PsiDirectoryNode" />
+              <item name="user" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -905,15 +910,15 @@
       <workItem from="1546178575916" duration="5988000" />
       <workItem from="1546354908748" duration="3310000" />
       <workItem from="1546415409685" duration="21357000" />
-      <workItem from="1546472862990" duration="591000" />
+      <workItem from="1546472862990" duration="1256000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="840809000" />
+    <option name="totallyTimeSpent" value="841474000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="173" y="23" width="1246" height="820" extended-state="0" />
+    <frame x="548" y="23" width="1246" height="820" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.8150573" visible="true" weight="0.21632653" />
@@ -962,16 +967,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/components/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="7" selection-start-line="1" selection-start-column="7" selection-end-line="1" selection-end-column="7" />
-          <folding>
-            <element signature="e#1#34#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/preFile.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
@@ -2384,7 +2379,7 @@
     <entry file="file://$PROJECT_DIR$/src/routes/sub/resume/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="320">
-          <caret line="237" column="6" lean-forward="true" selection-start-line="237" selection-start-column="6" selection-end-line="237" selection-end-column="6" />
+          <caret line="237" column="6" selection-start-line="237" selection-start-column="6" selection-end-line="237" selection-end-column="6" />
           <folding>
             <element signature="e#759#6061#0" />
             <element signature="e#988#1314#0" />
@@ -2480,7 +2475,7 @@
     <entry file="file://$PROJECT_DIR$/src/routes/sub/resume/model.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="301">
-          <caret line="84" column="19" lean-forward="true" selection-start-line="84" selection-start-column="19" selection-end-line="84" selection-end-column="19" />
+          <caret line="84" column="19" selection-start-line="84" selection-start-column="19" selection-end-line="84" selection-end-column="19" />
           <folding>
             <element signature="e#316#429#0" />
             <element signature="e#328#373#0" />
@@ -2511,16 +2506,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/routes/downToBack/meterDown/model.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="89" selection-start-line="89" selection-end-line="89" />
-          <folding>
-            <element signature="e#0#90#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/routes/downToBack/teamAccount/model.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="158">
@@ -2534,7 +2519,7 @@
     <entry file="file://$PROJECT_DIR$/src/routes/peopleManage/info/model.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="254">
-          <caret line="57" column="53" lean-forward="true" selection-start-line="57" selection-start-column="53" selection-end-line="57" selection-end-column="53" />
+          <caret line="57" column="53" selection-start-line="57" selection-start-column="53" selection-end-line="57" selection-end-column="53" />
           <folding>
             <element signature="e#0#99#0" expanded="true" />
           </folding>
@@ -2543,10 +2528,30 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/routes/evaluation/proEvaluate/model.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
-          <caret line="54" column="19" lean-forward="true" selection-start-line="54" selection-start-column="19" selection-end-line="54" selection-end-column="19" />
+        <state relative-caret-position="403">
+          <caret line="51" column="47" lean-forward="true" selection-start-line="51" selection-start-column="47" selection-end-line="51" selection-end-column="47" />
           <folding>
             <element signature="e#0#87#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/routes/downToBack/meterDown/model.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="217">
+          <caret line="98" column="35" selection-start-line="98" selection-start-column="35" selection-end-line="98" selection-end-column="35" />
+          <folding>
+            <element signature="e#0#90#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/routes/system/user/model.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="76" column="7" lean-forward="true" selection-start-line="76" selection-start-column="7" selection-end-line="76" selection-end-column="7" />
+          <folding>
+            <element signature="e#0#113#0" expanded="true" />
           </folding>
         </state>
       </provider>
