@@ -49,7 +49,7 @@ const CreateForm = Form.create()(props => {
   return (
     <Modal
       destroyOnClose
-      title={checkDetail ? '分包履历' : updateModalVisible ? "编辑分包履历" : "新增分包履历"}
+      title={checkDetail ? '分包商履历' : updateModalVisible ? "编辑分包商履历" : "新增分包商履历"}
       bodyStyle={{padding: 0 + 'px'}}
       visible={modalVisible}
       width={992}

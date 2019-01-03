@@ -893,7 +893,7 @@ class PeopleInfo extends Component {
                   <Option value="部长">部长</Option>
                   <Option value="副部长">副部长</Option>
                   <Option value="部员">部员</Option>
-                  <Option value="部见习生">部见习生</Option>
+                  <Option value="见习生">见习生</Option>
                 </Select>
               )}
             </FormItem>

@@ -248,11 +248,11 @@ class CreateForm extends Component {
           </Row>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="扣除覆约保证金">
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="扣除履约保证金">
                 {form.getFieldDecorator('performanceBond', {
-                  rules: [{required: true, message: '请输入保证金'}],
+                  rules: [{required: true, message: '请输入扣除履约保证金'}],
                   initialValue: selectedValues.performanceBond ? selectedValues.performanceBond : testValue,
-                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入扣除覆约保证金" addonAfter="元"/>)}
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入扣除履约保证金" addonAfter="元"/>)}
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
@@ -460,7 +460,7 @@ class MeterDown extends Component {
           key: 'warranty',
         },
         {
-          title: '扣除覆约保证金',
+          title: '扣除履约保证金',
           dataIndex: 'performanceBond',
           key: 'performanceBond',
         },

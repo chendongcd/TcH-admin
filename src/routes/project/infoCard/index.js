@@ -397,7 +397,6 @@ class CreateForm extends Component {
     let managers = getFieldValue('manager');
     let secretary = getFieldValue('secretary');
     let chiefEngineer = getFieldValue('engineer');
-    console.log(proNames)
     return (
       <Modal
         destroyOnClose
@@ -586,7 +585,7 @@ class CreateForm extends Component {
           </Row>
           <Row gutter={8}>
             <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="监管单位">
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="监理单位">
                 {form.getFieldDecorator('supervisionCompany', {
                   rules: [{required: true, message: '请输入监管单位'}],
                   initialValue: selectedValues.supervisionCompany ? selectedValues.supervisionCompany : testValue,
@@ -594,7 +593,7 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="监管地址">
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="监理地址">
                 {form.getFieldDecorator('supervisionAddress', {
                   rules: [{required: true, message: '请输入监管地址'}],
                   initialValue: selectedValues.supervisionAddress ? selectedValues.supervisionAddress : testValue,
@@ -602,7 +601,7 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="监管电话">
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="监理电话">
                 {form.getFieldDecorator('supervisionPhone', {
                   rules: [{required: true, pattern: reg, message: '请输入正确的联系方式'}],
                   initialValue: selectedValues.supervisionPhone ? selectedValues.supervisionPhone : testValue,
