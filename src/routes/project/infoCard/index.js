@@ -36,7 +36,7 @@ const status = [{id: 0, name: '在建'}, {id: 1, name: '完工未结算'}, {id: 
 const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/
 let uuid = 0;
 const pageButtons = menuData[6].buttons.map(a => a.permission)
-const testValue = '123'
+const testValue = ''
 const plainOptions = [{label: '项目工期', value: '1'},
   {label: '项目主要人员', value: '2'},
 ]
@@ -76,10 +76,14 @@ class CreateForm extends Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (!prevProps.selectedValues.manager && this.props.selectedValues.manager) {
       this.manager = cloneObject(this.props.selectedValues.manager)
-      this.engineer = cloneObject(this.props.selectedValues.engineer)
-      this.secretary = cloneObject(this.props.selectedValues.secretary)
       this.props.form.setFieldsValue({manager: this.manager});
+    }
+    if (!prevProps.selectedValues.engineer && this.props.selectedValues.engineer) {
+      this.engineer = cloneObject(this.props.selectedValues.engineer)
       this.props.form.setFieldsValue({engineer: this.engineer});
+    }
+    if (!prevProps.selectedValues.secretary && this.props.selectedValues.secretary) {
+      this.secretary = cloneObject(this.props.selectedValues.secretary)
       this.props.form.setFieldsValue({secretary: this.secretary});
     }
     if (prevProps.modalVisible && !this.props.modalVisible) {
@@ -184,7 +188,7 @@ class CreateForm extends Component {
         a.time = this.handleRange(a.time)
       }
     })
-    let res = params.filter(a => Array.isArray(a.time) && a.name && a.phone)
+    let res = params.filter(a =>a.time && a.name && a.phone)
     return res.length == 0 ? undefined : res
   }
 
@@ -349,6 +353,7 @@ class CreateForm extends Component {
           fieldsValue[prop] = fieldsValue[prop].format('YYYY-MM-DD')
         }
       }
+      console.log(this.manager)
       fieldsValue.manager = this.handleRanges(this.manager)
       fieldsValue.secretary = this.handleRanges(this.secretary)
       fieldsValue.engineer = this.handleRanges(this.engineer)

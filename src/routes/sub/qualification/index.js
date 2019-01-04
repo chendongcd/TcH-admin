@@ -1,6 +1,5 @@
 import React, {Component, Fragment} from 'react'
 import {connect} from 'dva'
-import {routerRedux} from 'dva/router'
 import {
   Row,
   Col,
@@ -86,6 +85,7 @@ class CreateForm extends Component {
           fieldsValue[prop] = fieldsValue[prop].format('YYYY-MM-DD')
         }
       }
+
       fieldsValue.annex = `{"url":"${this.state.fileList[0].url}","fileName":"${this.state.fileList[0].name}"}`
       handleAdd(fieldsValue, updateModalVisible, selectedValues, this.cleanState);
     });
@@ -236,7 +236,7 @@ class CreateForm extends Component {
               <FormItem style={{marginLeft: 14 + 'px'}} labelCol={{span: 3}} wrapperCol={{span: 15}} label="专业类型">
                 {form.getFieldDecorator('professionType', {
                   rules: [{required: true, message: '请选择专业类型'}],
-                  initialValue: selectedValues.professionType ? selectedValues.professionType : []
+                  initialValue: selectedValues.professionType ? selectedValues.professionType.split('、') : []
                 })(<Select mode="multiple" className={styles.customSelect} disabled={checkDetail} placeholder="请选择"
                            style={{width: '100%'}}>
                   {professionType.map((a, index) => <Option key={index} value={a}>{a}</Option>)}
@@ -513,60 +513,6 @@ class CreateForm extends Component {
     this.setState({fileList: []})
   }
 }
-
-const SubResume = Form.create()(props => {
-  const {checkResume, handleResumeModal, subResume} = props;
-
-  return (
-    <Modal
-      destroyOnClose
-      title={'分包履历'}
-      bodyStyle={{padding: 0 + 'px'}}
-      visible={checkResume}
-      width={992}
-      maskClosable={false}
-      afterClose={handleResumeModal}
-    >
-      <div className={styles.modalContent}>
-        <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="分包商名称">
-
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="开始日期">
-
-            </FormItem>
-          </Col>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="结束日期">
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 12}} label="该时间段所属项目部">
-            </FormItem>
-          </Col>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="项目部队伍名称">
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="施工规模">
-
-            </FormItem>
-          </Col>
-        </Row>
-      </div>
-    </Modal>
-  );
-});
 
 const CreateReview = Form.create()(props => {
   let {modalVisible, form, loading, handleReview, handleReviewModal, selectedValues} = props;
@@ -936,7 +882,7 @@ class Qualification extends Component {
     const payload = {
       name: fieldsValue.name,
       type: fieldsValue.type,
-      professionType: fieldsValue.professionType,
+      professionType: fieldsValue.professionType.join('、'),
       registeredCapital: fieldsValue.registeredCapital,
       taxpayerType: fieldsValue.taxpayerType,
       email: fieldsValue.email,
@@ -1065,8 +1011,8 @@ class Qualification extends Component {
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={6} sm={24}>
             <FormItem label="证书期限">
-              {getFieldDecorator('period')(<Select style={{width: '100%'}}>
-                {periodType.map((a, index) => <Option key={index} value={a}>{a}</Option>)}
+              {getFieldDecorator('isValid')(<Select style={{width: '100%'}}>
+                {periodType.map((a, index) => <Option key={index} value={index}>{a}</Option>)}
               </Select>)}
             </FormItem>
           </Col>
@@ -1167,9 +1113,6 @@ class Qualification extends Component {
           </Card>
           <CreateForm
             loading={loading.effects[`sub_qua/${updateModalVisible ? 'update' : 'add'}`]} {...parentMethods} {...parentState}/>
-          {/*
-          <SubResume handleResumeModal={this.handleResumeModal} checkResume={checkResume} subResume={subResume}/>
-*/}
           <CreateReview loading={loading.effects[`sub_qua/update'}`]} {...parentMethods} selectedValues={selectedValues}
                         modalVisible={reviewType}/>
           <ExportModal {...exportProps}/>
@@ -1215,7 +1158,8 @@ class Qualification extends Component {
         maxAmount: maxAmount,
         shareEvaluation: fieldsValue.shareEvaluation,
         companyEvaluation: fieldsValue.companyEvaluation,
-        groupEvaluation: fieldsValue.groupEvaluation
+        groupEvaluation: fieldsValue.groupEvaluation,
+        isValid:fieldsValue.isValid
       }
       cleanObject(payload)
       this.props.dispatch({

@@ -71,6 +71,16 @@ class CreateForm extends Component {
       }
       this.setState({fileList: [file]})
     }
+    if (!preProp.selectedValues.annexUrlSq && this.props.selectedValues.annexUrlSq && this.state.sqFileList.length == 0) {
+      let pdf = JSON.parse(this.props.selectedValues.annexUrlSq)
+      let file = {
+        uid: '-1',
+        name: pdf.fileName,
+        status: 'done',
+        url: pdf.url,
+      }
+      this.setState({sqFileList: [file]})
+    }
   }
 
   okHandle = () => {
@@ -388,7 +398,7 @@ class CreateForm extends Component {
                     // fileList={fileList}
                                   listType="picture"
                                   name="files"
-                                  disabled={fileList.length > 0 || checkDetail}
+                                  disabled={sqFileList.length > 0 || checkDetail}
                                   onSuccess={(e) => this.onSuccess(e, false)}
                                   onError={this.onError}
                                   onProgress={(e) => this.onProgress(e, false)}
@@ -401,7 +411,7 @@ class CreateForm extends Component {
                 )}
                 <PreFile disabled={checkDetail} onClose={this.removeSq} onPreview={this.handlePreview}
                          progress={sqProgress}
-                         file={fileList[0]}/>
+                         file={sqFileList[0]}/>
                 <span style={info_css}>备注：非法人管理队伍请上传授权委托书扫描件</span>
               </FormItem>
             </Col>

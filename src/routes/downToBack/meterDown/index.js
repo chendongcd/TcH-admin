@@ -426,7 +426,7 @@ class MeterDown extends Component {
       title: '计价期数',
       dataIndex: 'valuationPeriod',
       render(val) {
-        return <span>{'第'+val+'期'}</span>;
+        return <span>{val!==undefined?('第'+val+'期'):''}</span>;
       },
     },
     {
@@ -685,6 +685,7 @@ class MeterDown extends Component {
       endedPrice: fields.endedPrice,
       performanceBond:fields.performanceBond
     }
+
     if (updateModalVisible) {
       dispatch({
         type: 'meterDown/update',

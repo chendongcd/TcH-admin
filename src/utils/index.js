@@ -135,7 +135,6 @@ export function uuid(name){
 export const ImageUrl = 'http://pjno2bd7f.bkt.clouddn.com/'
 
 export async function QiNiuOss(params) {
-  console.log(params)
   return new Promise(function (resolve, reject) {
     upLoad().then(res => {
       // console.log(res)

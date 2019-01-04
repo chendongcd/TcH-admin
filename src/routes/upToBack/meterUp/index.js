@@ -83,7 +83,7 @@ class CreateForm extends Component {
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      fieldsValue.meteringTime = fieldsValue.meteringTime.format('YYYY-MM')
+      fieldsValue.meteringTime = fieldsValue.meteringTime.format('YYYY-MM-DD')
       fieldsValue.annexUrl = `{"url":"${this.state.fileList[0].url}","fileName":"${this.state.fileList[0].name}"}`
       handleAdd(fieldsValue, updateModalVisible, selectedValues, this.cleanState);
     });
@@ -357,7 +357,9 @@ class CreateForm extends Component {
     if (res.status == 'done') {
       this.props.form.setFieldsValue({annexUrl: []});
     } else {
-      this.upload.unsubscribe()
+      if(this.upload&&this.upload.unsubscribe) {
+        this.upload.unsubscribe()
+      }
     }
     this.setState({fileList: []})
   }
@@ -397,7 +399,7 @@ class MeterUp extends Component {
       title: '计量期数',
       dataIndex: 'meteringNum',
       render:(val)=>{
-        return <span>{'第'+val+'期'}</span>
+        return <span>{val!==undefined?('第'+val+'期'):''}</span>
       }
     },
     {

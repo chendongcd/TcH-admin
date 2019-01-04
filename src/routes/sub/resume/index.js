@@ -74,14 +74,14 @@ const CreateForm = Form.create()(props => {
               </Select>)}
             </FormItem>
           </Col>
-          <Col md={12} sm={24}>
+         {/* <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同签订人">
-              {form.getFieldDecorator('signName', {
+              {form.getFieldDecorator('contractPerson', {
                 rules: [{required: true, message: '请输入合同签订人'}],
-                initialValue: selectedValues.signName ? selectedValues.signName : '',
+                initialValue: selectedValues.contractPerson ? selectedValues.contractPerson : '',
               })(<Input placeholder="请输入合同签订人"/>)}
             </FormItem>
-          </Col>
+          </Col>*/}
         </Row>
         <Row gutter={8}>
           <Col md={12} sm={24}>
@@ -438,6 +438,7 @@ class Resume extends Component {
       laborAccountId: fields.laborAccountId,
       constructionScale: fields.constructionScale,
     }
+    // contractPerson:fields.contractPerson,
     cleanObject(payload)
     if (updateModalVisible) {
       dispatch({
