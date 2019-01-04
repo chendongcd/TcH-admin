@@ -35,7 +35,10 @@ const info_css = {
 const vType = [ '中期计价', '末次结算'];
 const testValue = ''
 const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
-
+const qiShu = []
+for (let i = 1; i < 201; i++) {
+  qiShu.push(<Option key={i} value={i}>{'第'+(i)+'期'}</Option>);
+}
 
 @Form.create()
 class CreateForm extends Component {
@@ -178,9 +181,14 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="计价期数">
                 {form.getFieldDecorator('valuationPeriod', {
-                  rules: [{required: true, message: '请输入期数'}],
-                  initialValue: selectedValues.valuationPeriod ? selectedValues.valuationPeriod : testValue,
-                })(<Input disabled={checkDetail} placeholder="请输入期数"/>)}
+                  rules: [{required: true, message: '请选择期数'}],
+                  initialValue: selectedValues.valuationPeriod ? ('第'+selectedValues.valuationPeriod+'期') : testValue,
+                })(<Select className={styles.customSelect}
+                           disabled={checkDetail}
+                           placeholder="请选择期数"
+                           style={{width: '100%'}}>
+                  {qiShu}
+                </Select>)}
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
@@ -418,7 +426,7 @@ class MeterDown extends Component {
       title: '计价期数',
       dataIndex: 'valuationPeriod',
       render(val) {
-        return <span>{val}</span>;
+        return <span>{'第'+val+'期'}</span>;
       },
     },
     {

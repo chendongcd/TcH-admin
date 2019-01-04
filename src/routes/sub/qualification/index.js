@@ -18,7 +18,7 @@ import {
   Divider,
   Badge
 } from 'antd';
-import {Page, PageHeaderWrapper, StandardTable, PreFile,ExportModal} from 'components'
+import {Page, PageHeaderWrapper, StandardTable, PreFile, ExportModal} from 'components'
 import styles from './index.less'
 import {getButtons, cleanObject, QiNiuOss, ImageUrl} from 'utils'
 import {menuData} from 'common/menu'
@@ -42,12 +42,13 @@ const info_css = {
 const testValue = ''
 const TenW = 1000000
 const plainOptions = [
-  { label: '分包商类型', value: '1' },
-  { label: '法定代表人', value: '2' },
-  { label: '注册资本金', value: '3' },
-  { label: '资质信息', value: '4' },
-  { label: '信誉评价', value: '5' },
+  {label: '分包商类型', value: '1'},
+  {label: '法定代表人', value: '2'},
+  {label: '注册资本金', value: '3'},
+  {label: '资质信息', value: '4'},
+  {label: '信誉评价', value: '5'},
 ]
+const periodType = ['绿色','黄色','红色']
 const _setColor = function (time) {
   let num
   num = time.split(' ')[0]
@@ -125,7 +126,7 @@ class CreateForm extends Component {
   }
 
   render() {
-    const {modalVisible, loading,form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
+    const {modalVisible, loading, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
     let {previewVisible, previewImage, fileList, progress} = this.state
     return (
       <Modal
@@ -134,7 +135,7 @@ class CreateForm extends Component {
         bodyStyle={{padding: 0 + 'px'}}
         visible={modalVisible}
         width={992}
-        okButtonProps={{loading:loading}}
+        okButtonProps={{loading: loading}}
         maskClosable={false}
         onOk={() => checkDetail ? handleCheckDetail() : this.okHandle()}
         onCancel={() => {
@@ -231,12 +232,12 @@ class CreateForm extends Component {
             </Col>
           </Row>
           <Row gutter={8}>
-            <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="专业类型">
+            <Col md={16} sm={24}>
+              <FormItem style={{marginLeft: 14 + 'px'}} labelCol={{span: 3}} wrapperCol={{span: 15}} label="专业类型">
                 {form.getFieldDecorator('professionType', {
                   rules: [{required: true, message: '请选择专业类型'}],
-                  initialValue: selectedValues.professionType ? selectedValues.professionType : ''
-                })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择"
+                  initialValue: selectedValues.professionType ? selectedValues.professionType : []
+                })(<Select mode="multiple" className={styles.customSelect} disabled={checkDetail} placeholder="请选择"
                            style={{width: '100%'}}>
                   {professionType.map((a, index) => <Option key={index} value={a}>{a}</Option>)}
                 </Select>)}
@@ -425,45 +426,46 @@ class CreateForm extends Component {
         </Row>
         <div className={styles.modalContent}>
           <Row gutter={8}>
-          <Col md={24} sm={24}>
-            <FormItem style={{marginLeft: 14 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="附件">
-              {form.getFieldDecorator('annex', {
-                rules: [{required: true, message: '请上传附件'}],
-                valuePropName: 'fileList',
-                getValueFromEvent: normFile,
-                initialValue: selectedValues.annex ? [selectedValues.annex] : [],
-              })(
-                <Upload.Dragger onChange={this.handleChange}
-                                accept={'.pdf'}
-                                showUploadList={false}
-                  // fileList={fileList}
-                                listType="picture"
-                                name="files"
-                                disabled={fileList.length > 0 || checkDetail}
-                                onSuccess={this.onSuccess}
-                                handleManualRemove={this.remove}
-                                onError={this.onError}
-                                onProgress={this.onProgress}
-                                customRequest={this.onUpload}>
-                  <p className="ant-upload-drag-icon">
-                    <Icon type="inbox"/>
-                  </p>
-                  <p className="ant-upload-text">点击或拖动附件进入</p>
-                </Upload.Dragger>
-              )}
-              <PreFile disabled={checkDetail} onClose={this.remove} onPreview={this.handlePreview} progress={progress}
-                       file={fileList[0]}/>
-              <span style={info_css}>备注：包含营业执照、资质证书、安全生产许可证、开户银行许可证、法人身份证等相关资质资料(盖鲜章),请以一份PDF格式文件上传。</span>
-            </FormItem>
-          </Col>
-        </Row>
+            <Col md={24} sm={24}>
+              <FormItem style={{marginLeft: 14 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="附件">
+                {form.getFieldDecorator('annex', {
+                  rules: [{required: true, message: '请上传附件'}],
+                  valuePropName: 'fileList',
+                  getValueFromEvent: normFile,
+                  initialValue: selectedValues.annex ? [selectedValues.annex] : [],
+                })(
+                  <Upload.Dragger onChange={this.handleChange}
+                                  accept={'.pdf'}
+                                  showUploadList={false}
+                    // fileList={fileList}
+                                  listType="picture"
+                                  name="files"
+                                  disabled={fileList.length > 0 || checkDetail}
+                                  onSuccess={this.onSuccess}
+                                  handleManualRemove={this.remove}
+                                  onError={this.onError}
+                                  onProgress={this.onProgress}
+                                  customRequest={this.onUpload}>
+                    <p className="ant-upload-drag-icon">
+                      <Icon type="inbox"/>
+                    </p>
+                    <p className="ant-upload-text">点击或拖动附件进入</p>
+                  </Upload.Dragger>
+                )}
+                <PreFile disabled={checkDetail} onClose={this.remove} onPreview={this.handlePreview} progress={progress}
+                         file={fileList[0]}/>
+                <span style={info_css}>备注：包含营业执照、资质证书、安全生产许可证、开户银行许可证、法人身份证等相关资质资料(盖鲜章),请以一份PDF格式文件上传。</span>
+              </FormItem>
+            </Col>
+          </Row>
           <Row gutter={8}>
             <Col md={24} sm={24}>
               <FormItem style={{marginLeft: 18 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="备注">
                 {form.getFieldDecorator('remark', {
                   rules: [{required: false}],
                   initialValue: selectedValues.remark ? selectedValues.remark : testValue
-                })(<Input.TextArea className={styles.customSelect} disabled={checkDetail} width={'100%'} placeholder="请输入" rows={4}/>)}
+                })(<Input.TextArea className={styles.customSelect} disabled={checkDetail} width={'100%'}
+                                   placeholder="请输入" rows={4}/>)}
               </FormItem>
             </Col>
           </Row>
@@ -567,7 +569,7 @@ const SubResume = Form.create()(props => {
 });
 
 const CreateReview = Form.create()(props => {
-  let {modalVisible, form, loading,handleReview, handleReviewModal, selectedValues} = props;
+  let {modalVisible, form, loading, handleReview, handleReviewModal, selectedValues} = props;
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -667,7 +669,7 @@ const CreateReview = Form.create()(props => {
       bodyStyle={{padding: 0 + 'px'}}
       visible={modalVisible > -1}
       width={992}
-      okButtonProps={{loading:loading}}
+      okButtonProps={{loading: loading}}
       maskClosable={false}
       onOk={okHandle}
       onCancel={() => handleReviewModal()}
@@ -693,7 +695,7 @@ class Qualification extends Component {
       selectedValues: {},
       checkDetail: false,
       checkResume: false,
-      exportModalVisible:false
+      exportModalVisible: false
     }
     this.exportParams = {
       page: 1,
@@ -709,8 +711,8 @@ class Qualification extends Component {
     {
       title: '分包商全称',
       dataIndex: 'name',
-      render:(val,record)=>{
-        return <a onClick={()=>this.getResume(val)}>{val}</a>
+      render: (val, record) => {
+        return <a onClick={() => this.getResume(val)}>{val}</a>
       }
     },
     {
@@ -752,9 +754,9 @@ class Qualification extends Component {
     {
       title: '证件期限',
       key: 'period',
-      render:(val,record)=> {
-        let status= this.checkPeriod(record)
-        return <Badge offset={[5,0]} status={status} />
+      render: (val, record) => {
+        let status = this.checkPeriod(record)
+        return <Badge offset={[5, 0]} status={status}/>
       }
     },
     {
@@ -825,15 +827,15 @@ class Qualification extends Component {
     },
   ];
 
-  checkPeriod=(record)=>{
+  checkPeriod = (record) => {
     let status1 = _setColor(moment(record.businessLicenseValidityPeriod).fromNow())
     let status2 = _setColor(moment(record.qualificationValidityPeriod).fromNow())
     let status3 = _setColor(moment(record.safetyValidityPeriod).fromNow())
-    let status = [status1,status2,status3]
-    if(status.includes('error')){
+    let status = [status1, status2, status3]
+    if (status.includes('error')) {
       return 'error'
     }
-    if(status.includes('warning')){
+    if (status.includes('warning')) {
       return 'warning'
     }
     return 'success'
@@ -900,7 +902,7 @@ class Qualification extends Component {
     });
   };
 
-  handleExportModalVisible = (flag=false) =>{
+  handleExportModalVisible = (flag = false) => {
     this.setState({
       exportModalVisible: !!flag,
     });
@@ -954,13 +956,13 @@ class Qualification extends Component {
       qualificationFrom: fieldsValue.qualificationFrom,
       safetyCode: fieldsValue.safetyCode,
       safetyValidityPeriod: fieldsValue.safetyValidityPeriod,
-      safetyFrom:fieldsValue.safetyFrom,
+      safetyFrom: fieldsValue.safetyFrom,
       bank: fieldsValue.bank,
       bankAccount: fieldsValue.bankAccount,
       bankFrom: fieldsValue.bankFrom,
       annex: fieldsValue.annex,
       createTime: fieldsValue.createTime,
-      remark:fieldsValue.remark
+      remark: fieldsValue.remark
     }
     if (updateModalVisible) {
       dispatch({
@@ -999,26 +1001,26 @@ class Qualification extends Component {
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={6} sm={24}>
             <FormItem label="分包商全称">
-              {getFieldDecorator('name')(<Input placeholder="请输入"/>)}
+              {getFieldDecorator('name')(<Input />)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="分包商类型">
-              {getFieldDecorator('type')(<Select placeholder="请选择" style={{width: '100%'}}>
+              {getFieldDecorator('type')(<Select  style={{width: '100%'}}>
                 {subType.map((a, index) => <Option key={index} value={a}>{a}</Option>)}
               </Select>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="专业类别">
-              {getFieldDecorator('professionType')(<Select placeholder="请选择" style={{width: '100%'}}>
+              {getFieldDecorator('professionType')(<Select style={{width: '100%'}}>
                 {professionType.map((a, index) => <Option key={index} value={a}>{a}</Option>)}
               </Select>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="注册资金">
-              {getFieldDecorator('registeredCapital')(<Select placeholder="请选择" style={{width: '100%'}}>
+              {getFieldDecorator('registeredCapital')(<Select  style={{width: '100%'}}>
                 <Option value={`{"minAmount":"0","maxAmount":"${5 * TenW}"}`}>500万以下</Option>
                 <Option value={`{"minAmount":"${5 * TenW}","maxAmount":"${10 * TenW}"}`}>500万-1000万</Option>
                 <Option value={`{"minAmount":"${10 * TenW}","maxAmount":"${30 * TenW}"}`}>1000万-3000万</Option>
@@ -1032,7 +1034,7 @@ class Qualification extends Component {
         {expandForm ? <Row gutter={{md: 4, lg: 12, xl: 24}}>
           <Col md={8} sm={24}>
             <FormItem label="股份公司综合信誉评价">
-              {getFieldDecorator('shareEvaluation')(<Select placeholder="请选择" style={{width: '100%'}}>
+              {getFieldDecorator('shareEvaluation')(<Select  style={{width: '100%'}}>
                 <Option value="优秀">优秀</Option>
                 <Option value="合格">合格</Option>
                 <Option value="不合格">不合格</Option>
@@ -1041,7 +1043,7 @@ class Qualification extends Component {
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="集团公司综合信誉评价">
-              {getFieldDecorator('groupEvaluation')(<Select placeholder="请选择" style={{width: '100%'}}>
+              {getFieldDecorator('groupEvaluation')(<Select  style={{width: '100%'}}>
                 <Option value="优秀">优秀</Option>
                 <Option value="合格">合格</Option>
                 <Option value="不合格">不合格</Option>
@@ -1050,7 +1052,7 @@ class Qualification extends Component {
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="公司本级综合信誉评价">
-              {getFieldDecorator('companyEvaluation')(<Select placeholder="请选择" style={{width: '100%'}}>
+              {getFieldDecorator('companyEvaluation')(<Select style={{width: '100%'}}>
                 <Option value="优秀">优秀</Option>
                 <Option value="良好">良好</Option>
                 <Option value="合格">合格</Option>
@@ -1060,19 +1062,28 @@ class Qualification extends Component {
             </FormItem>
           </Col>
         </Row> : null}
-        <div style={{overflow: 'hidden'}}>
-          <div style={{float: 'right', marginBottom: 24}}>
-            <Button type="primary" htmlType="submit">
-              查询
-            </Button>
-            <Button style={{marginLeft: 8}} onClick={this.handleFormReset}>
-              重置
-            </Button>
-            <a style={{marginLeft: 8}} onClick={this.toggleForm}>
-              {expandForm ? '收起' : '展开'} <Icon type={expandForm ? "up" : "down"}/>
-            </a>
+        <Row gutter={{md: 8, lg: 24, xl: 48}}>
+          <Col md={6} sm={24}>
+            <FormItem label="证书期限">
+              {getFieldDecorator('period')(<Select style={{width: '100%'}}>
+                {periodType.map((a, index) => <Option key={index} value={a}>{a}</Option>)}
+              </Select>)}
+            </FormItem>
+          </Col>
+          <div style={{overflow: 'hidden'}}>
+            <div style={{float: 'right', marginBottom: 24}}>
+              <Button type="primary" htmlType="submit">
+                查询
+              </Button>
+              <Button style={{marginLeft: 8}} onClick={this.handleFormReset}>
+                重置
+              </Button>
+              <a style={{marginLeft: 8}} onClick={this.toggleForm}>
+                {expandForm ? '收起' : '展开'} <Icon type={expandForm ? "up" : "down"}/>
+              </a>
+            </div>
           </div>
-        </div>
+        </Row>
       </Form>
     );
   }
@@ -1094,7 +1105,7 @@ class Qualification extends Component {
       loading,
       app: {user}
     } = this.props;
-    const {selectedRows,exportModalVisible, modalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail, reviewType} = this.state;
+    const {selectedRows, exportModalVisible, modalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail, reviewType} = this.state;
 
     const parentMethods = {
       handleAdd: this.handleAdd,
@@ -1112,13 +1123,18 @@ class Qualification extends Component {
       checkDetail: checkDetail,
       selectedRows: selectedRows
     }
-    const exportUrl = createURL(SUB_QUA_EXPORT, {...this.exportParams, ...{token: user.token,exportType:'subcontractorExportType'}})
-    const exportProps={
-      exportModalVisible:exportModalVisible,
-      handleExportModalVisible:this.handleExportModalVisible,
-      exportUrl:exportUrl,
-      plainOptions:plainOptions,
-      must:true
+    const exportUrl = createURL(SUB_QUA_EXPORT, {
+      ...this.exportParams, ...{
+        token: user.token,
+        exportType: 'subcontractorExportType'
+      }
+    })
+    const exportProps = {
+      exportModalVisible: exportModalVisible,
+      handleExportModalVisible: this.handleExportModalVisible,
+      exportUrl: exportUrl,
+      plainOptions: plainOptions,
+      must: true
     }
     return (
       <Page inner={true} loading={pageLoading}>
@@ -1149,11 +1165,13 @@ class Qualification extends Component {
               />
             </div>
           </Card>
-          <CreateForm loading={loading.effects[`sub_qua/${updateModalVisible?'update':'add'}`]} {...parentMethods} {...parentState}/>
+          <CreateForm
+            loading={loading.effects[`sub_qua/${updateModalVisible ? 'update' : 'add'}`]} {...parentMethods} {...parentState}/>
           {/*
           <SubResume handleResumeModal={this.handleResumeModal} checkResume={checkResume} subResume={subResume}/>
 */}
-          <CreateReview loading={loading.effects[`sub_qua/update'}`]} {...parentMethods} selectedValues={selectedValues} modalVisible={reviewType}/>
+          <CreateReview loading={loading.effects[`sub_qua/update'}`]} {...parentMethods} selectedValues={selectedValues}
+                        modalVisible={reviewType}/>
           <ExportModal {...exportProps}/>
         </PageHeaderWrapper>
       </Page>
@@ -1165,7 +1183,7 @@ class Qualification extends Component {
   }
 
   getResume = (name) => {
-  //  routerRedux.push('/sub/resume',{subcontractorName:name})
+    //  routerRedux.push('/sub/resume',{subcontractorName:name})
     let payload = {subcontractorName: name}
     this.props.dispatch({type: 'sub_qua/getResume', payload: payload})
   }
@@ -1217,7 +1235,7 @@ class Qualification extends Component {
       groupEvaluation: fieldsValue.groupEvaluation,
       groupRemark: fieldsValue.groupRemark
     } : {
-      qualification:fieldsValue.qualification,
+      qualification: fieldsValue.qualification,
       companyEvaluation: fieldsValue.companyEvaluation,
     }
     this.exportParams = payload

@@ -4,6 +4,7 @@ import config from 'config'
 import {menuData} from '../common/menu'
 import {getMenus} from 'utils'
 import {setStorage, getStorage} from 'utils/localStorage'
+import Store from "store";
 const {prefix} = config
 function getMenu(user) {
   if (user && user.id) {
@@ -63,10 +64,12 @@ export default {
       }
     },
 
-    * logout(_, {call, put}) {
-      yield put({type: 'updateState', payload: {loading: true, user: {}}})
-      const response = yield call(signOut);
-      if (response) {
+    * logout(_, {call, put,select}) {
+      const {app:{user:{token}}} = yield (select(_ => _))
+      const response = yield call(signOut,token);
+      if (response.code==200) {
+        Store.clearAll();
+        yield put({type: 'updateState', payload: {loading: true, user: {}}})
         yield put(routerRedux.push('/login'));
       }
     },

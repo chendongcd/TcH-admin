@@ -74,6 +74,14 @@ const CreateForm = Form.create()(props => {
               </Select>)}
             </FormItem>
           </Col>
+          <Col md={12} sm={24}>
+            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同签订人">
+              {form.getFieldDecorator('signName', {
+                rules: [{required: true, message: '请输入合同签订人'}],
+                initialValue: selectedValues.signName ? selectedValues.signName : '',
+              })(<Input placeholder="请输入合同签订人"/>)}
+            </FormItem>
+          </Col>
         </Row>
         <Row gutter={8}>
           <Col md={12} sm={24}>
@@ -87,7 +95,6 @@ const CreateForm = Form.create()(props => {
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="结束日期">
               {form.getFieldDecorator('endTime', {
-                rules: [{required: true, message: '请选择结束日期'}],
                 initialValue: selectedValues.endTime ? moment(selectedValues.endTime) : null
               })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
             </FormItem>
@@ -178,19 +185,6 @@ const CreateReview = Form.create()(props => {
           </Col>
         </Row>
         <Row gutter={8}>
-          <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 10}} label="集团公司信誉评价">
-              {form.getFieldDecorator('groupEvaluation', {
-                rules: [{required: true, message: '请选择'}],
-                initialValue: selectedValues.groupEvaluation ? selectedValues.groupEvaluation : ''
-              })(<Select placeholder="请选择" style={{width: '100%'}}>
-                <Option value="合格">合格</Option>
-                <Option value="不合格">不合格</Option>
-              </Select>)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={8}>
           <Col md={24} sm={24}>
             <FormItem style={{marginLeft: 21 + 'px'}} labelCol={{span: 3}} wrapperCol={{span: 15}} label="文字评价">
               {form.getFieldDecorator('projectDescription', {
@@ -255,7 +249,7 @@ class Resume extends Component {
       title: '结束日期',
       dataIndex: 'endTime',
       render(val) {
-        return <span>{moment(val).format('YYYY/MM/DD')}</span>;
+        return <span>{val?moment(val).format('YYYY/MM/DD'):''}</span>;
       },
     },
     {
@@ -444,6 +438,7 @@ class Resume extends Component {
       laborAccountId: fields.laborAccountId,
       constructionScale: fields.constructionScale,
     }
+    cleanObject(payload)
     if (updateModalVisible) {
       dispatch({
         type: 'sub_resume/update',
@@ -473,7 +468,6 @@ class Resume extends Component {
 
     const {dispatch, app: {user}} = this.props;
     const payload = {
-      groupEvaluation: fields.groupEvaluation,
       projectEvaluation: fields.projectEvaluation,
       projectDescription: fields.projectDescription
     }

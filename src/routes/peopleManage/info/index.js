@@ -236,9 +236,8 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="健康状况">
                 {form.getFieldDecorator('health', {
-                  rules: [{required: true, message: '请选择健康状况'}],
                   initialValue: selectedValues.health ? selectedValues.health : testValue,
-                })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择"
+                })(<Select className={styles.customSelect} disabled={checkDetail}
                            style={{width: '100%'}}>
                   <Option value="健康状态">健康状态</Option>
                   <Option value="亚健康状态">亚健康状态</Option>
@@ -252,9 +251,8 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="入党时间">
                 {form.getFieldDecorator('joinAssociationTime', {
-                  rules: [{required: true, message: '请选择入党时间'}],
                   initialValue: selectedValues.joinAssociationTime ? moment(selectedValues.joinAssociationTime) : null,
-                })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择入党时间"/>)}
+                })(<DatePicker disabled={checkDetail} style={{width: '100%'}}/>)}
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
@@ -270,9 +268,8 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="职称">
                 {form.getFieldDecorator('jobTitle', {
-                  rules: [{required: true, message: '请输入职称'}],
                   initialValue: selectedValues.jobTitle ? selectedValues.jobTitle : testValue,
-                })(<Input disabled={checkDetail} placehloder='请输入职称'/>)}
+                })(<Input disabled={checkDetail} />)}
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
@@ -282,6 +279,7 @@ class CreateForm extends Component {
                   initialValue: selectedValues.position ? selectedValues.position : testValue,
                 })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择"
                            style={{width: '100%'}}>
+                  <Option value="成本副经理">副总工兼部长</Option>
                   <Option value="成本副经理">成本副经理</Option>
                   <Option value="成本副经理兼部长">成本副经理兼部长</Option>
                   <Option value="部长">部长</Option>
@@ -311,14 +309,6 @@ class CreateForm extends Component {
             </Col>
           </Row>
           <Row gutter={8}>
-            <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="出生地">
-                {form.getFieldDecorator('birthplace', {
-                  rules: [{required: true, message: '请输入出生地'}],
-                  initialValue: selectedValues.birthplace ? selectedValues.birthplace : testValue,
-                })(<Input disabled={checkDetail} placehloder='请输入出生地'/>)}
-              </FormItem>
-            </Col>
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="家庭住址">
                 {form.getFieldDecorator('homeAddress', {
@@ -803,7 +793,7 @@ class PeopleInfo extends Component {
     //   },
     // });
     const {dispatch, app: {user}} = this.props;
-    const payload = {
+    let payload = {
       name: fieldsValue.name,
       sex: fieldsValue.sex,
       brithday: fieldsValue.brithday,
@@ -813,7 +803,6 @@ class PeopleInfo extends Component {
       position: fieldsValue.position,
       workTime: fieldsValue.workTime,
       specialty: fieldsValue.specialty,
-      birthplace: fieldsValue.birthplace,
       health: fieldsValue.health,
       idCard: fieldsValue.idCard,
       phone: fieldsValue.phone,
@@ -838,6 +827,7 @@ class PeopleInfo extends Component {
       headUrl: fieldsValue.headUrl,
       email:fieldsValue.email
     }
+    cleanObject(payload)
     if (updateModalVisible) {
       dispatch({
         type: 'peopleManage/update',

@@ -11,10 +11,11 @@ export async function signIn(params) {
 }
 
 // 用户退出了
-export async function signOut() {
+export async function signOut(token) {
   // 清除TOKEN，模拟退出
-  Store.clearAll();
-  return true;
+  return request(`${apiDev}/user/login_out/v1.1`, {
+    method: 'GET',
+  },token);
 }
 
 //获取文件上传token

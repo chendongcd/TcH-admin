@@ -31,16 +31,15 @@ export default {
             a10+=a.alreadyPaidAmount
             a11+=a.unpaidAmount
           })
-          z = x==0?0:Math.ceil((y / x * 100) / 100)
-          a15 = (a5 + a14 + a13)==0?0:Math.ceil(a5 / (a5 + a14 + a13) * 100) / 100
-        console.log(a5 / (a5 + a14 + a13))
+          z = x==0?0:(y / x).toFixed(4)
+          a15 = (a5 + a14 + a13)==0?0:(a5 / (a5 + a14 + a13)).toFixed(4)
           let sum = {
             payProportion: z,
             productionValue: a15,
             id: '合计:',
             prepaymentAmount:aPre,
             valuationAmountTax:a5,
-            valuationAmountNotTax:Math.ceil(a7) / 100,
+            valuationAmountNotTax:(a7/100).toFixed(2),
             realAmountTax:a8,
             realAmount:a9,
             alreadyPaidAmount:a10,

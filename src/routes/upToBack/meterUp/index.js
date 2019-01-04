@@ -43,6 +43,10 @@ const plainOptions = [
   {label: '其它计价', value: '5'},
   {label: '产值计价率', value: '6'}
 ]
+const qiShu = []
+for (let i = 1; i < 201; i++) {
+  qiShu.push(<Option key={i} value={i}>{'第'+(i)+'期'}</Option>);
+}
 
 @Form.create()
 class CreateForm extends Component {
@@ -146,9 +150,13 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="计量期数">
                 {form.getFieldDecorator('meteringNum', {
-                  rules: [{required: true, message: '请输入期数'}],
-                  initialValue: selectedValues.meteringNum ? selectedValues.meteringNum : testValue,
-                })(<Input disabled={checkDetail} placeholder="请输入期数"/>)}
+                  rules: [{required: true, message: '请选择期数'}],
+                  initialValue: selectedValues.meteringNum ? ('第'+selectedValues.meteringNum+'期') : testValue,
+                })(<Select className={styles.customSelect}
+                           disabled={checkDetail} placeholder="请选择期数"
+                           style={{width: '100%'}}>
+                  {qiShu}
+                </Select>)}
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
@@ -388,6 +396,9 @@ class MeterUp extends Component {
     {
       title: '计量期数',
       dataIndex: 'meteringNum',
+      render:(val)=>{
+        return <span>{'第'+val+'期'}</span>
+      }
     },
     {
       title: '计量日期',

@@ -16,7 +16,7 @@ import {
   Upload,
   Divider,
 } from 'antd';
-import {Page, PageHeaderWrapper, StandardTable, ExportModal,PreFile} from 'components'
+import {Page, PageHeaderWrapper, StandardTable, ExportModal, PreFile} from 'components'
 import styles from './index.less'
 import {getButtons, cleanObject, QiNiuOss, ImageUrl} from 'utils'
 import {menuData} from 'common/menu'
@@ -37,9 +37,10 @@ const teamStatus = ['正在施工', '完工待结算', '已结算']
 const contractType = ['主合同', '补充合同']
 const testValue = ''
 const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
-const plainOptions = [{ label: '劳务队伍统计', value: '0' },
-  { label: '备案情况', value: '1' },
+const plainOptions = [{label: '劳务队伍统计', value: '0'},
+  {label: '备案情况', value: '1'},
 ]
+
 @Form.create()
 class CreateForm extends Component {
 
@@ -51,7 +52,10 @@ class CreateForm extends Component {
       fileList: [],
       progress: 0,
       contractType: -1,
-      contractNum: ''
+      contractNum: '',
+      sqProgress: 0,
+      sqFileList: [],
+
     };
     this.upload = null
   }
@@ -101,8 +105,12 @@ class CreateForm extends Component {
     this.upload = null
   }
 
-  handleChange = ({fileList}) => {
-    this.setState({fileList})
+  handleChange = ({fileList}, type) => {
+    if (type) {
+      this.setState({fileList})
+    } else {
+      this.setState({sqFileList: fileList})
+    }
   }
 
   _onSelect = (e) => {
@@ -114,8 +122,8 @@ class CreateForm extends Component {
   }
 
   render() {
-    const {modalVisible, proNames, loading,subNames, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
-    let {previewVisible, previewImage, fileList, progress, contractType, contractNum} = this.state
+    const {modalVisible, proNames, loading, subNames, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
+    let {previewVisible, previewImage, fileList, progress, contractType, contractNum, sqProgress, sqFileList} = this.state
     return (
       <Modal
         destroyOnClose
@@ -123,7 +131,7 @@ class CreateForm extends Component {
         bodyStyle={{padding: 0 + 'px'}}
         visible={modalVisible}
         width={992}
-        okButtonProps={{loading:loading}}
+        okButtonProps={{loading: loading}}
         maskClosable={false}
         onOk={() => checkDetail ? handleCheckDetail() : this.okHandle()}
         onCancel={() => {
@@ -167,11 +175,11 @@ class CreateForm extends Component {
                   <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同编码">
                     {form.getFieldDecorator('contractCode', {
                       initialValue: selectedValues.contractNumber,
-                    })(<Input disabled={true} />)}
+                    })(<Input disabled={true}/>)}
                   </FormItem>
                 </Col>
               </Row>
-              {selectedValues.contractType==1? <Row gutter={8}>
+              {selectedValues.contractType == 1 ? <Row gutter={8}>
                 <Col md={12} sm={24}>
                   <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同类型">
                     {form.getFieldDecorator('contractType1', {
@@ -191,7 +199,7 @@ class CreateForm extends Component {
                     })(<Input disabled={true} placeholder="自动带入"/>)}
                   </FormItem>
                 </Col>
-              </Row>:null}
+              </Row> : null}
             </Fragment>
             : <Row gutter={8}>
               <Col md={12} sm={24}>
@@ -208,12 +216,13 @@ class CreateForm extends Component {
                 </FormItem>
               </Col>
               <Col md={12} sm={24}>
-                {contractType != -1||(selectedValues.contractType!=undefined) ? <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同编码">
-                  {form.getFieldDecorator('contractCode', {
-                    rules: [{required: true, message: '请选择项目'}],
-                    initialValue: selectedValues.contractNumber?selectedValues.contractNumber:contractNum,
-                  })(<Input disabled={true} placeholder="自动带入"/>)}
-                </FormItem> : null
+                {contractType != -1 || (selectedValues.contractType != undefined) ?
+                  <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同编码">
+                    {form.getFieldDecorator('contractCode', {
+                      rules: [{required: true, message: '请选择项目'}],
+                      initialValue: selectedValues.contractNumber ? selectedValues.contractNumber : contractNum,
+                    })(<Input disabled={true} placeholder="自动带入"/>)}
+                  </FormItem> : null
                 }
               </Col>
             </Row>}
@@ -272,7 +281,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="队伍状态">
                 {form.getFieldDecorator('status', {
                   rules: [{required: true, message: '请选择队伍状态'}],
-                  initialValue: selectedValues.status||selectedValues.status==0 ? selectedValues.status : ''
+                  initialValue: selectedValues.status || selectedValues.status == 0 ? selectedValues.status : ''
                 })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择队伍状态"
                            style={{width: '100%'}}>
                   <Option value="0">正在施工</Option>
@@ -342,17 +351,16 @@ class CreateForm extends Component {
                   getValueFromEvent: normFile,
                   initialValue: selectedValues.annexUrl ? [selectedValues.annexUrl] : [],
                 })(
-                  <Upload.Dragger onChange={this.handleChange}
+                  <Upload.Dragger onChange={(e) => this.handleChange(e, true)}
                                   accept={'.pdf'}
                                   showUploadList={false}
                     // fileList={fileList}
                                   listType="picture"
                                   name="files"
                                   disabled={fileList.length > 0 || checkDetail}
-                                  onSuccess={this.onSuccess}
-                                  handleManualRemove={this.remove}
+                                  onSuccess={(e) => this.onSuccess(e, true)}
                                   onError={this.onError}
-                                  onProgress={this.onProgress}
+                                  onProgress={(e) => this.onProgress(e, true)}
                                   customRequest={this.onUpload}>
                     <p className="ant-upload-drag-icon">
                       <Icon type="inbox"/>
@@ -363,6 +371,38 @@ class CreateForm extends Component {
                 <PreFile disabled={checkDetail} onClose={this.remove} onPreview={this.handlePreview} progress={progress}
                          file={fileList[0]}/>
                 <span style={info_css}>备注：请以一份PDF格式文件上传合同扫描件</span>
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={24} sm={24}>
+              <FormItem style={{marginLeft: 18 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="授权委托书">
+                {form.getFieldDecorator('annexUrlSq', {
+                  valuePropName: 'fileList',
+                  getValueFromEvent: normFile,
+                  initialValue: selectedValues.annexUrlSq ? [selectedValues.annexUrlSq] : [],
+                })(
+                  <Upload.Dragger onChange={(e) => this.handleChange(e, false)}
+                                  accept={'.pdf'}
+                                  showUploadList={false}
+                    // fileList={fileList}
+                                  listType="picture"
+                                  name="files"
+                                  disabled={fileList.length > 0 || checkDetail}
+                                  onSuccess={(e) => this.onSuccess(e, false)}
+                                  onError={this.onError}
+                                  onProgress={(e) => this.onProgress(e, false)}
+                                  customRequest={this.onUpload}>
+                    <p className="ant-upload-drag-icon">
+                      <Icon type="inbox"/>
+                    </p>
+                    <p className="ant-upload-text">点击或拖动附件进入</p>
+                  </Upload.Dragger>
+                )}
+                <PreFile disabled={checkDetail} onClose={this.removeSq} onPreview={this.handlePreview}
+                         progress={sqProgress}
+                         file={fileList[0]}/>
+                <span style={info_css}>备注：非法人管理队伍请上传授权委托书扫描件</span>
               </FormItem>
             </Col>
           </Row>
@@ -391,24 +431,39 @@ class CreateForm extends Component {
     })
   }
 
-  onProgress = (e) => {
-    this.setState({progress: parseInt(e.total.percent)})
+  onProgress = (e, type) => {
+    if (type) {
+      this.setState({progress: parseInt(e.total.percent)})
+    } else {
+      this.setState({sqProgress: parseInt(e.total.percent)})
+    }
   }
 
   onError = (error) => {
     console.log('上传失败', error)
   }
 
-  onSuccess = (res) => {
+  onSuccess = (res, type) => {
     //this.state.fileList.push(ImageUrl+res.key)
-    let file = {
-      uid: '-1',
-      name: this.state.fileList[0].name,
-      status: 'done',
-      url: ImageUrl + res.key,
+    if (type) {
+      let file = {
+        uid: '-1',
+        name: this.state.fileList[0].name,
+        status: 'done',
+        url: ImageUrl + res.key,
+      }
+      this.setState({fileList: [file]})
+      this.props.form.setFieldsValue({annexUrl: [file]});
+    } else {
+      let file = {
+        uid: '-1',
+        name: this.state.sqFileList[0].name,
+        status: 'done',
+        url: ImageUrl + res.key,
+      }
+      this.setState({sqFileList: [file]})
+      this.props.form.setFieldsValue({annexUrlSq: [file]});
     }
-    this.setState({fileList: [file]})
-    this.props.form.setFieldsValue({annexUrl: [file]});
   }
 
   remove = (res) => {
@@ -419,10 +474,19 @@ class CreateForm extends Component {
     }
     this.setState({fileList: []})
   }
+
+  removeSq = (res) => {
+    if (res.status == 'done') {
+      this.props.form.setFieldsValue({annexUrlSq: []});
+    } else {
+      this.upload.unsubscribe()
+    }
+    this.setState({sqFileList: []})
+  }
 }
 
 const CreateCompForm = Form.create()(props => {
-  const {modalVisible, form,loading, companyUpdate, handleComModalVisible, selectedValues} = props;
+  const {modalVisible, form, loading, companyUpdate, handleComModalVisible, selectedValues} = props;
 
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
@@ -438,7 +502,7 @@ const CreateCompForm = Form.create()(props => {
       bodyStyle={{padding: 0 + 'px'}}
       visible={modalVisible}
       width={992}
-      okButtonProps={{loading:loading}}
+      okButtonProps={{loading: loading}}
       maskClosable={false}
       onOk={okHandle}
       onCancel={() => handleComModalVisible()}
@@ -451,7 +515,6 @@ const CreateCompForm = Form.create()(props => {
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="日期">
               {form.getFieldDecorator('teamTime', {
-                rules: [{required: true, message: '请选择日期'}],
                 initialValue: selectedValues.teamTime ? moment(selectedValues.teamTime) : null
               })(<DatePicker style={{width: '100%'}} placeholder="请选择日期"/>)}
             </FormItem>
@@ -466,7 +529,6 @@ const CreateCompForm = Form.create()(props => {
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="日期">
               {form.getFieldDecorator('approvalTime', {
-                rules: [{required: true, message: '请选择日期'}],
                 initialValue: selectedValues.approvalTime ? moment(selectedValues.approvalTime) : null
               })(<DatePicker style={{width: '100%'}} placeholder="请选择日期"/>)}
             </FormItem>
@@ -474,7 +536,6 @@ const CreateCompForm = Form.create()(props => {
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="是否备案">
               {form.getFieldDecorator('settlementFiling', {
-                rules: [{required: true, message: '请选择是否备案'}],
                 initialValue: (selectedValues.settlementFiling || selectedValues.settlementFiling == 0) ? selectedValues.settlementFiling : ''
               })(<Select className={styles.customSelect} placeholder="请选择" style={{width: '100%'}}>
                 <Option name={'是'} value={1}>是</Option>
@@ -492,7 +553,6 @@ const CreateCompForm = Form.create()(props => {
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="日期">
               {form.getFieldDecorator('settlementTime', {
-                rules: [{required: true, message: '请选择日期'}],
                 initialValue: selectedValues.settlementTime ? moment(selectedValues.settlementTime) : null
               })(<DatePicker style={{width: '100%'}} placeholder="请选择日期"/>)}
             </FormItem>
@@ -527,7 +587,7 @@ class TeamAccount extends Component {
       comModal: false,
       selectedValues: {},
       checkDetail: false,
-      exportModalVisible:false
+      exportModalVisible: false
     }
     this.exportParams = {
       page: 1,
@@ -809,7 +869,7 @@ class TeamAccount extends Component {
     });
   };
 
-  handleExportModalVisible = (flag=false) =>{
+  handleExportModalVisible = (flag = false) => {
     this.setState({
       exportModalVisible: !!flag,
     });
@@ -896,7 +956,7 @@ class TeamAccount extends Component {
 
   companyUpdate = (fields, selectedValues) => {
     const {dispatch, app: {user}} = this.props;
-    const payload = {
+    let payload = {
       id: selectedValues.id,
       teamTime: fields.teamTime.format('YYYY-MM-DD'),
       settlementFiling: fields.settlementFiling,
@@ -904,6 +964,7 @@ class TeamAccount extends Component {
       settlementRemark: fields.settlementRemark,
       approvalTime: fields.approvalTime.format('YYYY-MM-DD')
     }
+    cleanObject(payload)
     dispatch({
       type: 'teamAccount/updateCompany',
       payload: payload,
@@ -980,7 +1041,7 @@ class TeamAccount extends Component {
       loading,
       app: {user}
     } = this.props;
-    const {selectedRows,exportModalVisible, modalVisible, pageLoading, comModal, selectedValues, updateModalVisible, checkDetail} = this.state;
+    const {selectedRows, exportModalVisible, modalVisible, pageLoading, comModal, selectedValues, updateModalVisible, checkDetail} = this.state;
 
     const parentMethods = {
       handleAdd: this.handleAdd,
@@ -1000,12 +1061,17 @@ class TeamAccount extends Component {
       subNames: subNames,
       contractCodes: contractCodes
     }
-    const exportUrl = createURL(TEAM_EXPORT, {...this.exportParams, ...{token: user.token,exportType:'teamExportType'}})
-    const exportProps={
-      exportModalVisible:exportModalVisible,
-      handleExportModalVisible:this.handleExportModalVisible,
-      exportUrl:exportUrl,
-      plainOptions:plainOptions
+    const exportUrl = createURL(TEAM_EXPORT, {
+      ...this.exportParams, ...{
+        token: user.token,
+        exportType: 'teamExportType'
+      }
+    })
+    const exportProps = {
+      exportModalVisible: exportModalVisible,
+      handleExportModalVisible: this.handleExportModalVisible,
+      exportUrl: exportUrl,
+      plainOptions: plainOptions
     }
 
     return (
@@ -1037,8 +1103,10 @@ class TeamAccount extends Component {
               />
             </div>
           </Card>
-          <CreateForm loading={loading.effects[`teamAccount/${updateModalVisible?'update':'add'}`]} {...parentMethods} {...parentState}/>
-          <CreateCompForm loading={loading.effects[`teamAccount/updateCompany`]} {...parentMethods} selectedValues={selectedValues} modalVisible={comModal}/>
+          <CreateForm
+            loading={loading.effects[`teamAccount/${updateModalVisible ? 'update' : 'add'}`]} {...parentMethods} {...parentState}/>
+          <CreateCompForm loading={loading.effects[`teamAccount/updateCompany`]} {...parentMethods}
+                          selectedValues={selectedValues} modalVisible={comModal}/>
           <ExportModal {...exportProps}/>
         </PageHeaderWrapper>
       </Page>
