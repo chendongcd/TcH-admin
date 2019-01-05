@@ -67,11 +67,11 @@ export default {
     * logout(_, {call, put,select}) {
       const {app:{user:{token}}} = yield (select(_ => _))
       const response = yield call(signOut,token);
-      if (response.code==200) {
+      //if (response.code==200) {
         Store.clearAll();
-        yield put({type: 'updateState', payload: {loading: true, user: {}}})
+        yield put({type: 'updateState', payload: { user: {}}})
         yield put(routerRedux.push('/login'));
-      }
+      //}
     },
 
     * changeNavbar(action, {put, select}) {

@@ -25,9 +25,7 @@ class Login extends Component {
       if (errors) {
         return
       }
-      //{account:values.username,password:values.password}
       await this.props.dispatch({type: 'app/login', payload: {account: values.username, password: values.password}})
-      // await this.props.dispatch({ type: 'app/login', payload: values })
     })
   }
 
@@ -56,7 +54,7 @@ class Login extends Component {
                     message: '请输入用户名'
                   },
                 ],
-              })(<Input onPressEnter={() => this.handleOk(validateFieldsAndScroll)} placeholder="用户名"/>)}
+              })(<Input onPressEnter={() => this.handleOk(validateFieldsAndScroll)} placeholder="请输用户名"/>)}
             </FormItem>
             <FormItem hasFeedback>
               {getFieldDecorator('password', {
@@ -67,16 +65,12 @@ class Login extends Component {
                   },
                 ],
               })(<Input type="password" onPressEnter={() => this.handleOk(validateFieldsAndScroll)}
-                        placeholder="Password"/>)}
+                        placeholder="请输入密码"/>)}
             </FormItem>
             <Row>
               <Button type="primary" onClick={() => this.handleOk(validateFieldsAndScroll)} loading={loading.effects[`app/login`]}>
                 登录
               </Button>
-              {/*<p>
-              <span>用户名：admin</span>
-              <span>密码：admin</span>
-            </p>*/}
             </Row>
           </form>
         </div>

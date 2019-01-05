@@ -640,7 +640,6 @@ class Qualification extends Component {
       reviewType: -1,
       selectedValues: {},
       checkDetail: false,
-      checkResume: false,
       exportModalVisible: false
     }
     this.exportParams = {
@@ -1119,10 +1118,6 @@ class Qualification extends Component {
         </PageHeaderWrapper>
       </Page>
     )
-  }
-
-  handleResumeModal = (flag) => {
-    this.setState({checkResume: !!flag})
   }
 
   getResume = (name) => {
