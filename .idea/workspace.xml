@@ -5,8 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f9cf8453-fce7-4f76-8b42-acb0ec5757a4" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/routes/downToBack/teamAccount/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/downToBack/teamAccount/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/evaluation/proEvaluate/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/evaluation/proEvaluate/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/sub/resume/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/sub/resume/index.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -240,11 +239,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/routes/downToBack/teamAccount/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="296" column="49" selection-start-line="296" selection-start-column="49" selection-end-line="296" selection-end-column="49" />
+            <state relative-caret-position="114">
+              <caret line="290" column="82" lean-forward="true" selection-start-line="290" selection-start-column="82" selection-end-line="290" selection-end-column="82" />
               <folding>
                 <element signature="e#766#788#0" />
                 <element signature="e#1071#1135#0" />
@@ -566,10 +565,19 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/utils/config.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="195">
+              <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/routes/sub/resume/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="163">
-              <caret line="136" selection-start-line="136" selection-end-line="136" />
+            <state relative-caret-position="193">
+              <caret line="138" column="49" selection-start-line="138" selection-start-column="49" selection-end-line="138" selection-end-column="49" />
               <folding>
                 <element signature="e#988#1314#0" />
                 <element signature="e#1036#1308#0" />
@@ -696,9 +704,9 @@
         <option value="$PROJECT_DIR$/src/routes/downToBack/meterDown/model.js" />
         <option value="$PROJECT_DIR$/src/routes/sub/resume/model.js" />
         <option value="$PROJECT_DIR$/src/routes/peopleManage/info/index.js" />
-        <option value="$PROJECT_DIR$/src/routes/sub/resume/index.js" />
         <option value="$PROJECT_DIR$/src/routes/evaluation/proEvaluate/index.js" />
         <option value="$PROJECT_DIR$/src/routes/downToBack/teamAccount/index.js" />
+        <option value="$PROJECT_DIR$/src/routes/sub/resume/index.js" />
       </list>
     </option>
   </component>
@@ -743,15 +751,15 @@
               <item name="TcH-admin" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="routes" type="462c0819:PsiDirectoryNode" />
-              <item name="downToBack" type="462c0819:PsiDirectoryNode" />
+              <item name="sub" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="TcH-admin" type="b2602c69:ProjectViewProjectNode" />
               <item name="TcH-admin" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="routes" type="462c0819:PsiDirectoryNode" />
-              <item name="downToBack" type="462c0819:PsiDirectoryNode" />
-              <item name="teamAccount" type="462c0819:PsiDirectoryNode" />
+              <item name="sub" type="462c0819:PsiDirectoryNode" />
+              <item name="resume" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -920,10 +928,11 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="885711000" />
+    <option name="totallyTimeSpent" value="885727000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="174" y="23" width="1235" height="820" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.8150573" visible="true" weight="0.2166392" />
       <window_info id="Structure" order="1" weight="0.24964337" />
@@ -1043,8 +1052,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/utils/config.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="1" selection-start-line="12" selection-start-column="1" selection-end-line="12" selection-end-column="1" />
+        <state relative-caret-position="195">
+          <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
         </state>
       </provider>
     </entry>
@@ -2117,29 +2126,6 @@
     <entry file="file://$PROJECT_DIR$/src/routes/sub/resume/index.less">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/routes/sub/resume/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="163">
-          <caret line="136" selection-start-line="136" selection-end-line="136" />
-          <folding>
-            <element signature="e#988#1314#0" />
-            <element signature="e#1036#1308#0" />
-            <element signature="e#1097#1236#0" />
-            <element signature="e#1148#1228#0" />
-            <element signature="e#1873#2662#0" />
-            <element signature="e#1907#2645#0" />
-            <element signature="e#2034#2212#0" />
-            <element signature="e#2214#2619#0" />
-            <element signature="e#2461#2593#0" />
-            <element signature="n#!!block;n#constructor#0;n#Resume#0" />
-            <element signature="n#!!block;n#componentDidMount#0;n#Resume#0" />
-            <element signature="n#!!block;n#renderAdvancedForm#0;n#Resume#0" />
-            <element signature="n#!!block;n#renderForm#0;n#Resume#0" />
-            <element signature="n#!!block;n#render#0;n#Resume#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/routes/evaluation/proEvaluate/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="88">
@@ -2259,8 +2245,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/routes/downToBack/teamAccount/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="296" column="49" selection-start-line="296" selection-start-column="49" selection-end-line="296" selection-end-column="49" />
+        <state relative-caret-position="114">
+          <caret line="290" column="82" lean-forward="true" selection-start-line="290" selection-start-column="82" selection-end-line="290" selection-end-column="82" />
           <folding>
             <element signature="e#766#788#0" />
             <element signature="e#1071#1135#0" />
@@ -2576,6 +2562,29 @@
             <element signature="e#40346#40574#0" />
             <element signature="e#40376#40570#0" />
             <element signature="e#40413#40556#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/routes/sub/resume/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="138" column="49" selection-start-line="138" selection-start-column="49" selection-end-line="138" selection-end-column="49" />
+          <folding>
+            <element signature="e#988#1314#0" />
+            <element signature="e#1036#1308#0" />
+            <element signature="e#1097#1236#0" />
+            <element signature="e#1148#1228#0" />
+            <element signature="e#1873#2662#0" />
+            <element signature="e#1907#2645#0" />
+            <element signature="e#2034#2212#0" />
+            <element signature="e#2214#2619#0" />
+            <element signature="e#2461#2593#0" />
+            <element signature="n#!!block;n#constructor#0;n#Resume#0" />
+            <element signature="n#!!block;n#componentDidMount#0;n#Resume#0" />
+            <element signature="n#!!block;n#renderAdvancedForm#0;n#Resume#0" />
+            <element signature="n#!!block;n#renderForm#0;n#Resume#0" />
+            <element signature="n#!!block;n#render#0;n#Resume#0" />
           </folding>
         </state>
       </provider>
