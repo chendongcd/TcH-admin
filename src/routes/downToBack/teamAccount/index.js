@@ -294,9 +294,9 @@ class CreateForm extends Component {
                   initialValue: selectedValues.status || selectedValues.status == 0 ? selectedValues.status : ''
                 })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择队伍状态"
                            style={{width: '100%'}}>
-                  <Option value="0">正在施工</Option>
-                  <Option value="1">完工待结算</Option>
-                  <Option value="2">已完结</Option>
+                  <Option value={0}>正在施工</Option>
+                  <Option value={1}>完工待结算</Option>
+                  <Option value={2}>已完结</Option>
                 </Select>)}
               </FormItem>
             </Col>
