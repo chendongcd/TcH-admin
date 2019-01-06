@@ -134,7 +134,6 @@ const CreateForm = Form.create()(props => {
           <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="施工规模">
               {form.getFieldDecorator('constructionScale', {
-                rules: [{required: true, message: '请选择施工规模'}],
                 initialValue: selectedValues.constructionScale ? selectedValues.constructionScale : testValue
               })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择"
                          style={{width: '100%'}}>

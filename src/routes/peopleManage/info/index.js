@@ -279,13 +279,13 @@ class CreateForm extends Component {
                   initialValue: selectedValues.position ? selectedValues.position : testValue,
                 })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择"
                            style={{width: '100%'}}>
-                  <Option value="成本副经理">副总工兼部长</Option>
+                  <Option value="副总工兼部长">副总工兼部长</Option>
                   <Option value="成本副经理">成本副经理</Option>
                   <Option value="成本副经理兼部长">成本副经理兼部长</Option>
                   <Option value="部长">部长</Option>
                   <Option value="副部长">副部长</Option>
                   <Option value="部员">部员</Option>
-                  <Option value="部见习生">部见习生</Option>
+                  <Option value="见习生">见习生</Option>
                 </Select>)}
               </FormItem>
             </Col>

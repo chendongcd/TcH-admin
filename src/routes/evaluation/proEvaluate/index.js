@@ -402,12 +402,12 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={10} sm={24}>
-              <FormItem labelCol={{span: 10}} wrapperCol={{span: 14}} label="含分包差及经营费">
+              <FormItem labelCol={{span: 10}} wrapperCol={{span: 14}} label="含分包差及经营费($)">
                 {form.getFieldDecorator('jointHearingCost', {
-                  rules: [{required: true, message: '请输入含分包差及经营费'}],
+                  rules: [{required: true, message: '请输入含分包差及经营费($)'}],
                   initialValue: selectedValues.jointHearingCost ? selectedValues.jointHearingCost : testValue
 
-                })(<Input disabled={checkDetail} placeholder='请输入(保留小数点后两位)'/>)}
+                })(<Input disabled={checkDetail} placeholder='请输入(保留小数点后两位)' addonAfter={'%'}/>)}
               </FormItem>
             </Col>
             <Col md={7} sm={24}>
@@ -788,7 +788,7 @@ class ProEvaluate extends Component {
         key: 'jointHearingBenefit',
         dataIndex: 'jointHearingBenefit'
       }, {
-        title: '含分包差及经营费',
+        title: '含分包差及经营费(%)',
         key: 'jointHearingCost',
         dataIndex: 'jointHearingCost'
       }, {
