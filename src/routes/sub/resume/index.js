@@ -137,8 +137,6 @@ const CreateForm = Form.create()(props => {
                 initialValue: selectedValues.constructionScale ? selectedValues.constructionScale : testValue
               })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择"
                          style={{width: '100%'}}>
-                <Option value="项目1">项目1</Option>
-                <Option value="项目2">项目2</Option>
               </Select>)}
             </FormItem>
           </Col>
