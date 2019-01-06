@@ -1,7 +1,8 @@
 import {addDown, queryDownList, updateDown} from "../../../services/downToBack/meterDown";
 import {queryProPerList} from "../../../services/system/sys_project";
-import {querySubList} from "../../../services/sub/resume";
-import {queryTeamList} from "../../../services/downToBack/teamAccount"
+import {queryTeamLists,queryAmount,querySubList} from "../../../services/downToBack/teamAccount"
+import {message} from 'antd';
+
 export default {
   namespace: 'meterDown',
 
@@ -12,10 +13,8 @@ export default {
     },
     proNames: [],
     subNames: [],
-    teamList:{
-      list: [],
-      pagination: {},
-    }
+    teamList:[],
+    sumContractAmount:''
   },
 
   effects: {
@@ -54,7 +53,7 @@ export default {
           payload: response,
         });
       }
-      if (response.code == '401') {
+      if (global.checkToken(response)) {
         yield put({type: 'app/logout'})
         return false
       }
@@ -64,7 +63,7 @@ export default {
       if (response.code == '200') {
         return true
       }
-      if (response.code == '401') {
+      if (global.checkToken(response)) {
         yield put({type: 'app/logout'})
         return false
       }
@@ -75,7 +74,7 @@ export default {
       if (response.code == '200') {
         return true
       }
-      if (response.code == '401') {
+      if (global.checkToken(response)) {
         yield put({type: 'app/logout'})
         return false
       }
@@ -89,7 +88,7 @@ export default {
           payload: response.entity?response.entity:[]
         })
       }
-      if (response.code == '401') {
+      if (global.checkToken(response)) {
         yield put({type: 'app/logout'})
         return false
       }
@@ -97,29 +96,45 @@ export default {
     * querySubNames({payload, token}, {call, put}) {
       const response = yield call(querySubList, payload, token);
       if (response.code == '200') {
+        if(response.entity&&response.entity.length==0){
+          message.warning('该项目还没有所属分包商')
+        }
         yield put({
           type: 'saveSubName',
           payload: response.entity
         })
       }
-      if (response.code == '401') {
+      if (global.checkToken(response)) {
         yield put({type: 'app/logout'})
         return false
       }
     },
     * queryTeams({payload, token}, {call, put}) {
-      const response = yield call(queryTeamList, payload, token);
+      const response = yield call(queryTeamLists, payload, token);
       if (response.code == '200') {
-
+        if(response.entity&&response.entity.length==0){
+          message.warning('该项目和分包商还没有所属队伍')
+        }
         yield put({
           type: 'saveTeamList',
-          payload: response
+          payload: response.entity
         })
       }
-      if (response.code == '401') {
+      if (global.checkToken(response)) {
         yield put({type: 'app/logout'})
         return false
       }
+    },
+    * queryAmount({payload, token}, {call, put}) {
+      const response = yield call(queryAmount, payload, token);
+      if (response.code == '200') {
+        return response.entity
+      }
+      if (global.checkToken(response)) {
+        yield put({type: 'app/logout'})
+        return false
+      }
+      return false
     },
   },
 

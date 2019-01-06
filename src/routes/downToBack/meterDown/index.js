@@ -16,12 +16,13 @@ import {
   Upload,
   Divider,
 } from 'antd';
-import {Page, PageHeaderWrapper, StandardTable,PreFile} from 'components'
+import {Page, PageHeaderWrapper, StandardTable, PreFile} from 'components'
 import styles from './index.less'
-import { getButtons, cleanObject,QiNiuOss, ImageUrl} from 'utils'
+import {getButtons, cleanObject, QiNiuOss, ImageUrl} from 'utils'
 import {menuData} from 'common/menu'
 import {DOWN_EXPORT} from 'common/urls'
 import {createURL} from 'services/app'
+
 const pageButtons = menuData[14].buttons.map(a => a.permission)
 const FormItem = Form.Item;
 const {Option} = Select;
@@ -32,12 +33,12 @@ const getValue = obj =>
 const info_css = {
   color: '#fa541c'
 }
-const vType = [ '中期计价', '末次结算'];
+const vType = ['中期计价', '末次结算'];
 const testValue = ''
 const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
 const qiShu = []
 for (let i = 1; i < 201; i++) {
-  qiShu.push(<Option key={i} value={i}>{'第'+(i)+'期'}</Option>);
+  qiShu.push(<Option key={i} value={i}>{'第' + (i) + '期'}</Option>);
 }
 
 @Form.create()
@@ -49,7 +50,8 @@ class CreateForm extends Component {
       previewVisible: false,
       previewImage: '',
       fileList: [],
-      progress: 0
+      progress: 0,
+      selects: {}
     };
     this.upload = null
   }
@@ -79,12 +81,12 @@ class CreateForm extends Component {
       fieldsValue.annexUrl = `{"url":"${this.state.fileList[0].url}","fileName":"${this.state.fileList[0].name}"}`
 
       // form.resetFields();
-      handleAdd(fieldsValue, updateModalVisible, selectedValues,this.cleanState);
+      handleAdd(fieldsValue, updateModalVisible, selectedValues, this.cleanState);
     });
   };
 
-  cleanState=()=>{
-    this.setState({fileList:[],previewImage:''})
+  cleanState = () => {
+    this.setState({fileList: [], previewImage: ''})
   }
 
   handleCancel = () => this.setState({previewVisible: false})
@@ -104,10 +106,48 @@ class CreateForm extends Component {
     this.setState({fileList})
   }
 
-  render() {
-    const {modalVisible,loading, proNames,teamList, subNames, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
-    let {previewVisible, previewImage, fileList, progress} = this.state
+  handleAmount = (value, type) => {
+    let {form, getSubNames, getTeamList, getAmount} = this.props
+    let res = form.getFieldsValue(['projectId', 'subcontractorId', 'laborAccountId'])
+    let selects = this.state.selects
+    if (type === 0) {
+      if (selects.projectId != value) {
+        if (selects.projectId) {
+          form.setFieldsValue({'subcontractorId': '', 'laborAccountId': '', 'contractPrice': ''})
+        }
+        this.setState({selects: {projectId: value}})
+        getSubNames({projectId: value})
+        return
+      }
+      return
+    } else if (type === 1) {
+      if (selects.subcontractorId != value) {
+        if (selects.subcontractorId) {
+          form.setFieldsValue({'laborAccountId': '', 'contractPrice': ''})
+        }
+        this.setState({selects: {projectId: res.projectId, subcontractorId: value}})
+        getTeamList({projectId: res.projectId, subcontractorId: value})
+        return
+      }
+      return
+    } else {
+      res.laborAccountId = value.props.name
+    }
+    this.setState({selects: res})
+    if (res.projectId && res.subcontractorId && res.laborAccountId) {
+      let payload = {projectId: res.projectId, subcontractorId: res.subcontractorId, teamName: res.laborAccountId}
+      getAmount(payload, this.setAmount)
+    }
+  }
 
+  setAmount = (value) => {
+    this.props.form.setFieldsValue({contractPrice: value})
+
+  }
+
+  render() {
+    const {modalVisible, loading, proNames, amountLoading, teamList, teamLoading, subNames, subLoading, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
+    let {previewVisible, previewImage, fileList, progress, selects} = this.state
     return (
       <Modal
         destroyOnClose
@@ -115,10 +155,10 @@ class CreateForm extends Component {
         bodyStyle={{padding: 0 + 'px'}}
         visible={modalVisible}
         width={992}
-        okButtonProps={{loading:loading}}
+        okButtonProps={{loading: loading}}
         maskClosable={false}
-        onOk={()=>checkDetail ? handleCheckDetail():this.okHandle()}
-        onCancel={() =>{
+        onOk={() => checkDetail ? handleCheckDetail() : this.okHandle()}
+        onCancel={() => {
           this.cleanState()
           checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()
         }
@@ -131,7 +171,8 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('projectId', {
                   rules: [{required: true, message: '请选择项目'}],
                   initialValue: selectedValues.projectId ? selectedValues.projectId : '',
-                })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'}
+                })(<Select className={styles.customSelect} onSelect={(value) => this.handleAmount(value, 0)}
+                           showSearch={true} optionFilterProp={'name'}
                            disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
                   {proNames.map((item, index) => {
                     return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
@@ -142,10 +183,13 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="分包商名称">
                 {form.getFieldDecorator('subcontractorId', {
-                  rules: [{required: true, message: '请选择项目'}],
+                  rules: [{required: true, message: '请选择分包商名称'}],
                   initialValue: selectedValues.subcontractorId ? selectedValues.subcontractorId : '',
-                })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'}
-                           disabled={checkDetail} placeholder="请选择"
+                })(<Select className={styles.customSelect} onSelect={(value) => this.handleAmount(value, 1)}
+                           showSearch={true}
+                           loading={subLoading}
+                           optionFilterProp={'name'}
+                           disabled={checkDetail || !selects.projectId} placeholder="请选择"
                            style={{width: '100%'}}>
                   {subNames.map((item, index) => {
                     return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
@@ -160,10 +204,16 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('laborAccountId', {
                   rules: [{required: true, message: '请选择队伍名称'}],
                   initialValue: selectedValues.laborAccountId ? selectedValues.laborAccountId : '',
-                })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'}
-                           disabled={checkDetail} placeholder="请选择队伍名称" style={{width: '100%'}}>
-                  {teamList.list.map((item, index) => {
-                    return <Option key={item.id} item={item} name={item.teamName} value={item.id}>{item.teamName}</Option>
+                })(<Select className={styles.customSelect}
+                           onSelect={(value, option) => this.handleAmount(option, 2)}
+                           showSearch={true}
+                           optionFilterProp={'name'}
+                           loading={teamLoading}
+                           disabled={checkDetail || !selects.subcontractorId} placeholder="请选择队伍名称"
+                           style={{width: '100%'}}>
+                  {teamList.map((item, index) => {
+                    return <Option key={item.id} item={item} name={item.teamName}
+                                   value={item.id}>{item.teamName}</Option>
                   })}
                 </Select>)}
               </FormItem>
@@ -171,9 +221,9 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="合同金额">
                 {form.getFieldDecorator('contractPrice', {
-                  rules: [{required: true,message:'请输入合同金额'}],
-                  initialValue: selectedValues.contractPrice ? selectedValues.contractPrice : testValue,
-                })(<Input disabled={checkDetail} placehloder='请输入合同金额' addonAfter={'元'}/>)}
+                  rules: [{required: true, message: '请选择项目、分包商和队伍'}],
+                  initialValue: selectedValues.sumContractAmount ? selectedValues.sumContractAmount : '',
+                })(<Input disabled={true} placehloder='自动带入' addonAfter={'元'}/>)}
               </FormItem>
             </Col>
           </Row>
@@ -182,7 +232,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="计价期数">
                 {form.getFieldDecorator('valuationPeriod', {
                   rules: [{required: true, message: '请选择期数'}],
-                  initialValue: selectedValues.valuationPeriod ? ('第'+selectedValues.valuationPeriod+'期') : testValue,
+                  initialValue: selectedValues.valuationPeriod ? ('第' + selectedValues.valuationPeriod + '期') : testValue,
                 })(<Select className={styles.customSelect}
                            disabled={checkDetail}
                            placeholder="请选择期数"
@@ -194,7 +244,7 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="计价日期">
                 {form.getFieldDecorator('valuationTime', {
-                  rules: [{required: true,message:'请选择日期'}],
+                  rules: [{required: true, message: '请选择日期'}],
                   initialValue: selectedValues.valuationTime ? moment(selectedValues.valuationPeriod) : null,
                 })(<DatePicker.MonthPicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
               </FormItem>
@@ -216,7 +266,7 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="计价负责人">
                 {form.getFieldDecorator('valuationPerson', {
-                  rules: [{required: true,message:'请输入计价负责人'}],
+                  rules: [{required: true, message: '请输入计价负责人'}],
                   initialValue: selectedValues.valuationPerson ? selectedValues.valuationPerson : testValue,
                 })(<Input disabled={checkDetail} placehloder='请输入计价负责人'/>)}
               </FormItem>
@@ -309,7 +359,7 @@ class CreateForm extends Component {
                     // fileList={fileList}
                                   listType="picture"
                                   name="files"
-                                  disabled={fileList.length > 0||checkDetail}
+                                  disabled={fileList.length > 0 || checkDetail}
                                   onSuccess={this.onSuccess}
                                   handleManualRemove={this.remove}
                                   onError={this.onError}
@@ -321,9 +371,10 @@ class CreateForm extends Component {
                     <p className="ant-upload-text">点击或拖动附件进入</p>
                   </Upload.Dragger>
                 )}
-                <PreFile disabled={checkDetail} onClose={this.remove} onPreview={this.handlePreview} progress={progress} file={fileList[0]}/>
+                <PreFile disabled={checkDetail} onClose={this.remove} onPreview={this.handlePreview} progress={progress}
+                         file={fileList[0]}/>
                 <span style={info_css}>备注：中期计价附件（封面、验工计价批复表、汇总表）；</span>
-                <span  style={info_css}>末次计价附件（公司批复的《劳务结算审批》、结算资料），请以一份PDF格式文件上传</span>
+                <span style={info_css}>末次计价附件（公司批复的《劳务结算审批》、结算资料），请以一份PDF格式文件上传</span>
               </FormItem>
             </Col>
           </Row>
@@ -338,15 +389,16 @@ class CreateForm extends Component {
             </Col>
           </Row>
         </div>
-        <Modal width={643} style={{width: 643, height: 940}} bodyStyle={{width: 643, height: 940}} visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+        <Modal width={643} style={{width: 643, height: 940}} bodyStyle={{width: 643, height: 940}}
+               visible={previewVisible} footer={null} onCancel={this.handleCancel}>
           <iframe style={{width: 595, height: 892}} frameBorder={0} src={previewImage}/>
-      </Modal>
+        </Modal>
       </Modal>
     )
   }
 
   onUpload = (params) => {
-    QiNiuOss(params).then(res=>{
+    QiNiuOss(params).then(res => {
       this.upload = res
     })
   }
@@ -377,7 +429,7 @@ class CreateForm extends Component {
     } else {
       this.upload.unsubscribe()
     }
-    this.setState({fileList:[]})
+    this.setState({fileList: []})
   }
 }
 
@@ -396,8 +448,8 @@ class MeterDown extends Component {
       checkDetail: false
     }
     this.exportParams = {
-      page:1,
-      pageSize:10
+      page: 1,
+      pageSize: 10
     }
   }
 
@@ -420,20 +472,20 @@ class MeterDown extends Component {
     },
     {
       title: '合同金额',
-      dataIndex: 'contractPrice',
+      dataIndex: 'sumContractAmount',
     },
     {
       title: '计价期数',
       dataIndex: 'valuationPeriod',
       render(val) {
-        return <span>{val!==undefined?('第'+val+'期'):''}</span>;
+        return <span>{val !== undefined ? ('第' + val + '期') : ''}</span>;
       },
     },
     {
       title: '计价日期',
       dataIndex: 'valuationTime',
       render(val) {
-        return <span>{val?moment(val).format('YYYY/MM'):''}</span>;
+        return <span>{val ? moment(val).format('YYYY/MM') : ''}</span>;
       },
     },
     {
@@ -485,15 +537,15 @@ class MeterDown extends Component {
           },
         }, {
           title: '已完成未计',
-          dataIndex:'endedPrice',
+          dataIndex: 'endedPrice',
           key: 'endedPrice',
         }]
     },
     {
       title: '对下计价率',
       dataIndex: 'underRate',
-      render:(val)=>{
-        return <span>{Math.floor(val * 100)+'%'}</span>
+      render: (val) => {
+        return <span>{Math.floor(val * 100) + '%'}</span>
       }
     },
     {
@@ -542,7 +594,7 @@ class MeterDown extends Component {
     {
       title: '操作',
       render: (val, record) => {
-        if(record.id=='合计:'){
+        if (record.id == '合计:') {
           return null
         }
         const user = this.props.app.user
@@ -571,8 +623,6 @@ class MeterDown extends Component {
   componentDidMount() {
     this.getProNames()
     this.getList()
-    this.getSubNames()
-    this.getTeamList()
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
@@ -662,7 +712,7 @@ class MeterDown extends Component {
     });
   };
 
-  handleAdd = (fields, updateModalVisible, selectedValues,cleanState) => {
+  handleAdd = (fields, updateModalVisible, selectedValues, cleanState) => {
 
     const {dispatch, app: {user}} = this.props;
     const payload = {
@@ -683,7 +733,7 @@ class MeterDown extends Component {
       warranty: fields.warranty,
       compensation: fields.compensation,
       endedPrice: fields.endedPrice,
-      performanceBond:fields.performanceBond
+      performanceBond: fields.performanceBond
     }
 
     if (updateModalVisible) {
@@ -789,7 +839,7 @@ class MeterDown extends Component {
 
   render() {
     const {
-      meterDown: {data, proNames, subNames,teamList},
+      meterDown: {data, proNames, subNames, teamList, sumContractAmount},
       loading,
       app: {user}
     } = this.props;
@@ -800,7 +850,10 @@ class MeterDown extends Component {
       handleModalVisible: this.handleModalVisible,
       normFile: this.normFile,
       handleUpdateModalVisible: this.handleUpdateModalVisible,
-      handleCheckDetail: this.handleCheckDetail
+      handleCheckDetail: this.handleCheckDetail,
+      getAmount: this.getAmount,
+      getSubNames: this.getSubNames,
+      getTeamList: this.getTeamList
     };
     const parentState = {
       updateModalVisible: updateModalVisible,
@@ -809,10 +862,14 @@ class MeterDown extends Component {
       checkDetail: checkDetail,
       proNames: proNames,
       subNames: subNames,
-      teamList:teamList,
-      loading:loading.effects[`meterDown/${updateModalVisible?'update':'add'}`]
+      teamList: teamList,
+      loading: loading.effects[`meterDown/${updateModalVisible ? 'update' : 'add'}`],
+      subLoading: loading.effects['meterDown/querySubNames'],
+      teamLoading: loading.effects['meterDown/queryTeams'],
+      amountLoading: loading.effects['meterDown/queryAmount'],
+      sumContractAmount: sumContractAmount
     }
-    const exportUrl = createURL(DOWN_EXPORT,{...this.exportParams,...{token:user.token}})
+    const exportUrl = createURL(DOWN_EXPORT, {...this.exportParams, ...{token: user.token}})
 
     return (
       <Page inner={true} loading={pageLoading}>
@@ -896,26 +953,38 @@ class MeterDown extends Component {
     });
   }
 
-  getSubNames = (subName = []) => {
-    if (subName.length < 1) {
-      this.props.dispatch(
-        {
-          type: 'meterDown/querySubNames',
-          payload: {page: 1, pageSize: 10},
-          token: this.props.app.user.token
-        }
-      )
-    }
-  }
-
-  getTeamList=()=>{
+  getSubNames = (payload) => {
     this.props.dispatch(
       {
-        type: 'meterDown/queryTeams',
-        payload: {page: 1, pageSize: 10},
+        type: 'meterDown/querySubNames',
+        payload: payload,
         token: this.props.app.user.token
       }
     )
+  }
+
+  getTeamList = (payload) => {
+    this.props.dispatch(
+      {
+        type: 'meterDown/queryTeams',
+        payload: payload,
+        token: this.props.app.user.token
+      }
+    )
+  }
+
+  getAmount = (paload, callback) => {
+    this.props.dispatch(
+      {
+        type: 'meterDown/queryAmount',
+        payload: paload,
+        token: this.props.app.user.token
+      }
+    ).then(res => {
+      if (res) {
+        callback(res.sumAmount)
+      }
+    })
   }
 }
 

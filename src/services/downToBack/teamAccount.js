@@ -39,3 +39,22 @@ export async function updateCompany(params,token) {
     body: params
   },token);
 }
+export async function queryAmount(params,token) {
+  return request(`${api}/contractor_amount/v1.1`,{
+    method: 'GET',
+    body: params
+  },token);
+}
+export async function querySubList(params,token) {
+  return request(`${api}/sub_list/v1.1`,{
+    method: 'GET',
+    body: params
+  },token);
+}
+
+export async function queryTeamLists(params,token) {
+  return request(`${api}/team_list/v1.1`,{
+    method: 'GET',
+    body: params
+  },token);
+}

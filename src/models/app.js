@@ -82,12 +82,9 @@ export default {
       }
     },
     * checkRouter({payload},{call,put,select}){
-    //  console.log(payload.locationPathname)
-     // console.log(routers)
-      //const perRouters =
+
       const {app:{menu,user}} = yield (select(_ => _))
       const paths = menu.filter(a=>a.route).map(b=>b.route)
-    //  console.log(paths)
       if(![...paths,...["/404"]].includes(payload.locationPathname)&&user.token&&payload.locationPathname!='/') {
         yield put(routerRedux.push('/404'))
       }

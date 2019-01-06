@@ -35,7 +35,7 @@ export default {
 
         return true
       }
-      if (response.code == '401') {
+      if (global.checkToken(response)) {
         yield put({type: 'app/logout'})
         return false
       }
@@ -47,7 +47,7 @@ export default {
 
         return true
       }
-      if (response.code == '401') {
+      if (global.checkToken(response)) {
         yield put({type: 'app/logout'})
         return false
       }
@@ -59,7 +59,7 @@ export default {
 
         return true
       }
-      if (response.code == '401') {
+      if (global.checkToken(response)) {
         yield put({type: 'app/logout'})
         return false
       }
@@ -73,20 +73,20 @@ export default {
           payload: response.entity?response.entity:[]
         })
       }
-      if (response.code == '401') {
+      if (global.checkToken(response)) {
         yield put({type: 'app/logout'})
         return false
       }
     },
     * querySubNames({payload, token}, {call, put}) {
       const response = yield call(querySubList, payload, token);
-      if (response.code == '200') {
+      if (global.checkToken(response)) {
         yield put({
           type: 'saveSubName',
           payload: response.entity
         })
       }
-      if (response.code == '401') {
+      if (global.checkToken(response)) {
         yield put({type: 'app/logout'})
         return false
       }
@@ -99,7 +99,7 @@ export default {
           payload: response.entity
         })
       }
-      if (response.code == '401') {
+      if (global.checkToken(response)) {
         yield put({type: 'app/logout'})
         return false
       }

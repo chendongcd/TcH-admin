@@ -21,7 +21,7 @@ export default {
         });
         return true
       }
-      if(response.code=='401'){
+      if(global.checkToken(response)){
         yield put({type:'app/logout'})
         return false
       }
@@ -32,7 +32,7 @@ export default {
       if(response.code=='200') {
         return true
       }
-      if(response.code=='401'){
+      if(global.checkToken(response)){
         yield put({type:'app/logout'})
         return false
       }
@@ -43,7 +43,7 @@ export default {
       if(response.code=='200') {
         return true
       }
-      if(response.code=='401'){
+      if(global.checkToken(response)){
         yield put({type:'app/logout'})
         return false
       }
@@ -57,7 +57,7 @@ export default {
           payload: response.entity?response.entity:[]
         })
       }
-      if(response.code=='401'){
+      if(global.checkToken(response)){
         yield put({type:'app/logout'})
         return false
       }
