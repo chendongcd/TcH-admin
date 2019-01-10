@@ -246,25 +246,7 @@ class User extends Component {
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    const {formValues} = this.state;
-
-    const filters = Object.keys(filtersArg).reduce((obj, key) => {
-      const newObj = {...obj};
-      newObj[key] = getValue(filtersArg[key]);
-      return newObj;
-    }, {});
-
-    const params = {
-      page: pagination.current,
-      pageSize: pagination.pageSize,
-      ...formValues,
-      ...filters,
-    };
-    if (sorter.field) {
-      params.sorter = `${sorter.field}_${sorter.order}`;
-    }
-
-    this.getList(...params)
+    this.searchList(pagination.current, pagination.pageSize)
   };
 
   handleFormReset = () => {
