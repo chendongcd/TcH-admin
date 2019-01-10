@@ -354,7 +354,7 @@ class Project extends Component {
                 loading={loading.effects['sys_pro/queryProList']}
                 data={data}
                 rowKey="id"
-                scroll={{x: '120%',y: global._scollY}}
+                scroll={{x: '110%',y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

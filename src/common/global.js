@@ -7,5 +7,5 @@ export default ()=> {
     return false
   }
 
-  window._scollY = 265
+  window._scollY = 0
 }
