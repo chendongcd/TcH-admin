@@ -563,7 +563,7 @@ class Resume extends Component {
                 filterMultiple={false}
                 rowKey={'id'}
                 data={data}
-                scroll={{x: '200%'}}
+                scroll={{x: '200%',y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

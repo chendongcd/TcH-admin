@@ -772,7 +772,7 @@ class MeterUp extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '200%'}}
+                scroll={{x: '200%',y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

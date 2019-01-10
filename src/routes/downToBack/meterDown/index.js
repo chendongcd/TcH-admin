@@ -427,7 +427,9 @@ class CreateForm extends Component {
     if (res.status == 'done') {
       this.props.form.setFieldsValue({annexUrl: []});
     } else {
-      this.upload.unsubscribe()
+      if(this.upload&&this.upload.unsubscribe) {
+        this.upload.unsubscribe()
+      }
     }
     this.setState({fileList: []})
   }
@@ -871,7 +873,7 @@ class MeterDown extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '250%'}}
+                scroll={{x: '250%',y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

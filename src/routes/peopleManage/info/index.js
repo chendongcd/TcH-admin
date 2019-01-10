@@ -555,7 +555,9 @@ class CreateForm extends Component {
     if (res.status == 'done') {
       this.props.form.setFieldsValue({headUrl: []});
     } else {
-      this.upload.unsubscribe()
+      if(this.upload&&this.upload.unsubscribe) {
+        this.upload.unsubscribe()
+      }
     }
     this.setState({fileList: []})
   }
@@ -968,7 +970,7 @@ class PeopleInfo extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '300%'}}
+                scroll={{x: '300%',y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

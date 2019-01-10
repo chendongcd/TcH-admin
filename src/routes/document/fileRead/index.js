@@ -197,7 +197,9 @@ class CreateForm extends Component {
     if (res.status == 'done') {
       this.props.form.setFieldsValue({annexUrl: []});
     } else {
-      this.upload.unsubscribe()
+      if(this.upload&&this.upload.unsubscribe) {
+        this.upload.unsubscribe()
+      }
     }
     this.setState({fileList: []})
   }
@@ -470,6 +472,7 @@ class FileRead extends Component {
                 selectedRows={selectedRows}
                 loading={loading.effects['fileRead/fetch']}
                 data={data}
+                scroll={{y: global._scollY}}
                 bordered
                 rowKey={'id'}
                 columns={this.columns}

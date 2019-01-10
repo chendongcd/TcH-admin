@@ -1164,7 +1164,7 @@ class InfoCard extends Component {
                 selectedRows={selectedRows}
                 loading={loading.effects['pro_proInfo/fetch']}
                 data={data}
-                scroll={{x: '200%'}}
+                scroll={{x: '200%',y: global._scollY}}
                 rowKey="id"
                 bordered
                 columns={this.columns}

@@ -38,7 +38,7 @@ const getValue = obj =>
 const info_css = {
   color: '#fa541c'
 }
-const testValue = '123'
+const testValue = ''
 const TenW = 1000000
 const plainOptions = [
   {label: '分包商类型', value: '1'},
@@ -491,7 +491,7 @@ class CreateForm extends Component {
   remove = (res) => {
     if (res.status == 'done') {
       this.props.form.setFieldsValue({annex: []});
-    } else {
+    } else if(this.upload){
       this.upload.unsubscribe()
     }
     this.setState({fileList: []})
@@ -1073,7 +1073,7 @@ class Qualification extends Component {
                 bordered
                 rowKey="id"
                 data={data}
-                scroll={{x: '210%'}}
+                scroll={{x: '210%',y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
