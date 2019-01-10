@@ -3,7 +3,7 @@ import {connect} from 'dva';
 import {Helmet} from 'react-helmet'
 import PropTypes from 'prop-types'
 import config from '../utils/config'
-import {Loader, MyLayout,Page} from 'components'
+import {Loader, MyLayout} from 'components'
 import {BackTop, Layout} from 'antd'
 import classnames from 'classnames'
 import '../themes/index.less'
@@ -11,7 +11,6 @@ import '../themes/index.less'
 import {withRouter} from 'dva/router'
 import MenuContext from "../components/Layout/MenuContext";
 import PageHeader from "../components/PageHeader";
-import Style from './Index.less'
 const {Content, Footer, Sider} = Layout
 const {Header, styles} = MyLayout
 
@@ -103,7 +102,9 @@ class IndexPage extends Component {
               </MenuContext.Consumer>
               <Content style={{minHeight: '100vh-100',position:'relative'}}>
                 {children[0]}
+{/*
                 {app.locationPathname==='/home'?null: <Page className={Style.loadingPage} inner={false} loading={true}/>}
+*/}
               </Content>
               <Footer>
                 {config.footerText}

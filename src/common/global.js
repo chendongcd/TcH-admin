@@ -6,4 +6,6 @@ export default ()=> {
     }
     return false
   }
+
+  window._scollY = 0
 }

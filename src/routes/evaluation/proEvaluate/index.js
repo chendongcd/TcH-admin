@@ -628,7 +628,9 @@ class CreateForm extends Component {
       if (res.status == 'done') {
         this.props.form.setFieldsValue({responsibilityAnnex: []});
       } else {
-        this.upload[2].unsubscribe()
+        if(this.upload[2]&&this.upload[2].unsubscribe) {
+          this.upload[2].unsubscribe()
+        }
       }
       this.setState({responsibilityAnnex: []})
     }
@@ -636,7 +638,9 @@ class CreateForm extends Component {
       if (res.status == 'done') {
         this.props.form.setFieldsValue({jointHearingAnnex: []});
       } else {
-        this.upload[1].unsubscribe()
+        if(this.upload[1]&&this.upload[1].unsubscribe) {
+          this.upload[1].unsubscribe()
+        }
       }
       this.setState({jointHearingAnnex: []})
     }
@@ -644,7 +648,9 @@ class CreateForm extends Component {
       if (res.status == 'done') {
         this.props.form.setFieldsValue({evaluationAnnex: []});
       } else {
-        this.upload[0].unsubscribe()
+        if(this.upload[0]&&this.upload[0].unsubscribe) {
+          this.upload[0].unsubscribe()
+        }
       }
       this.setState({evaluationAnnex: []})
     }
@@ -884,29 +890,7 @@ class ProEvaluate extends Component {
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    const {dispatch} = this.props;
-    const {formValues} = this.state;
-
-    const filters = Object.keys(filtersArg).reduce((obj, key) => {
-      const newObj = {...obj};
-      newObj[key] = getValue(filtersArg[key]);
-      return newObj;
-    }, {});
-
-    const params = {
-      currentPage: pagination.current,
-      pageSize: pagination.pageSize,
-      ...formValues,
-      ...filters,
-    };
-    if (sorter.field) {
-      params.sorter = `${sorter.field}_${sorter.order}`;
-    }
-
-    dispatch({
-      type: 'rule/fetch',
-      payload: params,
-    });
+    this.searchList(pagination.current, pagination.pageSize)
   };
 
   handleFormReset = () => {
@@ -1170,7 +1154,7 @@ class ProEvaluate extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '300%'}}
+                scroll={{x: '300%',y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

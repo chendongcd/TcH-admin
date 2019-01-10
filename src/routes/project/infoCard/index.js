@@ -888,29 +888,7 @@ class InfoCard extends Component {
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    const {dispatch} = this.props;
-    const {formValues} = this.state;
-
-    const filters = Object.keys(filtersArg).reduce((obj, key) => {
-      const newObj = {...obj};
-      newObj[key] = getValue(filtersArg[key]);
-      return newObj;
-    }, {});
-
-    const params = {
-      currentPage: pagination.current,
-      pageSize: pagination.pageSize,
-      ...formValues,
-      ...filters,
-    };
-    if (sorter.field) {
-      params.sorter = `${sorter.field}_${sorter.order}`;
-    }
-
-    dispatch({
-      type: 'rule/fetch',
-      payload: params,
-    });
+    this.searchList(pagination.current, pagination.pageSize)
   };
 
   handleFormReset = () => {
@@ -1186,7 +1164,7 @@ class InfoCard extends Component {
                 selectedRows={selectedRows}
                 loading={loading.effects['pro_proInfo/fetch']}
                 data={data}
-                scroll={{x: '200%'}}
+                scroll={{x: '200%',y: global._scollY}}
                 rowKey="id"
                 bordered
                 columns={this.columns}

@@ -555,7 +555,9 @@ class CreateForm extends Component {
     if (res.status == 'done') {
       this.props.form.setFieldsValue({headUrl: []});
     } else {
-      this.upload.unsubscribe()
+      if(this.upload&&this.upload.unsubscribe) {
+        this.upload.unsubscribe()
+      }
     }
     this.setState({fileList: []})
   }
@@ -698,29 +700,7 @@ class PeopleInfo extends Component {
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    const {dispatch} = this.props;
-    const {formValues} = this.state;
-
-    const filters = Object.keys(filtersArg).reduce((obj, key) => {
-      const newObj = {...obj};
-      newObj[key] = getValue(filtersArg[key]);
-      return newObj;
-    }, {});
-
-    const params = {
-      currentPage: pagination.current,
-      pageSize: pagination.pageSize,
-      ...formValues,
-      ...filters,
-    };
-    if (sorter.field) {
-      params.sorter = `${sorter.field}_${sorter.order}`;
-    }
-
-    dispatch({
-      type: 'rule/fetch',
-      payload: params,
-    });
+    this.searchList(pagination.current, pagination.pageSize)
   };
 
   handleFormReset = () => {
@@ -990,7 +970,7 @@ class PeopleInfo extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '300%'}}
+                scroll={{x: '300%',y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

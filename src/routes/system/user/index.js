@@ -95,7 +95,7 @@ class CreateForm extends Component {
         {this.state.type == 1 ? <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="项目名称">
           {form.getFieldDecorator('proName', {
             rules: [{required: true, message: '请选择项目名称'}],
-            initialValue: selectedValues.projectId ? [selectedValues.projectId] : []
+            initialValue: selectedValues.projectId ? selectedValues.projectId : ''
           })(<Select className={styles.customSelect} onFocus={() => this.getOptions(getProNames, proNames)}
                      notFoundContent={this.isLoad ? '暂无数据' : '正在加载'}
                      disabled={checkDetail}
@@ -246,25 +246,7 @@ class User extends Component {
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    const {formValues} = this.state;
-
-    const filters = Object.keys(filtersArg).reduce((obj, key) => {
-      const newObj = {...obj};
-      newObj[key] = getValue(filtersArg[key]);
-      return newObj;
-    }, {});
-
-    const params = {
-      page: pagination.current,
-      pageSize: pagination.pageSize,
-      ...formValues,
-      ...filters,
-    };
-    if (sorter.field) {
-      params.sorter = `${sorter.field}_${sorter.order}`;
-    }
-
-    this.getList(...params)
+    this.searchList(pagination.current, pagination.pageSize)
   };
 
   handleFormReset = () => {
@@ -448,7 +430,7 @@ class User extends Component {
                 loading={loading.effects['sys_user/queryUserList']}
                 rowKey="id"
                 data={data}
-                scroll={{x: '150%'}}
+                scroll={{x: '150%',y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

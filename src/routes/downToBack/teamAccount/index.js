@@ -55,7 +55,6 @@ class CreateForm extends Component {
       contractNum: '',
       sqProgress: 0,
       sqFileList: [],
-
     };
     this.upload = null
   }
@@ -480,7 +479,9 @@ class CreateForm extends Component {
     if (res.status == 'done') {
       this.props.form.setFieldsValue({annexUrl: []});
     } else {
-      this.upload.unsubscribe()
+      if(this.upload&&this.upload.unsubscribe) {
+        this.upload.unsubscribe()
+      }
     }
     this.setState({fileList: []})
   }
@@ -489,7 +490,9 @@ class CreateForm extends Component {
     if (res.status == 'done') {
       this.props.form.setFieldsValue({annexUrlSq: []});
     } else {
-      this.upload.unsubscribe()
+      if(this.upload&&this.upload.unsubscribe) {
+        this.upload.unsubscribe()
+      }
     }
     this.setState({sqFileList: []})
   }
@@ -809,29 +812,7 @@ class TeamAccount extends Component {
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    const {dispatch} = this.props;
-    const {formValues} = this.state;
-
-    const filters = Object.keys(filtersArg).reduce((obj, key) => {
-      const newObj = {...obj};
-      newObj[key] = getValue(filtersArg[key]);
-      return newObj;
-    }, {});
-
-    const params = {
-      currentPage: pagination.current,
-      pageSize: pagination.pageSize,
-      ...formValues,
-      ...filters,
-    };
-    if (sorter.field) {
-      params.sorter = `${sorter.field}_${sorter.order}`;
-    }
-
-    dispatch({
-      type: 'rule/fetch',
-      payload: params,
-    });
+    this.searchList(pagination.current, pagination.pageSize)
   };
 
   handleFormReset = () => {
@@ -909,13 +890,6 @@ class TeamAccount extends Component {
   };
 
   handleAdd = (fields, updateModalVisible, selectedValues, cleanState) => {
-    // const {dispatch} = this.props;
-    // dispatch({
-    //   type: 'rule/add',
-    //   payload: {
-    //     desc: fields.desc,
-    //   },
-    // });
     const {dispatch, app: {user}} = this.props;
     const payload = {
       projectId: fields.projectId,
@@ -1106,7 +1080,7 @@ class TeamAccount extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '300%'}}
+                scroll={{x: '300%',y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

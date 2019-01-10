@@ -40,7 +40,9 @@ export default {
       }
     },
     *updateUser({payload,token,callback,callback2},{call,put}){
+      console.log(payload)
       const response = yield call(updateUser, payload,token);
+      console.log(response)
       if(response.code=='200'){
         message.success('用户信息修改成功')
         callback()
