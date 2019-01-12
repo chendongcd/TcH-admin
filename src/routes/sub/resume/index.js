@@ -613,8 +613,7 @@ class Resume extends Component {
     }
   }
 
-  getList = (e,page = 1, pageSize = 10) => {
-    e&&e.preventDefault?e.preventDefault():null
+  getList = (page = 1, pageSize = 10) => {
     this.props.dispatch({
       type: 'sub_resume/fetch',
       payload: {page: page, pageSize: pageSize},
@@ -622,7 +621,8 @@ class Resume extends Component {
     });
   }
 
-  searchList = (page = 1, pageSize = 10) => {
+  searchList = (e,page = 1, pageSize = 10) => {
+    e&&e.preventDefault?e.preventDefault():null
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
       let payload = {
