@@ -48,7 +48,7 @@ const plainOptions = [
   {label: '资质信息', value: '4'},
   {label: '信誉评价', value: '5'},
 ]
-const periodType = ['绿色','黄色','红色']
+const periodType = ['绿色', '黄色', '红色']
 const _setColor = function (time) {
   let num
   num = time.split(' ')[0]
@@ -72,8 +72,8 @@ class CreateForm extends Component {
       previewImage: '',
       fileList: [],
       progress: 0,
-      dateOpen:false,
-      showTag:false
+      dateOpen: false,
+      showTag: false
     };
     this.upload = null
   }
@@ -88,10 +88,10 @@ class CreateForm extends Component {
           fieldsValue[prop] = fieldsValue[prop].format('YYYY-MM-DD')
         }
       }
-      if(fieldsValue.annex.length>0) {
+      if (fieldsValue.annex.length > 0) {
         fieldsValue.annex = `{"url":"${this.state.fileList[0].url}","fileName":"${this.state.fileList[0].name}"}`
-      }else {
-        fieldsValue.annex =''
+      } else {
+        fieldsValue.annex = ''
       }
       handleAdd(fieldsValue, updateModalVisible, selectedValues, this.cleanState);
     });
@@ -131,18 +131,18 @@ class CreateForm extends Component {
     this.setState({fileList})
   }
 
-  renderExtral=()=>{
-    return <a onClick={()=>this.longPeriod()}>长期</a>
+  renderExtral = () => {
+    return <a onClick={() => this.longPeriod()}>长期</a>
   }
 
-  longPeriod=()=>{
-    this.props.form.setFieldsValue({'businessLicenseValidityPeriod':moment('2200-01-01')})
-    this.setState({dateOpen:false,showTag:true})
+  longPeriod = () => {
+    this.props.form.setFieldsValue({'businessLicenseValidityPeriod': moment('2200-01-01')})
+    this.setState({dateOpen: false, showTag: true})
   }
 
   render() {
     const {modalVisible, loading, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
-    let {previewVisible, previewImage, fileList, progress,dateOpen,showTag} = this.state
+    let {previewVisible, previewImage, fileList, progress, dateOpen, showTag} = this.state
     return (
       <Modal
         destroyOnClose
@@ -201,14 +201,14 @@ class CreateForm extends Component {
           </Row>
           <Row gutter={0}>
             <Col md={12} sm={24}>
-              <FormItem  labelCol={{span: 4}} wrapperCol={{span: 20}} label="电话">
+              <FormItem labelCol={{span: 4}} wrapperCol={{span: 20}} label="电话">
                 {form.getFieldDecorator('phone', {
                   initialValue: selectedValues.phone ? selectedValues.phone : testValue
                 })(<Input disabled={checkDetail} placeholder="请输入电话"/>)}
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem  labelCol={{span: 4}} wrapperCol={{span: 20}} label="电子邮箱">
+              <FormItem labelCol={{span: 4}} wrapperCol={{span: 20}} label="电子邮箱">
                 {form.getFieldDecorator('email', {
                   initialValue: selectedValues.email ? selectedValues.email : testValue
                 })(<Input disabled={checkDetail} placeholder="请输入电子邮箱"/>)}
@@ -318,15 +318,17 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('businessLicenseValidityPeriod', {
                   rules: [{required: true, message: '请选择期限'}],
                   initialValue: selectedValues.businessLicenseValidityPeriod ? moment(selectedValues.businessLicenseValidityPeriod) : null
-                })(showTag?<Tag
+                })(showTag ? <Tag
                     closable
                     visible={showTag}
                     color="#87d068"
                     onClose={() => this.onTagClose()}
                   >
                     长期
-                  </Tag>:
-                  <DatePicker  onOpenChange={(dateOpen)=>this.setState({dateOpen})} open={dateOpen} renderExtraFooter={() => this.renderExtral()} disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
+                  </Tag> :
+                  <DatePicker onOpenChange={(dateOpen) => this.setState({dateOpen})} open={dateOpen}
+                              renderExtraFooter={() => this.renderExtral()} disabled={checkDetail}
+                              style={{width: '100%'}} placeholder="请选择日期"/>)}
               </FormItem>
             </Col>
             <Col md={8} sm={24}>
@@ -482,9 +484,9 @@ class CreateForm extends Component {
     )
   }
 
-  onTagClose=()=>{
-    this.props.form.setFieldsValue({'businessLicenseValidityPeriod':null})
-    this.setState({ showTag: false })
+  onTagClose = () => {
+    this.props.form.setFieldsValue({'businessLicenseValidityPeriod': null})
+    this.setState({showTag: false})
   }
 
   onUpload = (params) => {
@@ -516,7 +518,7 @@ class CreateForm extends Component {
   remove = (res) => {
     if (res.status == 'done') {
       this.props.form.setFieldsValue({annex: []});
-    } else if(this.upload){
+    } else if (this.upload) {
       this.upload.unsubscribe()
     }
     this.setState({fileList: []})
@@ -729,7 +731,7 @@ class Qualification extends Component {
     {
       title: '下载附件',
       render: (val, record) => {
-        if(!record.annex){
+        if (!record.annex) {
           return null
         }
         let annex = JSON.parse(record.annex)
@@ -772,12 +774,6 @@ class Qualification extends Component {
             {getButtons(button, pageButtons[2]) ?
               <a onClick={() => this.handleCheckDetail(true, record)}>查看</a> : null}
             {more}
-            {/* <Divider type="horizontal"/>
-          <a onClick={() => this.handleReviewModal(0,record)}> 股份公司综合信誉评价</a>
-          <Divider type="horizontal"/>
-          <a onClick={() => this.handleReviewModal(1,record)}>集团公司综合信誉评价</a>
-          <Divider type="horizontal"/>
-          <a onClick={() => this.handleReviewModal(2,record)}>公司本级综合信誉评价</a>*/}
           </Fragment>
         )
       }
@@ -803,7 +799,7 @@ class Qualification extends Component {
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    this.searchList(pagination.current, pagination.pageSize)
+    this.searchList(null,pagination.current, pagination.pageSize)
   };
 
   handleFormReset = () => {
@@ -941,12 +937,12 @@ class Qualification extends Component {
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={6} sm={24}>
             <FormItem label="分包商全称">
-              {getFieldDecorator('name')(<Input />)}
+              {getFieldDecorator('name')(<Input/>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="分包商类型">
-              {getFieldDecorator('type')(<Select  style={{width: '100%'}}>
+              {getFieldDecorator('type')(<Select style={{width: '100%'}}>
                 {subType.map((a, index) => <Option key={index} value={a}>{a}</Option>)}
               </Select>)}
             </FormItem>
@@ -960,7 +956,7 @@ class Qualification extends Component {
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="注册资金">
-              {getFieldDecorator('registeredCapital')(<Select  style={{width: '100%'}}>
+              {getFieldDecorator('registeredCapital')(<Select style={{width: '100%'}}>
                 <Option value={`{"minAmount":"0","maxAmount":"${5 * TenW}"}`}>500万以下</Option>
                 <Option value={`{"minAmount":"${5 * TenW}","maxAmount":"${10 * TenW}"}`}>500万-1000万</Option>
                 <Option value={`{"minAmount":"${10 * TenW}","maxAmount":"${30 * TenW}"}`}>1000万-3000万</Option>
@@ -974,7 +970,7 @@ class Qualification extends Component {
         {expandForm ? <Row gutter={{md: 4, lg: 12, xl: 24}}>
           <Col md={8} sm={24}>
             <FormItem label="股份公司综合信誉评价">
-              {getFieldDecorator('shareEvaluation')(<Select  style={{width: '100%'}}>
+              {getFieldDecorator('shareEvaluation')(<Select style={{width: '100%'}}>
                 <Option value="优秀">优秀</Option>
                 <Option value="合格">合格</Option>
                 <Option value="不合格">不合格</Option>
@@ -983,7 +979,7 @@ class Qualification extends Component {
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="集团公司综合信誉评价">
-              {getFieldDecorator('groupEvaluation')(<Select  style={{width: '100%'}}>
+              {getFieldDecorator('groupEvaluation')(<Select style={{width: '100%'}}>
                 <Option value="优秀">优秀</Option>
                 <Option value="合格">合格</Option>
                 <Option value="不合格">不合格</Option>
@@ -1098,7 +1094,7 @@ class Qualification extends Component {
                 bordered
                 rowKey="id"
                 data={data}
-                scroll={{x: '260%',y: global._scollY}}
+                scroll={{x: '260%', y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
@@ -1128,8 +1124,8 @@ class Qualification extends Component {
     });
   }
 
-  searchList = (e,page = 1, pageSize = 10) => {
-    e&&e.preventDefault?e.preventDefault():null
+  searchList = (e, page = 1, pageSize = 10) => {
+    e && e.preventDefault ? e.preventDefault() : null
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
       let minAmount, maxAmount
@@ -1149,7 +1145,7 @@ class Qualification extends Component {
         shareEvaluation: fieldsValue.shareEvaluation,
         companyEvaluation: fieldsValue.companyEvaluation,
         groupEvaluation: fieldsValue.groupEvaluation,
-        isValid:fieldsValue.isValid
+        isValid: fieldsValue.isValid
       }
       cleanObject(payload)
       this.props.dispatch({
