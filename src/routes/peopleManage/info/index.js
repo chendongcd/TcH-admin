@@ -1002,8 +1002,7 @@ class PeopleInfo extends Component {
     });
   }
 
-  searchList = (e, page = 1, pageSize = 10) => {
-    e.preventDefault()
+  searchList = (page = 1, pageSize = 10) => {
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
       //  form.resetFields();

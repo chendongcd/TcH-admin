@@ -621,8 +621,7 @@ class Resume extends Component {
     });
   }
 
-  searchList = (e, page = 1, pageSize = 10) => {
-    e?e.preventDefault():null
+  searchList = (page = 1, pageSize = 10) => {
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
       let payload = {

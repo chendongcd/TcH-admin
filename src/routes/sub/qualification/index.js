@@ -15,7 +15,8 @@ import {
   Modal,
   Upload,
   Divider,
-  Badge
+  Badge,
+  Tag
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable, PreFile, ExportModal} from 'components'
 import styles from './index.less'
@@ -39,7 +40,7 @@ const info_css = {
   color: '#fa541c'
 }
 const testValue = ''
-const TenW = 1000000
+const TenW = 100
 const plainOptions = [
   {label: '分包商类型', value: '1'},
   {label: '法定代表人', value: '2'},
@@ -70,7 +71,9 @@ class CreateForm extends Component {
       previewVisible: false,
       previewImage: '',
       fileList: [],
-      progress: 0
+      progress: 0,
+      dateOpen:false,
+      showTag:false
     };
     this.upload = null
   }
@@ -128,9 +131,18 @@ class CreateForm extends Component {
     this.setState({fileList})
   }
 
+  renderExtral=()=>{
+    return <a onClick={()=>this.longPeriod()}>长期</a>
+  }
+
+  longPeriod=()=>{
+    this.props.form.setFieldsValue({'businessLicenseValidityPeriod':moment('2200-01-01')})
+    this.setState({dateOpen:false,showTag:true})
+  }
+
   render() {
     const {modalVisible, loading, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
-    let {previewVisible, previewImage, fileList, progress} = this.state
+    let {previewVisible, previewImage, fileList, progress,dateOpen,showTag} = this.state
     return (
       <Modal
         destroyOnClose
@@ -306,7 +318,15 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('businessLicenseValidityPeriod', {
                   rules: [{required: true, message: '请选择期限'}],
                   initialValue: selectedValues.businessLicenseValidityPeriod ? moment(selectedValues.businessLicenseValidityPeriod) : null
-                })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
+                })(showTag?<Tag
+                    closable
+                    visible={showTag}
+                    color="#87d068"
+                    onClose={() => this.onTagClose()}
+                  >
+                    长期
+                  </Tag>:
+                  <DatePicker  onOpenChange={(dateOpen)=>this.setState({dateOpen})} open={dateOpen} renderExtraFooter={() => this.renderExtral()} disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
               </FormItem>
             </Col>
             <Col md={8} sm={24}>
@@ -460,6 +480,11 @@ class CreateForm extends Component {
         </Modal>
       </Modal>
     )
+  }
+
+  onTagClose=()=>{
+    this.props.form.setFieldsValue({'businessLicenseValidityPeriod':null})
+    this.setState({ showTag: false })
   }
 
   onUpload = (params) => {
@@ -1073,7 +1098,7 @@ class Qualification extends Component {
                 bordered
                 rowKey="id"
                 data={data}
-                scroll={{x: '210%',y: global._scollY}}
+                scroll={{x: '260%',y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
@@ -1103,8 +1128,7 @@ class Qualification extends Component {
     });
   }
 
-  searchList = (e, page = 1, pageSize = 10) => {
-    e.preventDefault()
+  searchList = (page = 1, pageSize = 10) => {
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
       let minAmount, maxAmount
