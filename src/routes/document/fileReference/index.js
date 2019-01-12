@@ -433,7 +433,7 @@ class FileReference extends Component {
   }
 
   searchList = (e, page = 1, pageSize = 10) => {
-    e.preventDefault()
+    e&&e.preventDefault?e.preventDefault():null
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
       //  form.resetFields();

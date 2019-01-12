@@ -45,7 +45,7 @@ const plainOptions = [
 ]
 const qiShu = []
 for (let i = 1; i < 201; i++) {
-  qiShu.push(<Option key={i} value={i}>{'第'+(i)+'期'}</Option>);
+  qiShu.push(<Option key={i} value={i}>{'第' + (i) + '期'}</Option>);
 }
 
 @Form.create()
@@ -151,7 +151,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="计量期数">
                 {form.getFieldDecorator('meteringNum', {
                   rules: [{required: true, message: '请选择期数'}],
-                  initialValue: selectedValues.meteringNum ? ('第'+selectedValues.meteringNum+'期') : testValue,
+                  initialValue: selectedValues.meteringNum ? ('第' + selectedValues.meteringNum + '期') : testValue,
                 })(<Select className={styles.customSelect}
                            disabled={checkDetail} placeholder="请选择期数"
                            style={{width: '100%'}}>
@@ -349,6 +349,8 @@ class CreateForm extends Component {
       status: 'done',
       url: ImageUrl + res.key,
     }
+  //  console.log(file)
+
     this.setState({fileList: [file]})
     this.props.form.setFieldsValue({annexUrl: [file]});
   }
@@ -357,7 +359,7 @@ class CreateForm extends Component {
     if (res.status == 'done') {
       this.props.form.setFieldsValue({annexUrl: []});
     } else {
-      if(this.upload&&this.upload.unsubscribe) {
+      if (this.upload && this.upload.unsubscribe) {
         this.upload.unsubscribe()
       }
     }
@@ -378,7 +380,7 @@ class MeterUp extends Component {
       pageLoading: false,
       selectedValues: {},
       checkDetail: false,
-      exportModalVisible:false
+      exportModalVisible: false
     }
     this.exportParams = {
       page: 1,
@@ -398,8 +400,8 @@ class MeterUp extends Component {
     {
       title: '计量期数',
       dataIndex: 'meteringNum',
-      render:(val)=>{
-        return <span>{val!==undefined?('第'+val+'期'):''}</span>
+      render: (val) => {
+        return <span>{val !== undefined ? ('第' + val + '期') : ''}</span>
       }
     },
     {
@@ -569,7 +571,7 @@ class MeterUp extends Component {
     });
   };
 
-  handleExportModalVisible = (flag=false) =>{
+  handleExportModalVisible = (flag = false) => {
     this.setState({
       exportModalVisible: !!flag,
     });
@@ -724,7 +726,7 @@ class MeterUp extends Component {
       loading,
       app: {user}
     } = this.props;
-    const {selectedRows, modalVisible,exportModalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail} = this.state;
+    const {selectedRows, modalVisible, exportModalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail} = this.state;
 
     const parentMethods = {
       handleAdd: this.handleAdd,
@@ -741,13 +743,18 @@ class MeterUp extends Component {
       proNames: proNames,
       loading: loading.effects[`meterUp/${updateModalVisible ? 'update' : 'add'}`]
     }
-    const exportUrl = createURL(METER_EXPORT, {...this.exportParams, ...{token: user.token,exportType:'forUpExportType'}})
-    const exportProps={
-      exportModalVisible:exportModalVisible,
-      handleExportModalVisible:this.handleExportModalVisible,
-      exportUrl:exportUrl,
-      plainOptions:plainOptions,
-      must:true
+    const exportUrl = createURL(METER_EXPORT, {
+      ...this.exportParams, ...{
+        token: user.token,
+        exportType: 'forUpExportType'
+      }
+    })
+    const exportProps = {
+      exportModalVisible: exportModalVisible,
+      handleExportModalVisible: this.handleExportModalVisible,
+      exportUrl: exportUrl,
+      plainOptions: plainOptions,
+      must: true
     }
 
     return (
@@ -772,7 +779,7 @@ class MeterUp extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '200%',y: global._scollY}}
+                scroll={{x: '200%', y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
@@ -807,7 +814,7 @@ class MeterUp extends Component {
   }
 
   searchList = (e, page = 1, pageSize = 10) => {
-    e.preventDefault();
+    e&&e.preventDefault?e.preventDefault():null
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
       let time = fieldsValue.meteringTime ? fieldsValue.meteringTime.format('YYYY-MM') : null

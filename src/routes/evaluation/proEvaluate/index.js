@@ -1188,8 +1188,8 @@ class ProEvaluate extends Component {
     });
   }
 
-  searchList = (e, page = 1, pageSize = 10) => {
-    e.preventDefault();
+  searchList = (e,page = 1, pageSize = 10) => {
+    e&&e.preventDefault?e.preventDefault():null
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
       let payload = {
