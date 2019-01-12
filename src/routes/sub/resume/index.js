@@ -613,7 +613,8 @@ class Resume extends Component {
     }
   }
 
-  getList = (page = 1, pageSize = 10) => {
+  getList = (e,page = 1, pageSize = 10) => {
+    e&&e.preventDefault?e.preventDefault():null
     this.props.dispatch({
       type: 'sub_resume/fetch',
       payload: {page: page, pageSize: pageSize},

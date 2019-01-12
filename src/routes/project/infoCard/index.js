@@ -1200,7 +1200,8 @@ class InfoCard extends Component {
     });
   }
 
-  searchList = (page = 1, pageSize = 10) => {
+  searchList = (e,page = 1, pageSize = 10) => {
+    e&&e.preventDefault?e.preventDefault():null
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
       //  form.resetFields();
