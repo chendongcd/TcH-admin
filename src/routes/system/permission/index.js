@@ -487,7 +487,6 @@ class Permission extends Component {
   }
 
   getList = (page = 1, pageSize = 10) => {
-    console.log(1)
     this.props.dispatch({
       type: 'sys_per/query',
       payload: {page: page, pageSize: pageSize},
