@@ -39,7 +39,7 @@ const getValue = obj =>
 const info_css = {
   color: '#fa541c'
 }
-const testValue = ''
+const testValue = '123'
 const TenW = 100
 const plainOptions = [
   {label: '分包商类型', value: '1'},
@@ -108,12 +108,16 @@ class CreateForm extends Component {
       }
       this.setState({fileList: [file]})
     }
+    //(moment(selectedValues.businessLicenseValidityPeriod).format('YYYY-MM-DD')=='2200-01-01')
+    if (!this.state.showTag && !preProp.selectedValues.businessLicenseValidityPeriod && this.props.selectedValues.businessLicenseValidityPeriod &&moment(this.props.selectedValues.businessLicenseValidityPeriod).format('YYYY-MM-DD')=='2200-01-01') {
+      this.setState({showTag: true})
+    }
   }
 
   handleCancel = () => this.setState({previewVisible: false})
 
   cleanState = () => {
-    this.setState({fileList: [], previewImage: ''})
+    this.setState({fileList: [], previewImage: '',showTag:false})
   }
 
   handlePreview = (file) => {
@@ -319,7 +323,7 @@ class CreateForm extends Component {
                   rules: [{required: true, message: '请选择期限'}],
                   initialValue: selectedValues.businessLicenseValidityPeriod ? moment(selectedValues.businessLicenseValidityPeriod) : null
                 })(showTag ? <Tag
-                    closable
+                    closable={!checkDetail}
                     visible={showTag}
                     color="#87d068"
                     onClose={() => this.onTagClose()}

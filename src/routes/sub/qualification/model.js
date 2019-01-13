@@ -17,10 +17,7 @@ export default {
 
   effects: {
     * fetch({payload,token}, {call, put}) {
-     // console.log(payload)
       const response = yield call(querySubQuaList, payload,token);
-      console.log(response)
-
       if (response.code == '200') {
         yield put({
           type: 'save',
