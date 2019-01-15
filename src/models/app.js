@@ -8,10 +8,16 @@ import Store from "store";
 const {prefix} = config
 function getMenu(user) {
   if (user && user.id) {
-    return getMenus([...user.permissionsMap.menu, ...[menuData[0].permission]])
+    if(process.env.NODE_ENV=='production'){
+      return getMenus([...user.permissionsMap.menu, ...[menuData[0].permission]])
+    }
+    let report = menuData.filter(a=>a.permission.includes('PERMISSIONS_REPORT_MANAGER')).map(b=>b.permission)
+    return getMenus([...user.permissionsMap.menu, ...[menuData[0].permission],...report])
   }
   return []
 }
+
+
 
 export default {
   namespace: 'app',
