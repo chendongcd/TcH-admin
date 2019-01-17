@@ -236,7 +236,7 @@ export const menuData = [
     bpid: '9',
     mpid: '9',
     name: '合同外费用',
-   // route: '/report/expenses',
+   // route: '/report/expense',
     permission:'PERMISSIONS_REPORT_MANAGER_EXPENSES',
   },
   {

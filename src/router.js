@@ -87,6 +87,26 @@ const Routers = function ({history, app}) {
     models: [],
     component: () => import(/* webpackChunkName: "404" */'./routes/error/404')
   })
+  const Report_Expense_form = dynamic({
+    app,
+    models: () => [import('./routes/report/expense/form/model')],
+    component: () => import(/* webpackChunkName: "" ExpenseForm */'./routes/report/expense/form/index')
+  })
+  const Report_Expense_account = dynamic({
+    app,
+    models: () => [import('./routes/report/expense/account/model')],
+    component: () => import(/* webpackChunkName: "" ExpenseForm */'./routes/report/expense/account/index')
+  })
+  const Report_Expense_daily = dynamic({
+    app,
+    models: () => [import('./routes/report/expense/daily/model')],
+    component: () => import(/* webpackChunkName: "" ExpenseForm */'./routes/report/expense/daily/index')
+  })
+  const Report_form = dynamic({
+    app,
+    models: () => [import('./routes/report/form/model')],
+    component: () => import(/* webpackChunkName: "" ExpenseForm */'./routes/report/form/index')
+  })
 
   return (
     <LocaleProvider locale={zhCN}>
@@ -108,6 +128,10 @@ const Routers = function ({history, app}) {
             <Route path="/evaluation/evaluate"  component={Evaluate_Pro}/>
             <Route path="/files/read"  component={Document_fileRead}/>
             <Route path="/files/reference"  component={Document_fileReference}/>
+            <Route path="/report/compensationForm"  component={Report_Expense_form}/>
+            <Route path="/report/dailyWork"  component={Report_Expense_daily}/>
+            <Route path="/report/account"  component={Report_Expense_account}/>
+            <Route path="/report/form"  component={Report_form}/>
           </Switch>
           <Route path="/login" component={Login}/>
           <Route path="/404"  component={NotFound}/>
