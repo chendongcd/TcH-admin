@@ -1,6 +1,6 @@
 const path =process.env.NODE_ENV=='production'?'':'public'
 module.exports = {
-  name: '成本管理系统',
+  name: '劳务成本管理系统',
   prefix: 'TcH-Admin',
   footerText: `© ${(new Date()).getFullYear()} 成都甲戌时代科技有限公司`,
   logo:  `${path}/logo.png`,//`${path}/logo.png`,http://pjno2bd7f.bkt.clouddn.com/logo.png
