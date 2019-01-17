@@ -349,7 +349,7 @@ class CreateForm extends Component {
       status: 'done',
       url: ImageUrl + res.key,
     }
-  //  console.log(file)
+    //  console.log(file)
 
     this.setState({fileList: [file]})
     this.props.form.setFieldsValue({annexUrl: [file]});
@@ -368,7 +368,7 @@ class CreateForm extends Component {
 }
 
 @Form.create()
-class MeterUp extends Component {
+class ExpenseForm extends Component {
 
   constructor(props) {
     super(props)
@@ -517,8 +517,8 @@ class MeterUp extends Component {
 
   componentDidMount() {
     if (this.props.app.user.token) {
-      this.getProNames([])
-      this.getList()
+     // this.getProNames([])
+     // this.getList()
     }
   }
 
@@ -839,6 +839,6 @@ class MeterUp extends Component {
   }
 }
 
-MeterUp.propTypes = {}
+ExpenseForm.propTypes = {}
 
-export default connect(({app, loading, meterUp}) => ({app, loading, meterUp}))(MeterUp)
+export default connect(({app, loading, meterUp}) => ({app, loading, meterUp}))(ExpenseForm)

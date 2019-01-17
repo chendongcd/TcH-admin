@@ -132,6 +132,7 @@ const Menus = ({
   return (
     <Menu
       {...menuProps}
+      inlineIndent={18}
       mode={siderFold ? 'vertical' : 'inline'}
       theme={darkTheme ? 'dark' : 'light'}
       selectedKeys={defaultSelectedKeys}

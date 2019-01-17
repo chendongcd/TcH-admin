@@ -1227,4 +1227,4 @@ class InfoCard extends Component {
 
 InfoCard.propTypes = {}
 
-export default connect(({app, rule, loading, pro_proInfo}) => ({app, rule, loading, pro_proInfo}))(InfoCard)
+export default connect(({app, loading, pro_proInfo}) => ({app,  loading, pro_proInfo}))(InfoCard)

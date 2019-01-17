@@ -80,6 +80,7 @@ class IndexPage extends Component {
               trigger={null}
               collapsible
               collapsed={app.siderFold}
+              width={252}
             >
               {menu.length === 0 ? null : <MyLayout.Sider {...siderProps} />}
             </Sider>}

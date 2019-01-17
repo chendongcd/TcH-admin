@@ -228,8 +228,72 @@ export const menuData = [
     bpid: '1',
     icon: 'file-text',
     name: '报表管理',
- //   route: '/report',
-    permission:'PERMISSIONS_REPORTL_MANAGER',
+    //route: '/report',
+    permission:'PERMISSIONS_REPORT_MANAGER',
+  },
+  {
+    id: '91',
+    bpid: '9',
+    mpid: '9',
+    name: '合同外费用',
+   // route: '/report/expenses',
+    permission:'PERMISSIONS_REPORT_MANAGER_EXPENSES',
+  },
+  {
+    id: '911',
+    bpid: '91',
+    mpid: '91',
+    name: '合同外赔偿情况统计表',
+    route: '/report/compensationForm',
+    permission:'PERMISSIONS_REPORT_MANAGER_EXPENSES_FORM',
+    buttons:[
+      {name:'新增',permission:'PERMISSIONS_REPORT_MANAGER_FORM_ADD'},
+      {name:'编辑',permission:'PERMISSIONS_REPORT_MANAGER_FORM_UPDATE'},
+      {name:'查看',permission:'PERMISSIONS_REPORT_MANAGER_FORM_LOOK'},
+      {name:'导出',permission:'PERMISSIONS_REPORT_MANAGER_FORM_EXPORT'},
+    ]
+  },
+  {
+    id: '912',
+    bpid: '91',
+    mpid: '91',
+    name: '合同外计日工及赔偿统计表',
+    route: '/report/dailyWork',
+    permission:'PERMISSIONS_REPORT_MANAGER_EXPENSES_DAILY',
+    buttons:[
+      {name:'新增',permission:'PERMISSIONS_REPORT_MANAGER_DAILY_ADD'},
+      {name:'编辑',permission:'PERMISSIONS_REPORT_MANAGER_DAILY_UPDATE'},
+      {name:'查看',permission:'PERMISSIONS_REPORT_MANAGER_DAILY_LOOK'},
+      {name:'导出',permission:'PERMISSIONS_REPORT_MANAGER_DAILY_EXPORT'},
+    ]
+  },
+  {
+    id: '913',
+    bpid: '91',
+    mpid: '91',
+    name: '合同外计日工及补偿费用台账',
+    route: '/report/account',
+    permission:'PERMISSIONS_REPORT_MANAGER_EXPENSES_ACCOUNT',
+    buttons:[
+      {name:'新增',permission:'PERMISSIONS_REPORT_MANAGER_EXPENSES_ACCOUNT_ADD'},
+      {name:'编辑',permission:'PERMISSIONS_REPORT_MANAGER_EXPENSES_ACCOUNT_UPDATE'},
+      {name:'查看',permission:'PERMISSIONS_REPORT_MANAGER_EXPENSES_ACCOUNT_LOOK'},
+      {name:'导出',permission:'PERMISSIONS_REPORT_MANAGER_EXPENSES_ACCOUNT_EXPORT'},
+    ]
+  },
+  {
+    id: '92',
+    bpid: '9',
+    mpid: '9',
+    name: '工程变更索赔月快报表',
+    route: '/report/form',
+    permission:'PERMISSIONS_REPORT_MANAGER_FORM',
+    buttons:[
+      {name:'新增',permission:'PERMISSIONS_REPORT_MANAGER_FORM_ADD'},
+      {name:'编辑',permission:'PERMISSIONS_REPORT_MANAGER_FORM_UPDATE'},
+      {name:'查看',permission:'PERMISSIONS_REPORT_MANAGER_FORM_LOOK'},
+      {name:'导出',permission:'PERMISSIONS_REPORT_MANAGER_FORM_EXPORT'},
+    ]
   },
   {
     id: '10',

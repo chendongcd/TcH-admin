@@ -400,4 +400,4 @@ class Project extends Component {
 
 Project.propTypes = {}
 
-export default connect(({app, rule, sys_pro, loading}) => ({app, rule, sys_pro, loading}))(Project)
+export default connect(({app, sys_pro, loading}) => ({app, sys_pro, loading}))(Project)

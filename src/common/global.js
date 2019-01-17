@@ -8,4 +8,5 @@ export default ()=> {
   }
 
   window._scollY = 0
+
 }
