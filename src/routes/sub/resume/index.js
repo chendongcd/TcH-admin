@@ -644,4 +644,4 @@ class Resume extends Component {
 
 Resume.propTypes = {}
 
-export default connect(({app, rule, loading, sub_resume}) => ({app, rule, loading, sub_resume}))(Resume)
+export default connect(({app,  loading, sub_resume}) => ({app, loading, sub_resume}))(Resume)

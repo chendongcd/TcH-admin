@@ -497,4 +497,4 @@ class User extends Component {
 
 User.propTypes = {}
 
-export default connect(({app, rule, sys_user, loading}) => ({app, rule, sys_user, loading}))(User)
+export default connect(({app, sys_user, loading}) => ({app, sys_user, loading}))(User)

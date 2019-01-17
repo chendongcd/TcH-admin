@@ -1030,4 +1030,4 @@ class PeopleInfo extends Component {
 
 PeopleInfo.propTypes = {}
 
-export default connect(({app, rule, loading, peopleManage}) => ({app, rule, loading, peopleManage}))(PeopleInfo)
+export default connect(({app, loading, peopleManage}) => ({app,  loading, peopleManage}))(PeopleInfo)

@@ -512,4 +512,4 @@ class Permission extends Component {
 
 Permission.propTypes = {}
 
-export default connect(({app, rule, sys_per, loading}) => ({app, rule, sys_per, loading}))(Permission)
+export default connect(({app, sys_per, loading}) => ({app, sys_per, loading}))(Permission)

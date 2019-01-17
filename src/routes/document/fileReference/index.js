@@ -454,4 +454,4 @@ class FileReference extends Component {
 
 FileReference.propTypes = {}
 
-export default connect(({app, rule, loading, fileRefer}) => ({app, rule, loading, fileRefer}))(FileReference)
+export default connect(({app, loading, fileRefer}) => ({app, loading, fileRefer}))(FileReference)

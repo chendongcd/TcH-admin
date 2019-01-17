@@ -1214,4 +1214,4 @@ class ProEvaluate extends Component {
 
 ProEvaluate.propTypes = {}
 
-export default connect(({app, rule, loading, proEvaluate}) => ({app, rule, loading, proEvaluate}))(ProEvaluate)
+export default connect(({app, loading, proEvaluate}) => ({app, loading, proEvaluate}))(ProEvaluate)

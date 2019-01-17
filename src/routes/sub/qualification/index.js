@@ -39,7 +39,7 @@ const getValue = obj =>
 const info_css = {
   color: '#fa541c'
 }
-const testValue = '123'
+const testValue = ''
 const TenW = 100
 const plainOptions = [
   {label: '分包商类型', value: '1'},
@@ -1188,4 +1188,4 @@ class Qualification extends Component {
 
 Qualification.propTypes = {}
 
-export default connect(({app, rule, loading, sub_qua}) => ({app, rule, loading, sub_qua}))(Qualification)
+export default connect(({app, loading, sub_qua}) => ({app, loading, sub_qua}))(Qualification)

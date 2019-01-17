@@ -968,4 +968,4 @@ class MeterDown extends Component {
 
 MeterDown.propTypes = {}
 
-export default connect(({app, rule, loading, meterDown}) => ({app, rule, loading, meterDown}))(MeterDown)
+export default connect(({app, loading, meterDown}) => ({app, loading, meterDown}))(MeterDown)

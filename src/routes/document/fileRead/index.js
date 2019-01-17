@@ -517,4 +517,4 @@ class FileRead extends Component {
 
 FileRead.propTypes = {}
 
-export default connect(({app, rule, loading, fileRead}) => ({app, rule, loading, fileRead}))(FileRead)
+export default connect(({app,loading, fileRead}) => ({app, loading, fileRead}))(FileRead)

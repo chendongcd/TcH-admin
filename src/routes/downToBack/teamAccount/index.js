@@ -1154,4 +1154,4 @@ class TeamAccount extends Component {
 
 TeamAccount.propTypes = {}
 
-export default connect(({app, rule, loading, teamAccount}) => ({app, rule, loading, teamAccount}))(TeamAccount)
+export default connect(({app, loading, teamAccount}) => ({app, loading, teamAccount}))(TeamAccount)
