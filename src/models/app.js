@@ -12,7 +12,6 @@ function getMenu(user) {
       return getMenus([...user.permissionsMap.menu, ...[menuData[0].permission]])
     }
     let report = menuData.filter(a=>a.permission.includes('PERMISSIONS_REPORT_MANAGER')).map(b=>b.permission)
-    console.log(getMenus([...user.permissionsMap.menu, ...[menuData[0].permission],...report]))
     return getMenus([...user.permissionsMap.menu, ...[menuData[0].permission],...report])
   }
   return []
