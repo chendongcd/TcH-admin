@@ -1,7 +1,25 @@
 @import '~antd/lib/style/themes/default.less';
-
+@bkColor:#76BFFC;
+@trColor:#cccccc;
 .standardTable {
   :global {
+     .ant-table-thead{
+      tr {
+        th {
+          background-color: @bkColor;
+          color: #ffffff;
+        }
+      }
+    }
+    .ant-table-tbody{
+      tr {
+        border-color: @trColor;
+        td {
+          border-left: 1px solid @trColor;
+          border-color:@trColor;
+        }
+      }
+    }
     .ant-table-pagination {
       margin-top: 24px;
     }
