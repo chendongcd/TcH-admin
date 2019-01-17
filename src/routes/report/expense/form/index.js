@@ -394,124 +394,120 @@ class ExpenseForm extends Component {
       dataIndex: 'id',
     },
     {
+      title: '项目编码',
+      dataIndex: 'projectCode',
+    },
+    {
       title: '项目名称',
       dataIndex: 'projectName',
     },
     {
-      title: '计量期数',
-      dataIndex: 'meteringNum',
-      render: (val) => {
-        return <span>{val !== undefined ? ('第' + val + '期') : ''}</span>
+      title: '工程类别',
+      dataIndex: 'projectType'
+    },
+    {
+      title: '合同编码',
+      dataIndex: 'contractCode'
+    },
+    {
+      title: '分包商名称',
+      dataIndex: 'subcontractorName',
+    },
+    {
+      title: '队伍名称',
+      dataIndex:'teamName'
+    },
+    {
+      title: '合同签订人',
+      dataIndex:'signName'
+    },
+    {
+      title: '填报日期',
+      dataIndex:'tianbaoTime',
+      render(val){
+        return <span>{val?moment(val).format('YYYY/MM'):''}</span>;
       }
     },
     {
-      title: '计量日期',
-      dataIndex: 'meteringTime',
-      render(val) {
-        return <span>{val ? moment(val).format('YYYY/MM') : ''}</span>;
-      },
-    },
-    {
-      title: '预付款（元）',
-      dataIndex: 'prepaymentAmount',
-    },
-    {
-      title: '计价金额（元）',
-      children: [{
-        title: '含税',
-        dataIndex: 'valuationAmountTax',
-        key: 'valuationAmountTax'
+      title: '已计价金额（元）',
+      children: [
+        {
+        title: '合同内计量',
+        dataIndex: 'hetongneijilaing',
+        key: 'hetongneijiliang',
       },
         {
-          title: '税率（%）',
-          dataIndex: 'tax',
-          key: 'tax'
-        }, {
-          title: '不含税',
-          dataIndex: 'valuationAmountNotTax',
-          key: 'valuationAmountNotTax',
-        }]
-    },
-    {
-      title: '实际应付金额（元）',
-      children: [{
-        title: '含税',
-        dataIndex: 'realAmountTax',
-        key: 'realAmountTax',
-      }, {
-        title: '不含税',
-        dataIndex: 'realAmount',
-        key: 'realAmount',
-      }]
-    },
-    {
-      title: '资金拨付情况（元）',
-      children: [{
-        title: '已支付金额',
-        dataIndex: 'alreadyPaidAmount',
-        key: 'alreadyPaidAmount'
+        title: '计日工',
+        key: 'jirigong',
+        children:[{
+          title: '机械台班',
+          dataIndex: 'jixietaiban',
+          key: 'jixietaiban',
+        },{
+          title: '零星用工',
+          dataIndex: 'jixietaiban1',
+          key: 'jixietaiban',
+        },{
+          title: '小计',
+          dataIndex: 'jixietaiban1',
+          key: 'jixietaiban1',
+        },]
       },
         {
-          title: '未支付金额',
-          dataIndex: 'unpaidAmount',
-          key: 'unpaidAmount',
-        }, {
-          title: '拨付率',
-          dataIndex: 'payProportion',
-          key: 'payProportion',
-          render(val) {
-            return <span>{val * 100 + '%'}</span>;
-          }
-        }]
-    },
-    {
-      title: '其他计价（元）',
-      children: [{
-        title: '超计价',
-        dataIndex: 'extraAmount',
-        key: 'extraAmount',
-      },
+          title: '合同外补偿',
+          key: 'hetongwaibuc',
+          children:[{
+            title: '进出场',
+            dataIndex: 'jinchuc1',
+            key: 'jinchuc1',
+          },{
+            title: '灾损',
+            dataIndex: 'jinchuc2',
+            key: 'jinchuc2',
+          },{
+            title: '窝工/停工',
+            dataIndex: 'jinchuc3',
+            key: 'jinchuc3',
+          },,{
+            title: '其他',
+            dataIndex: 'jinchuc4',
+            key: 'jinchuc4',
+          },{
+            title: '小计',
+            dataIndex: 'jinchuc5',
+            key: 'jinchuc5',
+          },]
+        },
         {
-          title: '已完未计',
-          dataIndex: 'notCalculatedAmount',
-          key: 'notCalculatedAmount',
-        }]
+          title: '合计',
+          dataIndex: 'heji',
+          key: 'heji',
+        },
+      ]
     },
     {
-      title: '产值计价率',
-      dataIndex: 'productionValue',
-      render(val) {
-        return <span>{val * 100 + '%'}</span>;
-      }
+      title: '计日工占已计价金额比例（%）',
+      dataIndex:'jirigongbilio'
     },
     {
-      title: '备注',
-      dataIndex: 'remark'
+      title: '合同外补偿/赔偿占已计价金额比例（%）',
+      dataIndex:'jirigongbilio1'
     },
     {
-      title: '操作',
-      render: (val, record) => {
-        if (record.id === '合计:') {
-          return null
-        }
-        const user = this.props.app.user
-        if (!user.token) {
-          return null
-        }
-        const button = user.permissionsMap.button
-        let annex = JSON.parse(record.annexUrl)
-        let href = annex.url + '?attname=' + annex.fileName
-        return (
-          <Fragment>
-            {getButtons(button, pageButtons[1]) ?
-              <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a> : null}
-            <Divider type="vertical"/>
-            {getButtons(button, pageButtons[2]) ? <a onClick={() => this.handleCheckDetail(true, record)}>查看</a> : null}
-            <Divider type="vertical"/>
-            <a href={href} download="附件">下载附件</a>
-          </Fragment>
-        )
-      }
+      title: '计日工及补偿已拨付金额（元）',
+      dataIndex:'jirigongbilio2'
+    },
+    {
+      title: '计日工及补偿已拨付金额拨付率（%）',
+      dataIndex:'jirigongbilio3'
+    },
+    {
+      title: '是否报审',
+      dataIndex:'jirigongbilio4'
+    },
+    {
+      title: '是否结算',
+      dataIndex:'jirigongbilio5'
     },
   ];
 
@@ -722,7 +718,7 @@ class ExpenseForm extends Component {
 
   render() {
     const {
-      meterUp: {data, proNames},
+      expensesForm: {data, proNames},
       loading,
       app: {user}
     } = this.props;
@@ -779,7 +775,7 @@ class ExpenseForm extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '200%', y: global._scollY}}
+                scroll={{x: '300%', y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
@@ -841,4 +837,4 @@ class ExpenseForm extends Component {
 
 ExpenseForm.propTypes = {}
 
-export default connect(({app, loading, meterUp}) => ({app, loading, meterUp}))(ExpenseForm)
+export default connect(({app, loading, expensesForm}) => ({app, loading, expensesForm}))(ExpenseForm)
