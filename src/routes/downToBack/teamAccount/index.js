@@ -80,16 +80,6 @@ class CreateForm extends Component {
       }
       this.setState({sqFileList: [file]})
     }
-    if (!preProp.selectedValues.annexUrl && this.props.selectedValues.annexUrl && this.state.fileList.length == 0) {
-      let pdf = JSON.parse(this.props.selectedValues.annexUrl)
-      let file = {
-        uid: '-1',
-        name: pdf.fileName,
-        status: 'done',
-        url: pdf.url,
-      }
-      this.setState({fileList: [file]})
-    }
   }
 
   okHandle = () => {
@@ -108,7 +98,7 @@ class CreateForm extends Component {
   };
 
   cleanState = () => {
-    this.setState({fileList: [], previewImage: ''})
+    this.setState({fileList: [], previewImage: '',contractType: -1})
   }
 
   handleCancel = () => this.setState({previewVisible: false})
@@ -174,6 +164,30 @@ class CreateForm extends Component {
                 </Select>)}
               </FormItem>
             </Col>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="队伍名称">
+                {form.getFieldDecorator('teamName', {
+                  rules: [{required: true, message: '请输入队伍名称'}],
+                  initialValue: selectedValues.teamName ? selectedValues.teamName : testValue,
+                })(<Input disabled={checkDetail} placeholder="请输入队伍名称"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={0}>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="分包商名称">
+                {form.getFieldDecorator('subcontractorId', {
+                  rules: [{required: true, message: '请选择项目'}],
+                  initialValue: selectedValues.subcontractorId ? selectedValues.subcontractorId : '',
+                })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'}
+                           disabled={checkDetail} placeholder="请选择"
+                           style={{width: '100%'}}>
+                  {subNames.map((item, index) => {
+                    return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
+                  })}
+                </Select>)}
+              </FormItem>
+            </Col>
           </Row>
           {checkDetail ?
             <Fragment>
@@ -201,7 +215,7 @@ class CreateForm extends Component {
               {selectedValues.contractType == 1 ? <Row gutter={8}>
                 <Col md={12} sm={24}>
                   <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同类型">
-                    {form.getFieldDecorator('contractType1', {
+                    {form.getFieldDecorator('contractType', {
                       initialValue: 1,
                     })(<Select onSelect={this._onSelect} className={styles.customSelect} disabled={checkDetail}
                                placeholder="请选择"
@@ -213,7 +227,7 @@ class CreateForm extends Component {
                 </Col>
                 <Col md={12} sm={24}>
                   <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同编码">
-                    {form.getFieldDecorator('contractCode1', {
+                    {form.getFieldDecorator('contractCode', {
                       initialValue: selectedValues.contractCode,
                     })(<Input disabled={true} placeholder="自动带入"/>)}
                   </FormItem>
@@ -238,37 +252,13 @@ class CreateForm extends Component {
                 {contractType != -1 || (selectedValues.contractType != undefined) ?
                   <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同编码">
                     {form.getFieldDecorator('contractCode', {
-                      rules: [{required: true, message: '请选择项目'}],
+                      rules: [{required: !((contractType!==0&&selectedValues.contractType === undefined)||(selectedValues.contractType !== undefined&&selectedValues.contractType!==0)), message: '请选择项目'}],
                       initialValue: selectedValues.contractNumber ? selectedValues.contractNumber : '',
-                    })(<Input disabled={(contractType!==0&&selectedValues.contractType === undefined)||(selectedValues.contractType !== undefined&&selectedValues.contractType!==0)} placeholder={((contractType!==0&&selectedValues.contractType === undefined)||(selectedValues.contractType !== undefined&&selectedValues.contractType!==0))?'自动带入':'请输入'}/>)}
+                    })(<Input disabled={(contractType!==0&&selectedValues.contractType === undefined)||(selectedValues.contractType !== undefined&&selectedValues.contractType!==0)} placeholder={((contractType!==0&&selectedValues.contractType === undefined)||(selectedValues.contractType !== undefined&&selectedValues.contractType!==0))?'系统自动生成':'请输入'}/>)}
                   </FormItem> : null
                 }
               </Col>
             </Row>}
-          <Row gutter={0}>
-            <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="分包商名称">
-                {form.getFieldDecorator('subcontractorId', {
-                  rules: [{required: true, message: '请选择项目'}],
-                  initialValue: selectedValues.subcontractorId ? selectedValues.subcontractorId : '',
-                })(<Select className={styles.customSelect} showSearch={true} optionFilterProp={'name'}
-                           disabled={checkDetail} placeholder="请选择"
-                           style={{width: '100%'}}>
-                  {subNames.map((item, index) => {
-                    return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
-                  })}
-                </Select>)}
-              </FormItem>
-            </Col>
-            <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="队伍名称">
-                {form.getFieldDecorator('teamName', {
-                  rules: [{required: true, message: '请输入队伍名称'}],
-                  initialValue: selectedValues.teamName ? selectedValues.teamName : testValue,
-                })(<Input disabled={checkDetail} placeholder="请输入队伍名称"/>)}
-              </FormItem>
-            </Col>
-          </Row>
           <Row gutter={0}>
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同签订日期">
