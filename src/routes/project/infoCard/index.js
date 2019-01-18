@@ -353,11 +353,9 @@ class CreateForm extends Component {
           fieldsValue[prop] = fieldsValue[prop].format('YYYY-MM-DD')
         }
       }
-      console.log(this.manager)
       fieldsValue.manager = this.handleRanges(this.manager)
       fieldsValue.secretary = this.handleRanges(this.secretary)
       fieldsValue.engineer = this.handleRanges(this.engineer)
-      console.log(fieldsValue.manager)
       handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
   };

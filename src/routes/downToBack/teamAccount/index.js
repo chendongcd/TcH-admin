@@ -80,6 +80,16 @@ class CreateForm extends Component {
       }
       this.setState({sqFileList: [file]})
     }
+    if (!preProp.selectedValues.annexUrl && this.props.selectedValues.annexUrl && this.state.fileList.length == 0) {
+      let pdf = JSON.parse(this.props.selectedValues.annexUrl)
+      let file = {
+        uid: '-1',
+        name: pdf.fileName,
+        status: 'done',
+        url: pdf.url,
+      }
+      this.setState({fileList: [file]})
+    }
   }
 
   okHandle = () => {
@@ -229,8 +239,8 @@ class CreateForm extends Component {
                   <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同编码">
                     {form.getFieldDecorator('contractCode', {
                       rules: [{required: true, message: '请选择项目'}],
-                      initialValue: selectedValues.contractNumber ? selectedValues.contractNumber : contractNum,
-                    })(<Input disabled={true} placeholder="自动带入"/>)}
+                      initialValue: selectedValues.contractNumber ? selectedValues.contractNumber : '',
+                    })(<Input disabled={(contractType!==0&&selectedValues.contractType === undefined)||(selectedValues.contractType !== undefined&&selectedValues.contractType!==0)} placeholder={((contractType!==0&&selectedValues.contractType === undefined)||(selectedValues.contractType !== undefined&&selectedValues.contractType!==0))?'自动带入':'请输入'}/>)}
                   </FormItem> : null
                 }
               </Col>

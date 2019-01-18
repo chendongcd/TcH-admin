@@ -146,7 +146,7 @@ class CreateForm extends Component {
   }
 
   render() {
-    const {modalVisible, loading, proNames, amountLoading, teamList, teamLoading, subNames, subLoading, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
+    const {modalVisible, loading, proNames, teamList, teamLoading, subNames, subLoading, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
     let {previewVisible, previewImage, fileList, progress, selects} = this.state
     return (
       <Modal
@@ -278,24 +278,26 @@ class CreateForm extends Component {
         </Row>
         <div className={styles.modalContent}>
           <Row gutter={8}>
-            <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="计价总金额">
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="计价总金额">
                 {form.getFieldDecorator('valuationPrice', {
                   rules: [{required: true, message: '请输入计价总金额'}],
                   initialValue: selectedValues.valuationPrice ? selectedValues.valuationPrice : testValue,
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入计价总金额" addonAfter="元"/>)}
               </FormItem>
             </Col>
-            <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="扣款">
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="扣款">
                 {form.getFieldDecorator('valuationPriceReduce', {
                   rules: [{required: true, message: '请输入扣款金额'}],
                   initialValue: selectedValues.valuationPriceReduce ? selectedValues.valuationPriceReduce : testValue,
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入扣款金额" addonAfter="元"/>)}
               </FormItem>
             </Col>
-            <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="扣除质保金">
+          </Row>
+          <Row gutter={8}>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="扣除质保金">
                 {form.getFieldDecorator('warranty', {
                   rules: [{required: true, message: '请输入扣除质保金'}],
                   initialValue: selectedValues.warranty ? selectedValues.warranty : testValue,
