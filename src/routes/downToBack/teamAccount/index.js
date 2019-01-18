@@ -123,6 +123,9 @@ class CreateForm extends Component {
   }
 
   _onSelect = (e) => {
+    if(e==1){
+      this.props.form.setFieldsValue({'contractCode':''})
+    }
     this.setState({contractType: e})
   }
 
@@ -215,7 +218,7 @@ class CreateForm extends Component {
               {selectedValues.contractType == 1 ? <Row gutter={8}>
                 <Col md={12} sm={24}>
                   <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同类型">
-                    {form.getFieldDecorator('contractType', {
+                    {form.getFieldDecorator('contractType1', {
                       initialValue: 1,
                     })(<Select onSelect={this._onSelect} className={styles.customSelect} disabled={checkDetail}
                                placeholder="请选择"
@@ -227,7 +230,7 @@ class CreateForm extends Component {
                 </Col>
                 <Col md={12} sm={24}>
                   <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同编码">
-                    {form.getFieldDecorator('contractCode', {
+                    {form.getFieldDecorator('contractCode1', {
                       initialValue: selectedValues.contractCode,
                     })(<Input disabled={true} placeholder="自动带入"/>)}
                   </FormItem>
