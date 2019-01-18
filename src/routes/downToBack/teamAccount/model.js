@@ -80,7 +80,8 @@ export default {
     },
     * querySubNames({payload, token}, {call, put}) {
       const response = yield call(querySubList, payload, token);
-      if (global.checkToken(response)) {
+
+      if (response.code == '200') {
         yield put({
           type: 'saveSubName',
           payload: response.entity

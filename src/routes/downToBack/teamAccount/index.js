@@ -132,7 +132,7 @@ class CreateForm extends Component {
 
   render() {
     const {modalVisible, proNames, loading, subNames, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
-    let {previewVisible, previewImage, fileList, progress, contractType, contractNum, sqProgress, sqFileList} = this.state
+    let {previewVisible, previewImage, fileList, progress, contractType, sqProgress, sqFileList} = this.state
     return (
       <Modal
         destroyOnClose
@@ -249,12 +249,12 @@ class CreateForm extends Component {
                 </FormItem>
               </Col>
               <Col md={12} sm={24}>
-                {contractType != -1 || (selectedValues.contractType != undefined) ?
+                {contractType != -1 ?
                   <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同编码">
                     {form.getFieldDecorator('contractCode', {
-                      rules: [{required: !((contractType!==0&&selectedValues.contractType === undefined)||(selectedValues.contractType !== undefined&&selectedValues.contractType!==0)), message: '请选择项目'}],
+                      rules: [{required: !(contractType!==0), message: '请选择项目'}],
                       initialValue: selectedValues.contractNumber ? selectedValues.contractNumber : '',
-                    })(<Input disabled={(contractType!==0&&selectedValues.contractType === undefined)||(selectedValues.contractType !== undefined&&selectedValues.contractType!==0)} placeholder={((contractType!==0&&selectedValues.contractType === undefined)||(selectedValues.contractType !== undefined&&selectedValues.contractType!==0))?'系统自动生成':'请输入'}/>)}
+                    })(<Input disabled={contractType!==0} placeholder={contractType!==0?'系统自动生成':'请输入'}/>)}
                   </FormItem> : null
                 }
               </Col>
