@@ -18,7 +18,6 @@ class IndexPage extends Component {
 
   constructor(props) {
     super(props)
-    window.addEventListener('beforeunload',this.beforeUnloadHandler,true);
   }
 
   componentDidMount() {
@@ -27,16 +26,6 @@ class IndexPage extends Component {
         history.push('/login')
     }
 
-  }
-
-  beforeUnloadHandler=()=> {
-    let {app,dispatch} = this.props
-    if (!app.user.token) {
-      //dispatch
-      dispatch({
-        type: 'app/logOut', payload: {token: app.user.token}
-      })
-    }
   }
 
   render() {
