@@ -231,7 +231,7 @@ class CreateForm extends Component {
         <div className={styles.modalContent}>
           <Row gutter={8}>
             <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="已支付金额">
+              <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="已支付金额">
                 {form.getFieldDecorator('alreadyPaidAmount', {
                   rules: [{required: true, message: '请输入已支付金额'}],
                   initialValue: selectedValues.alreadyPaidAmount ? selectedValues.alreadyPaidAmount : testValue,
@@ -250,7 +250,7 @@ class CreateForm extends Component {
         <div className={styles.modalContent}>
           <Row gutter={8}>
             <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="超计价金额">
+              <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="超计价金额">
                 {form.getFieldDecorator('extraAmount', {
                   rules: [{required: true, message: '请输入超计价金额'}],
                   initialValue: selectedValues.extraAmount ? selectedValues.extraAmount : testValue,
@@ -258,7 +258,7 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="已完未计价金额">
+              <FormItem labelCol={{span: 10}} wrapperCol={{span: 14}} label="已完未计价金额">
                 {form.getFieldDecorator('notCalculatedAmount', {
                   rules: [{required: true, message: '请输入已完未计价金额'}],
                   initialValue: selectedValues.notCalculatedAmount ? selectedValues.notCalculatedAmount : testValue,

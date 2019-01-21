@@ -220,6 +220,10 @@ class Resume extends Component {
 
   columns = [
     {
+      title:'序号',
+      dataIndex:'id'
+    },
+    {
       title: '分包商备案编码',
       dataIndex: 'subcontractorCode',
     },

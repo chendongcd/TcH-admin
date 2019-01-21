@@ -760,6 +760,10 @@ class InfoCard extends Component {
 
   columns = [
     {
+      title:'序号',
+      dataIndex:'id'
+    },
+    {
       title: '项目编码',
       dataIndex: 'code',
     },

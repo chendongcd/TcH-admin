@@ -60,7 +60,7 @@ class CreateForm extends Component {
   }
 
   componentDidUpdate(preProp, preState) {
-    if (!preProp.selectedValues.annexUrl && this.props.selectedValues.annexUrl && this.state.fileList.length == 0) {
+    if (!preProp.selectedValues.annexUrl && this.props.selectedValues.annexUrl && this.state.fileList.length === 0) {
       let pdf = JSON.parse(this.props.selectedValues.annexUrl)
       let file = {
         uid: '-1',
@@ -70,7 +70,7 @@ class CreateForm extends Component {
       }
       this.setState({fileList: [file]})
     }
-    if (!preProp.selectedValues.annexUrlSq && this.props.selectedValues.annexUrlSq && this.state.sqFileList.length == 0) {
+    if (!preProp.selectedValues.annexUrlSq && this.props.selectedValues.annexUrlSq && this.state.sqFileList.length === 0) {
       let pdf = JSON.parse(this.props.selectedValues.annexUrlSq)
       let file = {
         uid: '-1',
@@ -79,6 +79,9 @@ class CreateForm extends Component {
         url: pdf.url,
       }
       this.setState({sqFileList: [file]})
+    }
+    if (preProp.selectedValues.contractType===undefined && this.props.selectedValues.contractType!=undefined && this.state.contractType === -1) {
+      this.setState({contractType: this.props.selectedValues.contractType})
     }
   }
 
@@ -93,12 +96,13 @@ class CreateForm extends Component {
         }
       }
       fieldsValue.annexUrl = `{"url":"${this.state.fileList[0].url}","fileName":"${this.state.fileList[0].name}"}`
+      fieldsValue.annexUrlSq =this.state.sqFileList.length>0? `{"url":"${this.state.sqFileList[0].url}","fileName":"${this.state.sqFileList[0].name}"}`:null
       handleAdd(fieldsValue, updateModalVisible, selectedValues, this.cleanState);
     });
   };
 
   cleanState = () => {
-    this.setState({fileList: [], previewImage: '',contractType: -1})
+    this.setState({fileList: [], previewImage: '',contractType: -1,sqFileList: []})
   }
 
   handleCancel = () => this.setState({previewVisible: false})
@@ -242,7 +246,7 @@ class CreateForm extends Component {
                 <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同类型">
                   {form.getFieldDecorator('contractType', {
                     rules: [{required: true, message: '请选择合同类型'}],
-                    initialValue: (selectedValues.contractType || selectedValues.contractType == 0) ? selectedValues.contractType : '',
+                    initialValue: (selectedValues.contractType || selectedValues.contractType === 0) ? selectedValues.contractType : '',
                   })(<Select onSelect={this._onSelect} className={styles.customSelect} disabled={checkDetail}
                              placeholder="请选择"
                              style={{width: '100%'}}>
@@ -252,7 +256,7 @@ class CreateForm extends Component {
                 </FormItem>
               </Col>
               <Col md={12} sm={24}>
-                {contractType != -1 ?
+                {contractType !== -1?
                   <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同编码">
                     {form.getFieldDecorator('contractCode', {
                       rules: [{required: !(contractType!==0), message: '请选择项目'}],
@@ -613,6 +617,10 @@ class TeamAccount extends Component {
 
   columns = [
     {
+      title:'序号',
+      dataIndex:'id'
+    },
+    {
       title: '劳务队伍统计（项目部填写）',
       key: '01',
       children: [
@@ -680,6 +688,9 @@ class TeamAccount extends Component {
           title: '负责人',
           key: '009',
           children: [{
+            title:'法人',
+            dataIndex:'legalPerson'
+          },{
             title: '合同签订人',
             dataIndex: 'contractPerson',
           },
@@ -700,7 +711,7 @@ class TeamAccount extends Component {
             function isJSON(str) {
               if (typeof str == 'string') {
                 try {
-                  var obj = JSON.parse(str);
+                  let obj = JSON.parse(str);
                   if (str.indexOf('{') > -1) {
                     return true;
                   } else {
@@ -721,6 +732,36 @@ class TeamAccount extends Component {
               href = val
             }
             return <a href={href} download={'附件'}>下载附件</a>;
+          },
+        },
+        {
+          title: '授权委托书',
+          dataIndex: 'annexUrlSq',
+          render(val) {
+            function isJSON(str) {
+              if (typeof str === 'string') {
+                try {
+                  let obj = JSON.parse(str);
+                  if (str.indexOf('{') > -1) {
+                    return true;
+                  } else {
+                    return false;
+                  }
+                } catch (e) {
+                  return false;
+                }
+              }
+              return false;
+            }
+
+            let href = ''
+            if (isJSON(val)) {
+              let annex = JSON.parse(val)
+              href = annex.url + '?attname=' + annex.fileName
+            } else {
+              href = val
+            }
+            return href?<a href={href} download={'授权委托书'}>下载</a>:null;
           },
         },
         {
@@ -781,6 +822,7 @@ class TeamAccount extends Component {
     },
     {
       title: '操作',
+      ket:'03',
       render: (val, record) => {
         const user = this.props.app.user
         if (!user.token) {
@@ -908,12 +950,14 @@ class TeamAccount extends Component {
       shouldAmount: fields.shouldAmount,
       remark: fields.remark,
       annexUrl: fields.annexUrl,
+      annexUrlSq:fields.annexUrlSq,
       contractPerson: fields.contractPerson,
       phone: fields.phone,
       approvalFiling: fields.approvalFiling,
       contractCode: fields.contractCode
     }
     cleanObject(payload)
+    console.log(payload)
     if (updateModalVisible) {
       dispatch({
         type: 'teamAccount/update',
@@ -973,24 +1017,24 @@ class TeamAccount extends Component {
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={6} sm={24}>
             <FormItem label="项目名称">
-              {getFieldDecorator('projectName')(<Input placeholder="请输入"/>)}
+              {getFieldDecorator('projectName')(<Input />)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="分包商名称">
-              {getFieldDecorator('subcontractorName')(<Input placeholder="请输入"/>)}
+              {getFieldDecorator('subcontractorName')(<Input/>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="队伍状态">
-              {getFieldDecorator('status')(<Select placeholder="请选择" style={{width: '100%'}}>
+              {getFieldDecorator('status')(<Select style={{width: '100%'}}>
                 {teamStatus.map((a, index) => <Option key={index} value={index}>{a}</Option>)}
               </Select>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="合同备案">
-              {getFieldDecorator('approval')(<Select placeholder="请选择" style={{width: '100%'}}>
+              {getFieldDecorator('approval')(<Select style={{width: '100%'}}>
                 <Option value="1">是</Option>
                 <Option value="0">否</Option>
               </Select>)}
@@ -998,6 +1042,13 @@ class TeamAccount extends Component {
           </Col>
         </Row>
         <div style={{overflow: 'hidden'}}>
+          <Row gutter={{md: 8, lg: 24, xl: 48}}>
+            <Col md={6} sm={24}>
+              <FormItem label="合同签订人">
+                {getFieldDecorator('contractPerson')(<Input/>)}
+              </FormItem>
+            </Col>
+          </Row>
           <div style={{float: 'right', marginBottom: 24}}>
             <Button type="primary" htmlType="submit">
               查询
@@ -1130,7 +1181,8 @@ class TeamAccount extends Component {
         projectName: fieldsValue.projectName,
         subcontractorName: fieldsValue.subcontractorName,
         status: fieldsValue.status,
-        approval: fieldsValue.approval
+        approval: fieldsValue.approval,
+        contractPerson:fieldsValue.contractPerson
       }
       cleanObject(payload)
       this.exportParams = payload
