@@ -79,6 +79,10 @@ export default {
         yield put(routerRedux.push('/login'));
       //}
     },
+    * logOut({payload}, {call}) {
+      yield call(signOut,payload);
+      Store.clearAll();
+    },
 
     * changeNavbar(action, {put, select}) {
       const {app} = yield (select(_ => _))

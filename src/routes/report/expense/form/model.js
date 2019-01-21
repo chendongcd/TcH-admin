@@ -2,7 +2,7 @@ import {updateUp,addUp,queryUpDetail,queryUpList} from '../../../../services/upT
 import {queryProPerList} from "../../../../services/system/sys_project";
 import {message} from "antd";
 export default {
-  namespace: 'expensesForm',
+  namespace: 'expenseForm',
 
   state: {
     data: {
