@@ -345,11 +345,20 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 7}} wrapperCol={{span: 12}} label="合同签订人联系电话">
+              <FormItem labelCol={{span: 8}} wrapperCol={{span: 12}} label="合同签订人联系电话">
                 {form.getFieldDecorator('phone', {
                   rules: [{required: true, message: '请输入合同签订人联系电话'}],
                   initialValue: selectedValues.phone ? selectedValues.phone : testValue
                 })(<Input disabled={checkDetail} placeholder="请输入合同签订人联系电话"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="法人">
+                {form.getFieldDecorator('legalPerson', {
+                  initialValue: selectedValues.legalPerson ? selectedValues.legalPerson : testValue
+                })(<Input disabled={checkDetail} placeholder="请输入法人"/>)}
               </FormItem>
             </Col>
           </Row>
@@ -954,10 +963,10 @@ class TeamAccount extends Component {
       contractPerson: fields.contractPerson,
       phone: fields.phone,
       approvalFiling: fields.approvalFiling,
-      contractCode: fields.contractCode
+      contractCode: fields.contractCode,
+      legalPerson:fields.legalPerson
     }
     cleanObject(payload)
-    console.log(payload)
     if (updateModalVisible) {
       dispatch({
         type: 'teamAccount/update',
