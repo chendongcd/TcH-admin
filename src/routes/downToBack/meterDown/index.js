@@ -79,7 +79,11 @@ class CreateForm extends Component {
         }
       }
       fieldsValue.annexUrl = `{"url":"${this.state.fileList[0].url}","fileName":"${this.state.fileList[0].name}"}`
-
+      if(selectedValues.subcontractorId){
+        fieldsValue.subcontractorId = selectedValues.subcontractorId
+        fieldsValue.laborAccountId = selectedValues.laborAccountId
+        fieldsValue.valuationPeriod = selectedValues.valuationPeriod
+      }
       // form.resetFields();
       handleAdd(fieldsValue, updateModalVisible, selectedValues, this.cleanState);
     });
@@ -184,7 +188,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="分包商名称">
                 {form.getFieldDecorator('subcontractorId', {
                   rules: [{required: true, message: '请选择分包商名称'}],
-                  initialValue: selectedValues.subcontractorId ? selectedValues.subcontractorId : '',
+                  initialValue: selectedValues.subcontractorName ? selectedValues.subcontractorName : '',
                 })(<Select className={styles.customSelect} onSelect={(value) => this.handleAmount(value, 1)}
                            showSearch={true}
                            loading={subLoading}
@@ -203,7 +207,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="队伍名称">
                 {form.getFieldDecorator('laborAccountId', {
                   rules: [{required: true, message: '请选择队伍名称'}],
-                  initialValue: selectedValues.laborAccountId ? selectedValues.laborAccountId : '',
+                  initialValue: selectedValues.teamName ? selectedValues.teamName : '',
                 })(<Select className={styles.customSelect}
                            onSelect={(value, option) => this.handleAmount(option, 2)}
                            showSearch={true}
@@ -232,7 +236,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="计价期数">
                 {form.getFieldDecorator('valuationPeriod', {
                   rules: [{required: true, message: '请选择期数'}],
-                  initialValue: selectedValues.valuationPeriod ? ('第' + selectedValues.valuationPeriod + '期') : testValue,
+                  initialValue: selectedValues.valuationPeriod ? ('第' + selectedValues.valuationPeriod + '期') : '',
                 })(<Select className={styles.customSelect}
                            disabled={checkDetail}
                            placeholder="请选择期数"
@@ -245,7 +249,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="计价日期">
                 {form.getFieldDecorator('valuationTime', {
                   rules: [{required: true, message: '请选择日期'}],
-                  initialValue: selectedValues.valuationTime ? moment(selectedValues.valuationPeriod) : null,
+                  initialValue: selectedValues.valuationTime ? moment(selectedValues.valuationTime) : null,
                 })(<DatePicker.MonthPicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
               </FormItem>
             </Col>
@@ -717,7 +721,7 @@ class MeterDown extends Component {
       endedPrice: fields.endedPrice,
       performanceBond: fields.performanceBond
     }
-
+    cleanObject(payload)
     if (updateModalVisible) {
       dispatch({
         type: 'meterDown/update',

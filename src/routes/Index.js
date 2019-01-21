@@ -25,6 +25,7 @@ class IndexPage extends Component {
     if (!app.user.token) {
         history.push('/login')
     }
+
   }
 
   render() {

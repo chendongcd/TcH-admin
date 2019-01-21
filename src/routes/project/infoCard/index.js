@@ -760,6 +760,10 @@ class InfoCard extends Component {
 
   columns = [
     {
+      title:'序号',
+      dataIndex:'id'
+    },
+    {
       title: '项目编码',
       dataIndex: 'code',
     },
@@ -852,9 +856,8 @@ class InfoCard extends Component {
     },
     {
       title: '下载信息卡',
-      dataIndex: 'id',
       render(val) {
-        return <a href={apiDev + PRO_PDF + val} download={'信息卡'}>下载</a>;
+        return <a href={apiDev + PRO_PDF + val.id} download={'信息卡'}>下载</a>;
       },
     },
     {

@@ -310,7 +310,7 @@ class CreateForm extends Component {
         <div className={styles.modalContent} style={{paddingLeft: 0}}>
           <Row gutter={2}>
             <Col md={10} sm={24}>
-              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="统一社会信誉代码">
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="编号">
                 {form.getFieldDecorator('businessLicenseCode', {
                   rules: [{required: true, message: '请输入统一社会信誉代码'}],
                   initialValue: selectedValues.businessLicenseCode ? selectedValues.businessLicenseCode : testValue
@@ -887,7 +887,7 @@ class Qualification extends Component {
       legalPersonCard: fieldsValue.legalPersonCard,
       legalPersonPhone: fieldsValue.legalPersonPhone,
       legalPersonAddress: fieldsValue.legalPersonAddress,
-      businessLicenseCode: fieldsValue.registeredCapital,
+      businessLicenseCode: fieldsValue.businessLicenseCode,
       businessLicenseValidityPeriod: fieldsValue.businessLicenseValidityPeriod,
       businessLicenseFrom: fieldsValue.businessLicenseFrom,
       qualificationCode: fieldsValue.qualificationCode,
