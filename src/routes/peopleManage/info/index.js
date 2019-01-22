@@ -223,7 +223,7 @@ class CreateForm extends Component {
           </Row>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="民族">
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="民族">
                 {form.getFieldDecorator('famousFamily', {
                   rules: [{required: true, message: '请选择民族'}],
                   initialValue: selectedValues.famousFamily ? selectedValues.famousFamily : testValue,
@@ -249,7 +249,7 @@ class CreateForm extends Component {
           </Row>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="入党时间">
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="入党时间">
                 {form.getFieldDecorator('joinAssociationTime', {
                   initialValue: selectedValues.joinAssociationTime ? moment(selectedValues.joinAssociationTime) : null,
                 })(<DatePicker disabled={checkDetail} style={{width: '100%'}}/>)}
@@ -266,7 +266,7 @@ class CreateForm extends Component {
           </Row>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="职称">
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="职称">
                 {form.getFieldDecorator('jobTitle', {
                   initialValue: selectedValues.jobTitle ? selectedValues.jobTitle : testValue,
                 })(<Input disabled={checkDetail} />)}
@@ -292,11 +292,11 @@ class CreateForm extends Component {
           </Row>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="参加工作年限">
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="参加工作年限">
                 {form.getFieldDecorator('workTime', {
                   rules: [{required: true, message: '请输入参加工作年限'}],
                   initialValue: selectedValues.workTime ? selectedValues.workTime : testValue,
-                })(<Input disabled={checkDetail} placehloder='请输入参加工作年限' addonAfter={'年'}/>)}
+                })(<Input disabled={checkDetail} style={{marginTop:4}} placehloder='请输入参加工作年限' addonAfter={'年'}/>)}
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
@@ -310,7 +310,7 @@ class CreateForm extends Component {
           </Row>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="家庭住址">
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="家庭住址">
                 {form.getFieldDecorator('homeAddress', {
                   rules: [{required: true, message: '请输入家庭住址'}],
                   initialValue: selectedValues.homeAddress ? selectedValues.homeAddress : testValue,
@@ -418,7 +418,7 @@ class CreateForm extends Component {
         <div className={styles.modalContent}>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="工作经历">
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="工作经历">
                 {form.getFieldDecorator('workExperience', {
                   rules: [{required: false}],
                   initialValue: selectedValues.workExperience ? selectedValues.workExperience : testValue,
@@ -427,7 +427,7 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="职业资格证书取证情况">
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="职业资格证书取证情况">
                 {form.getFieldDecorator('certificate', {
                   rules: [{required: false}],
                   initialValue: selectedValues.certificate ? selectedValues.certificate : testValue,
@@ -438,7 +438,7 @@ class CreateForm extends Component {
           </Row>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="学习及培训经历">
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="学习及培训经历">
                 {form.getFieldDecorator('training', {
                   rules: [{required: false}],
                   initialValue: selectedValues.training ? selectedValues.training : testValue,
@@ -447,7 +447,7 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="获奖励和受表彰情况">
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="获奖励和受表彰情况">
                 {form.getFieldDecorator('award', {
                   rules: [{required: false}],
                   initialValue: selectedValues.award ? selectedValues.award : testValue,

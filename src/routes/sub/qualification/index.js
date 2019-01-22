@@ -177,9 +177,9 @@ class CreateForm extends Component {
           <Row gutter={8}>
             <Col md={8} sm={24}>
               <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="成立日期">
-                {form.getFieldDecorator('createTime', {
+                {form.getFieldDecorator('setUpTime', {
                   rules: [{required: true, message: '请选择成立日期'}],
-                  initialValue: selectedValues.createTime ? moment(selectedValues.createTime) : null
+                  initialValue: selectedValues.setUpTime ? moment(selectedValues.setUpTime) : null
                 })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
               </FormItem>
             </Col>
@@ -310,7 +310,7 @@ class CreateForm extends Component {
         <div className={styles.modalContent} style={{paddingLeft: 0}}>
           <Row gutter={2}>
             <Col md={10} sm={24}>
-              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="编号">
+              <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="编号">
                 {form.getFieldDecorator('businessLicenseCode', {
                   rules: [{required: true, message: '请输入统一社会信誉代码'}],
                   initialValue: selectedValues.businessLicenseCode ? selectedValues.businessLicenseCode : testValue
@@ -554,7 +554,7 @@ const CreateReview = Form.create()(props => {
     let content = (<div className={styles.modalContent}>
       <Row gutter={8}>
         <Col md={12} sm={24}>
-          <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="股份公司综合信誉评价">
+          <FormItem labelCol={{span: 11}} wrapperCol={{span: 13}} label="股份公司综合信誉评价">
             {form.getFieldDecorator('shareEvaluation', {
               rules: [{required: false}],
               initialValue: selectedValues.shareEvaluation ? selectedValues.shareEvaluation : ''
@@ -572,7 +572,7 @@ const CreateReview = Form.create()(props => {
       content = (<div className={styles.modalContent}>
         <Row gutter={8}>
           <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 11}} wrapperCol={{span: 12}} label="集团公司综合信誉评价">
+            <FormItem labelCol={{span: 11}} wrapperCol={{span: 13}} label="集团公司综合信誉评价">
               {form.getFieldDecorator('groupEvaluation', {
                 rules: [{required: false}],
                 initialValue: selectedValues.groupEvaluation ? selectedValues.groupEvaluation : ''
@@ -590,8 +590,8 @@ const CreateReview = Form.create()(props => {
     if (type == 2) {
       content = (<div className={styles.modalContent}>
         <Row gutter={8}>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 11}} wrapperCol={{span: 12}} label="公司信誉评价">
+          <Col md={12} sm={24}>
+            <FormItem labelCol={{span: 11}} wrapperCol={{span: 13}} label="公司信誉评价">
               {form.getFieldDecorator('companyEvaluation', {
                 rules: [{required: false}],
                 initialValue: selectedValues.companyEvaluation ? selectedValues.companyEvaluation : ''
@@ -606,8 +606,8 @@ const CreateReview = Form.create()(props => {
           </Col>
         </Row>
         <Row gutter={8}>
-          <Col md={8} sm={24}>
-            <FormItem labelCol={{span: 11}} wrapperCol={{span: 12}} label="资质是否齐全">
+          <Col md={12} sm={24}>
+            <FormItem labelCol={{span: 11}} wrapperCol={{span: 13}} label="资质是否齐全">
               {form.getFieldDecorator('qualification', {
                 rules: [{required: false}],
                 initialValue: selectedValues.qualification ? selectedValues.qualification : ''
@@ -900,7 +900,7 @@ class Qualification extends Component {
       bankAccount: fieldsValue.bankAccount,
       bankFrom: fieldsValue.bankFrom,
       annex: fieldsValue.annex,
-      createTime: fieldsValue.createTime,
+      setUpTime: fieldsValue.setUpTime,
       remark: fieldsValue.remark
     }
     cleanObject(payload)

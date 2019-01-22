@@ -171,7 +171,7 @@ class CreateForm extends Component {
         <div className={styles.modalContent}>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="项目名称">
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="项目名称">
                 {form.getFieldDecorator('projectId', {
                   rules: [{required: true, message: '请选择项目'}],
                   initialValue: selectedValues.projectId ? selectedValues.projectId : '',
@@ -185,7 +185,7 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="分包商名称">
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="分包商名称">
                 {form.getFieldDecorator('subcontractorId', {
                   rules: [{required: true, message: '请选择分包商名称'}],
                   initialValue: selectedValues.subcontractorName ? selectedValues.subcontractorName : '',
@@ -204,7 +204,7 @@ class CreateForm extends Component {
           </Row>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="队伍名称">
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="队伍名称">
                 {form.getFieldDecorator('laborAccountId', {
                   rules: [{required: true, message: '请选择队伍名称'}],
                   initialValue: selectedValues.teamName ? selectedValues.teamName : '',
@@ -223,7 +223,7 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="合同金额">
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="合同金额">
                 {form.getFieldDecorator('contractPrice', {
                   rules: [{required: true, message: '请选择项目、分包商和队伍'}],
                   initialValue: selectedValues.sumContractAmount ? selectedValues.sumContractAmount : '',
@@ -233,7 +233,7 @@ class CreateForm extends Component {
           </Row>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="计价期数">
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="计价期数">
                 {form.getFieldDecorator('valuationPeriod', {
                   rules: [{required: true, message: '请选择期数'}],
                   initialValue: selectedValues.valuationPeriod ? ('第' + selectedValues.valuationPeriod + '期') : '',
@@ -246,7 +246,7 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="计价日期">
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="计价日期">
                 {form.getFieldDecorator('valuationTime', {
                   rules: [{required: true, message: '请选择日期'}],
                   initialValue: selectedValues.valuationTime ? moment(selectedValues.valuationTime) : null,
@@ -256,7 +256,7 @@ class CreateForm extends Component {
           </Row>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="计价类型">
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="计价类型">
                 {form.getFieldDecorator('valuationType', {
                   rules: [{required: true, message: '请选择计价类型'}],
                   initialValue: selectedValues.valuationType ? selectedValues.valuationType : '',
@@ -268,7 +268,7 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="计价负责人">
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="计价负责人">
                 {form.getFieldDecorator('valuationPerson', {
                   rules: [{required: true, message: '请输入计价负责人'}],
                   initialValue: selectedValues.valuationPerson ? selectedValues.valuationPerson : testValue,
@@ -283,7 +283,7 @@ class CreateForm extends Component {
         <div className={styles.modalContent}>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="计价总金额">
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="计价总金额">
                 {form.getFieldDecorator('valuationPrice', {
                   rules: [{required: true, message: '请输入计价总金额'}],
                   initialValue: selectedValues.valuationPrice ? selectedValues.valuationPrice : testValue,
@@ -291,7 +291,7 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="扣款">
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="扣款">
                 {form.getFieldDecorator('valuationPriceReduce', {
                   rules: [{required: true, message: '请输入扣款金额'}],
                   initialValue: selectedValues.valuationPriceReduce ? selectedValues.valuationPriceReduce : testValue,
@@ -301,7 +301,7 @@ class CreateForm extends Component {
           </Row>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="扣除质保金">
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="扣除质保金">
                 {form.getFieldDecorator('warranty', {
                   rules: [{required: true, message: '请输入扣除质保金'}],
                   initialValue: selectedValues.warranty ? selectedValues.warranty : testValue,
@@ -311,7 +311,7 @@ class CreateForm extends Component {
           </Row>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="扣除履约保证金">
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="扣除履约保证金">
                 {form.getFieldDecorator('performanceBond', {
                   rules: [{required: true, message: '请输入扣除履约保证金'}],
                   initialValue: selectedValues.performanceBond ? selectedValues.performanceBond : testValue,
@@ -319,7 +319,7 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="计日工及补偿费用">
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="计日工及补偿费用">
                 {form.getFieldDecorator('compensation', {
                   rules: [{required: true, message: '请输入预付款'}],
                   initialValue: selectedValues.compensation ? selectedValues.compensation : testValue,
@@ -329,7 +329,7 @@ class CreateForm extends Component {
           </Row>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="应支付金额">
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="应支付金额">
                 {form.getFieldDecorator('shouldAmount', {
                   rules: [{required: true, message: '请输入应支付金额'}],
                   initialValue: selectedValues.shouldAmount ? selectedValues.shouldAmount : testValue,
@@ -337,7 +337,7 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 9}} wrapperCol={{span: 10}} label="已完未计">
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="已完未计">
                 {form.getFieldDecorator('endedPrice', {
                   rules: [{required: true, message: '请输入已完未计'}],
                   initialValue: selectedValues.endedPrice ? selectedValues.endedPrice : testValue,

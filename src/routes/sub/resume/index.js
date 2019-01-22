@@ -61,7 +61,7 @@ const CreateForm = Form.create()(props => {
       <div className={styles.modalContent}>
         <Row gutter={8}>
           <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="分包商名称">
+            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="分包商名称">
               {form.getFieldDecorator('subcontractorId', {
                 rules: [{required: true, message: '请选择项目'}],
                 initialValue: selectedValues.subcontractorId ? selectedValues.subcontractorId : '',
@@ -85,7 +85,7 @@ const CreateForm = Form.create()(props => {
         </Row>
         <Row gutter={8}>
           <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="开始日期">
+            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="开始日期">
               {form.getFieldDecorator('startTime', {
                 rules: [{required: true, message: '请选择开始日期'}],
                 initialValue: selectedValues.startTime ? moment(selectedValues.startTime) : null
@@ -93,7 +93,7 @@ const CreateForm = Form.create()(props => {
             </FormItem>
           </Col>
           <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="结束日期">
+            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="结束日期">
               {form.getFieldDecorator('endTime', {
                 initialValue: selectedValues.endTime ? moment(selectedValues.endTime) : null
               })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
@@ -102,7 +102,7 @@ const CreateForm = Form.create()(props => {
         </Row>
         <Row gutter={8}>
           <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 12}} label="该时间段所属项目部">
+            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="该时间段所属项目部">
               {form.getFieldDecorator('projectId', {
                 rules: [{required: true, message: '请选择项目'}],
                 initialValue: selectedValues.projectId ? selectedValues.projectId : '',
@@ -116,7 +116,7 @@ const CreateForm = Form.create()(props => {
             </FormItem>
           </Col>
           <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="项目队伍名称">
+            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="项目队伍名称">
               {form.getFieldDecorator('laborAccountId', {
                 rules: [{required: true, message: '请输入项目部队伍名称'}],
                 initialValue: selectedValues.laborAccountId ? selectedValues.laborAccountId : ''
@@ -132,7 +132,7 @@ const CreateForm = Form.create()(props => {
         </Row>
         <Row gutter={8}>
           <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="施工规模">
+            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="施工规模">
               {form.getFieldDecorator('constructionScale', {
                 initialValue: selectedValues.constructionScale ? selectedValues.constructionScale : testValue
               })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择"

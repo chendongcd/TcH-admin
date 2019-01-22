@@ -159,7 +159,7 @@ class CreateForm extends Component {
         <div className={styles.modalContent}>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="项目名称">
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="项目名称">
                 {form.getFieldDecorator('projectId', {
                   rules: [{required: true, message: '请选择项目'}],
                   initialValue: selectedValues.projectId ? selectedValues.projectId : '',
@@ -172,7 +172,7 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="队伍名称">
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="队伍名称">
                 {form.getFieldDecorator('teamName', {
                   rules: [{required: true, message: '请输入队伍名称'}],
                   initialValue: selectedValues.teamName ? selectedValues.teamName : testValue,
@@ -182,7 +182,7 @@ class CreateForm extends Component {
           </Row>
           <Row gutter={0}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="分包商名称">
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="分包商名称">
                 {form.getFieldDecorator('subcontractorId', {
                   rules: [{required: true, message: '请选择项目'}],
                   initialValue: selectedValues.subcontractorId ? selectedValues.subcontractorId : '',
@@ -200,7 +200,7 @@ class CreateForm extends Component {
             <Fragment>
               <Row gutter={8}>
                 <Col md={12} sm={24}>
-                  <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同类型">
+                  <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="合同类型">
                     {form.getFieldDecorator('contractType', {
                       initialValue: 0,
                     })(<Select onSelect={this._onSelect} className={styles.customSelect} disabled={checkDetail}
@@ -212,7 +212,7 @@ class CreateForm extends Component {
                   </FormItem>
                 </Col>
                 <Col md={12} sm={24}>
-                  <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同编码">
+                  <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="合同编码">
                     {form.getFieldDecorator('contractCode', {
                       initialValue: selectedValues.contractNumber,
                     })(<Input disabled={true}/>)}
@@ -221,7 +221,7 @@ class CreateForm extends Component {
               </Row>
               {selectedValues.contractType == 1 ? <Row gutter={8}>
                 <Col md={12} sm={24}>
-                  <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同类型">
+                  <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="合同类型">
                     {form.getFieldDecorator('contractType1', {
                       initialValue: 1,
                     })(<Select onSelect={this._onSelect} className={styles.customSelect} disabled={checkDetail}
@@ -233,7 +233,7 @@ class CreateForm extends Component {
                   </FormItem>
                 </Col>
                 <Col md={12} sm={24}>
-                  <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同编码">
+                  <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="合同编码">
                     {form.getFieldDecorator('contractCode1', {
                       initialValue: selectedValues.contractCode,
                     })(<Input disabled={true} placeholder="自动带入"/>)}
@@ -243,7 +243,7 @@ class CreateForm extends Component {
             </Fragment>
             : <Row gutter={8}>
               <Col md={12} sm={24}>
-                <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同类型">
+                <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="合同类型">
                   {form.getFieldDecorator('contractType', {
                     rules: [{required: true, message: '请选择合同类型'}],
                     initialValue: (selectedValues.contractType || selectedValues.contractType === 0) ? selectedValues.contractType : '',
@@ -257,7 +257,7 @@ class CreateForm extends Component {
               </Col>
               <Col md={12} sm={24}>
                 {contractType !== -1?
-                  <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同编码">
+                  <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="合同编码">
                     {form.getFieldDecorator('contractCode', {
                       rules: [{required: !(contractType!==0), message: '请选择项目'}],
                       initialValue: selectedValues.contractNumber ? selectedValues.contractNumber : '',
@@ -268,7 +268,7 @@ class CreateForm extends Component {
             </Row>}
           <Row gutter={0}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同签订日期">
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="合同签订日期">
                 {form.getFieldDecorator('contractTime', {
                   rules: [{required: true, message: '请选择合同签订日期'}],
                   initialValue: selectedValues.contractTime ? moment(selectedValues.contractTime) : null,
@@ -276,17 +276,17 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="预计合同金额">
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="预计合同金额">
                 {form.getFieldDecorator('estimatedContractAmount', {
                   rules: [{required: true, message: '请输入预计合同金额'}],
                   initialValue: selectedValues.estimatedContractAmount ? selectedValues.estimatedContractAmount : testValue
-                })(<Input disabled={checkDetail} placeholder="请输入预计合同金额" addonAfter='元'/>)}
+                })(<Input disabled={checkDetail} style={{marginTop:4}} placeholder="请输入预计合同金额" addonAfter='元'/>)}
               </FormItem>
             </Col>
           </Row>
           <Row gutter={0}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="施工范围">
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="施工范围">
                 {form.getFieldDecorator('constructionScope', {
                   rules: [{required: true, message: '请输入施工范围'}],
                   initialValue: selectedValues.constructionScope ? selectedValues.constructionScope : testValue
@@ -294,7 +294,7 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="队伍状态">
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="队伍状态">
                 {form.getFieldDecorator('status', {
                   rules: [{required: true, message: '请选择队伍状态'}],
                   initialValue: selectedValues.status || selectedValues.status == 0 ? selectedValues.status : ''
@@ -314,7 +314,7 @@ class CreateForm extends Component {
         <div className={styles.modalContent}>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="应缴金额">
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="应缴金额">
                 {form.getFieldDecorator('shouldAmount', {
                   rules: [{required: true, message: '请输入应缴金额'}],
                   initialValue: selectedValues.shouldAmount ? selectedValues.shouldAmount : testValue
@@ -322,7 +322,7 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="实缴金额">
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="实缴金额">
                 {form.getFieldDecorator('realAmount', {
                   rules: [{required: true, message: '请输入实缴金额'}],
                   initialValue: selectedValues.realAmount ? selectedValues.realAmount : testValue
@@ -337,7 +337,7 @@ class CreateForm extends Component {
         <div className={styles.modalContent}>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同签订人">
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="合同签订人">
                 {form.getFieldDecorator('contractPerson', {
                   rules: [{required: true, message: '请输入合同签订人'}],
                   initialValue: selectedValues.contractPerson ? selectedValues.contractPerson : testValue
@@ -345,7 +345,7 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 8}} wrapperCol={{span: 12}} label="合同签订人联系电话">
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 12}} label="合同签订人联系电话">
                 {form.getFieldDecorator('phone', {
                   rules: [{required: true, message: '请输入合同签订人联系电话'}],
                   initialValue: selectedValues.phone ? selectedValues.phone : testValue
@@ -355,7 +355,7 @@ class CreateForm extends Component {
           </Row>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="法人">
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="法人">
                 {form.getFieldDecorator('legalPerson', {
                   initialValue: selectedValues.legalPerson ? selectedValues.legalPerson : testValue
                 })(<Input disabled={checkDetail} placeholder="请输入法人"/>)}
