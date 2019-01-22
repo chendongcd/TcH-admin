@@ -39,7 +39,7 @@ const getValue = obj =>
 const info_css = {
   color: '#fa541c'
 }
-const testValue = ''
+const testValue = '12333'
 const TenW = 100
 const plainOptions = [
   {label: '分包商类型', value: '1'},
