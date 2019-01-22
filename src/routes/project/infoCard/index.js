@@ -419,7 +419,7 @@ class CreateForm extends Component {
         <div className={styles.modalContent}>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="项目名称">
+              <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="项目名称">
                 {form.getFieldDecorator('projectId', {
                   rules: [{required: true, message: '请选择项目'}],
                   initialValue: selectedValues.projectId ? selectedValues.projectId : '',
@@ -433,7 +433,7 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="工程类别">
+              <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="工程类别">
                 {form.getFieldDecorator('projectType', {
                   rules: [{required: true, message: '请选择工程类别'}],
                   initialValue: selectedValues.projectType ? selectedValues.projectType : '',
@@ -443,7 +443,7 @@ class CreateForm extends Component {
           </Row>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="工程地点">
+              <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="工程地点">
                 {form.getFieldDecorator('address', {
                   rules: [{required: true, message: '请输入工程地点'}],
                   initialValue: selectedValues.address ? selectedValues.address : testValue,
@@ -451,7 +451,7 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="工程状态">
+              <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="工程状态">
                 {form.getFieldDecorator('status', {
                   rules: [{required: true, message: '请选择工程状态'}],
                   initialValue: selectedValues.status || selectedValues.status == 0 ? selectedValues.status : '',
@@ -467,7 +467,7 @@ class CreateForm extends Component {
 
           <Row gutter={4}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="项目部地址">
+              <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="项目部地址">
                 {form.getFieldDecorator('orgAddress', {
                   rules: [{required: true, message: '请输入项目部地址'}],
                   initialValue: selectedValues.orgAddress ? selectedValues.orgAddress : testValue,
@@ -475,7 +475,7 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="里程桩号">
+              <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="里程桩号">
                 {form.getFieldDecorator('mileageNumber', {
                   rules: [{required: true, message: '请输入里程桩号'}],
                   initialValue: selectedValues.mileageNumber ? selectedValues.mileageNumber : testValue,
@@ -485,7 +485,7 @@ class CreateForm extends Component {
           </Row>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="暂估合同额">
+              <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="暂估合同额">
                 {form.getFieldDecorator('temporarilyPrice', {
                   rules: [{required: true, message: '请输入暂估合同额', pattern: reg}],
                   initialValue: selectedValues.temporarilyPrice ? selectedValues.temporarilyPrice : testValue,
@@ -493,7 +493,7 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="有效合同额">
+              <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="有效合同额">
                 {form.getFieldDecorator('totalPrice', {
                   rules: [{required: true, message: '请输入有效合同额', pattern: reg}],
                   initialValue: selectedValues.totalPrice ? selectedValues.totalPrice : testValue,
@@ -504,7 +504,7 @@ class CreateForm extends Component {
 
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同编码">
+              <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="合同编码">
                 {form.getFieldDecorator('contractNumber', {
                   rules: [{required: true, message: '请输入合同编码'}],//pattern: reg
                   initialValue: selectedValues.contractNumber ? selectedValues.contractNumber : testValue,
@@ -514,7 +514,7 @@ class CreateForm extends Component {
           </Row>
           <Row gutter={8}>
             <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="合同开工日期">
+              <FormItem labelCol={{span: 10}} wrapperCol={{span: 14}} label="合同开工日期">
                 {form.getFieldDecorator('contractStartTime', {
                   rules: [{required: true, message: '请选择合同开工日期'}],
                   initialValue: selectedValues.contractStartTime ? moment(selectedValues.contractStartTime) : null,
@@ -523,7 +523,7 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="合同竣工日期">
+              <FormItem labelCol={{span: 10}} wrapperCol={{span: 14}} label="合同竣工日期">
                 {form.getFieldDecorator('contractEndTime', {
                   rules: [{required: true, message: '请选择合同竣工日期'}],
                   initialValue: selectedValues.contractEndTime ? moment(selectedValues.contractEndTime) : null,
@@ -542,7 +542,7 @@ class CreateForm extends Component {
           </Row>
           <Row gutter={8}>
             <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="实际开工日期">
+              <FormItem labelCol={{span: 10}} wrapperCol={{span: 14}} label="实际开工日期">
                 {form.getFieldDecorator('realContractStartTime', {
                   rules: [{required: true, message: '请选择实际开工日期'}],
                   initialValue: selectedValues.realContractStartTime ? moment(selectedValues.realContractStartTime) : null,
@@ -550,7 +550,7 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="实际竣工日期">
+              <FormItem labelCol={{span: 10}} wrapperCol={{span: 14}} label="实际竣工日期">
                 {form.getFieldDecorator('realContractEndTime', {
                   initialValue: selectedValues.realContractEndTime ? moment(selectedValues.realContractEndTime) : null,
                 })(<DatePicker  onChange={(date, dateString) => this.setRealTime(date, dateString, false)} disabled={checkDetail} style={{width: '100%'}} placeholder="请选择实际竣工日期"/>)}

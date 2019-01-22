@@ -176,8 +176,8 @@ class CreateForm extends Component {
         </Row>
         <div className={styles.modalContent}>
           <Row gutter={8}>
-            <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="预付款">
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="预付款">
                 {form.getFieldDecorator('prepaymentAmount', {
                   rules: [{required: true, message: '请输入预付款'}],
                   initialValue: selectedValues.prepaymentAmount ? selectedValues.prepaymentAmount : testValue,
@@ -191,16 +191,16 @@ class CreateForm extends Component {
         </Row>
         <div className={styles.modalContent}>
           <Row gutter={8}>
-            <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="含税金额">
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="含税金额">
                 {form.getFieldDecorator('valuationAmountTax', {
                   rules: [{required: true, message: '请输入含税金额'}],
                   initialValue: selectedValues.valuationAmountTax ? selectedValues.valuationAmountTax : testValue,
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入含税金额" addonAfter="元"/>)}
               </FormItem>
             </Col>
-            <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="税率">
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="税率">
                 {form.getFieldDecorator('tax', {
                   rules: [{required: true, message: '请输入税率'}],
                   initialValue: selectedValues.tax ? selectedValues.tax : testValue,
@@ -214,8 +214,8 @@ class CreateForm extends Component {
         </Row>
         <div className={styles.modalContent}>
           <Row gutter={8}>
-            <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="含税金额">
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="含税金额">
                 {form.getFieldDecorator('realAmountTax', {
                   rules: [{required: true, message: '请输入含税金额'}],
                   initialValue: selectedValues.realAmountTax ? selectedValues.realAmountTax : testValue,
@@ -230,8 +230,8 @@ class CreateForm extends Component {
         </Row>
         <div className={styles.modalContent}>
           <Row gutter={8}>
-            <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="已支付金额">
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="已支付金额">
                 {form.getFieldDecorator('alreadyPaidAmount', {
                   rules: [{required: true, message: '请输入已支付金额'}],
                   initialValue: selectedValues.alreadyPaidAmount ? selectedValues.alreadyPaidAmount : testValue,
@@ -249,16 +249,16 @@ class CreateForm extends Component {
         </Row>
         <div className={styles.modalContent}>
           <Row gutter={8}>
-            <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="超计价金额">
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="超计价金额">
                 {form.getFieldDecorator('extraAmount', {
                   rules: [{required: true, message: '请输入超计价金额'}],
                   initialValue: selectedValues.extraAmount ? selectedValues.extraAmount : testValue,
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入超计价金额" addonAfter="元"/>)}
               </FormItem>
             </Col>
-            <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 10}} wrapperCol={{span: 14}} label="已完未计价金额">
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="已完未计价金额">
                 {form.getFieldDecorator('notCalculatedAmount', {
                   rules: [{required: true, message: '请输入已完未计价金额'}],
                   initialValue: selectedValues.notCalculatedAmount ? selectedValues.notCalculatedAmount : testValue,

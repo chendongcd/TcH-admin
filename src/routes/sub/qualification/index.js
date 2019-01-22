@@ -176,7 +176,7 @@ class CreateForm extends Component {
           </Row>
           <Row gutter={8}>
             <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="成立日期">
+              <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="成立日期">
                 {form.getFieldDecorator('createTime', {
                   rules: [{required: true, message: '请选择成立日期'}],
                   initialValue: selectedValues.createTime ? moment(selectedValues.createTime) : null
@@ -184,7 +184,7 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="纳税人类型">
+              <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="纳税人类型">
                 {form.getFieldDecorator('taxpayerType', {
                   rules: [{required: true, message: '请选择纳税人类型'}],
                   initialValue: selectedValues.taxpayerType ? selectedValues.taxpayerType : ''
@@ -195,24 +195,24 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="注册资本金">
+              <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="注册资本金">
                 {form.getFieldDecorator('registeredCapital', {
                   rules: [{required: true, message: '请输入注册资本金'}],
                   initialValue: selectedValues.registeredCapital ? selectedValues.registeredCapital : testValue
-                })(<Input disabled={checkDetail} placeholder="请输入注册资本金" addonAfter="万元"/>)}
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入注册资本金" addonAfter="万元"/>)}
               </FormItem>
             </Col>
           </Row>
           <Row gutter={0}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 4}} wrapperCol={{span: 20}} label="电话">
+              <FormItem labelCol={{span: 5}}  wrapperCol={{span: 19}} label="电话">
                 {form.getFieldDecorator('phone', {
                   initialValue: selectedValues.phone ? selectedValues.phone : testValue
                 })(<Input disabled={checkDetail} placeholder="请输入电话"/>)}
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 4}} wrapperCol={{span: 20}} label="电子邮箱">
+              <FormItem labelCol={{span: 5}}  wrapperCol={{span: 19}} label="电子邮箱">
                 {form.getFieldDecorator('email', {
                   initialValue: selectedValues.email ? selectedValues.email : testValue
                 })(<Input disabled={checkDetail} placeholder="请输入电子邮箱"/>)}
@@ -221,7 +221,7 @@ class CreateForm extends Component {
           </Row>
           <Row gutter={0}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 4}} wrapperCol={{span: 20}} label="注册地址">
+              <FormItem labelCol={{span: 5}}  wrapperCol={{span: 19}} label="注册地址">
                 {form.getFieldDecorator('address', {
                   rules: [{required: true, message: '请输入注册地址'}],
                   initialValue: selectedValues.address ? selectedValues.address : testValue
@@ -229,7 +229,7 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 4}} wrapperCol={{span: 20}} label="邮编">
+              <FormItem labelCol={{span: 5}}  wrapperCol={{span: 19}} label="邮编">
                 {form.getFieldDecorator('zipCode', {
                   initialValue: selectedValues.zipCode ? selectedValues.zipCode : testValue
                 })(<Input disabled={checkDetail} placeholder="请输入邮编"/>)}
@@ -238,7 +238,7 @@ class CreateForm extends Component {
           </Row>
           <Row gutter={0}>
             <Col md={12} sm={24}>
-              <FormItem style={{marginLeft: 14 + 'px'}} labelCol={{span: 4}} wrapperCol={{span: 20}} label="分包商类型">
+              <FormItem style={{marginLeft: 14 + 'px'}} labelCol={{span: 5}} wrapperCol={{span: 19}} label="分包商类型">
                 {form.getFieldDecorator('type', {
                   initialValue: selectedValues.type ? selectedValues.type.split('、') : []
                 })(<Select mode="multiple" className={styles.customSelect} disabled={checkDetail} placeholder="请选择分包商类型"
@@ -248,7 +248,7 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem style={{marginLeft: 14 + 'px'}} labelCol={{span: 4}} wrapperCol={{span: 20}} label="专业类型">
+              <FormItem style={{marginLeft: 14 + 'px'}} labelCol={{span: 5}} wrapperCol={{span: 19}} label="专业类型">
                 {form.getFieldDecorator('professionType', {
                   initialValue: selectedValues.professionType ? selectedValues.professionType.split('、') : []
                 })(<Select mode="multiple" className={styles.customSelect} disabled={checkDetail} placeholder="请选择"

@@ -649,7 +649,7 @@ class PeopleInfo extends Component {
       dataIndex: 'certificate'
     },
     {
-      title: '籍贯（省/市/区/显）',
+      title: '籍贯（省/市/区/县）',
       dataIndex: 'jiguan'
     },
     {
