@@ -309,7 +309,7 @@ class CreateForm extends Component {
           </Row>
         </div>
         <Row align={'middle'} gutter={0} className={styles.titleView}>
-          <div className={styles.title}>覆约保证金</div>
+          <div className={styles.title}>履约保证金</div>
         </Row>
         <div className={styles.modalContent}>
           <Row gutter={8}>
@@ -682,7 +682,7 @@ class TeamAccount extends Component {
           dataIndex: 'constructionScope'
         },
         {
-          title: '覆约保证金',
+          title: '履约保证金',
           key: '008',
           children: [
             {
@@ -713,7 +713,7 @@ class TeamAccount extends Component {
           dataIndex: 'settlementAmount'
         },
         {
-          title: '附件（含同）',
+          title: '附件（合同）',
           dataIndex: 'annexUrl',
           render(val) {
             //if(JSON.parse(record.annexUrl))
