@@ -26,7 +26,7 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const pageButtons = menuData[21].buttons.map(a => a.permission)
+const pageButtons = menuData[26].buttons.map(a => a.permission)
 const testValue = ''
 const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
 
