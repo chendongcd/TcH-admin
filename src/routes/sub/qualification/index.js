@@ -177,9 +177,9 @@ class CreateForm extends Component {
           <Row gutter={8}>
             <Col md={8} sm={24}>
               <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="成立日期">
-                {form.getFieldDecorator('createTime', {
+                {form.getFieldDecorator('setUpTime', {
                   rules: [{required: true, message: '请选择成立日期'}],
-                  initialValue: selectedValues.createTime ? moment(selectedValues.createTime) : null
+                  initialValue: selectedValues.setUpTime ? moment(selectedValues.setUpTime) : null
                 })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder="请选择日期"/>)}
               </FormItem>
             </Col>
@@ -900,7 +900,7 @@ class Qualification extends Component {
       bankAccount: fieldsValue.bankAccount,
       bankFrom: fieldsValue.bankFrom,
       annex: fieldsValue.annex,
-      createTime: fieldsValue.createTime,
+      setUpTime: fieldsValue.setUpTime,
       remark: fieldsValue.remark
     }
     cleanObject(payload)
