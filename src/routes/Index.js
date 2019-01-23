@@ -70,7 +70,7 @@ class IndexPage extends Component {
       <div>
         <Loader fullScreen spinning={loading}/>
         <Helmet>
-          <title>成本管理系统</title>
+          <title>劳务成本管理系统</title>
           <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
           <link rel="shortcut icon" href={ico}/>
           {iconFontJS && <script src={iconFontJS}/>}
