@@ -587,34 +587,42 @@ class PeopleInfo extends Component {
   columns = [
     {
       title: '人员编码',
+      width:100,
       dataIndex: 'id',
     },
     {
       title: '姓名',
+      width:100,
       dataIndex: 'name',
     },
     {
       title: '性别',
+      width:100,
       dataIndex: 'sex',
     },
     {
       title: '当前状态',
+      width:100,
       dataIndex: 'status',
     },
     {
       title: '项目名称',
+      width:100,
       dataIndex: 'projectName'
     },
     {
       title: '职务',
+      width:100,
       dataIndex: 'position',
     },
     {
       title: '职称',
+      width:100,
       dataIndex: 'jobTitle',
     },
     {
       title: '参加工作年限',
+      width:100,
       dataIndex: 'workTime',
       render(val) {
         return <span>{val}年</span>;
@@ -622,39 +630,48 @@ class PeopleInfo extends Component {
     },
     {
       title: '第一学历',
+      width:100,
       dataIndex: 'firstDegreeLevel'
     },
     {
       title: '第二学历',
+      width:100,
       dataIndex: 'secondDegreeLevel'
     },
     {
       title: '手机号码',
+      width:150,
       dataIndex: 'phone'
     },
     {
       title: 'QQ号码',
+      width:180,
       dataIndex: 'qqNumber',
     },
     {
       title: '邮箱',
+      width:180,
       dataIndex: 'email'
     },
     {
       title: '身份证号码',
+      width:180,
       dataIndex: 'idCard'
     },
     {
       title: '已取得证书',
+      width:100,
       dataIndex: 'certificate'
     },
     {
       title: '籍贯（省/市/区/县）',
+      width:180,
       dataIndex: 'jiguan'
     },
     {
       title: '创建时间',
       dataIndex: 'createTime',
+      width:180,
       render(val) {
         return <span>{moment(val).format('YYYY-MM-DD HH:mm')}</span>;
       },
@@ -665,6 +682,7 @@ class PeopleInfo extends Component {
     },
     {
       title: '简历下载',
+      width:100,
       render: (val, record) => {
         return (
           <a href={apiDev + PEOPLE_PDF + record.id} download={'信息卡'}>下载</a>
@@ -673,6 +691,8 @@ class PeopleInfo extends Component {
     },
     {
       title: '操作',
+      width: 110,
+      fixed: 'right',
       render: (val, record) => {
         const user = this.props.app.user
         if (!user.token) {

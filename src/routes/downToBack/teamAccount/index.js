@@ -80,7 +80,7 @@ class CreateForm extends Component {
       }
       this.setState({sqFileList: [file]})
     }
-    if (preProp.selectedValues.contractType===undefined && this.props.selectedValues.contractType!=undefined && this.state.contractType === -1) {
+    if (preProp.selectedValues.contractType === undefined && this.props.selectedValues.contractType != undefined && this.state.contractType === -1) {
       this.setState({contractType: this.props.selectedValues.contractType})
     }
   }
@@ -96,13 +96,16 @@ class CreateForm extends Component {
         }
       }
       fieldsValue.annexUrl = `{"url":"${this.state.fileList[0].url}","fileName":"${this.state.fileList[0].name}"}`
-      fieldsValue.annexUrlSq =this.state.sqFileList.length>0? `{"url":"${this.state.sqFileList[0].url}","fileName":"${this.state.sqFileList[0].name}"}`:null
+      fieldsValue.annexUrlSq = this.state.sqFileList.length > 0 ? `{"url":"${this.state.sqFileList[0].url}","fileName":"${this.state.sqFileList[0].name}"}` : null
+      if(this.state.contractType===1){
+        fieldsValue.contractCode = null
+      }
       handleAdd(fieldsValue, updateModalVisible, selectedValues, this.cleanState);
     });
   };
 
   cleanState = () => {
-    this.setState({fileList: [], previewImage: '',contractType: -1,sqFileList: []})
+    this.setState({fileList: [], previewImage: '', contractType: -1, sqFileList: []})
   }
 
   handleCancel = () => this.setState({previewVisible: false})
@@ -127,8 +130,8 @@ class CreateForm extends Component {
   }
 
   _onSelect = (e) => {
-    if(e==1){
-      this.props.form.setFieldsValue({'contractCode':''})
+    if (e == 1) {
+      this.props.form.setFieldsValue({'contractCode': ''})
     }
     this.setState({contractType: e})
   }
@@ -256,12 +259,12 @@ class CreateForm extends Component {
                 </FormItem>
               </Col>
               <Col md={12} sm={24}>
-                {contractType !== -1?
+                {contractType !== -1 ?
                   <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="合同编码">
                     {form.getFieldDecorator('contractCode', {
-                      rules: [{required: !(contractType!==0), message: '请选择项目'}],
+                      rules: [{required: !(contractType !== 0), message: '请选择项目'}],
                       initialValue: selectedValues.contractNumber ? selectedValues.contractNumber : '',
-                    })(<Input disabled={contractType!==0} placeholder={contractType!==0?'系统自动生成':'请输入'}/>)}
+                    })(<Input disabled={contractType !== 0} placeholder={contractType !== 0 ? '系统自动生成' : '请输入'}/>)}
                   </FormItem> : null
                 }
               </Col>
@@ -280,7 +283,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('estimatedContractAmount', {
                   rules: [{required: true, message: '请输入预计合同金额'}],
                   initialValue: selectedValues.estimatedContractAmount ? selectedValues.estimatedContractAmount : testValue
-                })(<Input disabled={checkDetail} style={{marginTop:4}} placeholder="请输入预计合同金额" addonAfter='元'/>)}
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入预计合同金额" addonAfter='元'/>)}
               </FormItem>
             </Col>
           </Row>
@@ -495,7 +498,7 @@ class CreateForm extends Component {
     if (res.status == 'done') {
       this.props.form.setFieldsValue({annexUrl: []});
     } else {
-      if(this.upload&&this.upload.unsubscribe) {
+      if (this.upload && this.upload.unsubscribe) {
         this.upload.unsubscribe()
       }
     }
@@ -506,7 +509,7 @@ class CreateForm extends Component {
     if (res.status == 'done') {
       this.props.form.setFieldsValue({annexUrlSq: []});
     } else {
-      if(this.upload&&this.upload.unsubscribe) {
+      if (this.upload && this.upload.unsubscribe) {
         this.upload.unsubscribe()
       }
     }
@@ -626,8 +629,9 @@ class TeamAccount extends Component {
 
   columns = [
     {
-      title:'序号',
-      dataIndex:'id'
+      title: '序号',
+      width:80,
+      dataIndex: 'id'
     },
     {
       title: '劳务队伍统计（项目部填写）',
@@ -635,14 +639,17 @@ class TeamAccount extends Component {
       children: [
         {
           title: '项目名称',
+          width:100,
           dataIndex: 'projectName',
         },
         {
           title: '合同编码',
+          width:120,
           dataIndex: 'contractCode',
         },
         {
           title: '合同类型',
+          width:100,
           dataIndex: 'contractType',
           render(val) {
             return <span>{contractType[val]}</span>
@@ -650,14 +657,17 @@ class TeamAccount extends Component {
         },
         {
           title: '分包商名称',
+          width:100,
           dataIndex: 'subcontractorName'
         },
         {
           title: '队伍名称',
+          width:100,
           dataIndex: 'teamName',
         },
         {
           title: '队伍状态',
+          width:100,
           dataIndex: 'status',
           render(val) {
             return <span>{teamStatus[val]}</span>;
@@ -665,6 +675,7 @@ class TeamAccount extends Component {
         },
         {
           title: '合同签订日期',
+          width:120,
           dataIndex: 'contractTime',
           render(val) {
             return <span>{val ? moment(val).format('YYYY-MM-DD') : ''}</span>;
@@ -673,12 +684,14 @@ class TeamAccount extends Component {
         {
           title: '预计合同金额',
           dataIndex: 'estimatedContractAmount',
+          width:120,
           render(val) {
             return <span>{val}</span>;
           },
         },
         {
           title: '施工范围',
+          width:100,
           dataIndex: 'constructionScope'
         },
         {
@@ -687,9 +700,11 @@ class TeamAccount extends Component {
           children: [
             {
               title: '应缴金额（万元）',
+              width:150,
               dataIndex: 'shouldAmount'
             }, {
               title: '实际缴金额（万元）',
+              width:150,
               dataIndex: 'realAmount'
             }]
         },
@@ -697,24 +712,29 @@ class TeamAccount extends Component {
           title: '负责人',
           key: '009',
           children: [{
-            title:'法人',
-            dataIndex:'legalPerson'
-          },{
+            title: '法人',
+            width:100,
+            dataIndex: 'legalPerson'
+          }, {
             title: '合同签订人',
+            width:100,
             dataIndex: 'contractPerson',
           },
             {
               title: '联系方式',
+              width:150,
               dataIndex: 'phone',
             }]
         },
         {
           title: '结算金额',
+          width:100,
           dataIndex: 'settlementAmount'
         },
         {
           title: '附件（合同）',
           dataIndex: 'annexUrl',
+          width:120,
           render(val) {
             //if(JSON.parse(record.annexUrl))
             function isJSON(str) {
@@ -746,6 +766,7 @@ class TeamAccount extends Component {
         {
           title: '授权委托书',
           dataIndex: 'annexUrlSq',
+          width:100,
           render(val) {
             function isJSON(str) {
               if (typeof str === 'string') {
@@ -770,7 +791,7 @@ class TeamAccount extends Component {
             } else {
               href = val
             }
-            return href?<a href={href} download={'授权委托书'}>下载</a>:null;
+            return href ? <a href={href} download={'授权委托书'}>下载</a> : null;
           },
         },
         {
@@ -789,6 +810,7 @@ class TeamAccount extends Component {
           children: [{
             title: '日期',
             dataIndex: 'teamTime',
+            width:110,
             render(val) {
               return <span>{val ? moment(val).format('YYYY/MM/DD') : ''}</span>;
             },
@@ -800,6 +822,7 @@ class TeamAccount extends Component {
           children: [{
             title: '日期',
             dataIndex: 'approvalTime',
+            width:110,
             render(val) {
               return <span>{val ? moment(val).format('YYYY-MM-DD') : ''}</span>;
             },
@@ -808,6 +831,7 @@ class TeamAccount extends Component {
               title: '是否备案',
               key: 'settlementFiling',
               dataIndex: 'settlementFiling',
+              width:110,
               render(val) {
                 if (!val && val != 0) {
                   return null
@@ -821,6 +845,7 @@ class TeamAccount extends Component {
           key: '022',
           children: [{
             title: '日期',
+            width:110,
             dataIndex: 'settlementTime',
             render(val) {
               return <span>{moment(val).format('YYYY/MM/DD')}</span>;
@@ -831,7 +856,9 @@ class TeamAccount extends Component {
     },
     {
       title: '操作',
-      ket:'03',
+      ket: '03',
+      width: 180,
+      fixed: 'right',
       render: (val, record) => {
         const user = this.props.app.user
         if (!user.token) {
@@ -847,9 +874,7 @@ class TeamAccount extends Component {
                 <Divider type="vertical"/>
                 <a onClick={() => this.handleCheckDetail(true, record)}>查看</a></Fragment> : null}
             {getButtons(button, pageButtons[3]) ?
-              <Fragment>
-                <Divider type="vertical"/>
-                <a onClick={() => this.handleComModalVisible(true, record)}>公司编辑</a></Fragment> : null}
+              <Fragment> <Divider type="vertical"/><a onClick={() => this.handleComModalVisible(true, record)}>公司编辑</a> </Fragment> : null}
           </Fragment>
         )
       }
@@ -866,7 +891,7 @@ class TeamAccount extends Component {
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    this.searchList(null,pagination.current, pagination.pageSize)
+    this.searchList(null, pagination.current, pagination.pageSize)
   };
 
   handleFormReset = () => {
@@ -959,12 +984,12 @@ class TeamAccount extends Component {
       shouldAmount: fields.shouldAmount,
       remark: fields.remark,
       annexUrl: fields.annexUrl,
-      annexUrlSq:fields.annexUrlSq,
+      annexUrlSq: fields.annexUrlSq,
       contractPerson: fields.contractPerson,
       phone: fields.phone,
       approvalFiling: fields.approvalFiling,
       contractCode: fields.contractCode,
-      legalPerson:fields.legalPerson
+      legalPerson: fields.legalPerson
     }
     cleanObject(payload)
     if (updateModalVisible) {
@@ -1026,7 +1051,7 @@ class TeamAccount extends Component {
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={6} sm={24}>
             <FormItem label="项目名称">
-              {getFieldDecorator('projectName')(<Input />)}
+              {getFieldDecorator('projectName')(<Input/>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
@@ -1143,7 +1168,7 @@ class TeamAccount extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '300%',y: global._scollY}}
+                scroll={{x: '300%', y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
@@ -1180,8 +1205,8 @@ class TeamAccount extends Component {
     });
   }
 
-  searchList = ( e,page = 1, pageSize = 10) => {
-    e&&e.preventDefault?e.preventDefault():null
+  searchList = (e, page = 1, pageSize = 10) => {
+    e && e.preventDefault ? e.preventDefault() : null
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
       let payload = {
@@ -1191,7 +1216,7 @@ class TeamAccount extends Component {
         subcontractorName: fieldsValue.subcontractorName,
         status: fieldsValue.status,
         approval: fieldsValue.approval,
-        contractPerson:fieldsValue.contractPerson
+        contractPerson: fieldsValue.contractPerson
       }
       cleanObject(payload)
       this.exportParams = payload

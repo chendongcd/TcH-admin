@@ -247,27 +247,33 @@ class Permission extends Component {
     {
       title: '角色编码',
       dataIndex: 'id',
+      width:60,
     },
     {
       title: '角色名称',
       dataIndex: 'name',
+      width:100,
     },
     {
       title: '创建时间',
       dataIndex: 'createdTime',
+      width:180,
       render: val => <span>{moment(val).format('YYYY/MM/DD')}</span>,
     },
     {
       title: '最新修改人',
+      width:100,
       dataIndex: 'updateUserStr',
     },
     {
       title: '最新修改时间',
       dataIndex: 'updateTime',
+      width:180,
       render: val => <span>{val?moment(val).format('YYYY/MM/DD'):''}</span>,
     },
     {
       title: '操作',
+      width:100,
       render: (val, record) => {
         const user = this.props.app.user
         return (
@@ -472,6 +478,7 @@ class Permission extends Component {
                 rowKey="id"
                 loading={loading.effects['sys_per/query']}
                 data={data}
+                scroll={{y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

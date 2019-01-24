@@ -684,18 +684,22 @@ class ProEvaluate extends Component {
     {
       title: '序号',
       dataIndex: 'id',
+      width:80,
     },
     {
       title: '项目名称',
+      width:100,
       dataIndex: 'projectName',
     },
     {
       title: '工程类别',
+      width:100,
       dataIndex: 'engineeringType',
     },
     {
       title: '工程状态',
       dataIndex: 'engineeringStatus',
+      width:100,
       render(val){
         return <span>{status[val].name}</span>
       }
@@ -703,6 +707,7 @@ class ProEvaluate extends Component {
     {
       title: '评估状态',
       dataIndex: 'evaluationStatus',
+      width:100,
       render(val){
         return <span>{val}</span>
       }
@@ -713,9 +718,11 @@ class ProEvaluate extends Component {
         title: '中标',
         key: 'winningBid',
         dataIndex: 'winningBid',
+        width:100,
       }, {
         title: '有效收入',
         key: 'effectiveIncome',
+        width:100,
         dataIndex: 'effectiveIncome',
       },]
     },
@@ -724,11 +731,13 @@ class ProEvaluate extends Component {
       children: [{
         title: '是否签订',
         key: 'isSign',
-        dataIndex: 'isSign'
+        dataIndex: 'isSign',
+        width:100,
       }, {
         title: '签订日期',
         dataIndex: 'signTime',
         key: 'signTime',
+        width:120,
         render(val) {
           return <span>{moment(val).format('YYYY/MM/DD')}</span>;
         },
@@ -740,6 +749,7 @@ class ProEvaluate extends Component {
         title: '合同开工时间',
         key: 'contractStartTime',
         dataIndex: 'contractStartTime',
+        width:100,
         render(val) {
           return <span>{moment(val).format('YYYY/MM/DD')}</span>;
         },
@@ -747,6 +757,7 @@ class ProEvaluate extends Component {
         title: '合同竣工时间',
         key: 'contractEndTime',
         dataIndex: 'contractEndTime',
+        width:100,
         render(val) {
           return <span>{moment(val).format('YYYY/MM/DD')}</span>;
         },
@@ -754,6 +765,7 @@ class ProEvaluate extends Component {
         title: '工期(月)',
         key: 'duration',
         dataIndex: 'duration',
+        width:100,
       }]
     },
     {
@@ -769,18 +781,22 @@ class ProEvaluate extends Component {
         title: '评估效益点(%)',
         key: 'evaluationBenefit',
         dataIndex: 'evaluationBenefit',
+        width:100,
       }, {
         title: '含分包差及经营费(%)',
         key: 'evaluationCost',
         dataIndex: 'evaluationCost',
+        width:100,
       }, {
         title: '评估编号',
         key: 'evaluationCode',
-        dataIndex: 'evaluationCode'
+        dataIndex: 'evaluationCode',
+        width:100,
       }, {
         title: '附件',
         key: 'evaluationAnnex',
         dataIndex: 'evaluationAnnex',
+        width:100,
         render(val) {
           let href = ''
           let annex = JSON.parse(val)
@@ -794,11 +810,13 @@ class ProEvaluate extends Component {
       children: [{
         title: '效益点',
         key: 'jointHearingBenefit',
-        dataIndex: 'jointHearingBenefit'
+        dataIndex: 'jointHearingBenefit',
+        width:100,
       }, {
         title: '含分包差及经营费(%)',
         key: 'jointHearingCost',
-        dataIndex: 'jointHearingCost'
+        dataIndex: 'jointHearingCost',
+        width:100,
       }, {
         title: '上会时间',
         key: 'jointHearingTime',
@@ -806,6 +824,7 @@ class ProEvaluate extends Component {
         render(val) {
           return <span>{moment(val).format('YYYY/MM/DD')}</span>;
         },
+        width:100,
       }, {
         title: '附件',
         key: 'jointHearingAnnex',
@@ -816,6 +835,7 @@ class ProEvaluate extends Component {
             href = annex.url + '?attname=' + annex.fileName
           return <a href={href}>下载</a>;
         },
+        width:100,
       }]
     },
     {
@@ -824,16 +844,19 @@ class ProEvaluate extends Component {
         title: '责任状是否签订',
         dataIndex:'isResponsibility',
         key: 'isResponsibility',
+        width:100,
         render(val,record){
           return<span>{val==1?'是':'否'}</span>
         }
       },{
         title: '效益点',
         key: 'responsibilityBenefiy',
+        width:100,
         dataIndex: 'responsibilityBenefiy'
       }, {
         title: '签订时间',
         key: 'responsibilityTime',
+        width:100,
         dataIndex: 'responsibilityTime',
         render(val) {
           return <span>{moment(val).format('YYYY/MM/DD')}</span>;
@@ -841,14 +864,17 @@ class ProEvaluate extends Component {
       }, {
         title: '项目经理',
         key: 'responsibilityPeople',
+        width:100,
         dataIndex: 'responsibilityPeople',
       }, {
         title: '项目书记',
         key: 'responsibilitySecretary',
+        width:100,
         dataIndex: 'responsibilitySecretary',
       }, {
         title: '附件',
         key: 'responsibilityAnnex',
+        width:100,
         dataIndex: 'responsibilityAnnex',
         render(val) {
           let href = ''
@@ -864,6 +890,8 @@ class ProEvaluate extends Component {
     },
     {
       title: '操作',
+      width: 110,
+      fixed: 'right',
       render: (val, record) => {
         const user = this.props.app.user
         if (!user.token) {
@@ -1156,7 +1184,7 @@ class ProEvaluate extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '300%',y: global._scollY}}
+                scroll={{x: '350%',y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

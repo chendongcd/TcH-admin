@@ -464,27 +464,33 @@ class MeterDown extends Component {
   columns = [
     {
       title: '序号',
+      width:80,
       dataIndex: 'id',
     },
     {
       title: '项目名称',
+      width:100,
       dataIndex: 'projectName',
     },
     {
       title: '分包商名称',
+      width:100,
       dataIndex: 'subcontractorName',
     },
     {
       title: '队伍名称',
+      width:100,
       dataIndex: 'teamName',
     },
     {
       title: '合同金额',
+      width:100,
       dataIndex: 'sumContractAmount',
     },
     {
       title: '计价期数',
       dataIndex: 'valuationPeriod',
+      width:100,
       render(val) {
         return <span>{val !== undefined ? ('第' + val + '期') : ''}</span>;
       },
@@ -492,6 +498,7 @@ class MeterDown extends Component {
     {
       title: '计价日期',
       dataIndex: 'valuationTime',
+      width:100,
       render(val) {
         return <span>{val ? moment(val).format('YYYY/MM') : ''}</span>;
       },
@@ -499,6 +506,7 @@ class MeterDown extends Component {
     {
       title: '计价类型',
       dataIndex: 'valuationType',
+      width:100,
       render(val) {
         return <span>{vType[val]}</span>;
       },
@@ -510,6 +518,7 @@ class MeterDown extends Component {
           title: '计价总金额',
           dataIndex: 'valuationPrice',
           key: 'valuationPrice',
+          width:100,
           render(val) {
             return <span>{val}</span>;
           },
@@ -518,21 +527,25 @@ class MeterDown extends Component {
           title: '扣款',
           dataIndex: 'valuationPriceReduce',
           key: 'valuationPriceReduce',
+          width:100,
           render(val) {
             return <span>{val}</span>;
           },
         }, {
           title: '扣除质保金',
+          width:100,
           dataIndex: 'warranty',
           key: 'warranty',
         },
         {
           title: '扣除履约保证金',
+          width:100,
           dataIndex: 'performanceBond',
           key: 'performanceBond',
         },
         {
           title: '计日工及补偿费用',
+          width:100,
           dataIndex: 'compensation',
           key: 'compensation'
         },
@@ -540,6 +553,7 @@ class MeterDown extends Component {
           title: '应支付金额',
           dataIndex: 'shouldAmount',
           key: 'shouldAmount',
+          width:100,
           render(val) {
             return <span>{val}</span>;
           },
@@ -547,17 +561,20 @@ class MeterDown extends Component {
           title: '已完成未计',
           dataIndex: 'endedPrice',
           key: 'endedPrice',
+          width:100,
         }]
     },
     {
       title: '对下计价率',
       dataIndex: 'underRate',
+      width:100,
       render: (val) => {
         return <span>{Math.floor(val * 100) + '%'}</span>
       }
     },
     {
       title: '计价负责人',
+      width:100,
       dataIndex: 'valuationPerson',
     },
     {
@@ -567,6 +584,7 @@ class MeterDown extends Component {
     {
       title: '下载附件',
       dataIndex: 'annexUrl',
+      width:100,
       render: (val) => {
         //if(JSON.parse(record.annexUrl))
         function isJSON(str) {
@@ -601,6 +619,8 @@ class MeterDown extends Component {
     },
     {
       title: '操作',
+      width: 110,
+      fixed: 'right',
       render: (val, record) => {
         if (record.id == '合计:') {
           return null
@@ -620,7 +640,6 @@ class MeterDown extends Component {
             {getButtons(button, pageButtons[2]) ?
               <Fragment>
                 <a onClick={() => this.handleCheckDetail(true, record)}>查看</a>
-                <Divider type="vertical"/>
               </Fragment> : null}
           </Fragment>
         )

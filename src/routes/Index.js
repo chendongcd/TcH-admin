@@ -65,12 +65,12 @@ class IndexPage extends Component {
         dispatch({type: 'app/handleNavOpenKeys', payload: {navOpenKeys: openKeys}})
       },
     }
-    const {iconFontJS, iconFontCSS, ico} = config
+    const {iconFontJS, iconFontCSS, ico,name} = config
     return (
       <div>
         <Loader fullScreen spinning={loading}/>
         <Helmet>
-          <title>劳务成本管理系统</title>
+          <title>{name}</title>
           <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
           <link rel="shortcut icon" href={ico}/>
           {iconFontJS && <script src={iconFontJS}/>}
@@ -102,9 +102,9 @@ class IndexPage extends Component {
                   />
                 )}
               </MenuContext.Consumer>
-              <Content style={{minHeight: '100vh-100',position:'relative'}}>
+              <Content style={{minHeight: '100vh-100',position:'relative',padding:'12px'}}>
                 {children[0]}
-                {app.locationPathname==='/home'?null: <Page className={Style.loadingPage} inner={false} loading={true}/>}
+                {app.locationPathname==='/home'?null: <div className={Style.loadingPage}><div className={Style.innerLoading} /></div>}
               </Content>
               <Footer>
                 {config.footerText}

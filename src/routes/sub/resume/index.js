@@ -221,26 +221,35 @@ class Resume extends Component {
   columns = [
     {
       title:'序号',
-      dataIndex:'id'
+      dataIndex:'id',
+      width:80,
+      fixed:'left'
     },
     {
       title: '分包商备案编码',
       dataIndex: 'subcontractorCode',
+      width:100,
+      fixed:'left'
     },
     {
       title: '分包商全称',
       dataIndex: 'subcontractorName',
+      width:150,
+      fixed:'left'
     },
     {
       title: '队伍名称',
+      width:100,
       dataIndex: 'teamName',
     },
     {
       title: '施工规模',
+      width:100,
       dataIndex: 'constructionScale'
     },
     {
       title: '开始日期',
+      width:110,
       dataIndex: 'startTime',
       render(val) {
         return <span>{moment(val).format('YYYY/MM/DD')}</span>;
@@ -248,6 +257,7 @@ class Resume extends Component {
     },
     {
       title: '结束日期',
+      width:110,
       dataIndex: 'endTime',
       render(val) {
         return <span>{val?moment(val).format('YYYY/MM/DD'):''}</span>;
@@ -255,26 +265,32 @@ class Resume extends Component {
     },
     {
       title: '该时间段所属项目部',
+      width:120,
       dataIndex: 'projectName'
     },
     {
       title: '合同签订人',
+      width:100,
       dataIndex: 'contractPerson',
     },
     {
       title: '合同签订人联系方式',
+      width:120,
       dataIndex: 'phone'
     },
     {
       title: '合同金额',
+      width:100,
       dataIndex: 'contractAmount',
     },
     {
       title: '结算金额',
+      width:100,
       dataIndex: 'settlementAmount',
     },
     {
       title: '项目部评价',
+      width:100,
       dataIndex: 'projectEvaluation',
     },
     {
@@ -283,6 +299,8 @@ class Resume extends Component {
     },
     {
       title: '操作',
+      width:190,
+      fixed:'right',
       render: (val, record) => {
         const user = this.props.app.user
         if (!user.token) {
@@ -300,7 +318,6 @@ class Resume extends Component {
               <Divider type="vertical"/>
               <a onClick={() => this.handleReviewModal(true, record)}>项目部评价</a>
             </Fragment> : null}
-            {/* {getButtons(button,pageButtons[3])? <a>导出</a>:null}*/}
           </Fragment>
         )
       }

@@ -109,7 +109,7 @@ class CreateForm extends Component {
       this.setState({fileList: [file]})
     }
     //(moment(selectedValues.businessLicenseValidityPeriod).format('YYYY-MM-DD')=='2200-01-01')
-    if (!this.state.showTag && !preProp.selectedValues.businessLicenseValidityPeriod && this.props.selectedValues.businessLicenseValidityPeriod &&moment(this.props.selectedValues.businessLicenseValidityPeriod).format('YYYY-MM-DD')=='2200-01-01') {
+    if (!this.state.showTag && !preProp.selectedValues.businessLicenseValidityPeriod && this.props.selectedValues.businessLicenseValidityPeriod && moment(this.props.selectedValues.businessLicenseValidityPeriod).format('YYYY-MM-DD') == '2200-01-01') {
       this.setState({showTag: true})
     }
   }
@@ -117,7 +117,7 @@ class CreateForm extends Component {
   handleCancel = () => this.setState({previewVisible: false})
 
   cleanState = () => {
-    this.setState({fileList: [], previewImage: '',showTag:false})
+    this.setState({fileList: [], previewImage: '', showTag: false})
   }
 
   handlePreview = (file) => {
@@ -205,14 +205,14 @@ class CreateForm extends Component {
           </Row>
           <Row gutter={0}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}}  wrapperCol={{span: 19}} label="电话">
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 19}} label="电话">
                 {form.getFieldDecorator('phone', {
                   initialValue: selectedValues.phone ? selectedValues.phone : testValue
                 })(<Input disabled={checkDetail} placeholder="请输入电话"/>)}
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}}  wrapperCol={{span: 19}} label="电子邮箱">
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 19}} label="电子邮箱">
                 {form.getFieldDecorator('email', {
                   initialValue: selectedValues.email ? selectedValues.email : testValue
                 })(<Input disabled={checkDetail} placeholder="请输入电子邮箱"/>)}
@@ -221,7 +221,7 @@ class CreateForm extends Component {
           </Row>
           <Row gutter={0}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}}  wrapperCol={{span: 19}} label="注册地址">
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 19}} label="注册地址">
                 {form.getFieldDecorator('address', {
                   rules: [{required: true, message: '请输入注册地址'}],
                   initialValue: selectedValues.address ? selectedValues.address : testValue
@@ -229,7 +229,7 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}}  wrapperCol={{span: 19}} label="邮编">
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 19}} label="邮编">
                 {form.getFieldDecorator('zipCode', {
                   initialValue: selectedValues.zipCode ? selectedValues.zipCode : testValue
                 })(<Input disabled={checkDetail} placeholder="请输入邮编"/>)}
@@ -667,65 +667,76 @@ class Qualification extends Component {
     {
       title: '分包商备案编码',
       dataIndex: 'code',
+      width: 100,
+      fixed: 'left'
     },
     {
       title: '分包商全称',
       dataIndex: 'name',
+      fixed: 'left',
+      width: 160,
       render: (val, record) => {
         return <a onClick={() => this.getResume(val)}>{val}</a>
       }
     },
     {
       title: '分包商类型',
-      dataIndex: 'type'
+      dataIndex: 'type',
+      width: 100,
     },
     {
       title: '专业类型',
-      dataIndex: 'professionType'
+      dataIndex: 'professionType',
+      width: 100,
     },
     {
       title: '纳税人类型',
-      dataIndex: 'taxpayerType'
+      dataIndex: 'taxpayerType',
+      width: 100,
     },
     {
       title: '法人',
-      dataIndex: 'legalPersonName'
+      dataIndex: 'legalPersonName',
+      width: 100,
     },
     {
       title: '注册本金（万元）',
-      dataIndex: 'registeredCapital'
+      dataIndex: 'registeredCapital',
+      width: 100,
     },
     {
       title: '资料是否齐全',
-      dataIndex: 'qualification'
+      dataIndex: 'qualification',
+      width: 100,
     },
     {
       title: '股份公司综合信誉评价',
-      dataIndex: 'shareEvaluation'
+      dataIndex: 'shareEvaluation',
+      width: 130,
     },
     {
       title: '集团公司综合信誉评价',
-      dataIndex: 'groupEvaluation'
+      dataIndex: 'groupEvaluation',
+      width: 130,
     },
     {
       title: '公司本级综合信誉评价',
-      dataIndex: 'companyEvaluation'
+      dataIndex: 'companyEvaluation',
+      width: 130,
     },
     {
       title: '证件期限',
       key: 'period',
+      width: 100,
       render: (val, record) => {
         let status = this.checkPeriod(record)
         return <Badge offset={[5, 0]} status={status}/>
       }
     },
     {
-      title: '备注',
-      dataIndex: 'remark'
-    },
-    {
       title: '下载分包商资质信息卡',
       dataIndex: 'id',
+      width: 100,
       render: (val, record) => {
         return (
           <a href={apiDev + SUB_QUA_PDF + val} download={'分包商资质信息卡'}>下载</a>
@@ -734,6 +745,7 @@ class Qualification extends Component {
     },
     {
       title: '下载附件',
+      width: 100,
       render: (val, record) => {
         if (!record.annex) {
           return null
@@ -746,7 +758,14 @@ class Qualification extends Component {
       }
     },
     {
+      title: '备注',
+      dataIndex: 'remark',
+      //  width:100,
+    },
+    {
       title: '操作',
+      fixed: 'right',
+      width: 180,
       render: (val, record) => {
         const user = this.props.app.user
         if (!user.token) {
@@ -763,21 +782,23 @@ class Qualification extends Component {
         const more = (getButtons(button, pageButtons[4]) || getButtons(button, pageButtons[5]) || getButtons(button, pageButtons[6])
           ?
           <Fragment>
-            <Divider type="vertical"/>
             <Dropdown overlay={menu}>
               <a className="ant-dropdown-link">
-                更多 <Icon type="down"/>
+                评价 <Icon type="down"/>
               </a>
             </Dropdown>
           </Fragment> : null)
         return (
           <Fragment>
-            {getButtons(button, pageButtons[1]) ?
-              <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a> : null}
-            <Divider type="vertical"/>
-            {getButtons(button, pageButtons[2]) ?
-              <a onClick={() => this.handleCheckDetail(true, record)}>查看</a> : null}
-            {more}
+              {getButtons(button, pageButtons[1]) ?
+                <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a> : null}
+              <Divider type="vertical"/>
+              {getButtons(button, pageButtons[2]) ?
+                <a onClick={() => this.handleCheckDetail(true, record)}>查看</a> : null}
+            <Fragment>
+              <Divider type="vertical"/>
+              {more}
+            </Fragment>
           </Fragment>
         )
       }
@@ -803,7 +824,7 @@ class Qualification extends Component {
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    this.searchList(null,pagination.current, pagination.pageSize)
+    this.searchList(null, pagination.current, pagination.pageSize)
   };
 
   handleFormReset = () => {
@@ -1098,7 +1119,7 @@ class Qualification extends Component {
                 bordered
                 rowKey="id"
                 data={data}
-                scroll={{x: '260%', y: global._scollY}}
+                scroll={{x: '250%', y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
