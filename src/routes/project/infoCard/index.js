@@ -761,19 +761,23 @@ class InfoCard extends Component {
   columns = [
     {
       title:'序号',
-      dataIndex:'id'
+      dataIndex:'id',
+      width:80,
     },
     {
       title: '项目编码',
       dataIndex: 'code',
+      width:150,
     },
     {
       title: '项目名称',
       dataIndex: 'projectName',
+      width:120,
     },
     {
       title: '工程状态',
       dataIndex: 'status',
+      width:80,
       render(val) {
         return <Badge status={statusMap[val]} text={status[val].name}/>;
       },
@@ -784,6 +788,7 @@ class InfoCard extends Component {
         title: '合同开工日期',
         dataIndex: 'contractStartTime',
         key: 'contractStartTime',
+        width:120,
         render(val) {
           return <span>{moment(val).format('YYYY/MM/DD')}</span>;
         },
@@ -792,6 +797,7 @@ class InfoCard extends Component {
           title: '合同完工日期',
           dataIndex: 'contractEndTime',
           key: 'contractEndTime',
+          width:120,
           render(val) {
             return <span>{moment(val).format('YYYY/MM/DD')}</span>;
           },
@@ -803,6 +809,7 @@ class InfoCard extends Component {
         title: '实际开工日期',
         dataIndex: 'realContractStartTime',
         key: 'realContractStartTime',
+        width:120,
         render(val) {
           return <span>{moment(val).format('YYYY/MM/DD')}</span>;
         },
@@ -811,6 +818,7 @@ class InfoCard extends Component {
           title: '实际完工日期',
           dataIndex: 'realContractEndTime',
           key: 'realContractEndTime',
+          width:120,
           render(val) {
             return <span>{val?moment(val).format('YYYY/MM/DD'):''}</span>;
           },
@@ -821,6 +829,7 @@ class InfoCard extends Component {
       children: [{
         title: '暂估合同额',
         dataIndex: 'temporarilyPrice',
+        width:100,
         render(val) {
           return <span>{val}万</span>;
         },
@@ -828,6 +837,7 @@ class InfoCard extends Component {
         {
           title: '有效合同额',
           dataIndex: 'totalPrice',
+          width:100,
           render(val) {
             return <span>{val}万</span>;
           },
@@ -836,6 +846,7 @@ class InfoCard extends Component {
     {
       title: '项目经理',
       dataIndex: 'manager',
+      width:100,
       render(val) {
         return <span>{val ? val[val.length - 1].name : ''}</span>;
       },
@@ -843,12 +854,14 @@ class InfoCard extends Component {
     {
       title: '项目书记',
       dataIndex: 'secretary',
+      width:100,
       render(val) {
         return <span>{val? val[val.length - 1].name : ''}</span>;
       },
     },
     {
       title: '总工',
+      width:100,
       dataIndex: 'engineer',
       render(val) {
         return <span>{val ? val[val.length - 1].name : ''}</span>;
@@ -856,12 +869,15 @@ class InfoCard extends Component {
     },
     {
       title: '下载信息卡',
+     // width:100,
       render(val) {
         return <a href={apiDev + PRO_PDF + val.id} download={'信息卡'}>下载</a>;
       },
     },
     {
       title: '操作',
+      fixed:'right',
+      width:110,
       render: (val, record) => {
         const user = this.props.app.user
         if (!user.token) {
@@ -1165,7 +1181,7 @@ class InfoCard extends Component {
                 selectedRows={selectedRows}
                 loading={loading.effects['pro_proInfo/fetch']}
                 data={data}
-                scroll={{x: '200%',y: global._scollY}}
+                scroll={{x: '150%',y: global._scollY}}
                 rowKey="id"
                 bordered
                 columns={this.columns}

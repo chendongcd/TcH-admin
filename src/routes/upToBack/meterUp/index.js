@@ -349,7 +349,7 @@ class CreateForm extends Component {
       status: 'done',
       url: ImageUrl + res.key,
     }
-  //  console.log(file)
+    //  console.log(file)
 
     this.setState({fileList: [file]})
     this.props.form.setFieldsValue({annexUrl: [file]});
@@ -391,14 +391,20 @@ class MeterUp extends Component {
   columns = [
     {
       title: '序号',
+      fixed: 'left',
+      width: 80,
       dataIndex: 'id',
     },
     {
       title: '项目名称',
+      fixed: 'left',
+      width: 100,
       dataIndex: 'projectName',
     },
     {
       title: '计量期数',
+      fixed: 'left',
+      width: 100,
       dataIndex: 'meteringNum',
       render: (val) => {
         return <span>{val !== undefined ? ('第' + val + '期') : ''}</span>
@@ -406,6 +412,8 @@ class MeterUp extends Component {
     },
     {
       title: '计量日期',
+      fixed: 'left',
+      width: 100,
       dataIndex: 'meteringTime',
       render(val) {
         return <span>{val ? moment(val).format('YYYY/MM') : ''}</span>;
@@ -413,6 +421,7 @@ class MeterUp extends Component {
     },
     {
       title: '预付款（元）',
+      width: 100,
       dataIndex: 'prepaymentAmount',
     },
     {
@@ -420,16 +429,19 @@ class MeterUp extends Component {
       children: [{
         title: '含税',
         dataIndex: 'valuationAmountTax',
+        width: 100,
         key: 'valuationAmountTax'
       },
         {
           title: '税率（%）',
           dataIndex: 'tax',
+          width: 100,
           key: 'tax'
         }, {
           title: '不含税',
           dataIndex: 'valuationAmountNotTax',
           key: 'valuationAmountNotTax',
+          width: 100,
         }]
     },
     {
@@ -438,10 +450,12 @@ class MeterUp extends Component {
         title: '含税',
         dataIndex: 'realAmountTax',
         key: 'realAmountTax',
+        width: 100,
       }, {
         title: '不含税',
         dataIndex: 'realAmount',
         key: 'realAmount',
+        width: 100,
       }]
     },
     {
@@ -449,16 +463,19 @@ class MeterUp extends Component {
       children: [{
         title: '已支付金额',
         dataIndex: 'alreadyPaidAmount',
-        key: 'alreadyPaidAmount'
+        key: 'alreadyPaidAmount',
+        width: 100,
       },
         {
           title: '未支付金额',
           dataIndex: 'unpaidAmount',
           key: 'unpaidAmount',
+          width: 100,
         }, {
           title: '拨付率',
           dataIndex: 'payProportion',
           key: 'payProportion',
+          width: 100,
           render(val) {
             return <span>{val * 100 + '%'}</span>;
           }
@@ -470,15 +487,18 @@ class MeterUp extends Component {
         title: '超计价',
         dataIndex: 'extraAmount',
         key: 'extraAmount',
+        width: 100,
       },
         {
           title: '已完未计',
           dataIndex: 'notCalculatedAmount',
           key: 'notCalculatedAmount',
+          width: 100,
         }]
     },
     {
       title: '产值计价率',
+      width: 100,
       dataIndex: 'productionValue',
       render(val) {
         return <span>{val * 100 + '%'}</span>;
@@ -486,10 +506,13 @@ class MeterUp extends Component {
     },
     {
       title: '备注',
+      //width:100,
       dataIndex: 'remark'
     },
     {
       title: '操作',
+      fixed: 'right',
+      width: 180,
       render: (val, record) => {
         if (record.id === '合计:') {
           return null
@@ -503,12 +526,15 @@ class MeterUp extends Component {
         let href = annex.url + '?attname=' + annex.fileName
         return (
           <Fragment>
-            {getButtons(button, pageButtons[1]) ?
-              <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a> : null}
-            <Divider type="vertical"/>
-            {getButtons(button, pageButtons[2]) ? <a onClick={() => this.handleCheckDetail(true, record)}>查看</a> : null}
-            <Divider type="vertical"/>
-            <a href={href} download="附件">下载附件</a>
+              {getButtons(button, pageButtons[1]) ?
+                <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a> : null}
+              <Divider type="vertical"/>
+              {getButtons(button, pageButtons[2]) ?
+                <a onClick={() => this.handleCheckDetail(true, record)}>查看</a> : null}
+            <Fragment>
+              <Divider type="vertical"/>
+              <a href={href} download="附件">下载附件</a>
+            </Fragment>
           </Fragment>
         )
       }
@@ -523,7 +549,7 @@ class MeterUp extends Component {
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    this.searchList(null,pagination.current, pagination.pageSize)
+    this.searchList(null, pagination.current, pagination.pageSize)
   };
 
   handleFormReset = () => {
@@ -814,7 +840,7 @@ class MeterUp extends Component {
   }
 
   searchList = (e, page = 1, pageSize = 10) => {
-    e&&e.preventDefault?e.preventDefault():null
+    e && e.preventDefault ? e.preventDefault() : null
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
       let time = fieldsValue.meteringTime ? fieldsValue.meteringTime.format('YYYY-MM') : null

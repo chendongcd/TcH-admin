@@ -157,32 +157,39 @@ class User extends Component {
 
   columns = [
     {
-      title: '序号编码',
+      title: '用户编码',
       dataIndex: 'code',
+      width:100,
     },
     {
       title: '账号类别',
+      width:100,
       dataIndex: 'type',
       render: val => <span>{val == 0 ? '公司' : '项目部'}</span>,
     },
     {
       title: '账号名称',
+      width:100,
       dataIndex: 'account',
     },
     {
       title: '项目名称',
+      width:150,
       dataIndex: 'projectName',
     },
     {
       title: '项目密码',
+      width:100,
       dataIndex: 'password',
     },
     {
       title: '角色权限',
+      width:150,
       dataIndex: 'roleName',
     },
     {
       title: '状态',
+      width:100,
       dataIndex: 'disable',
       render(val) {
         return <Badge status={statusMap[val]} text={status[val]}/>;
@@ -190,26 +197,30 @@ class User extends Component {
     },
     {
       title: '创建人',
+      width:100,
       dataIndex: 'createUserStr',
     },
     {
       title: '创建时间',
+      width:180,
       dataIndex: 'createTime',
-      sorter: true,
       render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
     },
     {
       title: '最新修改人',
+      width:100,
       dataIndex: 'updateUserStr'
     },
     {
       title: '最新修改时间',
       dataIndex: 'updateTime',
-      sorter: true,
+      width:180,
       render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
     },
     {
       title: '操作',
+      fixed:'right',
+      width:150,
       render: (val, record) => {
         const user = this.props.app.user
         if (!user.token) {
@@ -430,7 +441,7 @@ class User extends Component {
                 loading={loading.effects['sys_user/queryUserList']}
                 rowKey="id"
                 data={data}
-                scroll={{x: '150%',y: global._scollY}}
+                scroll={{x: '130%',y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

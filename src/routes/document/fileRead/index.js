@@ -224,24 +224,29 @@ class FileRead extends Component {
   columns = [
     {
       title: '序号',
+      width:100,
       dataIndex: 'id',
     },
     {
       title: '文件名称',
+      width:180,
       dataIndex: 'name',
     },
     {
       title: '文件类型',
+      width:100,
       dataIndex: 'fileType',
     },
     {
       title: '创建时间',
+      width:180,
       dataIndex: 'createdTime',
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm')}</span>,
     },
     {
       title: '下载附件',
       dataIndex: 'annexUrl',
+      width:100,
       render: (val) => {
         let href = ''
         let annex = JSON.parse(val)

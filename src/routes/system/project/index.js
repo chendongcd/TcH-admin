@@ -84,18 +84,22 @@ class Project extends Component {
     {
       title: '项目编码',
       dataIndex: 'code',
+      width:180,
     },
     {
       title: '项目名称',
       dataIndex: 'name',
+      width:120,
     },
     {
       title: '工程类别',
       dataIndex: 'projectType',
+      width:100,
     },
     {
       title: '状态',
       dataIndex: 'status',
+      width:80,
       render(val) {
         return <Badge status={statusMap[val]} text={status[val]}/>;
       },
@@ -103,23 +107,29 @@ class Project extends Component {
     {
       title: '创建人',
       dataIndex: 'createUserStr',
+      width:100,
     },
     {
       title: '创建时间',
       dataIndex: 'createTime',
+     // width:180,
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm')}</span>,
     },
     {
       title: '最新修改人',
-      dataIndex: 'updateUserStr'
+      dataIndex: 'updateUserStr',
+     // width:100,
     },
     {
       title: '最新修改时间',
       dataIndex: 'updateTime',
+    //  width:180,
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm')}</span>,
     },
     {
       title: '操作',
+      fixed:'right',
+      width:110,
       render: (val, record) => {
         const user = this.props.app.user
         if(!user.token){

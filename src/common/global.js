@@ -7,6 +7,6 @@ export default ()=> {
     return false
   }
 
-  window._scollY = 0
+  window._scollY = 400
 
 }
