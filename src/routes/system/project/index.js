@@ -112,18 +112,18 @@ class Project extends Component {
     {
       title: '创建时间',
       dataIndex: 'createTime',
-     // width:180,
+      width:180,
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm')}</span>,
     },
     {
       title: '最新修改人',
       dataIndex: 'updateUserStr',
-     // width:100,
+      width:130,
     },
     {
       title: '最新修改时间',
       dataIndex: 'updateTime',
-    //  width:180,
+      width:180,
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm')}</span>,
     },
     {
