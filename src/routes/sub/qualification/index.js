@@ -32,10 +32,6 @@ const pageButtons = menuData[10].buttons.map(a => a.permission)
 
 const FormItem = Form.Item;
 const {Option} = Select;
-const getValue = obj =>
-  Object.keys(obj)
-    .map(key => obj[key])
-    .join(',');
 const info_css = {
   color: '#fa541c'
 }

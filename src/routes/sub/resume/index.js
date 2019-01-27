@@ -24,10 +24,6 @@ import {createURL} from 'services/app'
 
 const FormItem = Form.Item;
 const {Option} = Select;
-const getValue = obj =>
-  Object.keys(obj)
-    .map(key => obj[key])
-    .join(',');
 const testValue = ''
 
 const pageButtons = menuData[11].buttons.map(a => a.permission)
