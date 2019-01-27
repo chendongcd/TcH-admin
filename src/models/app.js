@@ -5,10 +5,11 @@ import {menuData} from '../common/menu'
 import {getMenus} from 'utils'
 import {setStorage, getStorage} from 'utils/localStorage'
 import Store from "store";
-const {prefix} = config
+const {prefix,apiDev} = config
 function getMenu(user) {
   if (user && user.id) {
-    if(process.env.NODE_ENV=='production'){
+
+    if(process.env.NODE_ENV=='production'&&apiDev==='http://47.105.127.126:8082/crcc'){
       return getMenus([...user.permissionsMap.menu, ...[menuData[0].permission]])
     }
     let report = menuData.filter(a=>a.permission.includes('PERMISSIONS_REPORT_MANAGER')).map(b=>b.permission)
