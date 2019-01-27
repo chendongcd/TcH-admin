@@ -680,7 +680,7 @@ class MeterUp extends Component {
             <FormItem label="项目名称">
               {getFieldDecorator('projectName', {
                 initialValue: null
-              })(<Input placeholder="请输入"/>)}
+              })(<Input />)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
@@ -696,12 +696,12 @@ class MeterUp extends Component {
             <FormItem label="拨付率">
               {getFieldDecorator('minPayProportion', {
                 initialValue: null
-              })(<Input placeholder="请输入" addonAfter={'%'}/>)}
+              })(<Input  addonAfter={'%'}/>)}
             </FormItem>
             <FormItem style={{marginLeft: 15 + 'px'}} label="至">
               {getFieldDecorator('maxPayProportion', {
                 initialValue: null
-              })(<Input placeholder="请输入" addonAfter={'%'}/>)}
+              })(<Input  addonAfter={'%'}/>)}
             </FormItem>
           </Col>
         </Row>
@@ -710,12 +710,12 @@ class MeterUp extends Component {
             <FormItem label="产值计价率">
               {getFieldDecorator('minProductionValue', {
                 initialValue: null
-              })(<Input placeholder="请输入" addonAfter={'%'}/>)}
+              })(<Input addonAfter={'%'}/>)}
             </FormItem>
             <FormItem style={{marginLeft: 15 + 'px'}} label="至">
               {getFieldDecorator('maxProductionValue', {
                 initialValue: null
-              })(<Input placeholder="请输入" addonAfter={'%'}/>)}
+              })(<Input addonAfter={'%'}/>)}
             </FormItem>
           </Col>
           <Col md={12} sm={24}>

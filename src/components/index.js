@@ -8,6 +8,7 @@ import PageHeaderWrapper from './PageHeaderWrapper'
 import StandardTable from './StandardTable'
 import PreFile from './preFile'
 import ExportModal from './exportModal'
+import CustomPicker from './CustomPicker'
 export {
   MyLayout,
   Iconfont,
@@ -17,5 +18,6 @@ export {
   PageHeaderWrapper,
   StandardTable,
   PreFile,
-  ExportModal
+  ExportModal,
+  CustomPicker
 }

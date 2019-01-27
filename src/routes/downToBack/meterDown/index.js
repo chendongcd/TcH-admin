@@ -26,10 +26,6 @@ import {createURL} from 'services/app'
 const pageButtons = menuData[14].buttons.map(a => a.permission)
 const FormItem = Form.Item;
 const {Option} = Select;
-const getValue = obj =>
-  Object.keys(obj)
-    .map(key => obj[key])
-    .join(',');
 const info_css = {
   color: '#fa541c'
 }
@@ -90,7 +86,7 @@ class CreateForm extends Component {
   };
 
   cleanState = () => {
-    this.setState({fileList: [], previewImage: ''})
+    this.setState({fileList: [], previewImage: '',selects: {}})
   }
 
   handleCancel = () => this.setState({previewVisible: false})
@@ -227,7 +223,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('contractPrice', {
                   rules: [{required: true, message: '请选择项目、分包商和队伍'}],
                   initialValue: selectedValues.sumContractAmount ? selectedValues.sumContractAmount : '',
-                })(<Input disabled={true} placehloder='自动带入' addonAfter={'元'}/>)}
+                })(<Input disabled={true} placeholder='选择项目、分包商和队伍后自动带出' addonAfter={'元'}/>)}
               </FormItem>
             </Col>
           </Row>
@@ -777,20 +773,20 @@ class MeterDown extends Component {
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={6} sm={24}>
             <FormItem label="项目名称">
-              {getFieldDecorator('projectName')(<Input placeholder="请输入"/>)}
+              {getFieldDecorator('projectName')(<Input />)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="分包商名称">
               {getFieldDecorator('subcontractorName')(
-                <Input placeholder="请输入"/>
+                <Input />
               )}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="计价类型">
               {getFieldDecorator('valuationType')(
-                <Select placeholder="请选择" style={{width: '100%'}}>
+                <Select style={{width: '100%'}}>
                   <Option value="1">中期计价</Option>
                   <Option value="2">末次结算</Option>
                 </Select>
@@ -800,7 +796,7 @@ class MeterDown extends Component {
           <Col md={6} sm={24}>
             <FormItem label="计价日期">
               {getFieldDecorator('valuationTime')(
-                <DatePicker style={{width: '100%'}} placeholder="请选择日期"/>
+                <DatePicker.MonthPicker style={{width: '100%'}} />
               )}
             </FormItem>
           </Col>
@@ -808,10 +804,10 @@ class MeterDown extends Component {
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col style={{flexDirection: 'row', display: 'flex'}} md={12} sm={24}>
             <FormItem label="对下计价率">
-              {getFieldDecorator('minUnderRate')(<Input placeholder="请输入" addonAfter={'%'}/>)}
+              {getFieldDecorator('minUnderRate')(<Input  addonAfter={'%'}/>)}
             </FormItem>
             <FormItem style={{marginLeft: 15 + 'px'}} label="至">
-              {getFieldDecorator('maxUnderRate')(<Input placeholder="请输入" addonAfter={'%'}/>)}
+              {getFieldDecorator('maxUnderRate')(<Input addonAfter={'%'}/>)}
             </FormItem>
           </Col>
           <Col md={12} sm={24}>
@@ -941,11 +937,10 @@ class MeterDown extends Component {
         projectName: fieldsValue.projectName,
         subcontractorName: fieldsValue.subcontractorName,
         valuationType: fieldsValue.valuationType,
-        valuationTime: fieldsValue.valuationTime,
+        valuationTime: fieldsValue.valuationTime?fieldsValue.valuationTime.format('YYYY-MM-DD'):null,
         minUnderRate: fieldsValue.minUnderRate,
         maxUnderRate: fieldsValue.maxUnderRate
       }
-
       cleanObject(payload)
       this.exportParams = payload
       this.props.dispatch({
