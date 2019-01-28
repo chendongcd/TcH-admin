@@ -104,7 +104,7 @@ class IndexPage extends Component {
               </MenuContext.Consumer>
               <Content style={{minHeight: '100vh-100',position:'relative',padding:'12px'}}>
                 {children[0]}
-                {app.locationPathname==='/home'?null: <div className={Style.loadingPage}><div className={Style.innerLoading} /></div>}
+                {app.locationPathname==='/home'||app.locationPathname==='/404'?null: <div className={Style.loadingPage}><div className={Style.innerLoading} /></div>}
               </Content>
               <Footer>
                 {config.footerText}

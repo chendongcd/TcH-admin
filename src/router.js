@@ -92,11 +92,6 @@ const Routers = function ({history, app}) {
     models: () => [import('./routes/report/expense/form/model')],
     component: () => import(/* webpackChunkName: "" ExpenseForm */'./routes/report/expense/form/index')
   })
-  const Report_Expense_account = dynamic({
-    app,
-    models: () => [import('./routes/report/expense/account/model')],
-    component: () => import(/* webpackChunkName: "" ExpenseForm */'./routes/report/expense/account/index')
-  })
   const Report_Expense_daily = dynamic({
     app,
     models: () => [import('./routes/report/expense/daily/model')],
@@ -104,9 +99,20 @@ const Routers = function ({history, app}) {
   })
   const Report_form = dynamic({
     app,
-    models: () => [import('./routes/report/form/model')],
-    component: () => import(/* webpackChunkName: "" ExpenseForm */'./routes/report/form/index')
+    models: () => [import('./routes/report/form/month/model')],
+    component: () => import(/* webpackChunkName: "" ExpenseForm */'./routes/report/form/month')
   })
+  const Report_formTable = dynamic({
+    app,
+    models: () => [import('./routes/report/form/formTable/model')],
+    component: () => import(/* webpackChunkName: "" ExpenseForm */'./routes/report/form/formTable/index')
+  })
+  const Report_loss= dynamic({
+    app,
+    models: () => [import('./routes/report/loss/model')],
+    component: () => import(/* webpackChunkName: "" ExpenseForm */'./routes/report/loss/index')
+  })
+
 
   return (
     <LocaleProvider locale={zhCN}>
@@ -130,8 +136,9 @@ const Routers = function ({history, app}) {
             <Route path="/files/reference"  component={Document_fileReference}/>
             <Route path="/report/compensationForm"  component={Report_Expense_form}/>
             <Route path="/report/dailyWork"  component={Report_Expense_daily}/>
-            <Route path="/report/account"  component={Report_Expense_account}/>
             <Route path="/report/form"  component={Report_form}/>
+            <Route path="/report/formTable"  component={Report_formTable}/>
+            <Route path="/report/loss"  component={Report_loss}/>
           </Switch>
           <Route path="/login" component={Login}/>
           <Route path="/404"  component={NotFound}/>

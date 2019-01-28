@@ -1,4 +1,3 @@
-import Store from 'store';
 import {request, config} from 'utils';
 // 用户登录
 const { apiDev} = config

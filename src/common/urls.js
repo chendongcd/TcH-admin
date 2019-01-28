@@ -20,6 +20,16 @@ export const PEOPLE_EXPORT = '/people/export/v1.1'
 
 export const EVAL_EXPORT = '/evaluation/export/v1.1'
 
+export const CONTRACT_EXPORT = '/contract_report/export/v1.1'
+
+export const CONTRACT_STAT_EXPORT = '/contract_report/export_statistics/v1.1'
+
+export const ENGINEER_EXPORT = '/engineer_change/export/v1.1'
+
+export const ENGINEER_STAT_EXPORT = '/engineer_change/export_statistics/v1.1'
+
+export const LOSS_EXPORT = '/loss/export/v1.1'
+
 //PDF下载URL
 export const PRO_PDF = '/project/pdf/v1.1?projectInfoId='
 

@@ -229,7 +229,7 @@ export const menuData = [
     icon: 'file-text',
     name: '报表管理',
     //route: '/report',
-    permission:'PERMISSIONS_REPORT_MANAGER',
+    permission:'PERMISSIONS_REPORT',
   },
   {
     id: '91',
@@ -237,7 +237,7 @@ export const menuData = [
     mpid: '9',
     name: '合同外费用',
    // route: '/report/expense',
-    permission:'PERMISSIONS_REPORT_MANAGER_EXPENSES',
+    permission:'PERMISSIONS_REPORT_CONTRACT',
   },
   {
     id: '911',
@@ -245,12 +245,12 @@ export const menuData = [
     mpid: '91',
     name: '合同外赔偿情况统计表',
     route: '/report/compensationForm',
-    permission:'PERMISSIONS_REPORT_MANAGER_EXPENSES_FORM',
+    permission:'PERMISSIONS_REPORT_CONTRACT_STATISTICS',
     buttons:[
-      {name:'新增',permission:'PERMISSIONS_REPORT_MANAGER_FORM_ADD'},
-      {name:'编辑',permission:'PERMISSIONS_REPORT_MANAGER_FORM_UPDATE'},
-      {name:'查看',permission:'PERMISSIONS_REPORT_MANAGER_FORM_LOOK'},
-      {name:'导出',permission:'PERMISSIONS_REPORT_MANAGER_FORM_EXPORT'},
+      {name:'新增',permission:'PERMISSIONS_REPORT_CONTRACT_STATISTICS_ADD'},
+      {name:'编辑',permission:'PERMISSIONS_REPORT_CONTRACT_STATISTICS_UPDATE'},
+      {name:'查看',permission:'PERMISSIONS_REPORT_CONTRACT_STATISTICS_LOOK'},
+      {name:'导出',permission:'PERMISSIONS_REPORT_CONTRACT_STATISTICS_EXPORT'},
     ]
   },
   {
@@ -259,40 +259,56 @@ export const menuData = [
     mpid: '91',
     name: '合同外计日工及赔偿统计表',
     route: '/report/dailyWork',
-    permission:'PERMISSIONS_REPORT_MANAGER_EXPENSES_DAILY',
+    permission:'PERMISSIONS_REPORT_CONTRACT_DAILY',
     buttons:[
-      {name:'新增',permission:'PERMISSIONS_REPORT_MANAGER_DAILY_ADD'},
-      {name:'编辑',permission:'PERMISSIONS_REPORT_MANAGER_DAILY_UPDATE'},
-      {name:'查看',permission:'PERMISSIONS_REPORT_MANAGER_DAILY_LOOK'},
-      {name:'导出',permission:'PERMISSIONS_REPORT_MANAGER_DAILY_EXPORT'},
-    ]
-  },
-  {
-    id: '913',
-    bpid: '91',
-    mpid: '91',
-    name: '合同外计日工及补偿费用台账',
-    route: '/report/account',
-    permission:'PERMISSIONS_REPORT_MANAGER_EXPENSES_ACCOUNT',
-    buttons:[
-      {name:'新增',permission:'PERMISSIONS_REPORT_MANAGER_EXPENSES_ACCOUNT_ADD'},
-      {name:'编辑',permission:'PERMISSIONS_REPORT_MANAGER_EXPENSES_ACCOUNT_UPDATE'},
-      {name:'查看',permission:'PERMISSIONS_REPORT_MANAGER_EXPENSES_ACCOUNT_LOOK'},
-      {name:'导出',permission:'PERMISSIONS_REPORT_MANAGER_EXPENSES_ACCOUNT_EXPORT'},
+      {name:'查看',permission:'PERMISSIONS_REPORT_CONTRACT_DAILY_LOOK'},
     ]
   },
   {
     id: '92',
     bpid: '9',
     mpid: '9',
+    name: '变更索赔管理',
+    // route: '/report/expense',
+    permission:'PERMISSIONS_REPORT_CHANGED',
+  },
+  {
+    id: '921',
+    bpid: '92',
+    mpid: '92',
     name: '工程变更索赔月快报表',
     route: '/report/form',
-    permission:'PERMISSIONS_REPORT_MANAGER_FORM',
+    permission:'PERMISSIONS_REPORT_CHANGED_YUE',
     buttons:[
-      {name:'新增',permission:'PERMISSIONS_REPORT_MANAGER_FORM_ADD'},
-      {name:'编辑',permission:'PERMISSIONS_REPORT_MANAGER_FORM_UPDATE'},
-      {name:'查看',permission:'PERMISSIONS_REPORT_MANAGER_FORM_LOOK'},
-      {name:'导出',permission:'PERMISSIONS_REPORT_MANAGER_FORM_EXPORT'},
+      {name:'新增',permission:'PERMISSIONS_REPORT_CHANGED_YUE_ADD'},
+      {name:'编辑',permission:'PERMISSIONS_REPORT_CHANGED_YUE_UPDATE'},
+      {name:'查看',permission:'PERMISSIONS_REPORT_CHANGED_YUE_LOOK'},
+      {name:'导出',permission:'PERMISSIONS_REPORT_CHANGED_YUE_EXPORT'},
+    ]
+  },
+  {
+    id: '922',
+    bpid: '92',
+    mpid: '92',
+    name: '变更索赔情况统计表',
+    route: '/report/formTable',
+    permission:'PERMISSIONS_REPORT_CHANGED_STATISTICS',
+    buttons:[
+      {name:'查看',permission:'PERMISSIONS_REPORT_CHANGED_STATISTICS_LOOK'},
+    ]
+  },
+  {
+    id: '93',
+    bpid: '9',
+    mpid: '9',
+    name: '亏损报表',
+    route: '/report/loss',
+    permission:'PERMISSIONS_REPORT_LOSS',
+    buttons:[
+      {name:'新增',permission:'PERMISSIONS_REPORT_LOSS_ADD'},
+      {name:'编辑',permission:'PERMISSIONS_REPORT_LOSS_UPDATE'},
+      {name:'查看',permission:'PERMISSIONS_REPORT_LOSS_LOOK'},
+      {name:'导出',permission:'PERMISSIONS_REPORT_LOSS_EXPORT'},
     ]
   },
   {

@@ -9,6 +9,7 @@ import StandardTable from './StandardTable'
 import PreFile from './preFile'
 import ExportModal from './exportModal'
 import CustomPicker from './CustomPicker'
+import Remark from './Remark'
 export {
   MyLayout,
   Iconfont,
@@ -19,5 +20,6 @@ export {
   StandardTable,
   PreFile,
   ExportModal,
-  CustomPicker
+  CustomPicker,
+  Remark
 }

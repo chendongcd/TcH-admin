@@ -108,6 +108,7 @@ export function _setTimeOut(func, time = 1000) {
 
 /*筛选用户拥有的菜单权限*/
 export function getMenus(menus) {
+  console.log(menus)
   return menuData.filter(a=>menus.includes(a.permission))
 }
 
