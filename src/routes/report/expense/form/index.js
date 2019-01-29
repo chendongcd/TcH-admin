@@ -22,7 +22,7 @@ import {createURL} from 'services/app'
 
 const FormItem = Form.Item;
 const {Option} = Select;
-const pageButtons = menuData[22].buttons.map(a => a.permission)
+const pageButtons = menuData[21].buttons.map(a => a.permission)
 const testValue = ''
 
 
@@ -101,7 +101,7 @@ class CreateForm extends Component {
     return (
       <Modal
         destroyOnClose
-        title={checkDetail ? '合同外赔偿情况统计表' : updateModalVisible ? "编辑合同外赔偿情况统计表" : "新增合同外赔偿情况统计表"}
+        title={checkDetail ? '合同外计日工赔偿情况统计表' : updateModalVisible ? "编辑合同外计日工赔偿情况统计表" : "新增合同外计日工赔偿情况统计表"}
         bodyStyle={{padding: 0 + 'px'}}
         visible={modalVisible}
         width={992}

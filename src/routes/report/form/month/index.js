@@ -22,7 +22,7 @@ import {createURL} from 'services/app'
 
 const FormItem = Form.Item;
 const {Option} = Select;
-const pageButtons = menuData[25].buttons.map(a => a.permission)
+const pageButtons = menuData[24].buttons.map(a => a.permission)
 const testValue = ''
 
 
@@ -398,8 +398,6 @@ class ReportForm extends Component {
               </Select>)}
             </FormItem>
           </Col>
-        </Row>
-        <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <div style={{overflow: 'hidden'}}>
             <div style={{float: 'right', marginBottom: 24}}>
               <Button type="primary" htmlType="submit">

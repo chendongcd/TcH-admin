@@ -243,7 +243,8 @@ export const menuData = [
     id: '911',
     bpid: '91',
     mpid: '91',
-    name: '合同外赔偿情况统计表',
+    name: '合同外计日工赔偿情况统计表',
+    title:'在建项目合同外计日工及赔偿情况统计表',
     route: '/report/compensationForm',
     permission:'PERMISSIONS_REPORT_CONTRACT_STATISTICS',
     buttons:[
@@ -257,11 +258,14 @@ export const menuData = [
     id: '912',
     bpid: '91',
     mpid: '91',
-    name: '合同外计日工及赔偿统计表',
+    name: '合同外计日工及补偿费用台账',
+    title:'项目合同外计日工及补偿费用台账',
     route: '/report/dailyWork',
     permission:'PERMISSIONS_REPORT_CONTRACT_DAILY',
     buttons:[
       {name:'查看',permission:'PERMISSIONS_REPORT_CONTRACT_DAILY_LOOK'},
+      {name:'导出',permission:'PERMISSIONS_REPORT_CONTRACT_DAILY_EXPORT'},
+
     ]
   },
   {
@@ -295,6 +299,7 @@ export const menuData = [
     permission:'PERMISSIONS_REPORT_CHANGED_STATISTICS',
     buttons:[
       {name:'查看',permission:'PERMISSIONS_REPORT_CHANGED_STATISTICS_LOOK'},
+      {name:'导出',permission:'PERMISSIONS_REPORT_CHANGED_STATISTICS_EXPORT'},
     ]
   },
   {

@@ -73,8 +73,7 @@ export default {
 
     * logout(_, {call, put,select}) {
       const {app:{user:{token}}} = yield (select(_ => _))
-      const response = yield call(signOut,token);
-      //if (response.code==200) {
+      yield call(signOut,token);
         Store.clearAll();
         yield put({type: 'updateState', payload: { user: {}}})
         yield put(routerRedux.push('/login'));
@@ -96,7 +95,7 @@ export default {
 
       const {app:{menu,user}} = yield (select(_ => _))
       const paths = menu.filter(a=>a.route).map(b=>b.route)
-      if(![...paths,...["/404"]].includes(payload.locationPathname)&&user.token&&payload.locationPathname!='/') {
+      if(![...paths,...["/404"]].includes(payload.locationPathname)&&user.token&&payload.locationPathname!=='/') {
         yield put(routerRedux.push('/404'))
       }
       yield put({type: 'updateState', payload: payload})

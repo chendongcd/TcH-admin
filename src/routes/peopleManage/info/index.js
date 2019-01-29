@@ -916,9 +916,9 @@ class PeopleInfo extends Component {
               </Select>)}
             </FormItem>
           </Col>
-          <Col push={6} md={12} sm={24}>
-            <div>
-              <div>
+          <Col md={12} sm={24}>
+            <div style={{overflow: 'hidden'}}>
+              <div style={{float: 'right', marginBottom: 24}}>
                 <Button type="primary" htmlType="submit">
                   查询
                 </Button>

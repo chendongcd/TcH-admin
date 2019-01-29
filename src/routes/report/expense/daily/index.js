@@ -20,7 +20,7 @@ import {createURL} from 'services/app'
 const FormItem = Form.Item;
 
 
-const pageButtons = menuData[23].buttons.map(a => a.permission)
+const pageButtons = menuData[22].buttons.map(a => a.permission)
 const testValue = ''
 
 
@@ -370,7 +370,7 @@ class Daily extends Component {
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
               <div className={styles.tableListOperator}>
-                {user.token && getButtons(user.permissionsMap.button, pageButtons[3]) ?
+                {user.token && getButtons(user.permissionsMap.button, pageButtons[1]) ?
                   <Button href={exportUrl} icon="export" type="primary">
                     导出
                   </Button> : null}

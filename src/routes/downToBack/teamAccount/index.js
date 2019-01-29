@@ -1082,15 +1082,19 @@ class TeamAccount extends Component {
                 {getFieldDecorator('contractPerson')(<Input/>)}
               </FormItem>
             </Col>
+            <Col md={18} sm={24}>
+            <div style={{overflow: 'hidden'}}>
+              <div style={{float: 'right', marginBottom: 24}}>
+                <Button type="primary" htmlType="submit">
+                  查询
+                </Button>
+                <Button style={{marginLeft: 8}} onClick={this.handleFormReset}>
+                  重置
+                </Button>
+              </div>
+            </div>
+            </Col>
           </Row>
-          <div style={{float: 'right', marginBottom: 24}}>
-            <Button type="primary" htmlType="submit">
-              查询
-            </Button>
-            <Button style={{marginLeft: 8}} onClick={this.handleFormReset}>
-              重置
-            </Button>
-          </div>
         </div>
       </Form>
     );

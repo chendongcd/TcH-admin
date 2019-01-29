@@ -22,7 +22,7 @@ import {createURL} from 'services/app'
 
 const FormItem = Form.Item;
 const {Option} = Select;
-const pageButtons = menuData[27].buttons.map(a => a.permission)
+const pageButtons = menuData[26].buttons.map(a => a.permission)
 const testValue = ''
 
 
