@@ -246,12 +246,12 @@ export const menuData = [
     name: '合同外计日工赔偿情况统计表',
     title:'在建项目合同外计日工及赔偿情况统计表',
     route: '/report/compensationForm',
-    permission:'PERMISSIONS_REPORT_CONTRACT_STATISTICS',
+    permission:'PERMISSIONS_REPORT_CONTRACT_DAILY',
     buttons:[
-      {name:'新增',permission:'PERMISSIONS_REPORT_CONTRACT_STATISTICS_ADD'},
-      {name:'编辑',permission:'PERMISSIONS_REPORT_CONTRACT_STATISTICS_UPDATE'},
-      {name:'查看',permission:'PERMISSIONS_REPORT_CONTRACT_STATISTICS_LOOK'},
-      {name:'导出',permission:'PERMISSIONS_REPORT_CONTRACT_STATISTICS_EXPORT'},
+      {name:'新增',permission:'PERMISSIONS_REPORT_CONTRACT_DAILY_ADD'},
+      {name:'编辑',permission:'PERMISSIONS_REPORT_CONTRACT_DAILY_UPDATE'},
+      {name:'查看',permission:'PERMISSIONS_REPORT_CONTRACT_DAILY_LOOK'},
+      {name:'导出',permission:'PERMISSIONS_REPORT_CONTRACT_DAILY_EXPORT'},
     ]
   },
   {
@@ -261,10 +261,10 @@ export const menuData = [
     name: '合同外计日工及补偿费用台账',
     title:'项目合同外计日工及补偿费用台账',
     route: '/report/dailyWork',
-    permission:'PERMISSIONS_REPORT_CONTRACT_DAILY',
+    permission:'PERMISSIONS_REPORT_CONTRACT_STATISTICS',
     buttons:[
-      {name:'查看',permission:'PERMISSIONS_REPORT_CONTRACT_DAILY_LOOK'},
-      {name:'导出',permission:'PERMISSIONS_REPORT_CONTRACT_DAILY_EXPORT'},
+      {name:'查看',permission:'PERMISSIONS_REPORT_CONTRACT_STATISTICS_LOOK'},
+      {name:'导出',permission:'PERMISSIONS_REPORT_CONTRACT_STATISTICS_EXPORT'},
 
     ]
   },

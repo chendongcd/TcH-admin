@@ -432,7 +432,6 @@ class Permission extends Component {
       payload: {roleId: id}
     }).then(res => {
       if (res) {
-        console.log(res.resouces)
         res.resouces = res.resouces.map(a => a.permission)
         this.setState({
           selectedValues: res
