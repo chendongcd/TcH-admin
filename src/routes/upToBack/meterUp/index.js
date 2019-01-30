@@ -506,7 +506,6 @@ class MeterUp extends Component {
     },
     {
       title: '备注',
-      //width:100,
       dataIndex: 'remark'
     },
     {

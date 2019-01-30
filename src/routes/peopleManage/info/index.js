@@ -40,6 +40,7 @@ const info_css = {
   marginLeft: 18
 }
 const degree = ['专科', '本科', '研究生']
+
 @Form.create()
 class CreateForm extends Component {
 
@@ -107,7 +108,7 @@ class CreateForm extends Component {
   }
 
   render() {
-    const {modalVisible, loading,proNames, form, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail, normFile} = this.props;
+    const {modalVisible, loading, proNames, form, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail, normFile} = this.props;
     let {previewVisible, previewImage, fileList, progress} = this.state
     return (
       <Modal
@@ -117,7 +118,7 @@ class CreateForm extends Component {
         visible={modalVisible}
         width={992}
         maskClosable={false}
-        okButtonProps={{loading:loading}}
+        okButtonProps={{loading: loading}}
         onOk={() => checkDetail ? handleCheckDetail() : this.okHandle()}
         onCancel={() => {
           this.cleanState()
@@ -269,7 +270,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="职称">
                 {form.getFieldDecorator('jobTitle', {
                   initialValue: selectedValues.jobTitle ? selectedValues.jobTitle : testValue,
-                })(<Input disabled={checkDetail} />)}
+                })(<Input disabled={checkDetail}/>)}
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
@@ -296,7 +297,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('workTime', {
                   rules: [{required: true, message: '请输入参加工作年限'}],
                   initialValue: selectedValues.workTime ? selectedValues.workTime : testValue,
-                })(<Input disabled={checkDetail} style={{marginTop:4}} placehloder='请输入参加工作年限' addonAfter={'年'}/>)}
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placehloder='请输入参加工作年限' addonAfter={'年'}/>)}
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
@@ -494,7 +495,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 3}} wrapperCol={{span: 15}} label="备注">
                 {form.getFieldDecorator('remark', {
                   rules: [{required: false}],
-                  initialValue: selectedValues.projectId ? selectedValues.projectId : testValue,
+                  initialValue: selectedValues.remark ? selectedValues.remark : testValue,
                 })(<Input.TextArea className={styles.customSelect} disabled={checkDetail} width={'100%'}
                                    placeholder="请输入" rows={4}/>)}
               </FormItem>
@@ -555,7 +556,7 @@ class CreateForm extends Component {
     if (res.status == 'done') {
       this.props.form.setFieldsValue({headUrl: []});
     } else {
-      if(this.upload&&this.upload.unsubscribe) {
+      if (this.upload && this.upload.unsubscribe) {
         this.upload.unsubscribe()
       }
     }
@@ -587,42 +588,42 @@ class PeopleInfo extends Component {
   columns = [
     {
       title: '人员编码',
-      width:100,
+      width: 100,
       dataIndex: 'id',
     },
     {
       title: '姓名',
-      width:100,
+      width: 100,
       dataIndex: 'name',
     },
     {
       title: '性别',
-      width:100,
+      width: 100,
       dataIndex: 'sex',
     },
     {
       title: '当前状态',
-      width:100,
+      width: 100,
       dataIndex: 'status',
     },
     {
       title: '项目名称',
-      width:100,
+      width: 100,
       dataIndex: 'projectName'
     },
     {
       title: '职务',
-      width:100,
+      width: 100,
       dataIndex: 'position',
     },
     {
       title: '职称',
-      width:100,
+      width: 100,
       dataIndex: 'jobTitle',
     },
     {
       title: '参加工作年限',
-      width:100,
+      width: 100,
       dataIndex: 'workTime',
       render(val) {
         return <span>{val}年</span>;
@@ -630,48 +631,48 @@ class PeopleInfo extends Component {
     },
     {
       title: '第一学历',
-      width:100,
+      width: 100,
       dataIndex: 'firstDegreeLevel'
     },
     {
       title: '第二学历',
-      width:100,
+      width: 100,
       dataIndex: 'secondDegreeLevel'
     },
     {
       title: '手机号码',
-      width:150,
+      width: 150,
       dataIndex: 'phone'
     },
     {
       title: 'QQ号码',
-      width:180,
+      width: 180,
       dataIndex: 'qqNumber',
     },
     {
       title: '邮箱',
-      width:180,
+      width: 180,
       dataIndex: 'email'
     },
     {
       title: '身份证号码',
-      width:180,
+      width: 180,
       dataIndex: 'idCard'
     },
     {
       title: '已取得证书',
-      width:100,
+      width: 100,
       dataIndex: 'certificate'
     },
     {
       title: '籍贯（省/市/区/县）',
-      width:180,
+      width: 180,
       dataIndex: 'jiguan'
     },
     {
       title: '创建时间',
       dataIndex: 'createTime',
-      width:180,
+      width: 180,
       render(val) {
         return <span>{moment(val).format('YYYY-MM-DD HH:mm')}</span>;
       },
@@ -682,7 +683,7 @@ class PeopleInfo extends Component {
     },
     {
       title: '简历下载',
-      width:100,
+      width: 100,
       render: (val, record) => {
         return (
           <a href={apiDev + PEOPLE_PDF + record.id} download={'信息卡'}>下载</a>
@@ -720,7 +721,7 @@ class PeopleInfo extends Component {
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    this.searchList(null,pagination.current, pagination.pageSize)
+    this.searchList(null, pagination.current, pagination.pageSize)
   };
 
   handleFormReset = () => {
@@ -825,7 +826,7 @@ class PeopleInfo extends Component {
       award: fieldsValue.award,
       remark: fieldsValue.remark,
       headUrl: fieldsValue.headUrl,
-      email:fieldsValue.email
+      email: fieldsValue.email
     }
     cleanObject(payload)
     if (updateModalVisible) {
@@ -915,9 +916,9 @@ class PeopleInfo extends Component {
               </Select>)}
             </FormItem>
           </Col>
-          <Col push={6} md={12} sm={24}>
-            <div>
-              <div>
+          <Col md={12} sm={24}>
+            <div style={{overflow: 'hidden'}}>
+              <div style={{float: 'right', marginBottom: 24}}>
                 <Button type="primary" htmlType="submit">
                   查询
                 </Button>
@@ -965,7 +966,7 @@ class PeopleInfo extends Component {
       selectedValues: selectedValues,
       checkDetail: checkDetail,
       proNames: proNames,
-      loading:loading.effects[`peopleManage/${updateModalVisible?'update':'add'}`]
+      loading: loading.effects[`peopleManage/${updateModalVisible ? 'update' : 'add'}`]
     }
     const exportUrl = createURL(PEOPLE_EXPORT, {...this.exportParams, ...{token: user.token}})
     return (
@@ -990,7 +991,7 @@ class PeopleInfo extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '300%',y: global._scollY}}
+                scroll={{x: '300%', y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
@@ -1022,8 +1023,8 @@ class PeopleInfo extends Component {
     });
   }
 
-  searchList = (e,page = 1, pageSize = 10) => {
-    e&&e.preventDefault?e.preventDefault():null
+  searchList = (e, page = 1, pageSize = 10) => {
+    e && e.preventDefault ? e.preventDefault() : null
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
       //  form.resetFields();
@@ -1050,4 +1051,4 @@ class PeopleInfo extends Component {
 
 PeopleInfo.propTypes = {}
 
-export default connect(({app, loading, peopleManage}) => ({app,  loading, peopleManage}))(PeopleInfo)
+export default connect(({app, loading, peopleManage}) => ({app, loading, peopleManage}))(PeopleInfo)

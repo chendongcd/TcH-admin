@@ -83,7 +83,7 @@ class CreatDrawer extends Component {
   renderSubTree = (trees) => {
     return trees.children ? trees.children.map((tree, index) => {
       return (<TreeNode selectable={false} title={tree.name} key={tree.permission}>
-        {this.renderButton(tree.buttons)}
+        {tree.buttons?this.renderButton(tree.buttons):this.renderSubTree(tree)}
       </TreeNode>)
     }) : null
   }
@@ -402,6 +402,7 @@ class Permission extends Component {
       drawVisible: true,
       selectedValues: value
     });
+
     this.getRoleDetail(value.id)
   };
 

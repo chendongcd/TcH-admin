@@ -12,8 +12,11 @@ export default class PageHeader extends PureComponent {
     if(app.locationPathname==='/login'){
       return ''
     }
+    if(app.locationPathname==='/404'){
+      return '404'
+    }
     let current = app.menu.filter(a=>a.route===app.locationPathname)
-    return current[0].name
+    return current[0].title?current[0].title:current[0].name
   }
 
   render() {

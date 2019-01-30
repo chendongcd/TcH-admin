@@ -1,6 +1,5 @@
 import React, {Component, Fragment} from 'react'
 import {connect} from 'dva'
-
 import {
   Row,
   Col,
@@ -14,14 +13,11 @@ import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
 import {getButtons, cleanObject} from 'utils'
 import {menuData} from 'common/menu'
-import {CONTRACT_STAT_EXPORT} from 'common/urls'
+import {ENGINEER_STAT_EXPORT} from 'common/urls'
 import {createURL} from 'services/app'
 
 const FormItem = Form.Item;
-
-
-const pageButtons = menuData[22].buttons.map(a => a.permission)
-const testValue = ''
+const pageButtons = menuData[25].buttons.map(a => a.permission)
 
 
 @Form.create()
@@ -39,26 +35,26 @@ class CreateForm extends Component {
   componentDidUpdate(preProp, preState) {
   }
 
-  okHandle = () => {
-
-  };
+  cleanState = () => {
+  }
 
   componentWillUnmount() {
   }
 
-
   render() {
-    const { modalVisible, form, handleCheckDetail, selectedValues, checkDetail} = this.props;
+    const { modalVisible,form, handleCheckDetail, selectedValues, checkDetail} = this.props;
     return (
       <Modal
         destroyOnClose
-        title={'项目合同外计日工及补偿费用台账'}
+        title={'变更索赔情况统计表'}
         bodyStyle={{padding: 0 + 'px'}}
         visible={modalVisible}
         width={992}
         maskClosable={false}
-        onOk={() => handleCheckDetail()}
-        onCancel={() => handleCheckDetail()}
+        onOk={() =>  handleCheckDetail()}
+        onCancel={() => {
+          handleCheckDetail()
+        }}
       >
         <div className={styles.modalContent}>
           <Row gutter={8}>
@@ -66,81 +62,46 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="项目名称">
                 {form.getFieldDecorator('projectName', {
                   initialValue: selectedValues.projectName ? selectedValues.projectName : '',
-                })(<Input disabled={true}/>)}
+                })(<Input disabled={true} />)}
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="工程类别">
                 {form.getFieldDecorator('projectType', {
                   initialValue: selectedValues.projectType ? selectedValues.projectType : '',
-                })(<Input disabled={true} />)}
-              </FormItem>
-            </Col>
-          </Row>
-        </div>
-        <Row align={'middle'} gutter={0} className={styles.titleView}>
-          <div className={styles.title}>已计价金额(元)</div>
-        </Row>
-        <div className={styles.modalContent}>
-          <Row gutter={8}>
-            <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="合同内计量">
-                {form.getFieldDecorator('statisticsTotalAmountContract', {
-                  initialValue: selectedValues.statisticsTotalAmountContract ? selectedValues.statisticsTotalAmountContract : testValue,
-                })(<Input disabled={checkDetail} style={{marginTop: 4}}  addonAfter="元"/>)}
-              </FormItem>
-            </Col>
-            <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="计日工">
-                {form.getFieldDecorator('statisticsDailyWorkSubtotal', {
-                  initialValue: selectedValues.statisticsDailyWorkSubtotal ? selectedValues.statisticsDailyWorkSubtotal : testValue,
-                })(<Input disabled={checkDetail} style={{marginTop: 4}}  addonAfter={'元'}/>)}
+                })(<Input disabled={true}/>)}
               </FormItem>
             </Col>
           </Row>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="合同外补偿/赔偿">
-                {form.getFieldDecorator('statisticsCompensationSubtotal', {
-                  initialValue: selectedValues.statisticsCompensationSubtotal ? selectedValues.statisticsCompensationSubtotal : testValue,
-                })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="元"/>)}
+              <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="施工产值">
+                {form.getFieldDecorator('constructionOutputValueStatistics', {
+                  initialValue: selectedValues.constructionOutputValueStatistics ? selectedValues.constructionOutputValueStatistics : '',
+                })(<Input disabled={checkDetail} style={{marginTop:4}} addonAfter={'万'}/>)}
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="小记">
-                {form.getFieldDecorator('statisticsAlreadySubtotal', {
-                  initialValue: selectedValues.statisticsAlreadySubtotal ? selectedValues.statisticsAlreadySubtotal : testValue,
-                })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="元"/>)}
-              </FormItem>
-            </Col>
-          </Row>
-        </div>
-        <Row align={'middle'} gutter={0} className={styles.titleView}>
-          <div className={styles.title}>预计金额(元)</div>
-        </Row>
-        <div className={styles.modalContent}>
-          <Row gutter={8}>
-            <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="计日工">
-                {form.getFieldDecorator('statisticsEstimateDailyWorkSubtotal', {
-                  initialValue: selectedValues.statisticsEstimateDailyWorkSubtotal ? selectedValues.statisticsEstimateDailyWorkSubtotal : testValue,
-                })(<Input disabled={checkDetail} style={{marginTop: 4}}  addonAfter={'元'}/>)}
-              </FormItem>
-            </Col>
-            <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="合同外补偿/赔偿">
-                {form.getFieldDecorator('statisticsEstimateCompensationSubtotal', {
-                  initialValue: selectedValues.statisticsEstimateCompensationSubtotal ? selectedValues.statisticsEstimateCompensationSubtotal : testValue,
-                })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="元"/>)}
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="变更索赔额">
+                {form.getFieldDecorator('changeClaimAmountStatistics', {
+                  initialValue: selectedValues.changeClaimAmountStatistics ? selectedValues.changeClaimAmountStatistics : '',
+                })(<Input disabled={checkDetail} style={{marginTop:4}} addonAfter={'万'}/>)}
               </FormItem>
             </Col>
           </Row>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="小记">
-                {form.getFieldDecorator('statisticsEstimateSubtotal', {
-                  initialValue: selectedValues.statisticsEstimateSubtotal ? selectedValues.statisticsEstimateSubtotal : testValue,
-                })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="元"/>)}
+              <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="合同金额">
+                {form.getFieldDecorator('temporarilyPriceStatistics', {
+                  initialValue: selectedValues.temporarilyPriceStatistics ? selectedValues.temporarilyPriceStatistics : '',
+                })(<Input disabled={checkDetail} style={{marginTop:4}} addonAfter={'万'}/>)}
+              </FormItem>
+            </Col>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="变更索赔率">
+                {form.getFieldDecorator('percentageStatistics', {
+                  initialValue: selectedValues.percentageStatistics ? selectedValues.percentageStatistics : '',
+                })(<Input disabled={true} style={{marginTop:4}} addonAfter={'%'}/>)}
               </FormItem>
             </Col>
           </Row>
@@ -148,10 +109,11 @@ class CreateForm extends Component {
       </Modal>
     );
   }
+
 }
 
 @Form.create()
-class Daily extends Component {
+class ReportFormTable extends Component {
 
   constructor(props) {
     super(props)
@@ -168,75 +130,54 @@ class Daily extends Component {
       page: 1,
       pageSize: 10
     }
+    this.CustomPicker = null
   }
 
   columns = [
     {
       title: '序号',
       dataIndex: 'id',
-      width: 80,
       fixed: 'left',
+      width: 80
     },
     {
       title: '项目名称',
       dataIndex: 'projectName',
-      width: 180,
       fixed: 'left',
+      width: 180
     },
     {
       title: '工程类别',
       dataIndex: 'projectType',
-      width: 100,
       fixed: 'left',
+      width: 100
     },
     {
-      title: '已计价金额（元）',
-      children: [
-        {
-          title: '合同内计量',
-          dataIndex: 'statisticsTotalAmountContract',
-          key: 'statisticsTotalAmountContract',
-          width: 180,
-        },
-        {
-          title: '计日工',
-          dataIndex: 'statisticsDailyWorkSubtotal',
-          width: 150,
-        },
-        {
-          title: '合同外补偿/赔偿',
-          dataIndex: 'statisticsCompensationSubtotal',
-          width: 210,
-        },
-        {
-          title: '小计',
-          dataIndex: 'statisticsAlreadySubtotal',
-          width: 150,
-        },
-      ]
+      title: '合同总额(万)',
+      dataIndex: 'temporarilyPriceStatistics',
+      width: 150
     },
     {
-      title: '预估金额（元）',
-      children: [
-        {
-          title: '计日工',
-          dataIndex: 'statisticsEstimateDailyWorkSubtotal',
-          width: 150,
-        },
-        {
-          title: '合同外补偿/赔偿',
-          dataIndex: 'statisticsEstimateCompensationSubtotal',
-          width: 150,
-        },
-        {
-          title: '小计',
-          dataIndex: 'statisticsEstimateSubtotal',
-        },
-      ]
+      title: '施工产值(万)',
+      dataIndex: 'constructionOutputValueStatistics',
+      width: 150
+    },
+    {
+      title: '变更索赔额(万)',
+      dataIndex: 'changeClaimAmountStatistics',
+      width: 150
+    },
+    {
+      title: '变更索赔率',
+      dataIndex: 'percentageStatistics',
+      render:(val)=>{
+        return<span>{isNaN(val)?'':(val*100).toFixed(2)}</span>
+      }
+    //  width: 180
     },
     {
       title: '操作',
-      width: 110,
+      width: 80,
       fixed: 'right',
       render: (val, record) => {
         if (record.id == '合计:') {
@@ -261,7 +202,8 @@ class Daily extends Component {
 
   componentDidMount() {
     if (this.props.app.user.token) {
-       this.getList()
+      this.getProNames([])
+      this.getList()
     }
   }
 
@@ -290,6 +232,12 @@ class Daily extends Component {
     });
   };
 
+  handleExportModalVisible = (flag = false) => {
+    this.setState({
+      exportModalVisible: !!flag,
+    });
+  }
+
   handleUpdateModalVisible = (flag, record) => {
     this.setState({
       updateModalVisible: !!flag,
@@ -306,6 +254,41 @@ class Daily extends Component {
     });
   };
 
+  handleAdd = (fields, updateModalVisible, selectedValues, cleanState) => {
+    const {dispatch, app: {user}} = this.props;
+    const payload = {
+      projectId: fields.projectId,
+      projectType: fields.projectType,
+      constructionOutputValue: fields.constructionOutputValue,
+      changeClaimAmount: fields.changeClaimAmount,
+    }
+    if (updateModalVisible) {
+      dispatch({
+        type: 'reportFormTable/update',
+        payload: {...payload, ...{id: selectedValues.id}},
+        token: user.token
+      }).then(res => {
+        if (res) {
+          this.handleUpdateModalVisible()
+          this.getList()
+          cleanState()
+        }
+      })
+    } else {
+      dispatch({
+        type: 'reportFormTable/add',
+        payload: payload,
+        token: user.token
+      }).then(res => {
+        if (res) {
+          this.handleModalVisible()
+          this.getList()
+          cleanState()
+        }
+      })
+    }
+  };
+
   renderAdvancedForm() {
     const {
       form: {getFieldDecorator},
@@ -313,11 +296,9 @@ class Daily extends Component {
     return (
       <Form onSubmit={this.searchList} layout="inline">
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
-          <Col md={6} sm={24}>
+          <Col md={8} sm={24}>
             <FormItem label="项目名称">
-              {getFieldDecorator('projectName', {
-                initialValue: null
-              })(<Input placeholder="请输入"/>)}
+              {getFieldDecorator('projectName', {})(<Input/>)}
             </FormItem>
           </Col>
           <div style={{overflow: 'hidden'}}>
@@ -341,16 +322,17 @@ class Daily extends Component {
 
   render() {
     const {
-      expenseDaily: {data},
+      reportFormTable: {data},
       loading,
       app: {user}
     } = this.props;
     const {selectedRows, modalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail} = this.state;
 
     const parentMethods = {
+      handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
       handleUpdateModalVisible: this.handleUpdateModalVisible,
-      handleCheckDetail: this.handleCheckDetail
+      handleCheckDetail: this.handleCheckDetail,
     };
     const parentState = {
       updateModalVisible: updateModalVisible,
@@ -358,14 +340,15 @@ class Daily extends Component {
       selectedValues: selectedValues,
       checkDetail: checkDetail,
     }
-    const exportUrl = createURL(CONTRACT_STAT_EXPORT, {
+    const exportUrl = createURL(ENGINEER_STAT_EXPORT, {
       ...this.exportParams, ...{
         token: user.token}
     })
 
+
     return (
       <Page inner={true} loading={pageLoading}>
-        <PageHeaderWrapper title="对上计量台账">
+        <PageHeaderWrapper title="变更索赔情况统计表">
           <Card bordered={false}>
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
@@ -377,11 +360,11 @@ class Daily extends Component {
               </div>
               <StandardTable
                 selectedRows={selectedRows}
-                loading={loading.effects['expenseDaily/fetch']}
+                loading={loading.effects['reportFormTable/fetch']}
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '160%', y: global._scollY}}
+                scroll={{x:'110', y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
@@ -394,9 +377,21 @@ class Daily extends Component {
     )
   }
 
+  getProNames = (proName) => {
+    if (proName.length < 1) {
+      this.props.dispatch(
+        {
+          type: 'reportFormTable/queryProNames',
+          payload: {page: 1, pageSize: 10},
+          token: this.props.app.user.token
+        }
+      )
+    }
+  }
+
   getList = (page = 1, pageSize = 10) => {
     this.props.dispatch({
-      type: 'expenseDaily/fetch',
+      type: 'reportFormTable/fetch',
       payload: {page: page, pageSize: pageSize},
       token: this.props.app.user.token
     });
@@ -414,7 +409,7 @@ class Daily extends Component {
       cleanObject(payload)
       this.exportParams = payload
       this.props.dispatch({
-        type: 'expenseDaily/fetch',
+        type: 'reportFormTable/fetch',
         payload: payload,
         token: this.props.app.user.token
       });
@@ -422,6 +417,6 @@ class Daily extends Component {
   }
 }
 
-Daily.propTypes = {}
+ReportFormTable.propTypes = {}
 
-export default connect(({app, loading, expenseDaily}) => ({app, loading, expenseDaily}))(Daily)
+export default connect(({app, loading, reportFormTable}) => ({app, loading, reportFormTable}))(ReportFormTable)

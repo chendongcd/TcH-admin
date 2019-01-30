@@ -5,14 +5,15 @@ import {menuData} from '../common/menu'
 import {getMenus} from 'utils'
 import {setStorage, getStorage} from 'utils/localStorage'
 import Store from "store";
-const {prefix} = config
+const {prefix,apiDev} = config
 function getMenu(user) {
   if (user && user.id) {
-    if(process.env.NODE_ENV=='production'){
-      return getMenus([...user.permissionsMap.menu, ...[menuData[0].permission]])
-    }
-    let report = menuData.filter(a=>a.permission.includes('PERMISSIONS_REPORT_MANAGER')).map(b=>b.permission)
-    return getMenus([...user.permissionsMap.menu, ...[menuData[0].permission],...report])
+
+    // if(process.env.NODE_ENV==='production'&&apiDev==='http://47.105.127.126:8082/crcc'){
+    //   return getMenus([...user.permissionsMap.menu, ...[menuData[0].permission]])
+    // }
+    // let report = menuData.filter(a=>a.permission.includes('PERMISSIONS_REPORT')).map(b=>b.permission)
+    return getMenus([...user.permissionsMap.menu, ...[menuData[0].permission]])
   }
   return []
 }
@@ -72,8 +73,7 @@ export default {
 
     * logout(_, {call, put,select}) {
       const {app:{user:{token}}} = yield (select(_ => _))
-      const response = yield call(signOut,token);
-      //if (response.code==200) {
+      yield call(signOut,token);
         Store.clearAll();
         yield put({type: 'updateState', payload: { user: {}}})
         yield put(routerRedux.push('/login'));
@@ -95,7 +95,7 @@ export default {
 
       const {app:{menu,user}} = yield (select(_ => _))
       const paths = menu.filter(a=>a.route).map(b=>b.route)
-      if(![...paths,...["/404"]].includes(payload.locationPathname)&&user.token&&payload.locationPathname!='/') {
+      if(![...paths,...["/404"]].includes(payload.locationPathname)&&user.token&&payload.locationPathname!=='/') {
         yield put(routerRedux.push('/404'))
       }
       yield put({type: 'updateState', payload: payload})

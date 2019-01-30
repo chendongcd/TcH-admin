@@ -20,13 +20,8 @@ import {getButtons, cleanObject, QiNiuOss, ImageUrl} from "utils";
 import {menuData} from "../../../common/menu";
 
 const FormItem = Form.Item;
-const getValue = obj =>
-  Object.keys(obj)
-    .map(key => obj[key])
-    .join(',');
-const pageButtons = menuData[27].buttons.map(a => a.permission)
+const pageButtons = menuData[29].buttons.map(a => a.permission)
 const testValue = ''
-const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
 
 @Form.create()
 class CreateForm extends Component {
@@ -41,7 +36,7 @@ class CreateForm extends Component {
   }
 
   componentDidUpdate(preProp, preState) {
-    if (!preProp.selectedValues.annexUrl && this.props.selectedValues.annexUrl && this.state.fileList.length == 0) {
+    if (!preProp.selectedValues.annexUrl && this.props.selectedValues.annexUrl && this.state.fileList.length === 0) {
       let pdf = JSON.parse(this.props.selectedValues.annexUrl)
       let file = {
         uid: '-1',
@@ -349,17 +344,17 @@ class FileReference extends Component {
               {getFieldDecorator('name')(<Input/>)}
             </FormItem>
           </Col>
-        </Row>
-        <div style={{overflow: 'hidden'}}>
-          <div style={{float: 'right', marginBottom: 24}}>
-            <Button type="primary" htmlType="submit">
-              查询
-            </Button>
-            <Button style={{marginLeft: 8}} onClick={this.handleFormReset}>
-              重置
-            </Button>
+          <div style={{overflow: 'hidden'}}>
+            <div style={{float: 'right', marginBottom: 24}}>
+              <Button type="primary" htmlType="submit">
+                查询
+              </Button>
+              <Button style={{marginLeft: 8}} onClick={this.handleFormReset}>
+                重置
+              </Button>
+            </div>
           </div>
-        </div>
+        </Row>
       </Form>
     );
   }

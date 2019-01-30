@@ -17,12 +17,12 @@ import {Page, PageHeaderWrapper, StandardTable, CustomPicker} from 'components'
 import styles from './index.less'
 import {getButtons, cleanObject} from 'utils'
 import {menuData} from 'common/menu'
-import {METER_EXPORT} from 'common/urls'
+import {CONTRACT_EXPORT} from 'common/urls'
 import {createURL} from 'services/app'
 
 const FormItem = Form.Item;
 const {Option} = Select;
-const pageButtons = menuData[8].buttons.map(a => a.permission)
+const pageButtons = menuData[21].buttons.map(a => a.permission)
 const testValue = ''
 
 
@@ -101,7 +101,7 @@ class CreateForm extends Component {
     return (
       <Modal
         destroyOnClose
-        title={checkDetail ? '合同外赔偿情况统计表' : updateModalVisible ? "编辑合同外赔偿情况统计表" : "新增合同外赔偿情况统计表"}
+        title={checkDetail ? '合同外计日工赔偿情况统计表' : updateModalVisible ? "编辑合同外计日工赔偿情况统计表" : "新增合同外计日工赔偿情况统计表"}
         bodyStyle={{padding: 0 + 'px'}}
         visible={modalVisible}
         width={992}
@@ -388,13 +388,13 @@ class ExpenseForm extends Component {
       title: '序号',
       dataIndex: 'id',
       fixed: 'left',
-      width: 100
+      width: 80
     },
     {
       title: '项目名称',
       dataIndex: 'projectName',
       fixed: 'left',
-      width: 100
+      width: 150
     },
     {
       title: '工程类别',
@@ -406,13 +406,13 @@ class ExpenseForm extends Component {
       title: '分包商名称',
       dataIndex: 'subcontractorName',
       //fixed: 'left',
-      width: 100
+      width: 150
     },
     {
       title: '队伍名称',
       dataIndex: 'teamName',
      // fixed: 'left',
-      width: 100
+      width: 150
     },
     {
       title: '合同编号',
@@ -427,9 +427,9 @@ class ExpenseForm extends Component {
     {
       title: '填报日期',
       dataIndex: 'reportTime',
-      width: 100,
-      render(val) {
-        return <span>{val ? moment(val).format('YYYY/MM') : ''}</span>;
+      width: 160,
+      render(val,record) {
+        return <span>{val ? `${moment(val).format('YYYY')}年第${record.quarter}季度` : ''}</span>;
       }
     },
     {
@@ -439,7 +439,7 @@ class ExpenseForm extends Component {
           title: '合同内计量',
           dataIndex: 'totalAmountContract',
           key: 'totalAmountContract',
-          width: 100,
+          width: 150,
         },
         {
           title: '计日工',
@@ -495,7 +495,7 @@ class ExpenseForm extends Component {
           title: '合计',
           dataIndex: 'total',
           key: 'total',
-          width: 100,
+          width: 150,
         },
       ]
     },
@@ -503,11 +503,17 @@ class ExpenseForm extends Component {
       title: '计日工占已计价金额比例（%）',
       dataIndex: 'dailyPercentage',
       width: 180,
+      render:(val)=>{
+        return<span>{isNaN(val)?'':(val*100).toFixed(2)}</span>
+      }
     },
     {
       title: '合同外补偿/赔偿占已计价金额比例（%）',
       dataIndex: 'compensationPercentage',
-      width: 180,
+      width: 100,
+      render:(val)=>{
+        return<span>{isNaN(val)?'':(val*100).toFixed(2)}</span>
+      }
     },
     {
       title: '计日工及补偿已拨付金额（元）',
@@ -517,7 +523,10 @@ class ExpenseForm extends Component {
     {
       title: '计日工及补偿已拨付金额拨付率（%）',
       dataIndex: 'disbursedPercentage',
-      width: 180,
+      width: 100,
+      render:(val)=>{
+        return<span>{isNaN(val)?'':(val*100).toFixed(2)}</span>
+      }
     },
     {
       title: '是否报审',
@@ -822,11 +831,9 @@ class ExpenseForm extends Component {
       teamLoading: loading.effects['expenseForm/queryTeams'],
       amountLoading: loading.effects['expenseForm/queryAmount'],
     }
-    const exportUrl = createURL(METER_EXPORT, {
+    const exportUrl = createURL(CONTRACT_EXPORT, {
       ...this.exportParams, ...{
-        token: user.token,
-        exportType: 'forUpExportType'
-      }
+        token: user.token}
     })
 
 
@@ -852,7 +859,7 @@ class ExpenseForm extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '380%', y: global._scollY}}
+                scroll={{x: '400%', y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
