@@ -133,7 +133,7 @@ export function uuid(name){
   });
 }
 
-export const ImageUrl = 'http://www.crcc23-3-jg.com/'//http://www.crcc23-3-jg.com/
+export const ImageUrl = 'http://crcc23-3-jg.com/'//http://www.crcc23-3-jg.com/
 
 export async function QiNiuOss(params) {
   return new Promise(function (resolve, reject) {
