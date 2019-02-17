@@ -218,19 +218,19 @@ class Resume extends Component {
     {
       title:'序号',
       dataIndex:'id',
-      width:80,
+      width:100,
       fixed:'left'
     },
     {
       title: '分包商备案编码',
       dataIndex: 'subcontractorCode',
-      width:100,
+      width:150,
       fixed:'left'
     },
     {
       title: '分包商全称',
       dataIndex: 'subcontractorName',
-      width:150,
+      width:200,
       fixed:'left'
     },
     {
@@ -245,7 +245,7 @@ class Resume extends Component {
     },
     {
       title: '开始日期',
-      width:110,
+      width:120,
       dataIndex: 'startTime',
       render(val) {
         return <span>{moment(val).format('YYYY/MM/DD')}</span>;
@@ -253,7 +253,7 @@ class Resume extends Component {
     },
     {
       title: '结束日期',
-      width:110,
+      width:120,
       dataIndex: 'endTime',
       render(val) {
         return <span>{val?moment(val).format('YYYY/MM/DD'):''}</span>;
@@ -261,32 +261,32 @@ class Resume extends Component {
     },
     {
       title: '该时间段所属项目部',
-      width:120,
+      width:150,
       dataIndex: 'projectName'
     },
     {
       title: '合同签订人',
-      width:100,
+      width:110,
       dataIndex: 'contractPerson',
     },
     {
       title: '合同签订人联系方式',
-      width:120,
+      width:150,
       dataIndex: 'phone'
     },
     {
       title: '合同金额',
-      width:100,
+      width:120,
       dataIndex: 'contractAmount',
     },
     {
       title: '结算金额',
-      width:100,
+      width:120,
       dataIndex: 'settlementAmount',
     },
     {
       title: '项目部评价',
-      width:100,
+      width:150,
       dataIndex: 'projectEvaluation',
     },
     {
@@ -295,7 +295,7 @@ class Resume extends Component {
     },
     {
       title: '操作',
-      width:190,
+      width:210,
       fixed:'right',
       render: (val, record) => {
         const user = this.props.app.user

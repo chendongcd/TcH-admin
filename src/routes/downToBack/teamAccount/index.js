@@ -639,7 +639,7 @@ class TeamAccount extends Component {
       children: [
         {
           title: '项目名称',
-          width:100,
+          width:150,
           dataIndex: 'projectName',
         },
         {
@@ -657,12 +657,12 @@ class TeamAccount extends Component {
         },
         {
           title: '分包商名称',
-          width:100,
+          width:200,
           dataIndex: 'subcontractorName'
         },
         {
           title: '队伍名称',
-          width:100,
+          width:150,
           dataIndex: 'teamName',
         },
         {
@@ -682,16 +682,16 @@ class TeamAccount extends Component {
           },
         },
         {
-          title: '预计合同金额',
+          title: '预计合同金额(元)',
           dataIndex: 'estimatedContractAmount',
-          width:120,
+          width:130,
           render(val) {
             return <span>{val}</span>;
           },
         },
         {
           title: '施工范围',
-          width:100,
+          width:150,
           dataIndex: 'constructionScope'
         },
         {
@@ -810,7 +810,7 @@ class TeamAccount extends Component {
           children: [{
             title: '日期',
             dataIndex: 'teamTime',
-            width:110,
+            width:120,
             render(val) {
               return <span>{val ? moment(val).format('YYYY/MM/DD') : ''}</span>;
             },
@@ -822,7 +822,7 @@ class TeamAccount extends Component {
           children: [{
             title: '日期',
             dataIndex: 'approvalTime',
-            width:110,
+            width:120,
             render(val) {
               return <span>{val ? moment(val).format('YYYY-MM-DD') : ''}</span>;
             },
@@ -845,7 +845,7 @@ class TeamAccount extends Component {
           key: '022',
           children: [{
             title: '日期',
-            width:110,
+            width:120,
             dataIndex: 'settlementTime',
             render(val) {
               return <span>{moment(val).format('YYYY/MM/DD')}</span>;
@@ -857,7 +857,7 @@ class TeamAccount extends Component {
     {
       title: '操作',
       ket: '03',
-      width: 180,
+      width: 200,
       fixed: 'right',
       render: (val, record) => {
         const user = this.props.app.user
@@ -1172,7 +1172,7 @@ class TeamAccount extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '300%', y: global._scollY}}
+                scroll={{x: '290%', y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

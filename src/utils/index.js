@@ -108,7 +108,6 @@ export function _setTimeOut(func, time = 1000) {
 
 /*筛选用户拥有的菜单权限*/
 export function getMenus(menus) {
-  console.log(menus)
   return menuData.filter(a=>menus.includes(a.permission))
 }
 
@@ -138,7 +137,6 @@ export const ImageUrl = 'http://crcc23-3-jg.com/'//http://www.crcc23-3-jg.com/
 export async function QiNiuOss(params) {
   return new Promise(function (resolve, reject) {
     upLoad().then(res => {
-      // console.log(res)
       if (res.code == '200') {
         let token = res.entity.token
         let {file, onProgress, onError, onSuccess} = params
