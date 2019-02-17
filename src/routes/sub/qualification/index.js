@@ -670,7 +670,7 @@ class Qualification extends Component {
       title: '分包商全称',
       dataIndex: 'name',
       fixed: 'left',
-      width: 160,
+      width: 200,
       render: (val, record) => {
         return <a onClick={() => this.getResume(val)}>{val}</a>
       }
@@ -688,42 +688,42 @@ class Qualification extends Component {
     {
       title: '纳税人类型',
       dataIndex: 'taxpayerType',
-      width: 100,
+      width: 120,
     },
     {
       title: '法人',
       dataIndex: 'legalPersonName',
-      width: 100,
+      width: 110,
     },
     {
       title: '注册本金（万元）',
       dataIndex: 'registeredCapital',
-      width: 100,
+      width: 150,
     },
     {
       title: '资料是否齐全',
       dataIndex: 'qualification',
-      width: 100,
+      width: 120,
     },
     {
       title: '股份公司综合信誉评价',
       dataIndex: 'shareEvaluation',
-      width: 130,
+      width: 180,
     },
     {
       title: '集团公司综合信誉评价',
       dataIndex: 'groupEvaluation',
-      width: 130,
+      width: 180,
     },
     {
       title: '公司本级综合信誉评价',
       dataIndex: 'companyEvaluation',
-      width: 130,
+      width: 180,
     },
     {
       title: '证件期限',
       key: 'period',
-      width: 100,
+      width: 120,
       render: (val, record) => {
         let status = this.checkPeriod(record)
         return <Badge offset={[5, 0]} status={status}/>
@@ -732,7 +732,7 @@ class Qualification extends Component {
     {
       title: '下载分包商资质信息卡',
       dataIndex: 'id',
-      width: 100,
+      width: 180,
       render: (val, record) => {
         return (
           <a href={apiDev + SUB_QUA_PDF + val} download={'分包商资质信息卡'}>下载</a>
@@ -761,7 +761,7 @@ class Qualification extends Component {
     {
       title: '操作',
       fixed: 'right',
-      width: 180,
+      width: 200,
       render: (val, record) => {
         const user = this.props.app.user
         if (!user.token) {
@@ -1115,7 +1115,7 @@ class Qualification extends Component {
                 bordered
                 rowKey="id"
                 data={data}
-                scroll={{x: '250%', y: global._scollY}}
+                scroll={{x: '240%', y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
@@ -1172,13 +1172,14 @@ class Qualification extends Component {
       this.props.dispatch({
         type: 'sub_qua/fetch',
         payload: payload
-      });
+      })
+
     });
   }
 
   handleReview = (fieldsValue, type, selectedValues) => {
     //type:0股份公司 1集团公司 2公司本级
-    const {dispatch, app: {user}} = this.props;
+    const {dispatch, app: {user},sub_qua: {data}} = this.props;
     const payload = type == 0 ? {
       shareEvaluation: fieldsValue.shareEvaluation,
       shareRemark: fieldsValue.shareRemark
@@ -1197,7 +1198,7 @@ class Qualification extends Component {
     }).then(res => {
       if (res) {
         this.handleReviewModal()
-        this.getList()
+        this.getList(data.pagination?data.pagination.current:1,10)
       }
     })
   }
