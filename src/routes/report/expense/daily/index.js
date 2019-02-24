@@ -174,7 +174,7 @@ class Daily extends Component {
     {
       title: '序号',
       dataIndex: 'id',
-      width: 80,
+      width: 100,
       fixed: 'left',
     },
     {
@@ -236,7 +236,7 @@ class Daily extends Component {
     },
     {
       title: '操作',
-      width: 110,
+      width: 120,
       fixed: 'right',
       render: (val, record) => {
         if (record.id == '合计:') {
@@ -365,7 +365,7 @@ class Daily extends Component {
 
     return (
       <Page inner={true} loading={pageLoading}>
-        <PageHeaderWrapper title="对上计量台账">
+        <PageHeaderWrapper>
           <Card bordered={false}>
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
@@ -381,7 +381,7 @@ class Daily extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '160%', y: global._scollY}}
+                scroll={{x: '150%', y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

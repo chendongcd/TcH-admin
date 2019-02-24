@@ -196,7 +196,7 @@ class ReportForm extends Component {
       title: '序号',
       dataIndex: 'id',
       fixed: 'left',
-      width: 80
+      width: 100
     },
     {
       title: '项目名称',
@@ -213,7 +213,7 @@ class ReportForm extends Component {
     {
       title: '填报日期',
       dataIndex: 'reportTime',
-      width: 100,
+      width: 150,
       render(val) {
         return <span>{val ? moment(val).format('YYYY/MM') : ''}</span>;
       }
@@ -247,7 +247,7 @@ class ReportForm extends Component {
     },
     {
       title: '操作',
-      width: 110,
+      width: 120,
       fixed: 'right',
       render: (val, record) => {
         if (record.id == '合计:') {
@@ -451,7 +451,7 @@ class ReportForm extends Component {
 
     return (
       <Page inner={true} loading={pageLoading}>
-        <PageHeaderWrapper title="合同外赔偿情况统计表">
+        <PageHeaderWrapper>
           <Card bordered={false}>
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
@@ -471,7 +471,7 @@ class ReportForm extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '150%', y: global._scollY}}
+                scroll={{x: '140%', y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

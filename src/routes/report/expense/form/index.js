@@ -388,7 +388,7 @@ class ExpenseForm extends Component {
       title: '序号',
       dataIndex: 'id',
       fixed: 'left',
-      width: 80
+      width: 100
     },
     {
       title: '项目名称',
@@ -406,7 +406,7 @@ class ExpenseForm extends Component {
       title: '分包商名称',
       dataIndex: 'subcontractorName',
       //fixed: 'left',
-      width: 150
+      width: 180
     },
     {
       title: '队伍名称',
@@ -600,7 +600,7 @@ class ExpenseForm extends Component {
     },
     {
       title: '操作',
-      width: 110,
+      width: 150,
       fixed: 'right',
       render: (val, record) => {
         if (record.id == '合计:') {
@@ -839,7 +839,7 @@ class ExpenseForm extends Component {
 
     return (
       <Page inner={true} loading={pageLoading}>
-        <PageHeaderWrapper title="合同外赔偿情况统计表">
+        <PageHeaderWrapper>
           <Card bordered={false}>
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
@@ -859,7 +859,7 @@ class ExpenseForm extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '400%', y: global._scollY}}
+                scroll={{x: '360%', y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
