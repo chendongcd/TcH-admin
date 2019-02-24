@@ -397,7 +397,7 @@ class LossForm extends Component {
     },
     {
       title: '操作',
-      width: 100,
+      width: 120,
       fixed: 'right',
       render: (val, record) => {
         if (record.id == '合计:') {
@@ -627,7 +627,7 @@ class LossForm extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '300%', y: global._scollY}}
+                scroll={{x: '280%', y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

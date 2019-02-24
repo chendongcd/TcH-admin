@@ -138,7 +138,7 @@ class ReportFormTable extends Component {
       title: '序号',
       dataIndex: 'id',
       fixed: 'left',
-      width: 80
+      width: 100
     },
     {
       title: '项目名称',
@@ -177,7 +177,7 @@ class ReportFormTable extends Component {
     },
     {
       title: '操作',
-      width: 80,
+      width: 120,
       fixed: 'right',
       render: (val, record) => {
         if (record.id == '合计:') {
