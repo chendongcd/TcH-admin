@@ -316,6 +316,20 @@ export const menuData = [
     ]
   },
   {
+    id: '94',
+    bpid: '9',
+    mpid: '9',
+    name: '确权清收表',
+    route: '/report/confirm',
+    permission:'PERMISSIONS_REPORT_CONFIRM',
+    buttons:[
+      {name:'新增',permission:'PERMISSIONS_REPORT_CONFIRM_ADD'},
+      {name:'编辑',permission:'PERMISSIONS_REPORT_CONFIRM_UPDATE'},
+      {name:'查看',permission:'PERMISSIONS_REPORT_CONFIRM_LOOK'},
+      {name:'导出',permission:'PERMISSIONS_REPORT_CONFIRM_EXPORT'},
+    ]
+  },
+  {
     id: '10',
     bpid: '1',
     icon: 'folder',

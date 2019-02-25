@@ -112,6 +112,11 @@ const Routers = function ({history, app}) {
     models: () => [import('./routes/report/loss/model')],
     component: () => import(/* webpackChunkName: "" ExpenseForm */'./routes/report/loss/index')
   })
+  const Report_confirm= dynamic({
+    app,
+    models: () => [import('./routes/report/confirm/model')],
+    component: () => import(/* webpackChunkName: "" ExpenseForm */'./routes/report/confirm/index')
+  })
 
 
   return (
@@ -139,6 +144,7 @@ const Routers = function ({history, app}) {
             <Route path="/report/form"  component={Report_form}/>
             <Route path="/report/formTable"  component={Report_formTable}/>
             <Route path="/report/loss"  component={Report_loss}/>
+            <Route path="/report/confirm"  component={Report_confirm}/>
           </Switch>
           <Route path="/login" component={Login}/>
           <Route path="/404"  component={NotFound}/>
