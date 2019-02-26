@@ -273,7 +273,7 @@ class Permission extends Component {
     },
     {
       title: '操作',
-      width:100,
+      width:120,
       render: (val, record) => {
         const user = this.props.app.user
         return (

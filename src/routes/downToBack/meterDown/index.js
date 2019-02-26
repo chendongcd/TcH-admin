@@ -460,17 +460,17 @@ class MeterDown extends Component {
   columns = [
     {
       title: '序号',
-      width:80,
+      width:100,
       dataIndex: 'id',
     },
     {
       title: '项目名称',
-      width:100,
+      width:180,
       dataIndex: 'projectName',
     },
     {
       title: '分包商名称',
-      width:100,
+      width:180,
       dataIndex: 'subcontractorName',
     },
     {
@@ -486,7 +486,7 @@ class MeterDown extends Component {
     {
       title: '计价期数',
       dataIndex: 'valuationPeriod',
-      width:100,
+      width:150,
       render(val) {
         return <span>{val !== undefined ? ('第' + val + '期') : ''}</span>;
       },
@@ -494,7 +494,7 @@ class MeterDown extends Component {
     {
       title: '计价日期',
       dataIndex: 'valuationTime',
-      width:100,
+      width:150,
       render(val) {
         return <span>{val ? moment(val).format('YYYY/MM') : ''}</span>;
       },
@@ -514,7 +514,7 @@ class MeterDown extends Component {
           title: '计价总金额',
           dataIndex: 'valuationPrice',
           key: 'valuationPrice',
-          width:100,
+          width:150,
           render(val) {
             return <span>{val}</span>;
           },
@@ -580,7 +580,7 @@ class MeterDown extends Component {
     {
       title: '下载附件',
       dataIndex: 'annexUrl',
-      width:100,
+      width:110,
       render: (val) => {
         //if(JSON.parse(record.annexUrl))
         function isJSON(str) {
@@ -615,7 +615,7 @@ class MeterDown extends Component {
     },
     {
       title: '操作',
-      width: 110,
+      width: 120,
       fixed: 'right',
       render: (val, record) => {
         if (record.id == '合计:') {
@@ -894,7 +894,7 @@ class MeterDown extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '250%',y: global._scollY}}
+                scroll={{x: '240%',y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
