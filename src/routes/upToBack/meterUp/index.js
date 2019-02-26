@@ -392,13 +392,13 @@ class MeterUp extends Component {
     {
       title: '序号',
       fixed: 'left',
-      width: 80,
+      width: 100,
       dataIndex: 'id',
     },
     {
       title: '项目名称',
       fixed: 'left',
-      width: 100,
+      width: 150,
       dataIndex: 'projectName',
     },
     {
@@ -429,7 +429,7 @@ class MeterUp extends Component {
       children: [{
         title: '含税',
         dataIndex: 'valuationAmountTax',
-        width: 100,
+        width: 150,
         key: 'valuationAmountTax'
       },
         {
@@ -441,7 +441,7 @@ class MeterUp extends Component {
           title: '不含税',
           dataIndex: 'valuationAmountNotTax',
           key: 'valuationAmountNotTax',
-          width: 100,
+          width: 150,
         }]
     },
     {
@@ -450,12 +450,12 @@ class MeterUp extends Component {
         title: '含税',
         dataIndex: 'realAmountTax',
         key: 'realAmountTax',
-        width: 100,
+        width: 150,
       }, {
         title: '不含税',
         dataIndex: 'realAmount',
         key: 'realAmount',
-        width: 100,
+        width: 150,
       }]
     },
     {
@@ -464,13 +464,13 @@ class MeterUp extends Component {
         title: '已支付金额',
         dataIndex: 'alreadyPaidAmount',
         key: 'alreadyPaidAmount',
-        width: 100,
+        width: 150,
       },
         {
           title: '未支付金额',
           dataIndex: 'unpaidAmount',
           key: 'unpaidAmount',
-          width: 100,
+          width: 150,
         }, {
           title: '拨付率',
           dataIndex: 'payProportion',
@@ -804,7 +804,7 @@ class MeterUp extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '200%', y: global._scollY}}
+                scroll={{x: '215%', y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

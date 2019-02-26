@@ -603,22 +603,22 @@ class PeopleInfo extends Component {
     },
     {
       title: '当前状态',
-      width: 100,
+      width: 120,
       dataIndex: 'status',
     },
     {
       title: '项目名称',
-      width: 100,
+      width: 150,
       dataIndex: 'projectName'
     },
     {
       title: '职务',
-      width: 100,
+      width: 150,
       dataIndex: 'position',
     },
     {
       title: '职称',
-      width: 100,
+      width: 150,
       dataIndex: 'jobTitle',
     },
     {
@@ -641,12 +641,12 @@ class PeopleInfo extends Component {
     },
     {
       title: '手机号码',
-      width: 150,
+      width: 200,
       dataIndex: 'phone'
     },
     {
       title: 'QQ号码',
-      width: 180,
+      width: 200,
       dataIndex: 'qqNumber',
     },
     {
@@ -656,12 +656,12 @@ class PeopleInfo extends Component {
     },
     {
       title: '身份证号码',
-      width: 180,
+      width: 200,
       dataIndex: 'idCard'
     },
     {
       title: '已取得证书',
-      width: 100,
+      width: 150,
       dataIndex: 'certificate'
     },
     {
@@ -991,7 +991,7 @@ class PeopleInfo extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '300%', y: global._scollY}}
+                scroll={{x: '280%', y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
