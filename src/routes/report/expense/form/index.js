@@ -863,7 +863,7 @@ class ExpenseForm extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '360%', y: global._scollY}}
+                scroll={{x: '375%', y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

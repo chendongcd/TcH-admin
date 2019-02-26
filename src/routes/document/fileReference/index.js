@@ -20,7 +20,7 @@ import {getButtons, cleanObject, QiNiuOss, ImageUrl} from "utils";
 import {menuData} from "../../../common/menu";
 
 const FormItem = Form.Item;
-const pageButtons = menuData[29].buttons.map(a => a.permission)
+const pageButtons = menuData[30].buttons.map(a => a.permission)
 const testValue = ''
 
 @Form.create()
