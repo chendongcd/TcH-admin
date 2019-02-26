@@ -129,7 +129,7 @@ class Project extends Component {
     {
       title: '操作',
       fixed:'right',
-      width:110,
+      width:120,
       render: (val, record) => {
         const user = this.props.app.user
         if(!user.token){
