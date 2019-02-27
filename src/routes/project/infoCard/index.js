@@ -825,13 +825,13 @@ class InfoCard extends Component {
         },]
     },
     {
-      title: '合同总价',
+      title: '合同总价(万)',
       children: [{
         title: '暂估合同额',
         dataIndex: 'temporarilyPrice',
         width:100,
         render(val) {
-          return <span>{val}万</span>;
+          return <span>{val}</span>;
         },
       },
         {
@@ -839,7 +839,7 @@ class InfoCard extends Component {
           dataIndex: 'totalPrice',
           width:100,
           render(val) {
-            return <span>{val}万</span>;
+            return <span>{val}</span>;
           },
         },]
     },

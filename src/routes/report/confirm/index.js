@@ -324,7 +324,7 @@ class Confirmation extends Component {
     {
       title: '填报时间',
       dataIndex: 'reportTime',
-      width: 150,
+      width: 180,
       render(val,record) {
         return <span>{val ? `${moment(val).format('YYYY')}年第${record.quarter}季度` : ''}</span>;
       }
@@ -335,12 +335,12 @@ class Confirmation extends Component {
       children:[
         {
           title: '上年末开累完成产值',
-          dataIndex: 'temporarilyPrice',
+          dataIndex: 'balanceCompleteValue',
           width: 150
         },
         {
           title: '上年末开累验工计价',
-          dataIndex: 'temporarilyPrice1',
+          dataIndex: 'balanceInspectionValue',
           width: 150
         },
         {
@@ -348,17 +348,17 @@ class Confirmation extends Component {
           children: [
             {
               title: '小计',
-              dataIndex: 'sumPriced',
-              width: 100,
+              dataIndex: 'sumBalance',
+              width: 120,
             },
             {
               title: '合同内应计未计',
-              dataIndex: 'alreadyPrice',
-              width: 100,
+              dataIndex: 'balanceShould',
+              width: 180,
             },
             {
               title: '变更索赔预计额',
-              dataIndex: 'confirmPriced',
+              dataIndex: 'balanceChange',
               width: 180,
             },
           ]
@@ -370,7 +370,7 @@ class Confirmation extends Component {
       children: [
         {
           title: '本年截至本期完成产值',
-          dataIndex: 'inBookCost',
+          dataIndex: 'currentProductionValue',
           width: 150,
         },
         {
@@ -378,25 +378,25 @@ class Confirmation extends Component {
           children: [
             {
               title: '小计',
-              dataIndex: 'sumPriced1',
-              width: 100,
+              dataIndex: 'sumHalfOne',
+              width: 120,
             },
             {
               title: '上年末已完工本年计价',
-              dataIndex: 'alreadyPrice1',
-              width: 180,
+              dataIndex: 'halfCompleteValue',
+              width: 170,
             },
             {
               title: '当年完成产值当年验工计价',
-              dataIndex: 'confirmPriced1',
-              width: 180,
+              dataIndex: 'oneCompleteValue',
+              width: 170,
             },
           ]
         },
         {
           title: '变更索赔预计额',
-          dataIndex: 'sunBookCost',
-          width: 100,
+          dataIndex: 'changeValue',
+          width: 180,
         },
       ]
     },
@@ -405,12 +405,12 @@ class Confirmation extends Component {
       children: [
         {
           title: '开累完成产值',
-          dataIndex: 'lossAmount',
-          width: 100,
+          dataIndex: 'completedValue',
+          width: 120,
         },
         {
           title: '开累验工计价',
-          dataIndex: 'confirmedNetProfit',
+          dataIndex: 'inspection',
           width: 200,
         },
         {
@@ -418,18 +418,18 @@ class Confirmation extends Component {
           children:[
             {
               title: '小记',
-              dataIndex: 'lossAmount1',
-              width: 100,
+              dataIndex: 'sumFinalPeriod',
+             // width: 120,
             },
             {
               title: '其中：合同内应计未计',
-              dataIndex: 'confirmedNetProfit1',
-              width: 150,
+              dataIndex: 'finalPeriodShould',
+              width: 180,
             },
             {
               title: '其中：变更索赔预计额',
-              dataIndex: 'confirmedNetProfit2',
-              width: 150,
+              dataIndex: 'finalPeriodChange',
+              width: 180,
             },
           ]
         },
