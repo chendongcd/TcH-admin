@@ -32,7 +32,6 @@ export default {
             a12 += a.compensation
             a13 += a.shouldAmount
           })
-
           z = (x + y)!=0?Math.floor(x / (x + y) * 100) / 100:0
           let sum = {
             id: '合计:',
@@ -46,7 +45,7 @@ export default {
             compensation: a12,
             shouldAmount: a13
           }
-          response.list = [...response.list, sum]
+          response.list = [...response.list]
         }
         yield put({
           type: 'save',

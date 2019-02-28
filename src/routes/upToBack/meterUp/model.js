@@ -47,7 +47,7 @@ export default {
             notCalculatedAmount:a14,
             extraAmount:a13
           }
-          response.list = [...response.list, sum]
+          response.list = [...response.list]
         yield put({
           type: 'save',
           payload: response,
