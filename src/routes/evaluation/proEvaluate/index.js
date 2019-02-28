@@ -26,11 +26,6 @@ import {createURL} from 'services/app'
 
 const FormItem = Form.Item;
 const {Option} = Select;
-const getValue = obj =>
-  Object.keys(obj)
-    .map(key => obj[key])
-    .join(',');
-const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
 const testValue = ''
 const status = [{id: 0, name: '在建'}, {id: 1, name: '完工未结算'}, {id: 2, name: '完工已结算'}, {id: 3, name: '停工'}];
 
@@ -1035,7 +1030,7 @@ class ProEvaluate extends Component {
       }).then(res => {
         if (res) {
           this.handleUpdateModalVisible()
-          this.getList()
+          this.searchList(false,this.exportParams.page,this.exportParams.pageSize)
           cleanState()
         }
       })

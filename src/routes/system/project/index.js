@@ -21,10 +21,6 @@ import {SYS_PRO_EXPORT} from 'common/urls'
 import { createURL} from 'services/app'
 const FormItem = Form.Item;
 const {Option} = Select;
-const getValue = obj =>
-  Object.keys(obj)
-    .map(key => obj[key])
-    .join(',');
 const statusMap = ['success', 'error'];
 const status = ['启用', '禁用'];
 const pageButtons = menuData[2].buttons.map(a=>a.permission)
@@ -77,7 +73,10 @@ class Project extends Component {
       selectedRows: [],
       selectedValues: {}
     }
-    this.exportParams = {}
+    this.exportParams = {
+      page:1,
+      pageSize:10
+    }
   }
 
   columns = [
@@ -226,7 +225,7 @@ class Project extends Component {
       }).then(res=>{
         if(res){
           this.handleUpdateModalVisible()
-          this.getList()
+          this.searchList(false,this.exportParams.page,this.exportParams.pageSize)
         }
       })
     } else {

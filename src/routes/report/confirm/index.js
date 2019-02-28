@@ -13,7 +13,7 @@ import {
   DatePicker,
   Modal, Divider,
 } from 'antd';
-import {Page, PageHeaderWrapper, StandardTable, CustomPicker,Remark} from 'components'
+import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
 import {getButtons, cleanObject} from 'utils'
 import {menuData} from 'common/menu'
@@ -23,7 +23,7 @@ import {createURL} from 'services/app'
 const FormItem = Form.Item;
 const {Option} = Select;
 const pageButtons = menuData[26].buttons.map(a => a.permission)
-const testValue = ''
+const testValue = '123'
 
 
 @Form.create()
@@ -47,15 +47,35 @@ class CreateForm extends Component {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
       fieldsValue.reportTime = fieldsValue.reportTime.format('YYYY-MM-DD')
-      fieldsValue.lossRatio = fieldsValue.lossRatio/100
       handleAdd(fieldsValue, updateModalVisible, selectedValues, this.cleanState);
     });
   }
 
   cleanState = () => {
+    this.props.form.resetFields();
   }
 
   componentWillUnmount() {
+  }
+
+  getProId=(id)=>{
+    this.props.dispatch({
+      type: 'confirmation/queryLast',
+      payload: {projectId: id},
+      token: this.props.user.token
+    }).then(res=>{
+      if(res){
+        this.props.form.setFieldsValue(
+          {
+            balanceChange:res.balanceChange,
+            balanceCompleteValue:res.balanceCompleteValue,
+            balanceInspectionValue:res.balanceInspectionValue,
+            balanceShould:res.balanceShould,
+            sumBalance:res.sumBalance
+          }
+          )
+      }
+    })
   }
 
   render() {
@@ -84,6 +104,7 @@ class CreateForm extends Component {
                   initialValue: selectedValues.projectId ? selectedValues.projectId : '',
                 })(<Select className={styles.customSelect}
                            showSearch={true}
+                           onSelect={(value) => this.getProId(value)}
                            optionFilterProp={'name'}
                            disabled={checkDetail}
                            style={{width: '100%'}}>
@@ -112,7 +133,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 11}} wrapperCol={{span: 10}} label="上年末开累完成产值" addonAfter={'万元'}>
                 {form.getFieldDecorator('balanceCompleteValue', {
                   rules: [{required: true, message: '请输入上年末开累完成产值'}],
-                  initialValue: selectedValues.balanceCompleteValue ? selectedValues.balanceCompleteValue : '',
+                  initialValue: global._checkNum(selectedValues.balanceCompleteValue),
                 })(<Input disabled={true} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>
@@ -120,7 +141,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 11}} wrapperCol={{span: 10}} label="上年末开累验工计价" addonAfter={'万元'}>
                 {form.getFieldDecorator('balanceInspectionValue', {
                   rules: [{required: true, message: '请输入上年末开累验工计价'}],
-                  initialValue: selectedValues.balanceInspectionValue ? selectedValues.balanceInspectionValue : '',
+                  initialValue: global._checkNum(selectedValues.balanceInspectionValue),
                 })(<Input disabled={true} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>
@@ -135,7 +156,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 11}} wrapperCol={{span: 10}} label="合同内应计未计" addonAfter={'万元'}>
                 {form.getFieldDecorator('balanceShould', {
                   rules: [{required: true, message: '请输入合同内应计未计'}],
-                  initialValue: selectedValues.balanceShould ? selectedValues.balanceShould : '',
+                  initialValue: global._checkNum(selectedValues.balanceShould),
                 })(<Input disabled={true} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>
@@ -143,7 +164,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 11}} wrapperCol={{span: 10}} label="变更索赔预计额" addonAfter={'万元'}>
                 {form.getFieldDecorator('balanceChange', {
                   rules: [{required: true, message: '请输入变更索赔预计额'}],
-                  initialValue: selectedValues.balanceChange ? selectedValues.balanceChange : '',
+                  initialValue: global._checkNum(selectedValues.balanceChange),
                 })(<Input disabled={true} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>
@@ -153,7 +174,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 11}} wrapperCol={{span: 10}} label="小计" addonAfter={'万元'}>
                 {form.getFieldDecorator('sumBalance', {
                   rules: [{required: true, message: '请输入小计'}],
-                  initialValue: selectedValues.sumBalance ? selectedValues.sumBalance : null,
+                  initialValue: global._checkNum(selectedValues.sumBalance),
                 })(<Input disabled={true} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>
@@ -168,7 +189,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 11}} wrapperCol={{span: 13}} label="截至本期完成产值">
                 {form.getFieldDecorator('currentProductionValue', {
                   rules: [{required: true, message: '请输入截至本期完成产值'}],
-                  initialValue: selectedValues.currentProductionValue ? selectedValues.currentProductionValue : testValue,
+                  initialValue: global._checkNum(selectedValues.currentProductionValue,testValue),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>
@@ -181,17 +202,17 @@ class CreateForm extends Component {
           <Row gutter={8}>
             <Col md={12} sm={24}>
             <FormItem labelCol={{span: 13}} wrapperCol={{span: 11}} label="上年末已完工本年计价">
-              {form.getFieldDecorator('halfCompleteValue', {
+              {form.getFieldDecorator('halfCompletedValue', {
                 rules: [{required: true, message: '请输入上年末已完工本年计价'}],
-                initialValue: selectedValues.halfCompleteValue ? selectedValues.halfCompleteValue : testValue,
+                initialValue: global._checkNum(selectedValues.halfCompletedValue,testValue),
               })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万元"/>)}
             </FormItem>
           </Col>
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 13}} wrapperCol={{span: 11}} label="当年完成产值当年验工计价">
-                {form.getFieldDecorator('oneCompleteValue', {
+                {form.getFieldDecorator('oneCompletedValue', {
                   rules: [{required: true, message: '请输入当年完成产值当年验工计价'}],
-                  initialValue: selectedValues.oneCompleteValue ? selectedValues.oneCompleteValue : testValue,
+                  initialValue: global._checkNum(selectedValues.oneCompletedValue,testValue),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>
@@ -201,16 +222,16 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 13}} wrapperCol={{span: 11}} label="小计" addonAfter={'万元'}>
                 {form.getFieldDecorator('sumHalfOne', {
                   rules: [{required: true, message: '请输入小计'}],
-                  initialValue: selectedValues.sumHalfOne ? selectedValues.sumHalfOne : testValue,
-                })(<DatePicker disabled={checkDetail} style={{width: '100%'}}/>)}
+                  initialValue: global._checkNum(selectedValues.sumHalfOne,testValue),
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 11}} wrapperCol={{span: 10}} label="变更索赔预计额" addonAfter={'万元'}>
                 {form.getFieldDecorator('changeValue', {
                   rules: [{required: true, message: '请输入变更索赔预计额'}],
-                  initialValue: selectedValues.changeValue ? selectedValues.changeValue : testValue,
-                })(<Input disabled={true} style={{marginTop: 4}} addonAfter="万元"/>)}
+                  initialValue:  global._checkNum(selectedValues.changeValue,testValue),
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>
           </Row>
@@ -224,7 +245,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 13}} wrapperCol={{span: 11}} label="开累完成产值">
                 {form.getFieldDecorator('completedValue', {
                   rules: [{required: true, message: '请输入开累完成产值'}],
-                  initialValue: selectedValues.completedValue ? selectedValues.completedValue : testValue,
+                  initialValue: global._checkNum(selectedValues.completedValue,testValue),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}}  addonAfter={'万元'}/>)}
               </FormItem>
             </Col>
@@ -232,7 +253,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 13}} wrapperCol={{span: 11}} label="开累验工计价">
                 {form.getFieldDecorator('inspection', {
                   rules: [{required: true, message: '请输入开累验工计价'}],
-                  initialValue: selectedValues.inspection ? selectedValues.inspection : testValue,
+                  initialValue: global._checkNum(selectedValues.inspection, testValue),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>
@@ -247,7 +268,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 13}} wrapperCol={{span: 11}} label="其中:合同内应计未计">
                 {form.getFieldDecorator('finalPeriodShould', {
                   rules: [{required: true, message: '请输入合同内应计未计'}],
-                  initialValue: selectedValues.finalPeriodShould ? selectedValues.finalPeriodShould: testValue,
+                  initialValue: global._checkNum(selectedValues.finalPeriodShould, testValue),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}}  addonAfter={'万元'}/>)}
               </FormItem>
             </Col>
@@ -255,7 +276,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 13}} wrapperCol={{span: 11}} label="其中:变更索赔预计额">
                 {form.getFieldDecorator('finalPeriodChange', {
                   rules: [{required: true, message: '请输入变更索赔预计额'}],
-                  initialValue: selectedValues.finalPeriodChange ? selectedValues.finalPeriodChange: testValue,
+                  initialValue: global._checkNum(selectedValues.finalPeriodChange, testValue),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}}  addonAfter={'万元'}/>)}
               </FormItem>
             </Col>
@@ -265,7 +286,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 13}} wrapperCol={{span: 11}} label="小计">
                 {form.getFieldDecorator('sumFinalPeriod', {
                   rules: [{required: true,message: '请输入小计'}],
-                  initialValue: selectedValues.sumFinalPeriod ? selectedValues.sumFinalPeriod : testValue,
+                  initialValue: global._checkNum(selectedValues.sumFinalPeriod, testValue),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}}  addonAfter={'万元'}/>)}
               </FormItem>
             </Col>
@@ -373,12 +394,12 @@ class Confirmation extends Component {
             },
             {
               title: '上年末已完工本年计价',
-              dataIndex: 'halfCompleteValue',
+              dataIndex: 'halfCompletedValue',
               width: 170,
             },
             {
               title: '当年完成产值当年验工计价',
-              dataIndex: 'oneCompleteValue',
+              dataIndex: 'oneCompletedValue',
               width: 170,
             },
           ]
@@ -462,7 +483,7 @@ class Confirmation extends Component {
     }
   }
 
-  handleStandardTableChange = (pagination, filtersArg, sorter) => {
+  handleStandardTableChange = (pagination) => {
     this.searchList(null, pagination.current, pagination.pageSize)
   };
 
@@ -514,18 +535,22 @@ class Confirmation extends Component {
     const {dispatch, app: {user}} = this.props;
     const payload = {
       projectId: fields.projectId,
-      temporarilyPrice: fields.temporarilyPrice,
-      alreadyPrice: fields.alreadyPrice,
-      unPriced: fields.unPriced,
-      confirmPriced: fields.confirmPriced,
-      inBookCost: fields.inBookCost,
       reportTime: fields.reportTime,
-      outBookCost: fields.outBookCost,
-      lossRatio: fields.lossRatio,
-      confirmedNetProfit: fields.confirmedNetProfit,
-      prepayments: fields.prepayments,
-      remark: fields.remark,
-      other: fields.other,
+      balanceCompleteValue: fields.balanceCompleteValue,
+      balanceInspectionValue: fields.balanceInspectionValue,
+      sumBalance: fields.sumBalance,
+      balanceShould: fields.balanceShould,
+      balanceChange: fields.balanceChange,
+      currentProductionValue: fields.currentProductionValue,
+      sumHalfOne: fields.sumHalfOne,
+      halfCompletedValue: fields.halfCompletedValue,
+      oneCompletedValue: fields.oneCompletedValue,
+      changeValue: fields.changeValue,
+      completedValue: fields.completedValue,
+      inspection: fields.inspection,
+      sumFinalPeriod: fields.sumFinalPeriod,
+      finalPeriodShould: fields.finalPeriodShould,
+      finalPeriodChange: fields.finalPeriodChange,
     }
     if (updateModalVisible) {
       dispatch({
@@ -535,7 +560,7 @@ class Confirmation extends Component {
       }).then(res => {
         if (res) {
           this.handleUpdateModalVisible()
-          this.getList()
+          this.searchList(false,this.exportParams.page,this.exportParams.pageSize)
           cleanState()
         }
       })
@@ -582,10 +607,6 @@ class Confirmation extends Component {
     );
   }
 
-  setYear = (value) => {
-    this.props.form.setFieldsValue({'year': value})
-  }
-
   renderForm() {
     return this.renderAdvancedForm()
   }
@@ -594,7 +615,8 @@ class Confirmation extends Component {
     const {
       confirmation: {data, proNames},
       loading,
-      app: {user}
+      app: {user},
+      dispatch
     } = this.props;
     const {selectedRows, modalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail} = this.state;
 
@@ -603,6 +625,7 @@ class Confirmation extends Component {
       handleModalVisible: this.handleModalVisible,
       handleUpdateModalVisible: this.handleUpdateModalVisible,
       handleCheckDetail: this.handleCheckDetail,
+      dispatch:dispatch,
     };
     const parentState = {
       updateModalVisible: updateModalVisible,
@@ -610,7 +633,8 @@ class Confirmation extends Component {
       selectedValues: selectedValues,
       checkDetail: checkDetail,
       proNames: proNames,
-      loading: loading.effects[`confirmation/${updateModalVisible ? 'update' : 'add'}`]
+      loading: loading.effects[`confirmation/${updateModalVisible ? 'update' : 'add'}`],
+      user:user
     }
     const exportUrl = createURL(LOSS_EXPORT, {
       ...this.exportParams, ...{
@@ -681,10 +705,8 @@ class Confirmation extends Component {
         page: page,
         pageSize: pageSize,
         projectName: fieldsValue.projectName,
-        subcontractorName: fieldsValue.subcontractorName,
-        teamName: fieldsValue.teamName,
-        year: fieldsValue.year?fieldsValue.year.format('YYYY'):null,
-        quarter: fieldsValue.quarter,
+        // year: fieldsValue.year?fieldsValue.year.format('YYYY'):null,
+        // quarter: fieldsValue.quarter,
       }
       cleanObject(payload)
       this.exportParams = payload

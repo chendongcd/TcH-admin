@@ -430,7 +430,6 @@ class Resume extends Component {
       laborAccountId: fields.laborAccountId,
       constructionScale: fields.constructionScale,
     }
-    // contractPerson:fields.contractPerson,
     cleanObject(payload)
     if (updateModalVisible) {
       dispatch({
@@ -440,7 +439,7 @@ class Resume extends Component {
       }).then(res => {
         if (res) {
           this.handleUpdateModalVisible()
-          this.getList()
+          this.searchList(false,this.exportParams.page,this.exportParams.pageSize)
         }
       })
     } else {

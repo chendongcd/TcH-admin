@@ -23,10 +23,6 @@ import {createURL} from 'services/app'
 
 const FormItem = Form.Item;
 const {Option} = Select;
-const getValue = obj =>
-  Object.keys(obj)
-    .map(key => obj[key])
-    .join(',');
 const statusMap = ['success', 'error'];
 const status = ['启用', '禁用'];
 const pageButtons = menuData[4].buttons.map(a => a.permission)
@@ -69,7 +65,7 @@ class CreateForm extends Component {
   }
 
   render() {
-    const {modalVisible,loading, form, handleAdd, getProNames, getRoleNames, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail, proNames, roleNames} = this.props;
+    const {modalVisible, loading, form, handleAdd, getProNames, getRoleNames, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail, proNames, roleNames} = this.props;
     return (
       <Modal
         destroyOnClose
@@ -77,7 +73,7 @@ class CreateForm extends Component {
         title={checkDetail ? '用户详情' : updateModalVisible ? "编辑用户" : "新建用户"}
         visible={modalVisible}
         className={styles.modalContent}
-        okButtonProps={{loading:loading}}
+        okButtonProps={{loading: loading}}
         onOk={() => checkDetail ? handleCheckDetail() : this.okHandle(handleAdd, form, updateModalVisible, selectedValues)}
         onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
       >
@@ -152,6 +148,8 @@ class User extends Component {
       checkDetail: false
     }
     this.exportParams = {
+      page:1,
+      pageSize:10
     }
   }
 
@@ -159,37 +157,37 @@ class User extends Component {
     {
       title: '用户编码',
       dataIndex: 'code',
-      width:100,
+      width: 100,
     },
     {
       title: '账号类别',
-      width:100,
+      width: 100,
       dataIndex: 'type',
       render: val => <span>{val == 0 ? '公司' : '项目部'}</span>,
     },
     {
       title: '账号名称',
-      width:100,
+      width: 100,
       dataIndex: 'account',
     },
     {
       title: '项目名称',
-      width:150,
+      width: 150,
       dataIndex: 'projectName',
     },
     {
       title: '项目密码',
-      width:100,
+      width: 100,
       dataIndex: 'password',
     },
     {
       title: '角色权限',
-      width:150,
+      width: 150,
       dataIndex: 'roleName',
     },
     {
       title: '状态',
-      width:100,
+      width: 100,
       dataIndex: 'disable',
       render(val) {
         return <Badge status={statusMap[val]} text={status[val]}/>;
@@ -197,30 +195,30 @@ class User extends Component {
     },
     {
       title: '创建人',
-      width:100,
+      width: 100,
       dataIndex: 'createUserStr',
     },
     {
       title: '创建时间',
-      width:180,
+      width: 180,
       dataIndex: 'createTime',
       render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
     },
     {
       title: '最新修改人',
-      width:100,
+      width: 100,
       dataIndex: 'updateUserStr'
     },
     {
       title: '最新修改时间',
       dataIndex: 'updateTime',
-      width:180,
+      width: 180,
       render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
     },
     {
       title: '操作',
-      fixed:'right',
-      width:160,
+      fixed: 'right',
+      width: 160,
       render: (val, record) => {
         const user = this.props.app.user
         if (!user.token) {
@@ -256,8 +254,8 @@ class User extends Component {
     }
   }
 
-  handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    this.searchList(null,pagination.current, pagination.pageSize)
+  handleStandardTableChange = (pagination) => {
+    this.searchList(null, pagination.current, pagination.pageSize)
   };
 
   handleFormReset = () => {
@@ -313,16 +311,22 @@ class User extends Component {
         type: 'sys_user/updateUser',
         payload: {...payload, ...{id: selectedValues.id}},
         token: user.token,
-        callback: this.handleUpdateModalVisible,
-        callback2: this.getList
+      }).then(res => {
+        if (res) {
+          this.handleUpdateModalVisible()
+          this.searchList(false,this.exportParams.page,this.exportParams.pageSize)
+        }
       })
     } else {
       dispatch({
         type: 'sys_user/addUser',
         payload: payload,
-        token: user.token,
-        callback: this.handleModalVisible,
-        callback2: this.getList
+        token: user.token
+      }).then(res => {
+        if (res) {
+          this.handleModalVisible()
+          this.getList()
+        }
       })
     }
   };
@@ -416,9 +420,9 @@ class User extends Component {
       checkDetail: checkDetail,
       proNames: proNames,
       roleNames: roleNames,
-      loading:loading.effects[`sys_user/${updateModalVisible?'updateUser':'addUser'}`]
+      loading: loading.effects[`sys_user/${updateModalVisible ? 'updateUser' : 'addUser'}`]
     }
-    const exportUrl = createURL(SYS_USER_EXPORT,this.exportParams)
+    const exportUrl = createURL(SYS_USER_EXPORT, this.exportParams)
 
     return (
       <Page inner={true} loading={pageLoading}>
@@ -441,7 +445,7 @@ class User extends Component {
                 loading={loading.effects['sys_user/queryUserList']}
                 rowKey="id"
                 data={data}
-                scroll={{x: '130%',y: global._scollY}}
+                scroll={{x: '130%', y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
@@ -454,13 +458,13 @@ class User extends Component {
     )
   }
 
-  getProNames = (proName=[]) => {
+  getProNames = (proName = []) => {
     if (proName.length < 1) {
       this.props.dispatch(
         {
           type: 'sys_user/queryProNames',
           payload: {page: 1, pageSize: 10},
-          token:this.props.app.user.token
+          token: this.props.app.user.token
         }
       )
     }
@@ -484,8 +488,8 @@ class User extends Component {
     })
   }
 
-  searchList = (e,page = 1, pageSize = 10) => {
-    e&&e.preventDefault?e.preventDefault():null
+  searchList = (e, page = 1, pageSize = 10) => {
+    e && e.preventDefault ? e.preventDefault() : null
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
       //  form.resetFields();

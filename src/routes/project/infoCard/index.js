@@ -996,7 +996,7 @@ class InfoCard extends Component {
       }).then(res => {
         if (res) {
           this.handleUpdateModalVisible()
-          this.getList()
+          this.searchList(false,this.exportParams.page,this.exportParams.pageSize)
         }
       })
     } else {

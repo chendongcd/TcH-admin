@@ -27,26 +27,22 @@ export default {
         return false
       }
     },
-    *addUser({payload,token,callback,callback2},{call,put}){
+    *addUser({payload,token},{call,put}){
       const response = yield call(addUser, payload,token);
       if(response.code=='200'){
         message.success('新增用户成功')
-        callback()
-        callback2()
+        return true
       }
       if(global.checkToken(response)){
         yield put({type:'app/logout'})
         return false
       }
     },
-    *updateUser({payload,token,callback,callback2},{call,put}){
-      console.log(payload)
+    *updateUser({payload,token},{call,put}){
       const response = yield call(updateUser, payload,token);
-      console.log(response)
       if(response.code=='200'){
         message.success('用户信息修改成功')
-        callback()
-        callback2()
+        return true
       }
       if(global.checkToken(response)){
         yield put({type:'app/logout'})
@@ -54,7 +50,7 @@ export default {
       }
     },
     *queryUserInfo({payload},{call,put}){
-      const response = yield call(queryUserInfo, payload);
+      yield call(queryUserInfo, payload);
     },
     *updateStatusUser({payload,token},{call,put}){
       const response = yield call(updateStatusUser, payload,token);

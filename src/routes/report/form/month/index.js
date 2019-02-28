@@ -340,7 +340,6 @@ class ReportForm extends Component {
       changeClaimAmount: fields.changeClaimAmount,
       remark: fields.remark,
     }
-    console.log(payload)
     if (updateModalVisible) {
       dispatch({
         type: 'reportForm/update',
@@ -349,7 +348,7 @@ class ReportForm extends Component {
       }).then(res => {
         if (res) {
           this.handleUpdateModalVisible()
-          this.getList()
+          this.searchList(false,this.exportParams.page,this.exportParams.pageSize)
           cleanState()
         }
       })

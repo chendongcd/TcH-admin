@@ -93,6 +93,14 @@ class CreateForm extends Component {
                 </Select>)}
               </FormItem>
             </Col>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="合同金额">
+                {form.getFieldDecorator('temporarilyPrice', {
+                  rules: [{required: true, message: '请输入合同金额(万元)'}],
+                  initialValue: selectedValues.temporarilyPrice ? selectedValues.temporarilyPrice : testValue,
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万元"/>)}
+              </FormItem>
+            </Col>
           </Row>
           <Row gutter={8}>
             <Col md={12} sm={24}>
@@ -101,14 +109,6 @@ class CreateForm extends Component {
                   rules: [{required: true, message: '请选择填报日期'}],
                   initialValue: selectedValues.reportTime ? moment(selectedValues.reportTime) : null,
                 })(<DatePicker disabled={checkDetail} style={{width: '100%'}}/>)}
-              </FormItem>
-            </Col>
-            <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="合同金额">
-                {form.getFieldDecorator('temporarilyPrice', {
-                  rules: [{required: true, message: '请输入合同金额(万元)'}],
-                  initialValue: selectedValues.temporarilyPrice ? selectedValues.temporarilyPrice : testValue,
-                })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>
           </Row>
@@ -505,7 +505,7 @@ class LossForm extends Component {
       }).then(res => {
         if (res) {
           this.handleUpdateModalVisible()
-          this.getList()
+          this.searchList(false,this.exportParams.page,this.exportParams.pageSize)
           cleanState()
         }
       })

@@ -745,7 +745,7 @@ class MeterDown extends Component {
       }).then(res => {
         if (res) {
           this.handleUpdateModalVisible()
-          this.getList()
+          this.searchList(false,this.exportParams.page,this.exportParams.pageSize)
           cleanState()
         }
       })
@@ -938,8 +938,8 @@ class MeterDown extends Component {
         subcontractorName: fieldsValue.subcontractorName,
         valuationType: fieldsValue.valuationType,
         valuationTime: fieldsValue.valuationTime?fieldsValue.valuationTime.format('YYYY-MM-DD'):null,
-        minUnderRate: fieldsValue.minUnderRate,
-        maxUnderRate: fieldsValue.maxUnderRate
+        minUnderRate: fieldsValue.minUnderRate/100,
+        maxUnderRate: fieldsValue.maxUnderRate/100
       }
       cleanObject(payload)
       this.exportParams = payload
