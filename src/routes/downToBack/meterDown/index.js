@@ -30,7 +30,7 @@ const info_css = {
   color: '#fa541c'
 }
 const vType = ['','中期计价', '末次结算'];
-const testValue = ''
+const testValue = '1111'
 const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
 const qiShu = []
 for (let i = 1; i < 201; i++) {
