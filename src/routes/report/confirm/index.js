@@ -50,7 +50,7 @@ class CreateForm extends Component {
       fieldsValue.lossRatio = fieldsValue.lossRatio/100
       handleAdd(fieldsValue, updateModalVisible, selectedValues, this.cleanState);
     });
-  };
+  }
 
   cleanState = () => {
   }
@@ -78,7 +78,7 @@ class CreateForm extends Component {
         <div className={styles.modalContent}>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="项目名称">
+              <FormItem labelCol={{span: 11}} wrapperCol={{span: 10}} label="项目名称">
                 {form.getFieldDecorator('projectId', {
                   rules: [{required: true, message: '请选择项目'}],
                   initialValue: selectedValues.projectId ? selectedValues.projectId : '',
@@ -94,7 +94,7 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="填报时间">
+              <FormItem labelCol={{span: 11}} wrapperCol={{span: 10}} label="填报时间">
                 {form.getFieldDecorator('reportTime', {
                   rules: [{required: true, message: '请选择填报日期'}],
                   initialValue: selectedValues.reportTime ? moment(selectedValues.reportTime) : null,
@@ -110,36 +110,18 @@ class CreateForm extends Component {
           <Row gutter={8}>
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 11}} wrapperCol={{span: 10}} label="上年末开累完成产值" addonAfter={'万元'}>
-                {form.getFieldDecorator('reportTime1', {
+                {form.getFieldDecorator('balanceCompleteValue', {
                   rules: [{required: true, message: '请输入上年末开累完成产值'}],
-                  initialValue: selectedValues.reportTime ? moment(selectedValues.reportTime) : null,
-                })(<DatePicker disabled={checkDetail} style={{width: '100%'}}/>)}
+                  initialValue: selectedValues.balanceCompleteValue ? selectedValues.balanceCompleteValue : '',
+                })(<Input disabled={true} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 11}} wrapperCol={{span: 15}} label="上年末开累验工计价" addonAfter={'万元'}>
-                {form.getFieldDecorator('temporarilyPrice', {
+              <FormItem labelCol={{span: 11}} wrapperCol={{span: 10}} label="上年末开累验工计价" addonAfter={'万元'}>
+                {form.getFieldDecorator('balanceInspectionValue', {
                   rules: [{required: true, message: '请输入上年末开累验工计价'}],
-                  initialValue: selectedValues.temporarilyPrice ? selectedValues.temporarilyPrice : testValue,
-                })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万元"/>)}
-              </FormItem>
-            </Col>
-          </Row>
-          <Row gutter={8}>
-            <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 11}} wrapperCol={{span: 10}} label="上年末开累完成产值" addonAfter={'万元'}>
-                {form.getFieldDecorator('reportTime1', {
-                  rules: [{required: true, message: '请输入上年末开累完成产值'}],
-                  initialValue: selectedValues.reportTime ? moment(selectedValues.reportTime) : null,
-                })(<DatePicker disabled={checkDetail} style={{width: '100%'}}/>)}
-              </FormItem>
-            </Col>
-            <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 11}} wrapperCol={{span: 15}} label="上年末开累验工计价" addonAfter={'万元'}>
-                {form.getFieldDecorator('temporarilyPrice', {
-                  rules: [{required: true, message: '请输入上年末开累验工计价'}],
-                  initialValue: selectedValues.temporarilyPrice ? selectedValues.temporarilyPrice : testValue,
-                })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万元"/>)}
+                  initialValue: selectedValues.balanceInspectionValue ? selectedValues.balanceInspectionValue : '',
+                })(<Input disabled={true} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>
           </Row>
@@ -151,28 +133,28 @@ class CreateForm extends Component {
           <Row gutter={8}>
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 11}} wrapperCol={{span: 10}} label="合同内应计未计" addonAfter={'万元'}>
-                {form.getFieldDecorator('reportTime1', {
+                {form.getFieldDecorator('balanceShould', {
                   rules: [{required: true, message: '请输入合同内应计未计'}],
-                  initialValue: selectedValues.reportTime ? moment(selectedValues.reportTime) : null,
-                })(<DatePicker disabled={checkDetail} style={{width: '100%'}}/>)}
+                  initialValue: selectedValues.balanceShould ? selectedValues.balanceShould : '',
+                })(<Input disabled={true} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 11}} wrapperCol={{span: 10}} label="变更索赔预计额" addonAfter={'万元'}>
-                {form.getFieldDecorator('reportTime1', {
+                {form.getFieldDecorator('balanceChange', {
                   rules: [{required: true, message: '请输入变更索赔预计额'}],
-                  initialValue: selectedValues.reportTime ? moment(selectedValues.reportTime) : null,
-                })(<DatePicker disabled={checkDetail} style={{width: '100%'}}/>)}
+                  initialValue: selectedValues.balanceChange ? selectedValues.balanceChange : '',
+                })(<Input disabled={true} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>
           </Row>
           <Row gutter={8}>
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 11}} wrapperCol={{span: 10}} label="小计" addonAfter={'万元'}>
-                {form.getFieldDecorator('reportTime1', {
+                {form.getFieldDecorator('sumBalance', {
                   rules: [{required: true, message: '请输入小计'}],
-                  initialValue: selectedValues.reportTime ? moment(selectedValues.reportTime) : null,
-                })(<DatePicker disabled={checkDetail} style={{width: '100%'}}/>)}
+                  initialValue: selectedValues.sumBalance ? selectedValues.sumBalance : null,
+                })(<Input disabled={true} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>
           </Row>
@@ -184,9 +166,9 @@ class CreateForm extends Component {
           <Row gutter={8}>
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 11}} wrapperCol={{span: 13}} label="截至本期完成产值">
-                {form.getFieldDecorator('alreadyPrice', {
+                {form.getFieldDecorator('currentProductionValue', {
                   rules: [{required: true, message: '请输入截至本期完成产值'}],
-                  initialValue: selectedValues.alreadyPrice ? selectedValues.alreadyPrice : testValue,
+                  initialValue: selectedValues.currentProductionValue ? selectedValues.currentProductionValue : testValue,
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>
@@ -199,17 +181,17 @@ class CreateForm extends Component {
           <Row gutter={8}>
             <Col md={12} sm={24}>
             <FormItem labelCol={{span: 13}} wrapperCol={{span: 11}} label="上年末已完工本年计价">
-              {form.getFieldDecorator('inBookCost', {
+              {form.getFieldDecorator('halfCompleteValue', {
                 rules: [{required: true, message: '请输入上年末已完工本年计价'}],
-                initialValue: selectedValues.inBookCost ? selectedValues.inBookCost : testValue,
+                initialValue: selectedValues.halfCompleteValue ? selectedValues.halfCompleteValue : testValue,
               })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万元"/>)}
             </FormItem>
           </Col>
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 13}} wrapperCol={{span: 11}} label="当年完成产值当年验工计价">
-                {form.getFieldDecorator('inBookCost', {
+                {form.getFieldDecorator('oneCompleteValue', {
                   rules: [{required: true, message: '请输入当年完成产值当年验工计价'}],
-                  initialValue: selectedValues.inBookCost ? selectedValues.inBookCost : testValue,
+                  initialValue: selectedValues.oneCompleteValue ? selectedValues.oneCompleteValue : testValue,
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>
@@ -217,10 +199,18 @@ class CreateForm extends Component {
           <Row gutter={8}>
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 13}} wrapperCol={{span: 11}} label="小计" addonAfter={'万元'}>
-                {form.getFieldDecorator('reportTime1', {
+                {form.getFieldDecorator('sumHalfOne', {
                   rules: [{required: true, message: '请输入小计'}],
-                  initialValue: selectedValues.reportTime ? moment(selectedValues.reportTime) : null,
+                  initialValue: selectedValues.sumHalfOne ? selectedValues.sumHalfOne : testValue,
                 })(<DatePicker disabled={checkDetail} style={{width: '100%'}}/>)}
+              </FormItem>
+            </Col>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 11}} wrapperCol={{span: 10}} label="变更索赔预计额" addonAfter={'万元'}>
+                {form.getFieldDecorator('changeValue', {
+                  rules: [{required: true, message: '请输入变更索赔预计额'}],
+                  initialValue: selectedValues.changeValue ? selectedValues.changeValue : testValue,
+                })(<Input disabled={true} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>
           </Row>
@@ -231,18 +221,18 @@ class CreateForm extends Component {
         <div className={styles.modalContent}>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 11}} wrapperCol={{span: 13}} label="开累完成产值">
-                {form.getFieldDecorator('lossRatio', {
+              <FormItem labelCol={{span: 13}} wrapperCol={{span: 11}} label="开累完成产值">
+                {form.getFieldDecorator('completedValue', {
                   rules: [{required: true, message: '请输入开累完成产值'}],
-                  initialValue: selectedValues.lossRatio ? selectedValues.lossRatio*100 : testValue,
+                  initialValue: selectedValues.completedValue ? selectedValues.completedValue : testValue,
                 })(<Input disabled={checkDetail} style={{marginTop: 4}}  addonAfter={'万元'}/>)}
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 11}} wrapperCol={{span: 13}} label="开累验工计价">
-                {form.getFieldDecorator('confirmedNetProfit', {
+              <FormItem labelCol={{span: 13}} wrapperCol={{span: 11}} label="开累验工计价">
+                {form.getFieldDecorator('inspection', {
                   rules: [{required: true, message: '请输入开累验工计价'}],
-                  initialValue: selectedValues.confirmedNetProfit ? selectedValues.confirmedNetProfit : testValue,
+                  initialValue: selectedValues.inspection ? selectedValues.inspection : testValue,
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>
@@ -255,27 +245,27 @@ class CreateForm extends Component {
           <Row gutter={8}>
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 13}} wrapperCol={{span: 11}} label="其中:合同内应计未计">
-                {form.getFieldDecorator('prepayments', {
+                {form.getFieldDecorator('finalPeriodShould', {
                   rules: [{required: true, message: '请输入合同内应计未计'}],
-                  initialValue: selectedValues.prepayments ? selectedValues.prepayments: testValue,
+                  initialValue: selectedValues.finalPeriodShould ? selectedValues.finalPeriodShould: testValue,
                 })(<Input disabled={checkDetail} style={{marginTop: 4}}  addonAfter={'万元'}/>)}
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 13}} wrapperCol={{span: 11}} label="其中:变更索赔预计额">
-                {form.getFieldDecorator('prepayments', {
+                {form.getFieldDecorator('finalPeriodChange', {
                   rules: [{required: true, message: '请输入变更索赔预计额'}],
-                  initialValue: selectedValues.prepayments ? selectedValues.prepayments: testValue,
+                  initialValue: selectedValues.finalPeriodChange ? selectedValues.finalPeriodChange: testValue,
                 })(<Input disabled={checkDetail} style={{marginTop: 4}}  addonAfter={'万元'}/>)}
               </FormItem>
             </Col>
           </Row>
           <Row gutter={8}>
-            <Col md={24} sm={24}>
+            <Col md={12} sm={24}>
               <FormItem labelCol={{span: 13}} wrapperCol={{span: 11}} label="小计">
-                {form.getFieldDecorator('remark', {
+                {form.getFieldDecorator('sumFinalPeriod', {
                   rules: [{required: true,message: '请输入小计'}],
-                  initialValue: selectedValues.remark ? selectedValues.remark : testValue,
+                  initialValue: selectedValues.sumFinalPeriod ? selectedValues.sumFinalPeriod : testValue,
                 })(<Input disabled={checkDetail} style={{marginTop: 4}}  addonAfter={'万元'}/>)}
               </FormItem>
             </Col>
