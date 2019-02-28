@@ -1,5 +1,5 @@
-import {queryLossList,addLoss,updateLoss} from '../../../services/report/loss/loss';
 import {queryProPerList} from "../../../services/system/sys_project";
+import {queryConfirm,queryConfirmLast,addConfirm,updateConfirm} from '../../../services/report/confirm/index'
 import {message} from "antd";
 export default {
   namespace: 'confirmation',
@@ -9,14 +9,14 @@ export default {
       list: [],
       pagination: {},
     },
-    proNames:[]
+    proNames:[],
+    lastOver:{}
   },
 
   effects: {
     *fetch({ payload ,token}, { call, put }) {
-      const response = yield call(queryLossList, payload,token);
+      const response = yield call(queryConfirm, payload,token);
       if(response.code == '200'){
-        console.log(response)
         // let x = 0, y = 0, z = 0, a5 = 0, a14 = 0, a13 = 0, a15 = 0
         // let aPre = 0,a7=0,a8=0,a9=0,a10=0,a11=0
         // response.list.forEach(a => {
@@ -60,7 +60,7 @@ export default {
       }
     },
     *add({ payload,token}, { call, put }) {
-      const response = yield call(addLoss, payload,token);
+      const response = yield call(addConfirm, payload,token);
       if(response.code=='200'){
         message.success('新增成功');
         return true
@@ -72,7 +72,7 @@ export default {
       return false
     },
     *update({ payload,token}, { call, put }) {
-      const response = yield call(updateLoss, payload,token);
+      const response = yield call(updateConfirm, payload,token);
       if(response.code=='200'){
         message.success('修改成功');
         return true
@@ -96,6 +96,16 @@ export default {
         return false
       }
     },
+    *queryLast({payload,token},{call,put}){
+      const response = yield call(queryConfirmLast, payload,token);
+      if(response.code=='200'){
+        return response.entity
+      }
+      if(global.checkToken(response)){
+        yield put({type:'app/logout'})
+        return false
+      }
+    },
   },
 
   reducers: {
@@ -109,6 +119,12 @@ export default {
       return{
         ...state,
         proNames:action.payload
+      }
+    },
+    saveLastOver(state,action){
+      return{
+        ...state,
+        lastOver:action.payload
       }
     }
   },

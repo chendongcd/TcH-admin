@@ -241,6 +241,10 @@ class Permission extends Component {
       drawVisible: false,
       selectedValues: {}
     }
+    this.exportParams = {
+      page:1,
+      pageSize:10
+    }
   }
 
   columns = [
@@ -346,7 +350,7 @@ class Permission extends Component {
       }).then(res => {
         if (res) {
           this.handleUpdateModalVisible()
-          this.getList()
+          this.searchList(false,this.exportParams.page,this.exportParams.pageSize)
         }
       })
     } else {
@@ -509,6 +513,7 @@ class Permission extends Component {
       //  form.resetFields();
       let payload = {page: page, pageSize: pageSize, name: fieldsValue.searchName}
       cleanObject(payload)
+      this.exportParams = payload
       this.props.dispatch({
         type: 'sys_per/query',
         payload: payload

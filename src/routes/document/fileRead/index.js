@@ -219,6 +219,10 @@ class FileRead extends Component {
       selectedValues: {},
       checkDetail: false
     }
+    this.exportParams = {
+      page: 1,
+      pageSize: 10
+    }
   }
 
   columns = [
@@ -374,7 +378,7 @@ class FileRead extends Component {
       }).then(res => {
         if (res) {
           this.handleUpdateModalVisible()
-          this.getList()
+          this.searchList(false,this.exportParams.page,this.exportParams.pageSize)
           cleanState()
         }
       })
@@ -511,6 +515,7 @@ class FileRead extends Component {
         fileType: fieldsValue.fileType,
       }
       cleanObject(payload)
+      this.exportParams = payload
       this.props.dispatch({
         type: 'fileRead/fetch',
         payload: payload,

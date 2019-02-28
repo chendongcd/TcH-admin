@@ -196,6 +196,10 @@ class FileReference extends Component {
       selectedValues: {},
       checkDetail: false
     }
+    this.exportParams = {
+      page: 1,
+      pageSize: 10
+    }
   }
 
   columns = [
@@ -313,7 +317,7 @@ class FileReference extends Component {
       }).then(res => {
         if (res) {
           this.handleUpdateModalVisible()
-          this.getList()
+          this.searchList(false,this.exportParams.page,this.exportParams.pageSize)
           cleanState()
         }
       })
@@ -441,6 +445,7 @@ class FileReference extends Component {
         pageSize: pageSize,
         fileName: fieldsValue.name,
       }
+      this.exportParams = payload
       cleanObject(payload)
       this.props.dispatch({
         type: 'fileRefer/fetch',
