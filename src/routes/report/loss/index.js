@@ -140,7 +140,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="财务确认收入">
                 {form.getFieldDecorator('confirmPriced', {
                   rules: [{required: true, message: '请输入财务确认收入'}],
-                  initialValue: global.checkNum(selectedValues.confirmPriced),
+                  initialValue: global._checkNum(selectedValues.confirmPriced),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>
@@ -186,7 +186,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="财务已确认净利润">
                 {form.getFieldDecorator('confirmedNetProfit', {
                   rules: [{required: true, message: '请输入财务已确认净利润'}],
-                  initialValue: global(selectedValues.confirmedNetProfit),
+                  initialValue: global._checkNum(selectedValues.confirmedNetProfit),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入财务已确认净利润" addonAfter="万元"/>)}
               </FormItem>
             </Col>
@@ -208,7 +208,7 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="其他">
                 {form.getFieldDecorator('other', {
-                  initialValue: global.checkNum(selectedValues.other),
+                  initialValue: global._checkNum(selectedValues.other),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>

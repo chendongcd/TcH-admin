@@ -317,7 +317,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="扣除质保金">
                 {form.getFieldDecorator('warranty', {
                   rules: [{required: true, message: '请输入扣除质保金'}],
-                  initialValue: global.checkNum(selectedValues.warranty),
+                  initialValue: global._checkNum(selectedValues.warranty),
                 })(<Input onChange={(e)=>this.shouldPay(e.target.value,3)} disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入扣除质保金" addonAfter="元"/>)}
               </FormItem>
             </Col>
@@ -327,7 +327,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="扣除履约保证金">
                 {form.getFieldDecorator('performanceBond', {
                   rules: [{required: true, message: '请输入扣除履约保证金'}],
-                  initialValue: global.checkNum(selectedValues.performanceBond),
+                  initialValue: global._checkNum(selectedValues.performanceBond),
                 })(<Input onChange={(e)=>this.shouldPay(e.target.value,4)} disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入扣除履约保证金" addonAfter="元"/>)}
               </FormItem>
             </Col>
@@ -335,7 +335,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="计日工及补偿费用">
                 {form.getFieldDecorator('compensation', {
                   rules: [{required: true, message: '请输入计日工及补偿费用'}],
-                  initialValue: global.checkNum(selectedValues.compensation),
+                  initialValue: global._checkNum(selectedValues.compensation),
                 })(<Input  disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入计日工及补偿费用" addonAfter="元"/>)}
               </FormItem>
             </Col>
@@ -345,7 +345,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="应支付金额">
                 {form.getFieldDecorator('shouldAmount', {
                   rules: [{required: true, message: '请输入以上金额'}],
-                  initialValue: global.checkNum(selectedValues.shouldAmount),
+                  initialValue: global._checkNum(selectedValues.shouldAmount),
                 })(<Input disabled={true} style={{marginTop: 4}} placeholder="输入以上计价金额自动带出" addonAfter="元"/>)}
               </FormItem>
             </Col>
@@ -353,7 +353,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="已完未计">
                 {form.getFieldDecorator('endedPrice', {
                   rules: [{required: true, message: '请输入已完未计'}],
-                  initialValue: global.checkNum(selectedValues.endedPrice),
+                  initialValue: global._checkNum(selectedValues.endedPrice),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入已完未计" addonAfter="元"/>)}
               </FormItem>
             </Col>
