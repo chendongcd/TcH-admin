@@ -679,12 +679,14 @@ class ProEvaluate extends Component {
     {
       title: '序号',
       dataIndex: 'id',
-      width:80,
+      width:100,
+      fixed: 'left'
     },
     {
       title: '项目名称',
-      width:100,
-      dataIndex: 'projectName',
+      width:150,
+      fixed: 'left',
+      dataIndex: 'projectName'
     },
     {
       title: '工程类别',

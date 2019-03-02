@@ -119,7 +119,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('reportTime', {
                   rules: [{required: true, message: '请选择填报日期'}],
                   initialValue: selectedValues.reportTime ? moment(selectedValues.reportTime) : null,
-                })(<DatePicker disabled={checkDetail} style={{width: '100%'}}/>)}
+                })(<DatePicker.MonthPicker disabled={checkDetail} style={{width: '100%'}}/>)}
               </FormItem>
             </Col>
           </Row>
@@ -186,7 +186,7 @@ class CreateForm extends Component {
         <div className={styles.modalContent}>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 11}} wrapperCol={{span: 13}} label="截至本期完成产值">
+              <FormItem labelCol={{span: 11}} wrapperCol={{span: 13}} label="本年截至本期完成产值">
                 {form.getFieldDecorator('currentProductionValue', {
                   rules: [{required: true, message: '请输入截至本期完成产值'}],
                   initialValue: global._checkNum(selectedValues.currentProductionValue,testValue),

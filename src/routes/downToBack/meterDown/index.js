@@ -31,7 +31,6 @@ const info_css = {
 }
 const vType = ['','中期计价', '末次结算'];
 const testValue = ''
-const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
 const qiShu = []
 for (let i = 1; i < 201; i++) {
   qiShu.push(<Option key={i} value={i}>{'第' + (i) + '期'}</Option>);
@@ -137,6 +136,23 @@ class CreateForm extends Component {
     if (res.projectId && res.subcontractorId && res.laborAccountId) {
       let payload = {projectId: res.projectId, subcontractorId: res.subcontractorId, teamName: res.laborAccountId}
       getAmount(payload, this.setAmount)
+    }
+  }
+
+  shouldPay=(value,type)=>{
+    let form  = this.props.form
+    let  res = form.getFieldsValue(['valuationPrice','valuationPriceReduce','warranty','performanceBond','shouldAmount'])
+    let  arr = [res.valuationPrice,res.valuationPriceReduce,res.warranty,res.performanceBond]
+    arr[type-1] = value
+   // return
+    let test = (i)=>{
+      return (typeof Number(i)==='number'&&i.length>0)
+    }
+    if(arr.every(test)){
+      let pay = arr[0]-arr[1]-arr[2]-arr[3]
+      form.setFieldsValue({shouldAmount:Number.isInteger(pay)?pay:pay.toFixed(2)})
+    }else if(res.shouldAmount||res.shouldAmount===0){
+      form.setFieldsValue({shouldAmount:''})
     }
   }
 
@@ -282,16 +298,17 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="计价总金额">
                 {form.getFieldDecorator('valuationPrice', {
                   rules: [{required: true, message: '请输入计价总金额'}],
-                  initialValue: selectedValues.valuationPrice ? selectedValues.valuationPrice : testValue,
-                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入计价总金额" addonAfter="元"/>)}
+                  initialValue: global._checkNum(selectedValues.valuationPrice),
+                })(<Input onChange={(e)=>this.shouldPay(e.target.value,1)} disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入计价总金额" addonAfter="元"/>)}
+                <span style={info_css}>备注:填报未扣款的合同内外计价总金额</span>
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="扣款">
                 {form.getFieldDecorator('valuationPriceReduce', {
                   rules: [{required: true, message: '请输入扣款金额'}],
-                  initialValue: selectedValues.valuationPriceReduce ? selectedValues.valuationPriceReduce : testValue,
-                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入扣款金额" addonAfter="元"/>)}
+                  initialValue: global._checkNum(selectedValues.valuationPriceReduce),
+                })(<Input onChange={(e)=>this.shouldPay(e.target.value,2)} disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入扣款金额" addonAfter="元"/>)}
               </FormItem>
             </Col>
           </Row>
@@ -300,8 +317,8 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="扣除质保金">
                 {form.getFieldDecorator('warranty', {
                   rules: [{required: true, message: '请输入扣除质保金'}],
-                  initialValue: selectedValues.warranty ? selectedValues.warranty : testValue,
-                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入扣除质保金" addonAfter="元"/>)}
+                  initialValue: global.checkNum(selectedValues.warranty),
+                })(<Input onChange={(e)=>this.shouldPay(e.target.value,3)} disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入扣除质保金" addonAfter="元"/>)}
               </FormItem>
             </Col>
           </Row>
@@ -310,16 +327,16 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="扣除履约保证金">
                 {form.getFieldDecorator('performanceBond', {
                   rules: [{required: true, message: '请输入扣除履约保证金'}],
-                  initialValue: selectedValues.performanceBond ? selectedValues.performanceBond : testValue,
-                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入扣除履约保证金" addonAfter="元"/>)}
+                  initialValue: global.checkNum(selectedValues.performanceBond),
+                })(<Input onChange={(e)=>this.shouldPay(e.target.value,4)} disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入扣除履约保证金" addonAfter="元"/>)}
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="计日工及补偿费用">
                 {form.getFieldDecorator('compensation', {
-                  rules: [{required: true, message: '请输入预付款'}],
-                  initialValue: selectedValues.compensation ? selectedValues.compensation : testValue,
-                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入计日工及补偿费用" addonAfter="元"/>)}
+                  rules: [{required: true, message: '请输入计日工及补偿费用'}],
+                  initialValue: global.checkNum(selectedValues.compensation),
+                })(<Input  disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入计日工及补偿费用" addonAfter="元"/>)}
               </FormItem>
             </Col>
           </Row>
@@ -327,16 +344,16 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="应支付金额">
                 {form.getFieldDecorator('shouldAmount', {
-                  rules: [{required: true, message: '请输入应支付金额'}],
-                  initialValue: selectedValues.shouldAmount ? selectedValues.shouldAmount : testValue,
-                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入应支付金额" addonAfter="元"/>)}
+                  rules: [{required: true, message: '请输入以上金额'}],
+                  initialValue: global.checkNum(selectedValues.shouldAmount),
+                })(<Input disabled={true} style={{marginTop: 4}} placeholder="输入以上计价金额自动带出" addonAfter="元"/>)}
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="已完未计">
                 {form.getFieldDecorator('endedPrice', {
                   rules: [{required: true, message: '请输入已完未计'}],
-                  initialValue: selectedValues.endedPrice ? selectedValues.endedPrice : testValue,
+                  initialValue: global.checkNum(selectedValues.endedPrice),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入已完未计" addonAfter="元"/>)}
               </FormItem>
             </Col>
@@ -376,7 +393,7 @@ class CreateForm extends Component {
                 <PreFile disabled={checkDetail} onClose={this.remove} onPreview={this.handlePreview} progress={progress}
                          file={fileList[0]}/>
                 <span style={info_css}>备注：中期计价附件（封面、验工计价批复表、汇总表）；</span>
-                <span style={info_css}>末次计价附件（公司批复的《劳务结算审批》、结算资料），请以一份PDF格式文件上传</span>
+                <span style={info_css}>末次计价附件（公司批复的《劳务结算审批》、结算资料），当期计价合同外费用需上传支撑凭证,请以一份PDF格式文件上传</span>
               </FormItem>
             </Col>
           </Row>
@@ -462,11 +479,13 @@ class MeterDown extends Component {
       title: '序号',
       width:100,
       dataIndex: 'id',
+      fixed: 'left'
     },
     {
       title: '项目名称',
       width:180,
       dataIndex: 'projectName',
+      fixed: 'left'
     },
     {
       title: '分包商名称',

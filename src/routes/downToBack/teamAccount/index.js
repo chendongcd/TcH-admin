@@ -26,17 +26,12 @@ import {createURL} from 'services/app'
 const pageButtons = menuData[13].buttons.map(a => a.permission)
 const FormItem = Form.Item;
 const {Option} = Select;
-const getValue = obj =>
-  Object.keys(obj)
-    .map(key => obj[key])
-    .join(',');
 const info_css = {
   color: '#fa541c'
 }
 const teamStatus = ['正在施工', '完工待结算', '已结算']
 const contractType = ['主合同', '补充合同']
 const testValue = ''
-const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
 const plainOptions = [{label: '劳务队伍统计', value: '0'},
   {label: '备案情况', value: '1'},
 ]
@@ -398,7 +393,7 @@ class CreateForm extends Component {
                 )}
                 <PreFile disabled={checkDetail} onClose={this.remove} onPreview={this.handlePreview} progress={progress}
                          file={fileList[0]}/>
-                <span style={info_css}>备注：请以一份PDF格式文件上传合同扫描件</span>
+                <span style={info_css}>备注：请以一份PDF文件上传《劳务合同审批会签表》、合同扫描件、合同交底书</span>
               </FormItem>
             </Col>
           </Row>
@@ -430,7 +425,7 @@ class CreateForm extends Component {
                 <PreFile disabled={checkDetail} onClose={this.removeSq} onPreview={this.handlePreview}
                          progress={sqProgress}
                          file={sqFileList[0]}/>
-                <span style={info_css}>备注：非法人管理队伍请上传授权委托书扫描件</span>
+                <span style={info_css}>备注：非法人管理队伍请上传授权委托书扫描件(法人身份证、授权委托书、授权代理人身份证)</span>
               </FormItem>
             </Col>
           </Row>
@@ -630,8 +625,9 @@ class TeamAccount extends Component {
   columns = [
     {
       title: '序号',
-      width:80,
-      dataIndex: 'id'
+      width:100,
+      dataIndex: 'id',
+      fixed: 'left'
     },
     {
       title: '劳务队伍统计（项目部填写）',
@@ -641,6 +637,7 @@ class TeamAccount extends Component {
           title: '项目名称',
           width:150,
           dataIndex: 'projectName',
+          fixed: 'left'
         },
         {
           title: '合同编码',
@@ -848,7 +845,7 @@ class TeamAccount extends Component {
             width:120,
             dataIndex: 'settlementTime',
             render(val) {
-              return <span>{moment(val).format('YYYY/MM/DD')}</span>;
+              return <span>{val?moment(val).format('YYYY/MM/DD'):''}</span>;
             },
           }]
         },

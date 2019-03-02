@@ -762,17 +762,20 @@ class InfoCard extends Component {
     {
       title:'序号',
       dataIndex:'id',
-      width:80,
+      width:100,
+      fixed: 'left'
     },
     {
       title: '项目编码',
       dataIndex: 'code',
       width:150,
+      fixed: 'left'
     },
     {
       title: '项目名称',
       dataIndex: 'projectName',
       width:120,
+      fixed: 'left'
     },
     {
       title: '工程状态',

@@ -460,7 +460,7 @@ class CreateForm extends Component {
                 )}
                 <PreFile disabled={checkDetail} onClose={this.remove} onPreview={this.handlePreview} progress={progress}
                          file={fileList[0]}/>
-                <span style={info_css}>备注：包含营业执照、资质证书、安全生产许可证、开户银行许可证、法人身份证等相关资质资料(盖鲜章),请以一份PDF格式文件上传。</span>
+                <span style={info_css}>备注：包含营业执照、资质证书、安全生产许可证、开户银行许可证、法人身份证等相关资质资料(盖鲜章,不包含授权委托书),请以一份PDF格式文件上传。</span>
               </FormItem>
             </Col>
           </Row>
