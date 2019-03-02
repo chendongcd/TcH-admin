@@ -30,6 +30,8 @@ export const ENGINEER_STAT_EXPORT = '/engineer_change/export_statistics/v1.1'
 
 export const LOSS_EXPORT = '/loss/export/v1.1'
 
+export const CONFIRMATION_EXPORT = '/confirmation/export/v1.1'
+
 //PDF下载URL
 export const PRO_PDF = '/project/pdf/v1.1?projectInfoId='
 

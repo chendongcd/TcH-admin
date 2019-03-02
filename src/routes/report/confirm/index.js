@@ -17,12 +17,12 @@ import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
 import {getButtons, cleanObject} from 'utils'
 import {menuData} from 'common/menu'
-import {LOSS_EXPORT} from 'common/urls'
+import {CONFIRMATION_EXPORT} from 'common/urls'
 import {createURL} from 'services/app'
 
 const FormItem = Form.Item;
 const {Option} = Select;
-const pageButtons = menuData[26].buttons.map(a => a.permission)
+const pageButtons = menuData[27].buttons.map(a => a.permission)
 const testValue = ''
 
 
@@ -316,7 +316,6 @@ class Confirmation extends Component {
       page: 1,
       pageSize: 10
     }
-    this.CustomPicker = null
   }
 
   columns = [
@@ -489,7 +488,6 @@ class Confirmation extends Component {
 
   handleFormReset = () => {
     const {form} = this.props;
-    this.CustomPicker.resetValue()
     form.resetFields();
     this.setState({
       formValues: {},
@@ -636,7 +634,7 @@ class Confirmation extends Component {
       loading: loading.effects[`confirmation/${updateModalVisible ? 'update' : 'add'}`],
       user:user
     }
-    const exportUrl = createURL(LOSS_EXPORT, {
+    const exportUrl = createURL(CONFIRMATION_EXPORT, {
       ...this.exportParams, ...{
         token: user.token}
     })
