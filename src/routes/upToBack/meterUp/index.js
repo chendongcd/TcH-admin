@@ -25,10 +25,6 @@ import {createURL} from 'services/app'
 
 const FormItem = Form.Item;
 const {Option} = Select;
-const getValue = obj =>
-  Object.keys(obj)
-    .map(key => obj[key])
-    .join(',');
 
 const pageButtons = menuData[8].buttons.map(a => a.permission)
 const info_css = {
@@ -319,7 +315,7 @@ class CreateForm extends Component {
             </Col>
           </Row>
         </div>
-        <Modal width={643} style={{width: 643, height: 940}} bodyStyle={{width: 643, height: 940}}
+        <Modal style={{width: 643, height: 940}} bodyStyle={{width: 643, height: 940}}
                visible={previewVisible} footer={null} onCancel={this.handleCancel}>
           <iframe style={{width: 595, height: 892}} frameBorder={0} src={previewImage}/>
         </Modal>
