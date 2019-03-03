@@ -26,10 +26,6 @@ import {createURL} from 'services/app'
 
 const FormItem = Form.Item;
 const {Option} = Select;
-const getValue = obj =>
-  Object.keys(obj)
-    .map(key => obj[key])
-    .join(',');
 const statusMap = ['processing', 'processing', 'success', 'error'];
 const status = [{id: 0, name: '在建'}, {id: 1, name: '完工未结算'}, {id: 2, name: '完工已结算'}, {id: 3, name: '停工'}];
 
