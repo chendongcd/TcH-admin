@@ -85,13 +85,13 @@ class Project extends Component {
       title: '项目编码',
       dataIndex: 'code',
       width:160,
-      fixed: 'left'
+      //fixed: 'left'
     },
     {
       title: '项目名称',
       dataIndex: 'name',
       width:180,
-      fixed:'left'
+    //  fixed:'left'
     },
     {
       title: '工程类别',
@@ -131,7 +131,7 @@ class Project extends Component {
     {
       title: '操作',
       fixed:'right',
-      width:130,
+     // width:130,
       render: (val, record) => {
         const user = this.props.app.user
         if(!user.token){

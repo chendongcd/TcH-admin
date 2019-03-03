@@ -408,7 +408,7 @@ class CreateForm extends Component {
             </Col>
           </Row>
         </div>
-        <Modal width={'100%'} style={{width: '100%', height: '100%',top:0}} bodyStyle={{width: '100%', height: 700,paddingTop:50}}
+        <Modal width={'100%'} style={{width: '100%', height: '100%',top:0}} bodyStyle={{width: '100%', height: 900,paddingTop:50}}
                visible={previewVisible} footer={null} onCancel={this.handleCancel}>
           <iframe width={'100%'} height={'100%'} frameBorder={0} src={previewImage}/>
         </Modal>
@@ -479,13 +479,13 @@ class MeterDown extends Component {
       title: '序号',
       width:100,
       dataIndex: 'id',
-      fixed: 'left'
+     // fixed: 'left'
     },
     {
       title: '项目名称',
       width:180,
       dataIndex: 'projectName',
-      fixed: 'left'
+     // fixed: 'left'
     },
     {
       title: '分包商名称',
@@ -636,7 +636,7 @@ class MeterDown extends Component {
     {
       title: '操作',
       width: 120,
-      fixed: 'right',
+    //  fixed: 'right',
       render: (val, record) => {
         if (record.id == '合计:') {
           return null
@@ -734,7 +734,6 @@ class MeterDown extends Component {
   };
 
   handleAdd = (fields, updateModalVisible, selectedValues, cleanState) => {
-
     const {dispatch, app: {user}} = this.props;
     const payload = {
       projectId: fields.projectId,

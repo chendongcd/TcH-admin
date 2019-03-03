@@ -174,19 +174,19 @@ class Daily extends Component {
       title: '序号',
       dataIndex: 'id',
       width: 100,
-      fixed: 'left',
+     // fixed: 'left',
     },
     {
       title: '项目名称',
       dataIndex: 'projectName',
       width: 180,
-      fixed: 'left',
+      //fixed: 'left',
     },
     {
       title: '工程类别',
       dataIndex: 'projectType',
       width: 110,
-      fixed: 'left',
+     // fixed: 'left',
     },
     {
       title: '已计价金额（元）',
@@ -237,7 +237,7 @@ class Daily extends Component {
     {
       title: '操作',
       width: 120,
-      fixed: 'right',
+      //fixed: 'right',
       render: (val, record) => {
         if (record.id == '合计:') {
           return null

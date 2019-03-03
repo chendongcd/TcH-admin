@@ -219,19 +219,19 @@ class Resume extends Component {
       title:'序号',
       dataIndex:'id',
       width:100,
-      fixed:'left'
+      //fixed:'left'
     },
     {
       title: '分包商备案编码',
       dataIndex: 'subcontractorCode',
       width:150,
-      fixed:'left'
+      //fixed:'left'
     },
     {
       title: '分包商全称',
       dataIndex: 'subcontractorName',
       width:180,
-      fixed:'left'
+      //fixed:'left'
     },
     {
       title: '队伍名称',
@@ -297,7 +297,7 @@ class Resume extends Component {
     {
       title: '操作',
       width:200,
-      fixed:'right',
+      //fixed:'right',
       render: (val, record) => {
         const user = this.props.app.user
         if (!user.token) {

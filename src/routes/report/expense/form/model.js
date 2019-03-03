@@ -1,4 +1,4 @@
-import {queryExpenseFormList,addForm,updateForm} from '../../../../services/report/expense/form';
+import {queryExpenseFormList,addForm,updateForm,querySum} from '../../../../services/report/expense/form';
 import {queryProPerList} from "../../../../services/system/sys_project";
 import {queryTeamLists,querySubList} from "../../../../services/downToBack/teamAccount"
 import {message} from "antd";
@@ -19,60 +19,15 @@ export default {
     *fetch({ payload ,token}, { call, put }) {
       const response = yield call(queryExpenseFormList, payload,token);
       if(response.code == '200'){
-        // let a8=0,a9=0,a10=0,a11=0,a12=0,a13=0,a14=0,a15=0,a16=0,a17=0,a18=0,a19=0,a20=0,a21=0
-        // let a24 = 0,a25 = 0,a26 = 0,a27 = 0,a28 = 0,a29 = 0,a30 = 0,a31 = 0,a32=0
-        // response.list.forEach(a => {
-        //   a8 += a.totalAmountContract
-        //   a9+=a.mechanicalClass
-        //   a10+=a.sporadicEmployment
-        //   a11+= a.dailyWorkSubtotal
-        //   a12+=a.outIn
-        //   a13+=a.disasterDamage
-        //   a14+=a.workStop
-        //   a15+=a.other
-        //   a16+=a.compensationSubtotal
-        //   a17+=a.total
-        //   a20+=a.amountAlreadyDisbursed
-        //   a24+=a.estimateMechanicalClass
-        //   a25+=a.estimateSporadicEmployment
-        //   a26+=a.estimateDailyWorkSubtotal
-        //   a27+=a.estimateOutIn
-        //   a28+=a.estimateDisasterDamage
-        //   a29+=a.estimateWorkStop
-        //   a30+=a.estimateOther
-        //   a31+=a.estimateCompensationSubtotal
-        //   a32+=a.estimateTotal
-        // })
-        // a18 = a17===0?0:((a11/a17*100).toFixed(2))
-        // a19 = a17===0?0:(a16/a17*100).toFixed(2)
-        // a21 = (a16+a11)===0?0:(a20/(a16+a11)*100).toFixed(2)
-        // let sum = {
-        //   id: '合计:',
-        //   totalAmountContract:a8,
-        //   mechanicalClass:a9,
-        //   sporadicEmployment:a10,
-        //   dailyWorkSubtotal:a11,
-        //   outIn:a12,
-        //   disasterDamage:a13,
-        //   workStop:a14,
-        //   other:a15,
-        //   compensationSubtotal:a16,
-        //   total:a17.toFixed(2),
-        //   dailyPercentage:a18,
-        //   compensationPercentage:a19,
-        //   amountAlreadyDisbursed:a20,
-        //   disbursedPercentage:a21,
-        //   estimateMechanicalClass:a24,
-        //   estimateSporadicEmployment:a25,
-        //   estimateDailyWorkSubtotal:a26,
-        //   estimateOutIn:a27,
-        //   estimateDisasterDamage:a28,
-        //   estimateWorkStop:a29,
-        //   estimateOther:a30,
-        //   estimateCompensationSubtotal:a31,
-        //   estimateTotal:a32
-        // }
-        response.list = [...response.list]
+        if(response.list.length>0){
+          if(global._getTotalPage(response.pagination.total)===response.pagination.current){
+            yield put({
+              type:'fetchSum',
+              payload:payload,
+              token:token
+            })
+          }
+        }
         yield put({
           type: 'save',
           payload: response,
@@ -80,6 +35,52 @@ export default {
       }
       if(global.checkToken(response)){
         yield put({type:'app/logout'})
+        return false
+      }
+    },
+    * fetchSum({payload, token}, {call, put,select}) {
+      const response = yield call(querySum, payload, token);
+      if (response.code == '200') {
+        const data = yield (select(_ => _.expenseForm.data))
+        let sum = {
+          id: '合计:',
+          totalAmountContract: response.entity.sumTotalAmountContract,
+          mechanicalClass: response.entity.sumMechanicalClass,
+          sporadicEmployment: response.entity.sumSporadicEmployment,
+          dailyWorkSubtotal: response.entity.sumDailyWorkSubtotal,
+          outIn: response.entity.sumOutIn,
+          disasterDamage: response.entity.sumDisasterDamage,
+          workStop: response.entity.sumWorkStop,
+          other: response.entity.sumOther,
+          compensationSubtotal: response.entity.sumCompensationSubtotal,
+          total: response.entity.sumTotal,
+          dailyPercentage: response.entity.sumDailyPercentage/100,
+          compensationPercentage: response.entity.sumCompensationPercentage/100,
+          amountAlreadyDisbursed: response.entity.sumAmountAlreadyDisbursed,
+          disbursedPercentage: response.entity.sumDisbursedPercentage/100,
+          estimateMechanicalClass: response.entity.sumEstimateMechanicalClass,
+          estimateSporadicEmployment: response.entity.sumEstimateSporadicEmployment,
+          estimateDailyWorkSubtotal: response.entity.sumEstimateDailyWorkSubtotal,
+          estimateOutIn: response.entity.sumEstimateOutIn,
+          estimateDisasterDamage: response.entity.sumEstimateDisasterDamage,
+          estimateWorkStop: response.entity.sumEstimateWorkStop,
+          estimateOther: response.entity.sumEstimateOther,
+          estimateCompensationSubtotal: response.entity.sumEstimateCompensationSubtotal,
+          estimateTotal: response.entity.sumEstimateTotal
+        }
+        for(let a in sum){
+          if(sum[a]&&!isNaN(sum[a])&&a!=='disbursedPercentage'&&a!=='compensationPercentage'&&a!=='dailyPercentage'){
+            sum[a] = Number.isInteger(Number(sum[a]))?Number(sum[a]):Number(sum[a]).toFixed(2)
+          }
+        }
+        data.list = [...data.list,sum]
+        yield put({
+          type: 'save',
+          payload: data,
+        });
+      }
+      if (global.checkToken(response)) {
+        yield put({type: 'app/logout'})
         return false
       }
     },

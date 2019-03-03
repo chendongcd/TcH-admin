@@ -585,13 +585,13 @@ class PeopleInfo extends Component {
       title: '人员编码',
       width: 100,
       dataIndex: 'id',
-      fixed: 'left'
+     // fixed: 'left'
     },
     {
       title: '姓名',
       width: 100,
       dataIndex: 'name',
-      fixed:'left'
+     // fixed:'left'
     },
     {
       title: '性别',
@@ -691,7 +691,7 @@ class PeopleInfo extends Component {
     {
       title: '操作',
       width: 110,
-      fixed: 'right',
+      //fixed: 'right',
       render: (val, record) => {
         const user = this.props.app.user
         if (!user.token) {

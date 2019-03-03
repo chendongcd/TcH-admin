@@ -13,4 +13,8 @@ export default ()=> {
     return ((num||num==0)?num:testValue)
   }
 
+  window._getTotalPage=(total,pageSize=10)=>{
+    return (Math.ceil(total/pageSize))
+  }
+
 }

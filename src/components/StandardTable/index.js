@@ -71,7 +71,7 @@ class StandardTable extends PureComponent {
     } = this.props;
 
     const paginationProps = {
-      showSizeChanger: pagination.total>50,
+      showSizeChanger: false,
       showQuickJumper: pagination.total>100,
       ...pagination,
     };

@@ -159,14 +159,14 @@ class User extends Component {
       title: '用户编码',
       dataIndex: 'code',
       width: 100,
-      fixed:'left'
+      //fixed:'left'
     },
     {
       title: '账号类别',
       width: 100,
       dataIndex: 'type',
       render: val => <span>{val == 0 ? '公司' : '项目部'}</span>,
-      fixed:'left'
+     // fixed:'left'
     },
     {
       title: '账号名称',
@@ -222,7 +222,7 @@ class User extends Component {
     {
       title: '操作',
       fixed: 'right',
-      width: 180,
+      //width: 180,
       render: (val, record) => {
         const user = this.props.app.user
         if (!user.token) {

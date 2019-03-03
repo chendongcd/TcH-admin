@@ -440,7 +440,7 @@ class CreateForm extends Component {
             </Col>
           </Row>
         </div>
-        <Modal width={'100%'} style={{width: '100%', height: '100%',top:0}} bodyStyle={{width: '100%', height: 700,paddingTop:50}}
+        <Modal width={'100%'} style={{width: '100%', height: '100%',top:0}} bodyStyle={{width: '100%', height: 900,paddingTop:50}}
                visible={previewVisible} footer={null} onCancel={this.handleCancel}>
           <iframe width={'100%'} height={'100%'} frameBorder={0} src={previewImage}/>
         </Modal>
@@ -627,7 +627,7 @@ class TeamAccount extends Component {
       title: '序号',
       width:100,
       dataIndex: 'id',
-      fixed: 'left'
+      //fixed: 'left'
     },
     {
       title: '劳务队伍统计（项目部填写）',
@@ -856,7 +856,7 @@ class TeamAccount extends Component {
       title: '操作',
       ket: '03',
       width: 200,
-      fixed: 'right',
+      //fixed: 'right',
       render: (val, record) => {
         const user = this.props.app.user
         if (!user.token) {
@@ -880,9 +880,6 @@ class TeamAccount extends Component {
   ];
 
   componentDidMount() {
-    // setTimeout(() => {
-    //   this.setState({pageLoading:false})
-    // },1000)
     this.getList()
     this.getProNames()
     this.getSubNames()

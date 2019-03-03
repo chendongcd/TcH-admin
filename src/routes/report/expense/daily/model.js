@@ -1,4 +1,4 @@
-import {queryStatisiticsList} from '../../../../services/report/expense/daily';
+import {queryStatisiticsList,querySum} from '../../../../services/report/expense/daily';
 export default {
   namespace: 'expenseDaily',
 
@@ -13,27 +13,15 @@ export default {
     *fetch({ payload ,token}, { call, put }) {
       const response = yield call(queryStatisiticsList, payload,token);
       if(response.code == '200'){
-        // let a3 = 0,a4 = 0,a5 = 0,a6 = 0,a7 = 0,a8 = 0,a9 = 0
-        // response.list.forEach(a => {
-        //   a3 += a.statisticsTotalAmountContract
-        //   a4+=a.statisticsDailyWorkSubtotal
-        //   a5+=a.statisticsCompensationSubtotal
-        //   a6+= a.statisticsAlreadySubtotal
-        //   a7+=a.statisticsEstimateDailyWorkSubtotal
-        //   a8+=a.statisticsEstimateCompensationSubtotal
-        //   a9+=a.statisticsEstimateSubtotal
-        // })
-        // let sum = {
-        //   id: '合计:',
-        //   statisticsTotalAmountContract:a3.toFixed(2),
-        //   statisticsDailyWorkSubtotal:a4.toFixed(2),
-        //   statisticsCompensationSubtotal:a5.toFixed(2),
-        //   statisticsAlreadySubtotal:a6.toFixed(2),
-        //   statisticsEstimateDailyWorkSubtotal:a7.toFixed(2),
-        //   statisticsEstimateCompensationSubtotal:a8.toFixed(2),
-        //   statisticsEstimateSubtotal:a9.toFixed(2)
-        // }
-        response.list = [...response.list]
+        if(response.list.length>0){
+          if(global._getTotalPage(response.pagination.total)===response.pagination.current){
+            yield put({
+              type:'fetchSum',
+              payload:payload,
+              token:token
+            })
+          }
+        }
         yield put({
           type: 'save',
           payload: response,
@@ -43,7 +31,37 @@ export default {
         yield put({type:'app/logout'})
         return false
       }
-    }
+    },
+    * fetchSum({payload, token}, {call, put,select}) {
+      const response = yield call(querySum, payload, token);
+      if (response.code == '200') {
+        const data = yield (select(_ => _.expenseDaily.data))
+        let sum = {
+          id: '合计:',
+          statisticsTotalAmountContract:response.entity.sumStatisticsTotalAmountContract,
+          statisticsDailyWorkSubtotal:response.entity.sumStatisticsDailyWorkSubtotal,
+          statisticsCompensationSubtotal:response.entity.sumStatisticsCompensationSubtotal,
+          statisticsAlreadySubtotal:response.entity.sumStatisticsAlreadySubtotal,
+          statisticsEstimateDailyWorkSubtotal:response.entity.sumStatisticsEstimateDailyWorkSubtotal,
+          statisticsEstimateCompensationSubtotal:response.entity.sumStatisticsEstimateCompensationSubtotal,
+          statisticsEstimateSubtotal:response.entity.sumStatisticsEstimateSubtotal
+        }
+        for(let a in sum){
+          if(sum[a]&&!isNaN(sum[a])){
+            sum[a] = Number.isInteger(Number(sum[a]))?Number(sum[a]):Number(sum[a]).toFixed(2)
+          }
+        }
+        data.list = [...data.list,sum]
+        yield put({
+          type: 'save',
+          payload: data,
+        });
+      }
+      if (global.checkToken(response)) {
+        yield put({type: 'app/logout'})
+        return false
+      }
+    },
   },
 
   reducers: {

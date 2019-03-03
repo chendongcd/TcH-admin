@@ -322,13 +322,13 @@ class Confirmation extends Component {
     {
       title: '序号',
       dataIndex: 'id',
-      fixed: 'left',
+     // fixed: 'left',
       width: 100
     },
     {
       title: '项目名称',
       dataIndex: 'projectName',
-      fixed: 'left',
+     // fixed: 'left',
       width: 180
     },
     {
@@ -448,7 +448,7 @@ class Confirmation extends Component {
     {
       title: '操作',
       width: 120,
-      fixed: 'right',
+      //fixed: 'right',
       render: (val, record) => {
         if (record.id == '总计:') {
           return null

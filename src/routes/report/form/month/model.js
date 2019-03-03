@@ -1,4 +1,4 @@
-import {queryFormList,addForm,updateForm} from '../../../../services/report/form';
+import {queryFormList,addForm,updateForm,querySum} from '../../../../services/report/form';
 import {queryProPerList} from "../../../../services/system/sys_project";
 import {message} from "antd";
 export default {
@@ -16,21 +16,15 @@ export default {
     *fetch({ payload ,token}, { call, put }) {
       const response = yield call(queryFormList, payload,token);
       if(response.code == '200'){
-        let a5 = 0,a6 = 0,a7 = 0,a8 = 0
-        response.list.forEach(a => {
-          a5+=a.temporarilyPrice
-          a6+= a.constructionOutputValue
-          a7+=a.changeClaimAmount
-        })
-        a8 =a5===0?0:((a7/a5)*100).toFixed(2)
-        let sum = {
-          id: '合计:',
-          temporarilyPrice:isNaN(a5)?'':a5.toFixed(0),
-          constructionOutputValue:isNaN(a6)?'':a6.toFixed(0),
-          changeClaimAmount:isNaN(a7)?'':a7.toFixed(0),
-          percentage:isNaN(a8)?'':a8,
+        if(response.list.length>0){
+          if(global._getTotalPage(response.pagination.total)===response.pagination.current){
+            yield put({
+              type:'fetchSum',
+              payload:payload,
+              token:token
+            })
+          }
         }
-        response.list = [...response.list]
         yield put({
           type: 'save',
           payload: response,
@@ -38,6 +32,33 @@ export default {
       }
       if(global.checkToken(response)){
         yield put({type:'app/logout'})
+        return false
+      }
+    },
+    * fetchSum({payload, token}, {call, put,select}) {
+      const response = yield call(querySum, payload, token);
+      if (response.code == '200') {
+        const data = yield (select(_ => _.reportForm.data))
+        let sum = {
+          id: '合计:',
+          temporarilyPrice: response.entity.sumTemporarilyPrice,
+          constructionOutputValue: response.entity.sumConstructionOutputValue,
+          changeClaimAmount: response.entity.sumChangeClaimAmount,
+          percentage: response.entity.sumPercentage/100,
+        }
+        for(let a in sum){
+          if(sum[a]&&!isNaN(sum[a])&&a!=='percentage'){
+            sum[a] = Number.isInteger(Number(sum[a]))?Number(sum[a]):Number(sum[a]).toFixed(2)
+          }
+        }
+        data.list = [...data.list,sum]
+        yield put({
+          type: 'save',
+          payload: data,
+        });
+      }
+      if (global.checkToken(response)) {
+        yield put({type: 'app/logout'})
         return false
       }
     },

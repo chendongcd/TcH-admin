@@ -476,7 +476,7 @@ class CreateForm extends Component {
             </Col>
           </Row>
         </div>
-        <Modal width={'100%'} style={{width: '100%', height: '100%',top:0}} bodyStyle={{width: '100%', height: 700,paddingTop:50}}
+        <Modal width={'100%'} style={{width: '100%', height: '100%',top:0}} bodyStyle={{width: '100%', height: 900,paddingTop:50}}
                visible={previewVisible} footer={null} onCancel={this.handleCancel}>
           <iframe width={'100%'} height={'100%'} frameBorder={0} src={previewImage}/>
         </Modal>
@@ -664,12 +664,12 @@ class Qualification extends Component {
       title: '分包商备案编码',
       dataIndex: 'code',
       width: 150,
-      fixed: 'left'
+      //fixed: 'left'
     },
     {
       title: '分包商全称',
       dataIndex: 'name',
-      fixed: 'left',
+      //fixed: 'left',
       width: 180,
       render: (val, record) => {
         return <a onClick={() => this.getResume(val)}>{val}</a>
@@ -757,11 +757,10 @@ class Qualification extends Component {
       title: '备注',
       dataIndex: 'remark',
       width:180
-      //  width:100,
     },
     {
       title: '操作',
-      fixed: 'right',
+      //fixed: 'right',
       width: 200,
       render: (val, record) => {
         const user = this.props.app.user

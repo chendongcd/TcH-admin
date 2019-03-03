@@ -763,19 +763,19 @@ class InfoCard extends Component {
       title:'序号',
       dataIndex:'id',
       width:100,
-      fixed: 'left'
+      //fixed: 'left'
     },
     {
       title: '项目编码',
       dataIndex: 'code',
       width:160,
-      fixed: 'left'
+      //fixed: 'left'
     },
     {
       title: '项目名称',
       dataIndex: 'projectName',
       width:180,
-      fixed: 'left'
+      //fixed: 'left'
     },
     {
       title: '工程状态',
@@ -879,7 +879,7 @@ class InfoCard extends Component {
     },
     {
       title: '操作',
-      fixed:'right',
+     // fixed:'right',
       width:120,
       render: (val, record) => {
         const user = this.props.app.user

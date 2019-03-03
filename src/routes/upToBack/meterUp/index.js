@@ -315,7 +315,7 @@ class CreateForm extends Component {
             </Col>
           </Row>
         </div>
-        <Modal width={'100%'} style={{width: '100%', height: '100%',top:0}} bodyStyle={{width: '100%', height: 700,paddingTop:50}}
+        <Modal width={'100%'} style={{width: '100%', height: '100%',top:0}} bodyStyle={{width: '100%', height: 900,paddingTop:50}}
                visible={previewVisible} footer={null} onCancel={this.handleCancel}>
           <iframe width={'100%'} height={'100%'} frameBorder={0} src={previewImage}/>
         </Modal>
@@ -387,19 +387,19 @@ class MeterUp extends Component {
   columns = [
     {
       title: '序号',
-      fixed: 'left',
+     // fixed: 'left',
       width: 100,
       dataIndex: 'id',
     },
     {
       title: '项目名称',
-      fixed: 'left',
+      //fixed: 'left',
       width: 180,
       dataIndex: 'projectName',
     },
     {
       title: '计量期数',
-      fixed: 'left',
+    //  fixed: 'left',
       width: 110,
       dataIndex: 'meteringNum',
       render: (val) => {
@@ -408,7 +408,7 @@ class MeterUp extends Component {
     },
     {
       title: '计量日期',
-      fixed: 'left',
+     // fixed: 'left',
       width: 110,
       dataIndex: 'meteringTime',
       render(val) {
@@ -507,7 +507,7 @@ class MeterUp extends Component {
     },
     {
       title: '操作',
-      fixed: 'right',
+      //fixed: 'right',
       width: 200,
       render: (val, record) => {
         if (record.id === '合计:') {

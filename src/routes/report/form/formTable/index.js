@@ -137,19 +137,19 @@ class ReportFormTable extends Component {
     {
       title: '序号',
       dataIndex: 'id',
-      fixed: 'left',
+      //fixed: 'left',
       width: 100
     },
     {
       title: '项目名称',
       dataIndex: 'projectName',
-      fixed: 'left',
+     // fixed: 'left',
       width: 180
     },
     {
       title: '工程类别',
       dataIndex: 'projectType',
-      fixed: 'left',
+      //fixed: 'left',
       width: 100
     },
     {
@@ -178,7 +178,7 @@ class ReportFormTable extends Component {
     {
       title: '操作',
       width: 120,
-      fixed: 'right',
+     // fixed: 'right',
       render: (val, record) => {
         if (record.id == '合计:') {
           return null
