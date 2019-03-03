@@ -8,6 +8,12 @@ export async function queryExpenseFormList(params,token) {
     body: params
   },token);
 }
+export async function querySum(params,token) {
+  return request(`${api}/total/v1.1`,{
+    method: 'GET',
+    body: params
+  },token);
+}
 export async function addForm(params,token) {
   return request(`${api}/add/v1.1`,{
     method: 'POST',

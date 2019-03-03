@@ -26,17 +26,12 @@ import {createURL} from 'services/app'
 const pageButtons = menuData[13].buttons.map(a => a.permission)
 const FormItem = Form.Item;
 const {Option} = Select;
-const getValue = obj =>
-  Object.keys(obj)
-    .map(key => obj[key])
-    .join(',');
 const info_css = {
   color: '#fa541c'
 }
 const teamStatus = ['正在施工', '完工待结算', '已结算']
 const contractType = ['主合同', '补充合同']
 const testValue = ''
-const testPDF = 'https://images.unsplash.com/photo-1543363136-3fdb62e11be5?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=dose-juice-1184446-unsplash.jpg'
 const plainOptions = [{label: '劳务队伍统计', value: '0'},
   {label: '备案情况', value: '1'},
 ]
@@ -149,7 +144,7 @@ class CreateForm extends Component {
         title={checkDetail ? '队伍台账' : updateModalVisible ? "编辑台账" : "新增台账"}
         bodyStyle={{padding: 0 + 'px'}}
         visible={modalVisible}
-        width={992}
+        width={1100}
         okButtonProps={{loading: loading}}
         maskClosable={false}
         onOk={() => checkDetail ? handleCheckDetail() : this.okHandle()}
@@ -398,7 +393,7 @@ class CreateForm extends Component {
                 )}
                 <PreFile disabled={checkDetail} onClose={this.remove} onPreview={this.handlePreview} progress={progress}
                          file={fileList[0]}/>
-                <span style={info_css}>备注：请以一份PDF格式文件上传合同扫描件</span>
+                <span style={info_css}>备注：请以一份PDF文件上传《劳务合同审批会签表》、合同扫描件、合同交底书</span>
               </FormItem>
             </Col>
           </Row>
@@ -430,7 +425,7 @@ class CreateForm extends Component {
                 <PreFile disabled={checkDetail} onClose={this.removeSq} onPreview={this.handlePreview}
                          progress={sqProgress}
                          file={sqFileList[0]}/>
-                <span style={info_css}>备注：非法人管理队伍请上传授权委托书扫描件</span>
+                <span style={info_css}>备注：非法人管理队伍请上传授权委托书扫描件(法人身份证、授权委托书、授权代理人身份证)</span>
               </FormItem>
             </Col>
           </Row>
@@ -445,9 +440,9 @@ class CreateForm extends Component {
             </Col>
           </Row>
         </div>
-        <Modal width={643} style={{width: 643, height: 940}} bodyStyle={{width: 643, height: 940}}
+        <Modal width={'100%'} style={{width: '100%', height: '100%',top:0}} bodyStyle={{width: '100%', height: 900,paddingTop:50}}
                visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-          <iframe style={{width: 595, height: 892}} frameBorder={0} src={previewImage}/>
+          <iframe width={'100%'} height={'100%'} frameBorder={0} src={previewImage}/>
         </Modal>
       </Modal>
     )
@@ -630,8 +625,9 @@ class TeamAccount extends Component {
   columns = [
     {
       title: '序号',
-      width:80,
-      dataIndex: 'id'
+      width:100,
+      dataIndex: 'id',
+      //fixed: 'left'
     },
     {
       title: '劳务队伍统计（项目部填写）',
@@ -641,15 +637,16 @@ class TeamAccount extends Component {
           title: '项目名称',
           width:150,
           dataIndex: 'projectName',
+          fixed: 'left'
         },
         {
           title: '合同编码',
-          width:120,
+          width:150,
           dataIndex: 'contractCode',
         },
         {
           title: '合同类型',
-          width:100,
+          width:110,
           dataIndex: 'contractType',
           render(val) {
             return <span>{contractType[val]}</span>
@@ -657,7 +654,7 @@ class TeamAccount extends Component {
         },
         {
           title: '分包商名称',
-          width:200,
+          width:180,
           dataIndex: 'subcontractorName'
         },
         {
@@ -667,7 +664,7 @@ class TeamAccount extends Component {
         },
         {
           title: '队伍状态',
-          width:100,
+          width:110,
           dataIndex: 'status',
           render(val) {
             return <span>{teamStatus[val]}</span>;
@@ -675,7 +672,7 @@ class TeamAccount extends Component {
         },
         {
           title: '合同签订日期',
-          width:120,
+          width:150,
           dataIndex: 'contractTime',
           render(val) {
             return <span>{val ? moment(val).format('YYYY-MM-DD') : ''}</span>;
@@ -684,7 +681,7 @@ class TeamAccount extends Component {
         {
           title: '预计合同金额(元)',
           dataIndex: 'estimatedContractAmount',
-          width:130,
+          width:150,
           render(val) {
             return <span>{val}</span>;
           },
@@ -728,13 +725,13 @@ class TeamAccount extends Component {
         },
         {
           title: '结算金额',
-          width:100,
+          width:110,
           dataIndex: 'settlementAmount'
         },
         {
-          title: '附件（合同）',
+          title: '附件(合同)',
           dataIndex: 'annexUrl',
-          width:120,
+          width:130,
           render(val) {
             //if(JSON.parse(record.annexUrl))
             function isJSON(str) {
@@ -766,7 +763,7 @@ class TeamAccount extends Component {
         {
           title: '授权委托书',
           dataIndex: 'annexUrlSq',
-          width:100,
+          width:130,
           render(val) {
             function isJSON(str) {
               if (typeof str === 'string') {
@@ -796,6 +793,7 @@ class TeamAccount extends Component {
         },
         {
           title: '备注',
+          width:150,
           dataIndex: 'remark'
         },
       ]
@@ -810,7 +808,7 @@ class TeamAccount extends Component {
           children: [{
             title: '日期',
             dataIndex: 'teamTime',
-            width:120,
+            width:130,
             render(val) {
               return <span>{val ? moment(val).format('YYYY/MM/DD') : ''}</span>;
             },
@@ -822,7 +820,7 @@ class TeamAccount extends Component {
           children: [{
             title: '日期',
             dataIndex: 'approvalTime',
-            width:120,
+            width:130,
             render(val) {
               return <span>{val ? moment(val).format('YYYY-MM-DD') : ''}</span>;
             },
@@ -845,10 +843,10 @@ class TeamAccount extends Component {
           key: '022',
           children: [{
             title: '日期',
-            width:120,
+            width:130,
             dataIndex: 'settlementTime',
             render(val) {
-              return <span>{moment(val).format('YYYY/MM/DD')}</span>;
+              return <span>{val?moment(val).format('YYYY/MM/DD'):''}</span>;
             },
           }]
         },
@@ -858,7 +856,7 @@ class TeamAccount extends Component {
       title: '操作',
       ket: '03',
       width: 200,
-      fixed: 'right',
+      //fixed: 'right',
       render: (val, record) => {
         const user = this.props.app.user
         if (!user.token) {
@@ -882,9 +880,6 @@ class TeamAccount extends Component {
   ];
 
   componentDidMount() {
-    // setTimeout(() => {
-    //   this.setState({pageLoading:false})
-    // },1000)
     this.getList()
     this.getProNames()
     this.getSubNames()
@@ -1172,7 +1167,7 @@ class TeamAccount extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '270%', y: global._scollY}}
+                scroll={{x: 3270, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

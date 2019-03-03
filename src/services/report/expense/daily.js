@@ -8,4 +8,10 @@ export async function queryStatisiticsList(params,token) {
     body: params
   },token);
 }
+export async function querySum(params,token) {
+  return request(`${api}/total_statistics/v1.1`,{
+    method: 'GET',
+    body: params
+  },token);
+}
 

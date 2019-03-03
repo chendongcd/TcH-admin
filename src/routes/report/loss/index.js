@@ -66,7 +66,7 @@ class CreateForm extends Component {
         title={checkDetail ? '过程亏损项目明细表' : updateModalVisible ? "编辑过程亏损项目明细表" : "新增过程亏损项目明细表"}
         bodyStyle={{padding: 0 + 'px'}}
         visible={modalVisible}
-        width={992}
+        width={1100}
         okButtonProps={{loading: loading}}
         maskClosable={false}
         onOk={() => checkDetail ? handleCheckDetail() : this.okHandle()}
@@ -97,7 +97,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="合同金额">
                 {form.getFieldDecorator('temporarilyPrice', {
                   rules: [{required: true, message: '请输入合同金额(万元)'}],
-                  initialValue: selectedValues.temporarilyPrice ? selectedValues.temporarilyPrice : testValue,
+                  initialValue: global._checkNum(selectedValues.temporarilyPrice),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>
@@ -108,7 +108,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('reportTime', {
                   rules: [{required: true, message: '请选择填报日期'}],
                   initialValue: selectedValues.reportTime ? moment(selectedValues.reportTime) : null,
-                })(<DatePicker disabled={checkDetail} style={{width: '100%'}}/>)}
+                })(<DatePicker.MonthPicker disabled={checkDetail} style={{width: '100%'}}/>)}
               </FormItem>
             </Col>
           </Row>
@@ -122,7 +122,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="已计价">
                 {form.getFieldDecorator('alreadyPrice', {
                   rules: [{required: true, message: '请输入已计价'}],
-                  initialValue: selectedValues.alreadyPrice ? selectedValues.alreadyPrice : testValue,
+                  initialValue: global._checkNum(selectedValues.alreadyPrice),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入已计价" addonAfter="万元"/>)}
               </FormItem>
             </Col>
@@ -130,7 +130,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="未计价">
                 {form.getFieldDecorator('unPriced', {
                   rules: [{required: true, message: '请输入未计价'}],
-                  initialValue: selectedValues.unPriced ? selectedValues.unPriced : testValue,
+                  initialValue: global._checkNum(selectedValues.unPriced),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入未计价" addonAfter={'万元'}/>)}
               </FormItem>
             </Col>
@@ -140,7 +140,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="财务确认收入">
                 {form.getFieldDecorator('confirmPriced', {
                   rules: [{required: true, message: '请输入财务确认收入'}],
-                  initialValue: selectedValues.confirmPriced ? selectedValues.confirmPriced : testValue,
+                  initialValue: global._checkNum(selectedValues.confirmPriced),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>
@@ -155,7 +155,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="帐内成本">
                 {form.getFieldDecorator('inBookCost', {
                   rules: [{required: true, message: '请输入帐内成本'}],
-                  initialValue: selectedValues.inBookCost ? selectedValues.inBookCost : testValue,
+                  initialValue: global._checkNum(selectedValues.inBookCost ),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入帐内成本" addonAfter="万元"/>)}
               </FormItem>
             </Col>
@@ -163,7 +163,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span:6}} wrapperCol={{span: 15}} label="帐外成本">
                 {form.getFieldDecorator('outBookCost', {
                   rules: [{required: true, message: '请输入帐外成本'}],
-                  initialValue: selectedValues.outBookCost ? selectedValues.outBookCost : testValue,
+                  initialValue: global._checkNum(selectedValues.outBookCost),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入帐外成本" addonAfter={'万元'}/>)}
               </FormItem>
             </Col>
@@ -186,7 +186,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="财务已确认净利润">
                 {form.getFieldDecorator('confirmedNetProfit', {
                   rules: [{required: true, message: '请输入财务已确认净利润'}],
-                  initialValue: selectedValues.confirmedNetProfit ? selectedValues.confirmedNetProfit : testValue,
+                  initialValue: global._checkNum(selectedValues.confirmedNetProfit),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入财务已确认净利润" addonAfter="万元"/>)}
               </FormItem>
             </Col>
@@ -201,14 +201,14 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="预付账款">
                 {form.getFieldDecorator('prepayments', {
                   rules: [{required: true, message: '请输入预付账款'}],
-                  initialValue: selectedValues.prepayments ? selectedValues.prepayments: testValue,
+                  initialValue: global._checkNum(selectedValues.prepayments),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入预付账款" addonAfter={'万元'}/>)}
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="其他">
                 {form.getFieldDecorator('other', {
-                  initialValue: selectedValues.other ? selectedValues.other : testValue,
+                  initialValue: global._checkNum(selectedValues.other),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>
@@ -256,13 +256,13 @@ class LossForm extends Component {
     {
       title: '序号',
       dataIndex: 'id',
-      fixed: 'left',
+     // fixed: 'left',
       width: 100
     },
     {
       title: '项目名称',
       dataIndex: 'projectName',
-      fixed: 'left',
+    //  fixed: 'left',
       width: 180
     },
     {
@@ -391,6 +391,7 @@ class LossForm extends Component {
     {
       title:'备注',
       dataIndex:'remark',
+      width:150,
       render:(val)=>{
         return <Remark content={val} max={10}/>
       }
@@ -398,7 +399,7 @@ class LossForm extends Component {
     {
       title: '操作',
       width: 120,
-      fixed: 'right',
+      //fixed: 'right',
       render: (val, record) => {
         if (record.id == '合计:') {
           return null
@@ -627,7 +628,7 @@ class LossForm extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '280%', y: global._scollY}}
+                scroll={{x: 3010, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

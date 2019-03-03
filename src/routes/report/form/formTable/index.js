@@ -49,7 +49,7 @@ class CreateForm extends Component {
         title={'变更索赔情况统计表'}
         bodyStyle={{padding: 0 + 'px'}}
         visible={modalVisible}
-        width={992}
+        width={1100}
         maskClosable={false}
         onOk={() =>  handleCheckDetail()}
         onCancel={() => {
@@ -137,19 +137,19 @@ class ReportFormTable extends Component {
     {
       title: '序号',
       dataIndex: 'id',
-      fixed: 'left',
+      //fixed: 'left',
       width: 100
     },
     {
       title: '项目名称',
       dataIndex: 'projectName',
-      fixed: 'left',
+     // fixed: 'left',
       width: 180
     },
     {
       title: '工程类别',
       dataIndex: 'projectType',
-      fixed: 'left',
+      //fixed: 'left',
       width: 100
     },
     {
@@ -172,13 +172,13 @@ class ReportFormTable extends Component {
       dataIndex: 'percentageStatistics',
       render:(val)=>{
         return<span>{isNaN(val)?'':(val*100).toFixed(2)}</span>
-      }
-    //  width: 180
+      },
+      width: 120
     },
     {
       title: '操作',
       width: 120,
-      fixed: 'right',
+     // fixed: 'right',
       render: (val, record) => {
         if (record.id == '合计:') {
           return null
@@ -364,7 +364,7 @@ class ReportFormTable extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x:'110', y: global._scollY}}
+                scroll={{x:1070, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

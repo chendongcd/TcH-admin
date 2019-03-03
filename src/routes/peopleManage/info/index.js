@@ -28,10 +28,6 @@ import {createURL} from 'services/app'
 const FormItem = Form.Item;
 
 const {Option} = Select;
-const getValue = obj =>
-  Object.keys(obj)
-    .map(key => obj[key])
-    .join(',');
 const pageButtons = menuData[16].buttons.map(a => a.permission)
 const testValue = ''
 const info_css = {
@@ -116,7 +112,7 @@ class CreateForm extends Component {
         title={checkDetail ? '管理人员信息' : updateModalVisible ? "编辑管理人员" : "新增管理人员"}
         bodyStyle={{padding: 0 + 'px'}}
         visible={modalVisible}
-        width={992}
+        width={1100}
         maskClosable={false}
         okButtonProps={{loading: loading}}
         onOk={() => checkDetail ? handleCheckDetail() : this.okHandle()}
@@ -589,11 +585,13 @@ class PeopleInfo extends Component {
       title: '人员编码',
       width: 100,
       dataIndex: 'id',
+     // fixed: 'left'
     },
     {
       title: '姓名',
       width: 100,
       dataIndex: 'name',
+     // fixed:'left'
     },
     {
       title: '性别',
@@ -607,7 +605,7 @@ class PeopleInfo extends Component {
     },
     {
       title: '项目名称',
-      width: 150,
+      width: 180,
       dataIndex: 'projectName'
     },
     {
@@ -622,7 +620,7 @@ class PeopleInfo extends Component {
     },
     {
       title: '参加工作年限',
-      width: 100,
+      width: 120,
       dataIndex: 'workTime',
       render(val) {
         return <span>{val}年</span>;
@@ -630,32 +628,32 @@ class PeopleInfo extends Component {
     },
     {
       title: '第一学历',
-      width: 100,
+      width: 110,
       dataIndex: 'firstDegreeLevel'
     },
     {
       title: '第二学历',
-      width: 100,
+      width: 110,
       dataIndex: 'secondDegreeLevel'
     },
     {
       title: '手机号码',
-      width: 200,
+      width: 180,
       dataIndex: 'phone'
     },
     {
       title: 'QQ号码',
-      width: 200,
+      width: 180,
       dataIndex: 'qqNumber',
     },
     {
       title: '邮箱',
-      width: 180,
+      width: 200,
       dataIndex: 'email'
     },
     {
       title: '身份证号码',
-      width: 200,
+      width: 205,
       dataIndex: 'idCard'
     },
     {
@@ -664,7 +662,7 @@ class PeopleInfo extends Component {
       dataIndex: 'certificate'
     },
     {
-      title: '籍贯（省/市/区/县）',
+      title: '籍贯(省/市/区/县)',
       width: 180,
       dataIndex: 'jiguan'
     },
@@ -678,11 +676,12 @@ class PeopleInfo extends Component {
     },
     {
       title: '备注',
+      width:180,
       dataIndex: 'remark'
     },
     {
       title: '简历下载',
-      width: 100,
+      width: 110,
       render: (val, record) => {
         return (
           <a href={apiDev + PEOPLE_PDF + record.id} download={'信息卡'}>下载</a>
@@ -692,7 +691,7 @@ class PeopleInfo extends Component {
     {
       title: '操作',
       width: 110,
-      fixed: 'right',
+      //fixed: 'right',
       render: (val, record) => {
         const user = this.props.app.user
         if (!user.token) {
@@ -714,7 +713,6 @@ class PeopleInfo extends Component {
   ];
 
   componentDidMount() {
-    // const {dispatch} = this.props;
     this.getProNames()
     this.getList()
   }
@@ -970,7 +968,7 @@ class PeopleInfo extends Component {
     const exportUrl = createURL(PEOPLE_EXPORT, {...this.exportParams, ...{token: user.token}})
     return (
       <Page inner={true} loading={pageLoading}>
-        <PageHeaderWrapper title="人员信息">
+        <PageHeaderWrapper>
           <Card bordered={false}>
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
@@ -990,7 +988,7 @@ class PeopleInfo extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '280%', y: global._scollY}}
+                scroll={{x: 2915, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

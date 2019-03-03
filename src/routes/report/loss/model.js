@@ -16,7 +16,6 @@ export default {
     *fetch({ payload ,token}, { call, put }) {
       const response = yield call(queryLossList, payload,token);
       if(response.code == '200'){
-        console.log(response)
         // let x = 0, y = 0, z = 0, a5 = 0, a14 = 0, a13 = 0, a15 = 0
         // let aPre = 0,a7=0,a8=0,a9=0,a10=0,a11=0
         // response.list.forEach(a => {

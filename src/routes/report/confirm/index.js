@@ -17,12 +17,12 @@ import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
 import {getButtons, cleanObject} from 'utils'
 import {menuData} from 'common/menu'
-import {LOSS_EXPORT} from 'common/urls'
+import {CONFIRMATION_EXPORT} from 'common/urls'
 import {createURL} from 'services/app'
 
 const FormItem = Form.Item;
 const {Option} = Select;
-const pageButtons = menuData[26].buttons.map(a => a.permission)
+const pageButtons = menuData[27].buttons.map(a => a.permission)
 const testValue = ''
 
 
@@ -86,7 +86,7 @@ class CreateForm extends Component {
         title={checkDetail ? '确权清收表' : updateModalVisible ? "编辑确权清收表" : "新增确权清收表"}
         bodyStyle={{padding: 0 + 'px'}}
         visible={modalVisible}
-        width={992}
+        width={1100}
         okButtonProps={{loading: loading}}
         maskClosable={false}
         onOk={() => checkDetail ? handleCheckDetail() : this.okHandle()}
@@ -119,7 +119,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('reportTime', {
                   rules: [{required: true, message: '请选择填报日期'}],
                   initialValue: selectedValues.reportTime ? moment(selectedValues.reportTime) : null,
-                })(<DatePicker disabled={checkDetail} style={{width: '100%'}}/>)}
+                })(<DatePicker.MonthPicker disabled={checkDetail} style={{width: '100%'}}/>)}
               </FormItem>
             </Col>
           </Row>
@@ -186,7 +186,7 @@ class CreateForm extends Component {
         <div className={styles.modalContent}>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 11}} wrapperCol={{span: 13}} label="截至本期完成产值">
+              <FormItem labelCol={{span: 11}} wrapperCol={{span: 13}} label="本年截至本期完成产值">
                 {form.getFieldDecorator('currentProductionValue', {
                   rules: [{required: true, message: '请输入截至本期完成产值'}],
                   initialValue: global._checkNum(selectedValues.currentProductionValue,testValue),
@@ -316,20 +316,19 @@ class Confirmation extends Component {
       page: 1,
       pageSize: 10
     }
-    this.CustomPicker = null
   }
 
   columns = [
     {
       title: '序号',
       dataIndex: 'id',
-      fixed: 'left',
+     // fixed: 'left',
       width: 100
     },
     {
       title: '项目名称',
       dataIndex: 'projectName',
-      fixed: 'left',
+     // fixed: 'left',
       width: 180
     },
     {
@@ -430,7 +429,7 @@ class Confirmation extends Component {
             {
               title: '小记',
               dataIndex: 'sumFinalPeriod',
-             // width: 120,
+              width: 110,
             },
             {
               title: '其中：合同内应计未计',
@@ -449,7 +448,7 @@ class Confirmation extends Component {
     {
       title: '操作',
       width: 120,
-      fixed: 'right',
+      //fixed: 'right',
       render: (val, record) => {
         if (record.id == '总计:') {
           return null
@@ -481,6 +480,16 @@ class Confirmation extends Component {
       this.getProNames([])
       this.getList()
     }
+    // let num = 0
+    // let res = (arr)=>arr.map(a=>{
+    //   if(a.width){
+    //     num=num+a.width
+    //   }else {
+    //     res(a.children)
+    //   }
+    // })
+    // res(this.columns)
+    // console.log(num)
   }
 
   handleStandardTableChange = (pagination) => {
@@ -489,7 +498,6 @@ class Confirmation extends Component {
 
   handleFormReset = () => {
     const {form} = this.props;
-    this.CustomPicker.resetValue()
     form.resetFields();
     this.setState({
       formValues: {},
@@ -636,7 +644,7 @@ class Confirmation extends Component {
       loading: loading.effects[`confirmation/${updateModalVisible ? 'update' : 'add'}`],
       user:user
     }
-    const exportUrl = createURL(LOSS_EXPORT, {
+    const exportUrl = createURL(CONFIRMATION_EXPORT, {
       ...this.exportParams, ...{
         token: user.token}
     })
@@ -664,7 +672,7 @@ class Confirmation extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '280%', y: global._scollY}}
+                scroll={{x:2940, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

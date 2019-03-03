@@ -1,4 +1,4 @@
-import {addDown, queryDownList, updateDown} from "../../../services/downToBack/meterDown";
+import {addDown, queryDownList, updateDown,querySum} from "../../../services/downToBack/meterDown";
 import {queryProPerList} from "../../../services/system/sys_project";
 import {queryTeamLists,queryAmount,querySubList} from "../../../services/downToBack/teamAccount"
 import {message} from 'antd';
@@ -14,42 +14,57 @@ export default {
     proNames: [],
     subNames: [],
     teamList:[],
-    sumContractAmount:''
+    sumAmount:''
   },
 
   effects: {
     * fetch({payload, token}, {call, put}) {
       const response = yield call(queryDownList, payload, token);
       if (response.code == '200') {
-        if (response.list.length > 0) {
-          let x = 0, y = 0, z = 0, a9 = 0, a10 = 0, a11 = 0, a12 = 0, a13 = 0
-          response.list.forEach(a => {
-            x += a.valuationPrice
-            y += a.endedPrice
-            a9 += a.valuationPriceReduce
-            a10 += a.warranty
-            a11 += a.performanceBond
-            a12 += a.compensation
-            a13 += a.shouldAmount
-          })
-          z = (x + y)!=0?Math.floor(x / (x + y) * 100) / 100:0
-          let sum = {
-            id: '合计:',
-            valuationPrice: x,
-            endedPrice: y,
-            underRate: z,
-            code: '合计:',
-            valuationPriceReduce: a9,
-            warranty: a10,
-            performanceBond: a11,
-            compensation: a12,
-            shouldAmount: a13
+        if(response.list.length>0){
+          if(global._getTotalPage(response.pagination.total)===response.pagination.current){
+            yield put({
+              type:'fetchSum',
+              payload:payload,
+              token:token
+            })
           }
-          response.list = [...response.list]
         }
         yield put({
           type: 'save',
           payload: response,
+        });
+      }
+      if (global.checkToken(response)) {
+        yield put({type: 'app/logout'})
+        return false
+      }
+    },
+    * fetchSum({payload, token}, {call, put,select}) {
+      const response = yield call(querySum, payload, token);
+      if (response.code == '200') {
+        const data = yield (select(_ => _.meterDown.data))
+        let sum = {
+          id: '合计:',
+          valuationPrice: response.entity.sumValuationPrice,
+          endedPrice: response.entity.sumEndedPrice,
+          underRate: response.entity.percentage/100,
+          code: '合计:',
+          valuationPriceReduce: response.entity.sumValuationPriceReduce,
+          warranty: response.entity.sumWarranty,
+          performanceBond: response.entity.sumPerformanceBond,
+          compensation: response.entity.sumCompensation,
+          shouldAmount: response.entity.sumShouldAmount
+        }
+        for(let a in sum){
+          if(sum[a]&&!isNaN(sum[a])&&a!=='underRate'){
+            sum[a] = Number.isInteger(Number(sum[a]))?Number(sum[a]):Number(sum[a]).toFixed(2)
+          }
+        }
+        data.list = [...data.list,sum]
+        yield put({
+          type: 'save',
+          payload: data,
         });
       }
       if (global.checkToken(response)) {

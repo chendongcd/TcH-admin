@@ -14,6 +14,7 @@ export async function signOut(token) {
   // 清除TOKEN，模拟退出
   return request(`${apiDev}/user/login_out/v1.1`, {
     method: 'GET',
+    noMsg:true,
   },token);
 }
 

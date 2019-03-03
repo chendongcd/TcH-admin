@@ -321,12 +321,12 @@ export const menuData = [
     mpid: '9',
     name: '确权清收表',
     route: '/report/confirm',
-    permission:'PERMISSIONS_REPORT_CONFIRM',
+    permission:'PERMISSIONS_REPORT_CONFIRMATION',
     buttons:[
-      {name:'新增',permission:'PERMISSIONS_REPORT_CONFIRM_ADD'},
-      {name:'编辑',permission:'PERMISSIONS_REPORT_CONFIRM_UPDATE'},
-      {name:'查看',permission:'PERMISSIONS_REPORT_CONFIRM_LOOK'},
-      {name:'导出',permission:'PERMISSIONS_REPORT_CONFIRM_EXPORT'},
+      {name:'新增',permission:'PERMISSIONS_REPORT_CONFIRMATION_ADD'},
+      {name:'编辑',permission:'PERMISSIONS_REPORT_CONFIRMATION_UPDATE'},
+      {name:'查看',permission:'PERMISSIONS_REPORT_CONFIRMATION_LOOK'},
+      {name:'导出',permission:'PERMISSIONS_REPORT_CONFIRMATION_EXPORT'},
     ]
   },
   {

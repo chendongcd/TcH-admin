@@ -27,13 +27,16 @@ const codeMessage = {
   602:'所属队伍台账已存在主合同'
 };
 
-const checkStatus = response => {
+const checkStatus = (response,options) => {
  //  console.log(appModal)
  //  if(response.code == 200){
  //    message.error('用户信息认证失效，请重新登陆',5);
  //    appModal.effects.logout({})
  //    return
  //  }
+  if(options.noMsg){
+    return
+  }
   if (response.code >= 200 && response.code < 300) {
     return
   }
@@ -92,7 +95,7 @@ export default function request(url, options, token) {
 
     req.onload = function () {
         if (req.readyState === 4 && (req.status == 200||req.status == 401||req.status == 402)) {
-          checkStatus(JSON.parse(req.response))
+          checkStatus(JSON.parse(req.response),options)
           resolve(JSON.parse(req.response))
         } else {
           reject(Error(req.statusText))

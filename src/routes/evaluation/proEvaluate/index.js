@@ -159,7 +159,7 @@ class CreateForm extends Component {
         title={checkDetail ? '项目评估' : updateModalVisible ? "编辑项目评估" : "新增项目评估"}
         bodyStyle={{padding: 0 + 'px'}}
         visible={modalVisible}
-        width={992}
+        width={1100}
         okButtonProps={{loading:loading}}
         maskClosable={false}
         onOk={()=>checkDetail ? handleCheckDetail():this.okHandle()}
@@ -544,8 +544,9 @@ class CreateForm extends Component {
             </Row>
           </Fragment>:null}
         </div>
-        <Modal width={643} style={{width: 643, height: 940}} bodyStyle={{width: 643, height: 940}} visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-          <iframe style={{width: 595, height: 892}} frameBorder={0} src={previewImage}/>
+        <Modal width={'100%'} style={{width: '100%', height: '100%',top:0}} bodyStyle={{width: '100%', height: 900,paddingTop:50}}
+               visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+          <iframe width={'100%'} height={'100%'} frameBorder={0} src={previewImage}/>
         </Modal>
       </Modal>
     );
@@ -679,12 +680,14 @@ class ProEvaluate extends Component {
     {
       title: '序号',
       dataIndex: 'id',
-      width:80,
+      width:100,
+    //  fixed: 'left'
     },
     {
       title: '项目名称',
-      width:100,
-      dataIndex: 'projectName',
+      width:150,
+     // fixed: 'left',
+      dataIndex: 'projectName'
     },
     {
       title: '工程类别',
@@ -713,11 +716,11 @@ class ProEvaluate extends Component {
         title: '中标',
         key: 'winningBid',
         dataIndex: 'winningBid',
-        width:100,
+        width:130,
       }, {
         title: '有效收入',
         key: 'effectiveIncome',
-        width:100,
+        width:130,
         dataIndex: 'effectiveIncome',
       },]
     },
@@ -732,7 +735,7 @@ class ProEvaluate extends Component {
         title: '签订日期',
         dataIndex: 'signTime',
         key: 'signTime',
-        width:120,
+        width:130,
         render(val) {
           return <span>{moment(val).format('YYYY/MM/DD')}</span>;
         },
@@ -744,7 +747,7 @@ class ProEvaluate extends Component {
         title: '合同开工时间',
         key: 'contractStartTime',
         dataIndex: 'contractStartTime',
-        width:100,
+        width:130,
         render(val) {
           return <span>{moment(val).format('YYYY/MM/DD')}</span>;
         },
@@ -752,7 +755,7 @@ class ProEvaluate extends Component {
         title: '合同竣工时间',
         key: 'contractEndTime',
         dataIndex: 'contractEndTime',
-        width:100,
+        width:130,
         render(val) {
           return <span>{moment(val).format('YYYY/MM/DD')}</span>;
         },
@@ -768,6 +771,7 @@ class ProEvaluate extends Component {
       children: [{
         title: '评估时间',
         key: 'evaluationTime',
+        width:130,
         dataIndex: 'evaluationTime',
         render(val) {
           return <span>{moment(val).format('YYYY/MM/DD')}</span>;
@@ -776,17 +780,17 @@ class ProEvaluate extends Component {
         title: '评估效益点(%)',
         key: 'evaluationBenefit',
         dataIndex: 'evaluationBenefit',
-        width:100,
+        width:120,
       }, {
         title: '含分包差及经营费(%)',
         key: 'evaluationCost',
         dataIndex: 'evaluationCost',
-        width:100,
+        width:150,
       }, {
         title: '评估编号',
         key: 'evaluationCode',
         dataIndex: 'evaluationCode',
-        width:100,
+        width:110,
       }, {
         title: '附件',
         key: 'evaluationAnnex',
@@ -811,7 +815,7 @@ class ProEvaluate extends Component {
         title: '含分包差及经营费(%)',
         key: 'jointHearingCost',
         dataIndex: 'jointHearingCost',
-        width:100,
+        width:150,
       }, {
         title: '上会时间',
         key: 'jointHearingTime',
@@ -819,7 +823,7 @@ class ProEvaluate extends Component {
         render(val) {
           return <span>{moment(val).format('YYYY/MM/DD')}</span>;
         },
-        width:100,
+        width:130,
       }, {
         title: '附件',
         key: 'jointHearingAnnex',
@@ -839,7 +843,7 @@ class ProEvaluate extends Component {
         title: '责任状是否签订',
         dataIndex:'isResponsibility',
         key: 'isResponsibility',
-        width:100,
+        width:120,
         render(val,record){
           return<span>{val==1?'是':'否'}</span>
         }
@@ -851,7 +855,7 @@ class ProEvaluate extends Component {
       }, {
         title: '签订时间',
         key: 'responsibilityTime',
-        width:100,
+        width:130,
         dataIndex: 'responsibilityTime',
         render(val) {
           return <span>{moment(val).format('YYYY/MM/DD')}</span>;
@@ -882,11 +886,12 @@ class ProEvaluate extends Component {
     {
       title: '备注',
       dataIndex: 'remark',
+      width:180,
     },
     {
       title: '操作',
       width: 110,
-      fixed: 'right',
+     // fixed: 'right',
       render: (val, record) => {
         const user = this.props.app.user
         if (!user.token) {
@@ -1179,7 +1184,7 @@ class ProEvaluate extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '350%',y: global._scollY}}
+                scroll={{x: 3430,y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
