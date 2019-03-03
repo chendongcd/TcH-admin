@@ -46,7 +46,6 @@ class CreateForm extends Component {
   componentWillUnmount() {
   }
 
-
   render() {
     const { modalVisible, form, handleCheckDetail, selectedValues, checkDetail} = this.props;
     return (
@@ -55,7 +54,7 @@ class CreateForm extends Component {
         title={'项目合同外计日工及补偿费用台账'}
         bodyStyle={{padding: 0 + 'px'}}
         visible={modalVisible}
-        width={992}
+        width={1100}
         maskClosable={false}
         onOk={() => handleCheckDetail()}
         onCancel={() => handleCheckDetail()}
@@ -186,7 +185,7 @@ class Daily extends Component {
     {
       title: '工程类别',
       dataIndex: 'projectType',
-      width: 100,
+      width: 110,
       fixed: 'left',
     },
     {
@@ -201,7 +200,7 @@ class Daily extends Component {
         {
           title: '计日工',
           dataIndex: 'statisticsDailyWorkSubtotal',
-          width: 150,
+          width: 110,
         },
         {
           title: '合同外补偿/赔偿',
@@ -211,7 +210,7 @@ class Daily extends Component {
         {
           title: '小计',
           dataIndex: 'statisticsAlreadySubtotal',
-          width: 150,
+          width: 110,
         },
       ]
     },
@@ -221,7 +220,7 @@ class Daily extends Component {
         {
           title: '计日工',
           dataIndex: 'statisticsEstimateDailyWorkSubtotal',
-          width: 150,
+          width: 100,
         },
         {
           title: '合同外补偿/赔偿',
@@ -230,6 +229,7 @@ class Daily extends Component {
         },
         {
           title: '小计',
+          width:110,
           dataIndex: 'statisticsEstimateSubtotal',
         },
       ]
@@ -381,7 +381,7 @@ class Daily extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '150%', y: global._scollY}}
+                scroll={{x: 1480, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

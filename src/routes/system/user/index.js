@@ -72,6 +72,7 @@ class CreateForm extends Component {
         maskClosable={false}
         title={checkDetail ? '用户详情' : updateModalVisible ? "编辑用户" : "新建用户"}
         visible={modalVisible}
+        width={600}
         className={styles.modalContent}
         okButtonProps={{loading: loading}}
         onOk={() => checkDetail ? handleCheckDetail() : this.okHandle(handleAdd, form, updateModalVisible, selectedValues)}
@@ -158,21 +159,24 @@ class User extends Component {
       title: '用户编码',
       dataIndex: 'code',
       width: 100,
+      fixed:'left'
     },
     {
       title: '账号类别',
       width: 100,
       dataIndex: 'type',
       render: val => <span>{val == 0 ? '公司' : '项目部'}</span>,
+      fixed:'left'
     },
     {
       title: '账号名称',
       width: 100,
       dataIndex: 'account',
+      fixed:'left'
     },
     {
       title: '项目名称',
-      width: 150,
+      width: 180,
       dataIndex: 'projectName',
     },
     {
@@ -200,7 +204,7 @@ class User extends Component {
     },
     {
       title: '创建时间',
-      width: 180,
+      width: 160,
       dataIndex: 'createTime',
       render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
     },
@@ -212,13 +216,13 @@ class User extends Component {
     {
       title: '最新修改时间',
       dataIndex: 'updateTime',
-      width: 180,
+      width: 160,
       render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
     },
     {
       title: '操作',
       fixed: 'right',
-      width: 160,
+      width: 180,
       render: (val, record) => {
         const user = this.props.app.user
         if (!user.token) {
@@ -426,7 +430,7 @@ class User extends Component {
 
     return (
       <Page inner={true} loading={pageLoading}>
-        <PageHeaderWrapper title="用户管理">
+        <PageHeaderWrapper>
           <Card bordered={false}>
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
@@ -445,7 +449,7 @@ class User extends Component {
                 loading={loading.effects['sys_user/queryUserList']}
                 rowKey="id"
                 data={data}
-                scroll={{x: '130%', y: global._scollY}}
+                scroll={{x: 1530, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

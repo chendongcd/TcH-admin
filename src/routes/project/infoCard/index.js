@@ -410,7 +410,7 @@ class CreateForm extends Component {
         title={checkDetail ? '工程项目信息' : updateModalVisible ? "编辑工程项目信息" : "新增工程项目信息"}
         bodyStyle={{padding: 0 + 'px'}}
         visible={modalVisible}
-        width={992}
+        width={1100}
         maskClosable={false}
         okButtonProps={{loading: loading}}
         onOk={() => checkDetail ? handleCheckDetail() : this.okHandle(form, updateModalVisible, handleAdd, selectedValues)}
@@ -768,19 +768,19 @@ class InfoCard extends Component {
     {
       title: '项目编码',
       dataIndex: 'code',
-      width:150,
+      width:160,
       fixed: 'left'
     },
     {
       title: '项目名称',
       dataIndex: 'projectName',
-      width:120,
+      width:180,
       fixed: 'left'
     },
     {
       title: '工程状态',
       dataIndex: 'status',
-      width:80,
+      width:100,
       render(val) {
         return <Badge status={statusMap[val]} text={status[val].name}/>;
       },
@@ -791,7 +791,7 @@ class InfoCard extends Component {
         title: '合同开工日期',
         dataIndex: 'contractStartTime',
         key: 'contractStartTime',
-        width:120,
+        width:130,
         render(val) {
           return <span>{moment(val).format('YYYY/MM/DD')}</span>;
         },
@@ -800,7 +800,7 @@ class InfoCard extends Component {
           title: '合同完工日期',
           dataIndex: 'contractEndTime',
           key: 'contractEndTime',
-          width:120,
+          width:130,
           render(val) {
             return <span>{moment(val).format('YYYY/MM/DD')}</span>;
           },
@@ -812,7 +812,7 @@ class InfoCard extends Component {
         title: '实际开工日期',
         dataIndex: 'realContractStartTime',
         key: 'realContractStartTime',
-        width:120,
+        width:130,
         render(val) {
           return <span>{moment(val).format('YYYY/MM/DD')}</span>;
         },
@@ -821,7 +821,7 @@ class InfoCard extends Component {
           title: '实际完工日期',
           dataIndex: 'realContractEndTime',
           key: 'realContractEndTime',
-          width:120,
+          width:130,
           render(val) {
             return <span>{val?moment(val).format('YYYY/MM/DD'):''}</span>;
           },
@@ -832,7 +832,7 @@ class InfoCard extends Component {
       children: [{
         title: '暂估合同额',
         dataIndex: 'temporarilyPrice',
-        width:100,
+        width:150,
         render(val) {
           return <span>{val}</span>;
         },
@@ -840,7 +840,7 @@ class InfoCard extends Component {
         {
           title: '有效合同额',
           dataIndex: 'totalPrice',
-          width:100,
+          width:150,
           render(val) {
             return <span>{val}</span>;
           },
@@ -872,7 +872,7 @@ class InfoCard extends Component {
     },
     {
       title: '下载信息卡',
-     // width:100,
+      width:130,
       render(val) {
         return <a href={apiDev + PRO_PDF + val.id} download={'信息卡'}>下载</a>;
       },
@@ -880,7 +880,7 @@ class InfoCard extends Component {
     {
       title: '操作',
       fixed:'right',
-      width:110,
+      width:120,
       render: (val, record) => {
         const user = this.props.app.user
         if (!user.token) {
@@ -1184,7 +1184,7 @@ class InfoCard extends Component {
                 selectedRows={selectedRows}
                 loading={loading.effects['pro_proInfo/fetch']}
                 data={data}
-                scroll={{x: '150%',y: global._scollY}}
+                scroll={{x: 1920,y: global._scollY}}
                 rowKey="id"
                 bordered
                 columns={this.columns}

@@ -3,7 +3,7 @@ import {connect} from 'dva';
 import {Helmet} from 'react-helmet'
 import PropTypes from 'prop-types'
 import config from '../utils/config'
-import {Loader, MyLayout,Page} from 'components'
+import {Loader, MyLayout} from 'components'
 import {BackTop, Layout} from 'antd'
 import classnames from 'classnames'
 import '../themes/index.less'

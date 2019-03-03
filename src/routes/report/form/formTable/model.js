@@ -27,7 +27,7 @@ export default {
           changeClaimAmountStatistics:isNaN(a6)?'':a6.toFixed(0),
           changeClaimAmount:isNaN(a7)?'':a7,
         }
-        response.list = [...response.list, sum]
+        response.list = [...response.list]
         yield put({
           type: 'save',
           payload: response,

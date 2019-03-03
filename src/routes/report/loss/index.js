@@ -66,7 +66,7 @@ class CreateForm extends Component {
         title={checkDetail ? '过程亏损项目明细表' : updateModalVisible ? "编辑过程亏损项目明细表" : "新增过程亏损项目明细表"}
         bodyStyle={{padding: 0 + 'px'}}
         visible={modalVisible}
-        width={992}
+        width={1100}
         okButtonProps={{loading: loading}}
         maskClosable={false}
         onOk={() => checkDetail ? handleCheckDetail() : this.okHandle()}
@@ -391,6 +391,7 @@ class LossForm extends Component {
     {
       title:'备注',
       dataIndex:'remark',
+      width:150,
       render:(val)=>{
         return <Remark content={val} max={10}/>
       }
@@ -627,7 +628,7 @@ class LossForm extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '280%', y: global._scollY}}
+                scroll={{x: 3010, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

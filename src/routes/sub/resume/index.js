@@ -48,7 +48,7 @@ const CreateForm = Form.create()(props => {
       title={checkDetail ? '分包商履历' : updateModalVisible ? "编辑分包商履历" : "新增分包商履历"}
       bodyStyle={{padding: 0 + 'px'}}
       visible={modalVisible}
-      width={992}
+      width={1100}
       maskClosable={false}
       okButtonProps={{loading:loading}}
       onOk={() => checkDetail ? handleCheckDetail() : okHandle()}
@@ -230,22 +230,22 @@ class Resume extends Component {
     {
       title: '分包商全称',
       dataIndex: 'subcontractorName',
-      width:200,
+      width:180,
       fixed:'left'
     },
     {
       title: '队伍名称',
-      width:100,
+      width:150,
       dataIndex: 'teamName',
     },
     {
       title: '施工规模',
-      width:100,
+      width:110,
       dataIndex: 'constructionScale'
     },
     {
       title: '开始日期',
-      width:120,
+      width:130,
       dataIndex: 'startTime',
       render(val) {
         return <span>{moment(val).format('YYYY/MM/DD')}</span>;
@@ -253,7 +253,7 @@ class Resume extends Component {
     },
     {
       title: '结束日期',
-      width:120,
+      width:130,
       dataIndex: 'endTime',
       render(val) {
         return <span>{val?moment(val).format('YYYY/MM/DD'):''}</span>;
@@ -261,7 +261,7 @@ class Resume extends Component {
     },
     {
       title: '该时间段所属项目部',
-      width:150,
+      width:200,
       dataIndex: 'projectName'
     },
     {
@@ -276,12 +276,12 @@ class Resume extends Component {
     },
     {
       title: '合同金额',
-      width:120,
+      width:130,
       dataIndex: 'contractAmount',
     },
     {
       title: '结算金额',
-      width:120,
+      width:130,
       dataIndex: 'settlementAmount',
     },
     {
@@ -291,11 +291,12 @@ class Resume extends Component {
     },
     {
       title: '文字评价',
+      width:180,
       dataIndex: 'projectDescription',
     },
     {
       title: '操作',
-      width:210,
+      width:200,
       fixed:'right',
       render: (val, record) => {
         const user = this.props.app.user
@@ -579,7 +580,7 @@ class Resume extends Component {
                 filterMultiple={false}
                 rowKey={'id'}
                 data={data}
-                scroll={{x: '200%',y: global._scollY}}
+                scroll={{x: 2200,y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

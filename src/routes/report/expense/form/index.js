@@ -104,7 +104,7 @@ class CreateForm extends Component {
         title={checkDetail ? '合同外计日工赔偿情况统计表' : updateModalVisible ? "编辑合同外计日工赔偿情况统计表" : "新增合同外计日工赔偿情况统计表"}
         bodyStyle={{padding: 0 + 'px'}}
         visible={modalVisible}
-        width={992}
+        width={1100}
         okButtonProps={{loading: loading}}
         maskClosable={false}
         onOk={() => checkDetail ? handleCheckDetail() : this.okHandle()}
@@ -421,7 +421,7 @@ class ExpenseForm extends Component {
     {
       title: '合同编号',
       dataIndex: 'contractNumber',
-      width: 100
+      width: 110
     },
     {
       title: '合同签订人',
@@ -514,7 +514,7 @@ class ExpenseForm extends Component {
     {
       title: '合同外补偿/赔偿占已计价金额比例（%）',
       dataIndex: 'compensationPercentage',
-      width: 100,
+      width: 180,
       render:(val)=>{
         return<span>{isNaN(val)?'':(val*100).toFixed(2)}</span>
       }
@@ -527,7 +527,7 @@ class ExpenseForm extends Component {
     {
       title: '计日工及补偿已拨付金额拨付率（%）',
       dataIndex: 'disbursedPercentage',
-      width: 100,
+      width: 180,
       render:(val)=>{
         return<span>{isNaN(val)?'':(val*100).toFixed(2)}</span>
       }
@@ -599,7 +599,7 @@ class ExpenseForm extends Component {
           title: '合计',
           dataIndex: 'estimateTotal',
           key: 'estimateTotal',
-          // width: 100,
+          width: 110,
         },]
     },
     {
@@ -863,7 +863,7 @@ class ExpenseForm extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '375%', y: global._scollY}}
+                scroll={{x: 4130, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

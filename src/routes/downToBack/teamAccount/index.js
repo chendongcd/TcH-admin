@@ -144,7 +144,7 @@ class CreateForm extends Component {
         title={checkDetail ? '队伍台账' : updateModalVisible ? "编辑台账" : "新增台账"}
         bodyStyle={{padding: 0 + 'px'}}
         visible={modalVisible}
-        width={992}
+        width={1100}
         okButtonProps={{loading: loading}}
         maskClosable={false}
         onOk={() => checkDetail ? handleCheckDetail() : this.okHandle()}
@@ -440,9 +440,9 @@ class CreateForm extends Component {
             </Col>
           </Row>
         </div>
-        <Modal width={643} style={{width: 643, height: 940}} bodyStyle={{width: 643, height: 940}}
+        <Modal width={'100%'} style={{width: '100%', height: '100%',top:0}} bodyStyle={{width: '100%', height: 700,paddingTop:50}}
                visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-          <iframe style={{width: 595, height: 892}} frameBorder={0} src={previewImage}/>
+          <iframe width={'100%'} height={'100%'} frameBorder={0} src={previewImage}/>
         </Modal>
       </Modal>
     )
@@ -641,12 +641,12 @@ class TeamAccount extends Component {
         },
         {
           title: '合同编码',
-          width:120,
+          width:150,
           dataIndex: 'contractCode',
         },
         {
           title: '合同类型',
-          width:100,
+          width:110,
           dataIndex: 'contractType',
           render(val) {
             return <span>{contractType[val]}</span>
@@ -654,7 +654,7 @@ class TeamAccount extends Component {
         },
         {
           title: '分包商名称',
-          width:200,
+          width:180,
           dataIndex: 'subcontractorName'
         },
         {
@@ -664,7 +664,7 @@ class TeamAccount extends Component {
         },
         {
           title: '队伍状态',
-          width:100,
+          width:110,
           dataIndex: 'status',
           render(val) {
             return <span>{teamStatus[val]}</span>;
@@ -672,7 +672,7 @@ class TeamAccount extends Component {
         },
         {
           title: '合同签订日期',
-          width:120,
+          width:150,
           dataIndex: 'contractTime',
           render(val) {
             return <span>{val ? moment(val).format('YYYY-MM-DD') : ''}</span>;
@@ -681,7 +681,7 @@ class TeamAccount extends Component {
         {
           title: '预计合同金额(元)',
           dataIndex: 'estimatedContractAmount',
-          width:130,
+          width:150,
           render(val) {
             return <span>{val}</span>;
           },
@@ -725,13 +725,13 @@ class TeamAccount extends Component {
         },
         {
           title: '结算金额',
-          width:100,
+          width:110,
           dataIndex: 'settlementAmount'
         },
         {
-          title: '附件（合同）',
+          title: '附件(合同)',
           dataIndex: 'annexUrl',
-          width:120,
+          width:130,
           render(val) {
             //if(JSON.parse(record.annexUrl))
             function isJSON(str) {
@@ -763,7 +763,7 @@ class TeamAccount extends Component {
         {
           title: '授权委托书',
           dataIndex: 'annexUrlSq',
-          width:100,
+          width:130,
           render(val) {
             function isJSON(str) {
               if (typeof str === 'string') {
@@ -793,6 +793,7 @@ class TeamAccount extends Component {
         },
         {
           title: '备注',
+          width:150,
           dataIndex: 'remark'
         },
       ]
@@ -807,7 +808,7 @@ class TeamAccount extends Component {
           children: [{
             title: '日期',
             dataIndex: 'teamTime',
-            width:120,
+            width:130,
             render(val) {
               return <span>{val ? moment(val).format('YYYY/MM/DD') : ''}</span>;
             },
@@ -819,7 +820,7 @@ class TeamAccount extends Component {
           children: [{
             title: '日期',
             dataIndex: 'approvalTime',
-            width:120,
+            width:130,
             render(val) {
               return <span>{val ? moment(val).format('YYYY-MM-DD') : ''}</span>;
             },
@@ -842,7 +843,7 @@ class TeamAccount extends Component {
           key: '022',
           children: [{
             title: '日期',
-            width:120,
+            width:130,
             dataIndex: 'settlementTime',
             render(val) {
               return <span>{val?moment(val).format('YYYY/MM/DD'):''}</span>;
@@ -1169,7 +1170,7 @@ class TeamAccount extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '270%', y: global._scollY}}
+                scroll={{x: 3270, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

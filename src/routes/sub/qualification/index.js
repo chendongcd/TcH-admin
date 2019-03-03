@@ -149,7 +149,7 @@ class CreateForm extends Component {
         title={checkDetail ? '分包商资质信息卡' : updateModalVisible ? "编辑分包商资质信息卡" : "新增分包商资质信息卡"}
         bodyStyle={{padding: 0 + 'px'}}
         visible={modalVisible}
-        width={992}
+        width={1100}
         okButtonProps={{loading: loading}}
         maskClosable={false}
         onOk={() => checkDetail ? handleCheckDetail() : this.okHandle()}
@@ -663,14 +663,14 @@ class Qualification extends Component {
     {
       title: '分包商备案编码',
       dataIndex: 'code',
-      width: 100,
+      width: 150,
       fixed: 'left'
     },
     {
       title: '分包商全称',
       dataIndex: 'name',
       fixed: 'left',
-      width: 200,
+      width: 180,
       render: (val, record) => {
         return <a onClick={() => this.getResume(val)}>{val}</a>
       }
@@ -678,17 +678,17 @@ class Qualification extends Component {
     {
       title: '分包商类型',
       dataIndex: 'type',
-      width: 100,
+      width: 110,
     },
     {
       title: '专业类型',
       dataIndex: 'professionType',
-      width: 100,
+      width: 200,
     },
     {
       title: '纳税人类型',
       dataIndex: 'taxpayerType',
-      width: 120,
+      width: 150,
     },
     {
       title: '法人',
@@ -698,12 +698,12 @@ class Qualification extends Component {
     {
       title: '注册本金（万元）',
       dataIndex: 'registeredCapital',
-      width: 150,
+      width: 130,
     },
     {
       title: '资料是否齐全',
       dataIndex: 'qualification',
-      width: 120,
+      width: 130,
     },
     {
       title: '股份公司综合信誉评价',
@@ -723,7 +723,7 @@ class Qualification extends Component {
     {
       title: '证件期限',
       key: 'period',
-      width: 120,
+      width: 110,
       render: (val, record) => {
         let status = this.checkPeriod(record)
         return <Badge offset={[5, 0]} status={status}/>
@@ -741,7 +741,7 @@ class Qualification extends Component {
     },
     {
       title: '下载附件',
-      width: 100,
+      width: 110,
       render: (val, record) => {
         if (!record.annex) {
           return null
@@ -756,6 +756,7 @@ class Qualification extends Component {
     {
       title: '备注',
       dataIndex: 'remark',
+      width:180
       //  width:100,
     },
     {
@@ -1115,7 +1116,7 @@ class Qualification extends Component {
                 bordered
                 rowKey="id"
                 data={data}
-                scroll={{x: '220%', y: global._scollY}}
+                scroll={{x: 2480, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

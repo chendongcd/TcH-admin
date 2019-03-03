@@ -86,7 +86,7 @@ class CreateForm extends Component {
         title={checkDetail ? '确权清收表' : updateModalVisible ? "编辑确权清收表" : "新增确权清收表"}
         bodyStyle={{padding: 0 + 'px'}}
         visible={modalVisible}
-        width={992}
+        width={1100}
         okButtonProps={{loading: loading}}
         maskClosable={false}
         onOk={() => checkDetail ? handleCheckDetail() : this.okHandle()}
@@ -429,7 +429,7 @@ class Confirmation extends Component {
             {
               title: '小记',
               dataIndex: 'sumFinalPeriod',
-             // width: 120,
+              width: 110,
             },
             {
               title: '其中：合同内应计未计',
@@ -480,6 +480,16 @@ class Confirmation extends Component {
       this.getProNames([])
       this.getList()
     }
+    // let num = 0
+    // let res = (arr)=>arr.map(a=>{
+    //   if(a.width){
+    //     num=num+a.width
+    //   }else {
+    //     res(a.children)
+    //   }
+    // })
+    // res(this.columns)
+    // console.log(num)
   }
 
   handleStandardTableChange = (pagination) => {
@@ -662,7 +672,7 @@ class Confirmation extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '280%', y: global._scollY}}
+                scroll={{x:2940, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

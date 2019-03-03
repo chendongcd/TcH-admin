@@ -115,7 +115,7 @@ class CreateForm extends Component {
         title={checkDetail ? '对上计量台账' : updateModalVisible ? "编辑对上计量台账" : "新增对上计量台账"}
         bodyStyle={{padding: 0 + 'px'}}
         visible={modalVisible}
-        width={992}
+        width={1100}
         okButtonProps={{loading: loading}}
         maskClosable={false}
         onOk={() => checkDetail ? handleCheckDetail() : this.okHandle()}
@@ -227,7 +227,7 @@ class CreateForm extends Component {
         <div className={styles.modalContent}>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="已支付金额">
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="已支付金额">
                 {form.getFieldDecorator('alreadyPaidAmount', {
                   rules: [{required: true, message: '请输入已支付金额'}],
                   initialValue: selectedValues.alreadyPaidAmount ? selectedValues.alreadyPaidAmount : testValue,
@@ -246,7 +246,7 @@ class CreateForm extends Component {
         <div className={styles.modalContent}>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="超计价金额">
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="超计价金额">
                 {form.getFieldDecorator('extraAmount', {
                   rules: [{required: true, message: '请输入超计价金额'}],
                   initialValue: selectedValues.extraAmount ? selectedValues.extraAmount : testValue,
@@ -254,7 +254,7 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="已完未计价金额">
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="已完未计价金额">
                 {form.getFieldDecorator('notCalculatedAmount', {
                   rules: [{required: true, message: '请输入已完未计价金额'}],
                   initialValue: selectedValues.notCalculatedAmount ? selectedValues.notCalculatedAmount : testValue,
@@ -315,9 +315,9 @@ class CreateForm extends Component {
             </Col>
           </Row>
         </div>
-        <Modal style={{width: 643, height: 940}} bodyStyle={{width: 643, height: 940}}
+        <Modal width={'100%'} style={{width: '100%', height: '100%',top:0}} bodyStyle={{width: '100%', height: 700,paddingTop:50}}
                visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-          <iframe style={{width: 595, height: 892}} frameBorder={0} src={previewImage}/>
+          <iframe width={'100%'} height={'100%'} frameBorder={0} src={previewImage}/>
         </Modal>
       </Modal>
     );
@@ -394,13 +394,13 @@ class MeterUp extends Component {
     {
       title: '项目名称',
       fixed: 'left',
-      width: 150,
+      width: 180,
       dataIndex: 'projectName',
     },
     {
       title: '计量期数',
       fixed: 'left',
-      width: 100,
+      width: 110,
       dataIndex: 'meteringNum',
       render: (val) => {
         return <span>{val !== undefined ? ('第' + val + '期') : ''}</span>
@@ -409,7 +409,7 @@ class MeterUp extends Component {
     {
       title: '计量日期',
       fixed: 'left',
-      width: 100,
+      width: 110,
       dataIndex: 'meteringTime',
       render(val) {
         return <span>{val ? moment(val).format('YYYY/MM') : ''}</span>;
@@ -417,7 +417,7 @@ class MeterUp extends Component {
     },
     {
       title: '预付款（元）',
-      width: 100,
+      width: 120,
       dataIndex: 'prepaymentAmount',
     },
     {
@@ -489,12 +489,12 @@ class MeterUp extends Component {
           title: '已完未计',
           dataIndex: 'notCalculatedAmount',
           key: 'notCalculatedAmount',
-          width: 100,
+          width: 110,
         }]
     },
     {
       title: '产值计价率',
-      width: 100,
+      width: 120,
       dataIndex: 'productionValue',
       render(val) {
         return <span>{val * 100 + '%'}</span>;
@@ -502,12 +502,13 @@ class MeterUp extends Component {
     },
     {
       title: '备注',
+      width:130,
       dataIndex: 'remark'
     },
     {
       title: '操作',
       fixed: 'right',
-      width: 180,
+      width: 200,
       render: (val, record) => {
         if (record.id === '合计:') {
           return null
@@ -800,7 +801,7 @@ class MeterUp extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '215%', y: global._scollY}}
+                scroll={{x: 2400, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

@@ -59,7 +59,6 @@ class CreateForm extends Component {
 
   setType = (item) => {
     let {form} = this.props
-    console.log(item)
     form.setFieldsValue({'projectType': item.projectType})
   }
 
@@ -71,7 +70,7 @@ class CreateForm extends Component {
         title={checkDetail ? '工程变更索赔月快报表' : updateModalVisible ? "编辑工程变更索赔月快报表" : "新增工程变更索赔月快报表"}
         bodyStyle={{padding: 0 + 'px'}}
         visible={modalVisible}
-        width={992}
+        width={1100}
         okButtonProps={{loading: loading}}
         maskClosable={false}
         onOk={() => checkDetail ? handleCheckDetail() : this.okHandle()}
@@ -244,6 +243,7 @@ class ReportForm extends Component {
     {
       title: '备注',
       dataIndex: 'remark',
+      width:150,
     },
     {
       title: '操作',
@@ -470,7 +470,7 @@ class ReportForm extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '140%', y: global._scollY}}
+                scroll={{x: 1520, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

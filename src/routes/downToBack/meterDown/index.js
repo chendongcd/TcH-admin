@@ -170,7 +170,7 @@ class CreateForm extends Component {
         title={checkDetail ? '对下验工计价台账' : updateModalVisible ? "编辑对下验工计价台账" : "新增对下验工计价台账"}
         bodyStyle={{padding: 0 + 'px'}}
         visible={modalVisible}
-        width={992}
+        width={1100}
         okButtonProps={{loading: loading}}
         maskClosable={false}
         onOk={() => checkDetail ? handleCheckDetail() : this.okHandle()}
@@ -408,9 +408,9 @@ class CreateForm extends Component {
             </Col>
           </Row>
         </div>
-        <Modal width={643} style={{width: 643, height: 940}} bodyStyle={{width: 643, height: 940}}
+        <Modal width={'100%'} style={{width: '100%', height: '100%',top:0}} bodyStyle={{width: '100%', height: 700,paddingTop:50}}
                visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-          <iframe style={{width: 595, height: 892}} frameBorder={0} src={previewImage}/>
+          <iframe width={'100%'} height={'100%'} frameBorder={0} src={previewImage}/>
         </Modal>
       </Modal>
     )
@@ -494,18 +494,18 @@ class MeterDown extends Component {
     },
     {
       title: '队伍名称',
-      width:100,
+      width:150,
       dataIndex: 'teamName',
     },
     {
       title: '合同金额',
-      width:100,
+      width:130,
       dataIndex: 'sumContractAmount',
     },
     {
       title: '计价期数',
       dataIndex: 'valuationPeriod',
-      width:150,
+      width:130,
       render(val) {
         return <span>{val !== undefined ? ('第' + val + '期') : ''}</span>;
       },
@@ -513,7 +513,7 @@ class MeterDown extends Component {
     {
       title: '计价日期',
       dataIndex: 'valuationTime',
-      width:150,
+      width:130,
       render(val) {
         return <span>{val ? moment(val).format('YYYY/MM') : ''}</span>;
       },
@@ -521,7 +521,7 @@ class MeterDown extends Component {
     {
       title: '计价类型',
       dataIndex: 'valuationType',
-      width:100,
+      width:110,
       render(val) {
         return <span>{vType[val]}</span>;
       },
@@ -542,25 +542,25 @@ class MeterDown extends Component {
           title: '扣款',
           dataIndex: 'valuationPriceReduce',
           key: 'valuationPriceReduce',
-          width:100,
+          width:120,
           render(val) {
             return <span>{val}</span>;
           },
         }, {
           title: '扣除质保金',
-          width:100,
+          width:120,
           dataIndex: 'warranty',
           key: 'warranty',
         },
         {
           title: '扣除履约保证金',
-          width:100,
+          width:120,
           dataIndex: 'performanceBond',
           key: 'performanceBond',
         },
         {
           title: '计日工及补偿费用',
-          width:100,
+          width:120,
           dataIndex: 'compensation',
           key: 'compensation'
         },
@@ -568,7 +568,7 @@ class MeterDown extends Component {
           title: '应支付金额',
           dataIndex: 'shouldAmount',
           key: 'shouldAmount',
-          width:100,
+          width:120,
           render(val) {
             return <span>{val}</span>;
           },
@@ -576,30 +576,31 @@ class MeterDown extends Component {
           title: '已完成未计',
           dataIndex: 'endedPrice',
           key: 'endedPrice',
-          width:100,
+          width:120,
         }]
     },
     {
       title: '对下计价率',
       dataIndex: 'underRate',
-      width:100,
+      width:110,
       render: (val) => {
         return <span>{Math.floor(val * 100) + '%'}</span>
       }
     },
     {
       title: '计价负责人',
-      width:100,
+      width:110,
       dataIndex: 'valuationPerson',
     },
     {
       title: '备注',
+      width:180,
       dataIndex: 'remark',
     },
     {
       title: '下载附件',
       dataIndex: 'annexUrl',
-      width:110,
+      width:100,
       render: (val) => {
         //if(JSON.parse(record.annexUrl))
         function isJSON(str) {
@@ -893,7 +894,7 @@ class MeterDown extends Component {
 
     return (
       <Page inner={true} loading={pageLoading}>
-        <PageHeaderWrapper title="对下验工计价台账">
+        <PageHeaderWrapper>
           <Card bordered={false}>
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
@@ -913,7 +914,7 @@ class MeterDown extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: '210%',y: global._scollY}}
+                scroll={{x: 2600,y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

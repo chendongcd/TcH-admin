@@ -39,6 +39,7 @@ const CreateForm = Form.create()(props => {
       title={updateModalVisible ? "编辑项目" : "新增项目"}
       visible={modalVisible}
       onOk={okHandle}
+      width={600}
       okButtonProps={{loading:loading}}
       onCancel={() => updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
     >
@@ -83,12 +84,14 @@ class Project extends Component {
     {
       title: '项目编码',
       dataIndex: 'code',
-      width:180,
+      width:160,
+      fixed: 'left'
     },
     {
       title: '项目名称',
       dataIndex: 'name',
-      width:120,
+      width:180,
+      fixed:'left'
     },
     {
       title: '工程类别',
@@ -111,24 +114,24 @@ class Project extends Component {
     {
       title: '创建时间',
       dataIndex: 'createTime',
-      width:180,
+      width:160,
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm')}</span>,
     },
     {
       title: '最新修改人',
       dataIndex: 'updateUserStr',
-      width:130,
+      width:120,
     },
     {
       title: '最新修改时间',
       dataIndex: 'updateTime',
-      width:180,
+      width:160,
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm')}</span>,
     },
     {
       title: '操作',
       fixed:'right',
-      width:120,
+      width:130,
       render: (val, record) => {
         const user = this.props.app.user
         if(!user.token){
@@ -363,7 +366,7 @@ class Project extends Component {
                 loading={loading.effects['sys_pro/queryProList']}
                 data={data}
                 rowKey="id"
-                scroll={{x: '110%',y: global._scollY}}
+                scroll={{x: 1190,y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
