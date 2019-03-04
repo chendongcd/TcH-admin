@@ -172,7 +172,7 @@ class User extends Component {
       title: '账号名称',
       width: 100,
       dataIndex: 'account',
-      fixed:'left'
+      //fixed:'left'
     },
     {
       title: '项目名称',
@@ -221,8 +221,8 @@ class User extends Component {
     },
     {
       title: '操作',
-      fixed: 'right',
-      //width: 180,
+      //fixed: 'right',
+      width: 180,
       render: (val, record) => {
         const user = this.props.app.user
         if (!user.token) {
