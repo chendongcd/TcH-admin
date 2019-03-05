@@ -116,6 +116,10 @@ export function getButtons(pageButtons=[], button) {
   return pageButtons.includes(button)
 }
 
+export function getPage(id) {
+  return menuData.find(a=>a.id===id)
+}
+
 /*删除对象中的空对象*/
 export function cleanObject(obj) {
   for(let o in obj){

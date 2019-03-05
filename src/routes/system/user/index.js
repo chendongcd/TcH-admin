@@ -16,8 +16,7 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-import {getButtons, cleanObject} from "utils";
-import {menuData} from 'common/menu'
+import {getButtons, cleanObject,getPage} from "utils";
 import {SYS_USER_EXPORT} from 'common/urls'
 import {createURL} from 'services/app'
 
@@ -25,7 +24,7 @@ const FormItem = Form.Item;
 const {Option} = Select;
 const statusMap = ['success', 'error'];
 const status = ['启用', '禁用'];
-const pageButtons = menuData[4].buttons.map(a => a.permission)
+const pageButtons = getPage('23').buttons.map(a => a.permission)
 
 @Form.create()
 class CreateForm extends Component {

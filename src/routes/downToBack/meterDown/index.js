@@ -18,12 +18,11 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable, PreFile} from 'components'
 import styles from './index.less'
-import {getButtons, cleanObject, QiNiuOss, ImageUrl} from 'utils'
-import {menuData} from 'common/menu'
+import {getButtons, cleanObject, QiNiuOss, ImageUrl,getPage} from 'utils'
 import {DOWN_EXPORT} from 'common/urls'
 import {createURL} from 'services/app'
 
-const pageButtons = menuData[14].buttons.map(a => a.permission)
+const pageButtons = getPage('62').buttons.map(a => a.permission)
 const FormItem = Form.Item;
 const {Option} = Select;
 const info_css = {

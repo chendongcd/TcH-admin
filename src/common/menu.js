@@ -330,6 +330,20 @@ export const menuData = [
     ]
   },
   {
+    id: '95',
+    bpid: '9',
+    mpid: '9',
+    name: '责任成本快报',
+    route: '/report/response',
+    permission:'PERMISSIONS_REPORT_CONFIRMATION',
+    buttons:[
+      {name:'新增',permission:'PERMISSIONS_REPORT_CONFIRMATION_ADD'},
+      {name:'编辑',permission:'PERMISSIONS_REPORT_CONFIRMATION_UPDATE'},
+      {name:'查看',permission:'PERMISSIONS_REPORT_CONFIRMATION_LOOK'},
+      {name:'导出',permission:'PERMISSIONS_REPORT_CONFIRMATION_EXPORT'},
+    ]
+  },
+  {
     id: '10',
     bpid: '1',
     icon: 'folder',

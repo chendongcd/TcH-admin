@@ -16,17 +16,13 @@ import {
   Collapse,
   Spin
 } from 'antd';
-import {arrayToTree, _setTimeOut, getButtons, cleanObject} from 'utils'
+import {arrayToTree, _setTimeOut, getButtons, cleanObject,getPage} from 'utils'
 import {menuData} from '../../../common/menu'
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
 
 const FormItem = Form.Item;
 const TreeNode = Tree.TreeNode;
-const getValue = obj =>
-  Object.keys(obj)
-    .map(key => obj[key])
-    .join(',');
 const CreateForm = Form.create()(props => {
   const {modalVisible, form, handleAdd, handleModalVisible, handleUpdateModalVisible, updateModalVisible, selectedValues, loading} = props;
   const okHandle = () => {
@@ -55,7 +51,7 @@ const CreateForm = Form.create()(props => {
     </Modal>
   );
 });
-const pageButtons = menuData[3].buttons.map(a => a.permission)
+const pageButtons = getPage('22').buttons.map(a => a.permission)
 
 class CreatDrawer extends Component {
 

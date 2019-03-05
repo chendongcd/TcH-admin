@@ -81,7 +81,7 @@ export default {
           valuationAmountNotTax: response.entity.sumAmountNotTax,
           realAmountTax: response.entity.sumRealAmountTax,
           realAmount: response.entity.sumRealAmount,
-          alreadyPaidAmount: response.entity.sumAlreadyPaidAmount,
+          alreadyPaidAmount: response.entity.sumAlreadyAmount,
           unpaidAmount: response.entity.sumUnpaidAmount,
           notCalculatedAmount: response.entity.sumEndAmount,
           extraAmount: response.entity.sumExtraAmount

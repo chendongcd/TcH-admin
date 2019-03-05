@@ -16,8 +16,7 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-import {getButtons, cleanObject} from "utils";
-import {menuData} from 'common/menu'
+import {getButtons, cleanObject,getPage} from "utils";
 
 import {SUB_RES_EXPORT} from 'common/urls'
 import {createURL} from 'services/app'
@@ -26,7 +25,7 @@ const FormItem = Form.Item;
 const {Option} = Select;
 const testValue = ''
 
-const pageButtons = menuData[11].buttons.map(a => a.permission)
+const pageButtons = getPage('52').buttons.map(a => a.permission)
 
 const CreateForm = Form.create()(props => {
   const {modalVisible, form,loading, handleAdd, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail, subNames, teamList, proNames} = props;

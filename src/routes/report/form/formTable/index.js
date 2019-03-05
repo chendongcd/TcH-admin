@@ -11,13 +11,12 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-import {getButtons, cleanObject} from 'utils'
-import {menuData} from 'common/menu'
+import {getButtons, cleanObject,getPage} from 'utils'
 import {ENGINEER_STAT_EXPORT} from 'common/urls'
 import {createURL} from 'services/app'
 
 const FormItem = Form.Item;
-const pageButtons = menuData[25].buttons.map(a => a.permission)
+const pageButtons = getPage('922').buttons.map(a => a.permission)
 
 
 @Form.create()
@@ -134,12 +133,6 @@ class ReportFormTable extends Component {
   }
 
   columns = [
-    {
-      title: '序号',
-      dataIndex: 'id',
-      //fixed: 'left',
-      width: 100
-    },
     {
       title: '项目名称',
       dataIndex: 'projectName',

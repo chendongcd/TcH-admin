@@ -16,11 +16,10 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable, PreFile} from 'components'
 import styles from './index.less'
-import {getButtons, cleanObject, QiNiuOss, ImageUrl} from "utils";
-import {menuData} from "../../../common/menu";
+import {getButtons, cleanObject, QiNiuOss, ImageUrl,getPage} from "utils";
 
 const FormItem = Form.Item;
-const pageButtons = menuData[30].buttons.map(a => a.permission)
+const pageButtons = getPage('12').buttons.map(a => a.permission)
 const testValue = ''
 
 @Form.create()

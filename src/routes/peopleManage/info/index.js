@@ -18,8 +18,7 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable, PreFile} from 'components'
 import styles from './index.less'
-import {getButtons, cleanObject, QiNiuOss, ImageUrl} from 'utils'
-import {menuData} from "../../../common/menu";
+import {getButtons, cleanObject, QiNiuOss, ImageUrl,getPage} from 'utils'
 import {PEOPLE_EXPORT, PEOPLE_PDF} from 'common/urls'
 import {nationals} from 'common/types'
 import {apiDev} from 'utils/config'
@@ -28,7 +27,7 @@ import {createURL} from 'services/app'
 const FormItem = Form.Item;
 
 const {Option} = Select;
-const pageButtons = menuData[16].buttons.map(a => a.permission)
+const pageButtons = getPage('71').buttons.map(a => a.permission)
 const testValue = ''
 const info_css = {
   color: '#fa541c',

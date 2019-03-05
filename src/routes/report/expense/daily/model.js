@@ -37,7 +37,7 @@ export default {
       if (response.code == '200') {
         const data = yield (select(_ => _.expenseDaily.data))
         let sum = {
-          id: '合计:',
+          projectName: '合计:',
           statisticsTotalAmountContract:response.entity.sumStatisticsTotalAmountContract,
           statisticsDailyWorkSubtotal:response.entity.sumStatisticsDailyWorkSubtotal,
           statisticsCompensationSubtotal:response.entity.sumStatisticsCompensationSubtotal,
