@@ -20,15 +20,14 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable, PreFile, ExportModal} from 'components'
 import styles from './index.less'
-import {getButtons, cleanObject, QiNiuOss, ImageUrl} from 'utils'
-import {menuData} from 'common/menu'
+import {getButtons, cleanObject, QiNiuOss, ImageUrl,getPage} from 'utils'
 import {professionType, subType, taxpayerType} from 'common/types'
 import moment from 'moment'
 import {createURL} from 'services/app'
 import {SUB_QUA_PDF, SUB_QUA_EXPORT} from 'common/urls'
 import {apiDev} from 'utils/config'
 
-const pageButtons = menuData[10].buttons.map(a => a.permission)
+const pageButtons = getPage('51').buttons.map(a => a.permission)
 
 const FormItem = Form.Item;
 const {Option} = Select;

@@ -20,6 +20,12 @@ export async function queryFormTableList(params,token) {
     body: params
   },token);
 }
+export async function queryFormSum(params,token) {
+  return request(`${api}/total_statistics/v1.1`,{
+    method: 'GET',
+    body: params
+  },token);
+}
 export async function addForm(params,token) {
   return request(`${api}/add/v1.1`,{
     method: 'POST',

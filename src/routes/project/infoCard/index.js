@@ -18,9 +18,8 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable, ExportModal} from 'components'
 import styles from './index.less'
-import {getButtons, cleanObject, cloneObject} from 'utils'
+import {getButtons, cleanObject, cloneObject,getPage} from 'utils'
 import {apiDev} from 'utils/config'
-import {menuData} from 'common/menu'
 import {PRO_PDF, PRO_EXPORT} from 'common/urls'
 import {createURL} from 'services/app'
 
@@ -31,7 +30,7 @@ const status = [{id: 0, name: '在建'}, {id: 1, name: '完工未结算'}, {id: 
 
 const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/
 let uuid = 0;
-const pageButtons = menuData[6].buttons.map(a => a.permission)
+const pageButtons = getPage('31').buttons.map(a => a.permission)
 const testValue = ''
 const plainOptions = [{label: '项目工期', value: '1'},
   {label: '项目主要人员', value: '2'},

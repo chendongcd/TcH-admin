@@ -72,7 +72,6 @@ export default {
       const response = yield call(querySum, payload, token);
       if (response.code == '200') {
         const data = yield (select(_ => _.meterUp.data))
-        console.log(response.entity)
         let sum = {
           payProportion: response.entity.percentagePayProportion/100,
           productionValue: response.entity.percentageProductionValue/100,

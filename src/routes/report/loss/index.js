@@ -15,14 +15,13 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable, CustomPicker,Remark} from 'components'
 import styles from './index.less'
-import {getButtons, cleanObject} from 'utils'
-import {menuData} from 'common/menu'
+import {getButtons, cleanObject,getPage} from 'utils'
 import {LOSS_EXPORT} from 'common/urls'
 import {createURL} from 'services/app'
 
 const FormItem = Form.Item;
 const {Option} = Select;
-const pageButtons = menuData[26].buttons.map(a => a.permission)
+const pageButtons = getPage('93').buttons.map(a => a.permission)
 const testValue = ''
 
 

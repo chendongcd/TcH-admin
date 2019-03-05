@@ -19,8 +19,7 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable, PreFile,ExportModal} from 'components'
 import styles from './index.less'
-import {QiNiuOss, ImageUrl, cleanObject, getButtons} from 'utils'
-import {menuData} from "../../../common/menu";
+import {QiNiuOss, ImageUrl, cleanObject, getButtons,getPage} from 'utils'
 import {EVAL_EXPORT} from 'common/urls'
 import {createURL} from 'services/app'
 
@@ -33,7 +32,7 @@ const reStatus = ["未评估", "初评", "复评(二次)", "复评(三次)", "�
 const info_css = {
   color: '#fa541c'
 }
-const pageButtons = menuData[18].buttons.map(a => a.permission)
+const pageButtons = getPage('81').buttons.map(a => a.permission)
 const plainOptions = [
   { label: '项目信息', value: '1' },
   { label: '经管部评估', value: '2' },
