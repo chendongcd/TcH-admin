@@ -44,7 +44,7 @@ export default {
           percentageStatistics: response.entity.sumPercentage/100,
         }
         for(let a in sum){
-          if(sum[a]&&!isNaN(sum[a])&&a!=='percentage'){
+          if(sum[a]&&!isNaN(sum[a])&&a!=='percentageStatistics'){
             sum[a] = Number.isInteger(Number(sum[a]))?Number(sum[a]):Number(sum[a]).toFixed(2)
           }
         }
