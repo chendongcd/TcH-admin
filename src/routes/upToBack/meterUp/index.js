@@ -29,7 +29,7 @@ const pageButtons =  getPage('41').buttons.map(a => a.permission)
 const info_css = {
   color: '#fa541c'
 }
-const testValue = '123123'
+const testValue = ''
 const plainOptions = [
   {label: '预付款', value: '1'},
   {label: '计价金额', value: '2'},
