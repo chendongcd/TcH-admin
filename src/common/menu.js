@@ -335,7 +335,7 @@ export const menuData = [
     mpid: '9',
     name: '责任成本快报',
     route: '/report/response',
-    permission:'PERMISSIONS_REPORT_CONFIRMATION',
+    permission:'PERMISSIONS_REPORT_RESPONSE',
     buttons:[
       {name:'新增',permission:'PERMISSIONS_REPORT_CONFIRMATION_ADD'},
       {name:'编辑',permission:'PERMISSIONS_REPORT_CONFIRMATION_UPDATE'},

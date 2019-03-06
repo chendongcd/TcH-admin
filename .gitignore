@@ -5,6 +5,7 @@
 
 # production
 /dist
+dist.zip
 .idea
 .idea/workspace.xml
 

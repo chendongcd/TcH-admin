@@ -29,7 +29,7 @@ const pageButtons =  getPage('41').buttons.map(a => a.permission)
 const info_css = {
   color: '#fa541c'
 }
-const testValue = ''
+const testValue = '123123'
 const plainOptions = [
   {label: '预付款', value: '1'},
   {label: '计价金额', value: '2'},
@@ -78,6 +78,10 @@ class CreateForm extends Component {
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
+      if(updateModalVisible&&(typeof fieldsValue.meteringNum)==='string'&&fieldsValue.meteringNum.includes('第')){
+        fieldsValue.meteringNum = fieldsValue.meteringNum.slice(1,-1)
+      }
+      console.log(fieldsValue.meteringNum)
       fieldsValue.meteringTime = fieldsValue.meteringTime.format('YYYY-MM-DD')
       fieldsValue.annexUrl = `{"url":"${this.state.fileList[0].url}","fileName":"${this.state.fileList[0].name}"}`
       handleAdd(fieldsValue, updateModalVisible, selectedValues, this.cleanState);
