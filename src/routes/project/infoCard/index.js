@@ -405,7 +405,7 @@ class CreateForm extends Component {
         title={checkDetail ? '工程项目信息' : updateModalVisible ? "编辑工程项目信息" : "新增工程项目信息"}
         bodyStyle={{padding: 0 + 'px'}}
         visible={modalVisible}
-        width={1100}
+        width={1200}
         maskClosable={false}
         okButtonProps={{loading: loading}}
         onOk={() => checkDetail ? handleCheckDetail() : this.okHandle(form, updateModalVisible, handleAdd, selectedValues)}
@@ -677,15 +677,18 @@ class CreateForm extends Component {
     let year = end.get('year') - start.get('year')
     let month = end.get('month') - start.get('month')
     let date = end.get('date') - start.get('date')
-    if (year == 0) {
-      return date>=0? (month + 1):-1
+    if (year === 0) {
+      if(month===0&&date<0){
+        return -1
+      }
+      return month>=0? (month + 1):-1
     } else if (year > 0) {
       if (month > 0) {
         return year * 12 + month + 1
-      } else if(month==0){
-        return date>=0?(year * 12 + month + 1):-1
+      } else if(month===0){
+        return year * 12  + 1
       }else{
-        return month + 13
+        return year * 12+month + 13
       }
     }
     return -1
@@ -696,6 +699,7 @@ class CreateForm extends Component {
     const form = this.props.form
     const {getFieldValue} = form
     let start = type ? date : getFieldValue('contractStartTime'), end = !type ? date : getFieldValue('contractEndTime')
+
     if (start && end) {
       let res = this.calculateDuration(start, end)
       if(res==-1){

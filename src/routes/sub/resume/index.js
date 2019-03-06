@@ -47,7 +47,7 @@ const CreateForm = Form.create()(props => {
       title={checkDetail ? '分包商履历' : updateModalVisible ? "编辑分包商履历" : "新增分包商履历"}
       bodyStyle={{padding: 0 + 'px'}}
       visible={modalVisible}
-      width={1100}
+      width={1200}
       maskClosable={false}
       okButtonProps={{loading:loading}}
       onOk={() => checkDetail ? handleCheckDetail() : okHandle()}
@@ -97,7 +97,7 @@ const CreateForm = Form.create()(props => {
         </Row>
         <Row gutter={8}>
           <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="该时间段所属项目部">
+            <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="该时间段所属项目部">
               {form.getFieldDecorator('projectId', {
                 rules: [{required: true, message: '请选择项目'}],
                 initialValue: selectedValues.projectId ? selectedValues.projectId : '',
