@@ -79,7 +79,6 @@ class CreateForm extends Component {
       if(selectedValues.subcontractorId){
         fieldsValue.subcontractorId = selectedValues.subcontractorId
         fieldsValue.laborAccountId = selectedValues.laborAccountId
-        fieldsValue.valuationPeriod = selectedValues.valuationPeriod
       }
       // form.resetFields();
       handleAdd(fieldsValue, updateModalVisible, selectedValues, this.cleanState);
