@@ -67,6 +67,9 @@ class CreateForm extends Component {
     const {form, handleAdd, updateModalVisible, selectedValues} = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
+      if(updateModalVisible&&(typeof fieldsValue.valuationPeriod)==='string'&&fieldsValue.valuationPeriod.includes('第')){
+        fieldsValue.valuationPeriod = fieldsValue.valuationPeriod.slice(1,-1)
+      }
       for (let prop in fieldsValue) {
         if (fieldsValue[prop] instanceof moment) {
           fieldsValue[prop] = fieldsValue[prop].format('YYYY-MM-DD')
