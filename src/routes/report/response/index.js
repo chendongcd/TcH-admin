@@ -323,48 +323,24 @@ class Response extends Component {
       dataIndex: 'id',
      // fixed: 'left',
       //width: 100,
-      render:(val,row,index)=> {
-        return {
-          children:val,
-          props:{rowSpan:3}
-        }
-      },
     },
     {
       title: '项目名称',
       dataIndex: 'projectName',
       // fixed: 'left',
       //width: 180,
-      render:(val,row,index)=> {
-        return {
-          children:val,
-          props:{rowSpan:3}
-        }
-      },
     },
     {
       title: '工程类别',
       dataIndex: 'projectType',
       // fixed: 'left',
       //width: 110,
-      render:(val,row,index)=> {
-        return {
-          children:val,
-          props:{rowSpan:3}
-        }
-      },
     },
     {
       title: '项目状态',
       dataIndex: 'projectStatus',
       // fixed: 'left',
       //width: 110,
-      render:(val,row,index)=> {
-        return {
-          children:val,
-          props:{rowSpan:3}
-        }
-      },
     },
     {
       title: '填报时间',
@@ -373,7 +349,6 @@ class Response extends Component {
       render:(val,record)=> {
         return {
           children:<span>{val ? `${moment(val).format('YYYY')}年第${record.quarter}季度` : ''}</span>,
-          props:{rowSpan:3}
         }
       }
     },
@@ -387,8 +362,7 @@ class Response extends Component {
          // width: 150,
           render:(val,record)=> {
             return {
-              children:<span>{val ? `${moment(val).format('YYYY')}年第${record.quarter}季度` : ''}</span>,
-              props:{rowSpan:3}
+              children:<span>{val ?moment(val).format('YYYY-MM-DD') : ''}</span>,
             }
           }
         },
@@ -398,8 +372,7 @@ class Response extends Component {
          // width: 150,
           render:(val,record)=> {
             return {
-              children:<span>{val ? `${moment(val).format('YYYY')}年第${record.quarter}季度` : ''}</span>,
-              props:{rowSpan:3}
+              children:<span>{val ? moment(val).format('YYYY'): ''}</span>,
             }
           }
         },
@@ -410,12 +383,6 @@ class Response extends Component {
       dataIndex: 'projectStatus1',
       // fixed: 'left',
       //width: 180,
-      render:(val,row,index)=> {
-        return {
-          children:val,
-          props:{rowSpan:3}
-        }
-      },
     },
   ];
 
@@ -616,7 +583,7 @@ class Response extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{ y: global._scollY}}
+                scroll={{ x:'200%',y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}

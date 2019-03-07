@@ -432,7 +432,7 @@ class MeterUp extends Component {
         key: 'valuationAmountTax'
       },
         {
-          title: '税率（%）',
+          title: '税率(%)',
           dataIndex: 'tax',
           width: 100,
           key: 'tax'
@@ -471,12 +471,12 @@ class MeterUp extends Component {
           key: 'unpaidAmount',
           width: 150,
         }, {
-          title: '拨付率',
+          title: '拨付率(%)',
           dataIndex: 'payProportion',
           key: 'payProportion',
-          width: 100,
+          width: 110,
           render(val) {
-            return <span>{val * 100 + '%'}</span>;
+            return <span>{Number.isInteger(val * 100)?(val*100):(val*100).toFixed(2)}</span>;
           }
         }]
     },
@@ -496,11 +496,11 @@ class MeterUp extends Component {
         }]
     },
     {
-      title: '产值计价率',
-      width: 120,
+      title: '产值计价率(%)',
+      width: 130,
       dataIndex: 'productionValue',
       render(val) {
-        return <span>{val * 100 + '%'}</span>;
+        return <span>{Number.isInteger(val * 100)?(val*100):(val*100).toFixed(2)}</span>;
       }
     },
     {
@@ -804,7 +804,7 @@ class MeterUp extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: 2400, y: global._scollY}}
+                scroll={{x: 2420, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
