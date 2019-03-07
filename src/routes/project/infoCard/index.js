@@ -688,7 +688,7 @@ class CreateForm extends Component {
       } else if(month===0){
         return year * 12  + 1
       }else{
-        return year * 12+month + 13
+        return (year-1) * 12+13-start.get('month') +end.get('month')
       }
     }
     return -1
