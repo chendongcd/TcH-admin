@@ -9,7 +9,7 @@ export default ()=> {
 
   window._scollY = 400
 
-  window._checkNum=(num,testValue='')=>{
+  window._checkNum=(num,testValue='123')=>{
     return ((num||num==0)?num:testValue)
   }
 

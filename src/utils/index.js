@@ -191,3 +191,7 @@ export function cloneObject(obj){
   }
   return newObj;
 }
+
+export function fixNumber(val,rate=1,points=2) {
+  return Number.isInteger(val * rate)?(val*rate):(val*rate).toFixed(points)
+}
