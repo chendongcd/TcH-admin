@@ -1,5 +1,5 @@
 import {queryProPerList} from "../../../services/system/sys_project";
-import {queryConfirm,queryConfirmLast,addConfirm,updateConfirm} from '../../../services/report/confirm/index'
+import {queryConfirm,queryConfirmLast,addConfirm,updateConfirm,querySum} from '../../../services/report/confirm/index'
 import {message} from "antd";
 export default {
   namespace: 'confirmation',
@@ -49,6 +49,15 @@ export default {
         //   extraAmount:a13
         // }
         // response.list = [...response.list, sum]
+        if(response.list.length>0){
+          if(global._getTotalPage(response.pagination.total)===response.pagination.current){
+            yield put({
+              type:'fetchSum',
+              payload:payload,
+              token:token
+            })
+          }
+        }
         yield put({
           type: 'save',
           payload: response,
@@ -56,6 +65,45 @@ export default {
       }
       if(global.checkToken(response)){
         yield put({type:'app/logout'})
+        return false
+      }
+    },
+    * fetchSum({payload, token}, {call, put,select}) {
+      const response = yield call(querySum, payload, token);
+      if (response.code == '200') {
+        const data = yield (select(_ => _.confirmation.data))
+        let sum = {
+          id: '合计:',
+          balanceChange: response.entity.sumBalanceChange,
+          balanceCompleteValue: response.entity.sumBalanceCompleteValue,
+          balanceInspectionValue: response.entity.sumBalanceInspectionValue,
+          balanceShould: response.entity.sumBalanceShould,
+          changeValue: response.entity.sumChangeValue,
+          completedValue: response.entity.sumCompletedValue,
+          currentProductionValue: response.entity.sumCurrentProductionValue,
+          finalPeriodChange: response.entity.sumFinalPeriodChange,
+          finalPeriodShould: response.entity.sumFinalPeriodShould,
+          halfCompletedValue: response.entity.sumHalfCompletedValue,
+          inspection: response.entity.sumInspection,
+          oneCompletedValue: response.entity.sumOneCompletedValue,
+          sumBalance:response.entity. sumSumBalance,
+          sumFinalPeriod: response.entity.sumSumFinalPeriod,
+          sumHalfOne: response.entity.sumSumHalfOne
+        }
+        for(let a in sum){
+          if(sum[a]&&!isNaN(sum[a])){
+            sum[a] = Number.isInteger(Number(sum[a]))?Number(sum[a]):Number(sum[a]).toFixed(2)
+          }
+        }
+        data.list = [...data.list,sum]
+        data.pagination.pageSize = data.pagination.pageSize+1,
+          yield put({
+            type: 'save',
+            payload: data,
+          });
+      }
+      if (global.checkToken(response)) {
+        yield put({type: 'app/logout'})
         return false
       }
     },

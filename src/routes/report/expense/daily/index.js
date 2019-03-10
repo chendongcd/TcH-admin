@@ -265,7 +265,7 @@ class Daily extends Component {
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    this.searchList(null, pagination.current, pagination.pageSize)
+    this.searchList(null, pagination.current)
   };
 
   handleFormReset = () => {

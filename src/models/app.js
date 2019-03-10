@@ -9,11 +9,11 @@ const {prefix,apiDev} = config
 function getMenu(user) {
   if (user && user.id) {
 
-    if(process.env.NODE_ENV==='production'&&apiDev==='http://47.105.127.126:8082/crcc'){
+   // if(process.env.NODE_ENV==='production'&&apiDev==='http://47.105.127.126:8082/crcc'){
       return getMenus([...user.permissionsMap.menu, ...[menuData[0].permission]])
-    }
-    let report_res = menuData.find(a=>a.permission.includes('PERMISSIONS_REPORT_RESPONSE')).permission
-    return getMenus([...user.permissionsMap.menu, ...[menuData[0].permission],report_res])
+   // }
+   // let report_res = menuData.find(a=>a.permission.includes('PERMISSIONS_REPORT_RESPONSE')).permission
+  //  return getMenus([...user.permissionsMap.menu, ...[menuData[0].permission],report_res])
   }
   return []
 }

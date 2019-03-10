@@ -74,7 +74,8 @@ export default {
           }
         }
         data.list = [...data.list,sum]
-        yield put({
+        data.pagination.pageSize = data.pagination.pageSize+1,
+          yield put({
           type: 'save',
           payload: data,
         });

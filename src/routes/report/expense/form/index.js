@@ -639,7 +639,7 @@ class ExpenseForm extends Component {
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    this.searchList(null, pagination.current, pagination.pageSize)
+    this.searchList(null, pagination.current)
   };
 
   handleFormReset = () => {
@@ -773,10 +773,10 @@ class ExpenseForm extends Component {
           <Col md={6} sm={24}>
             <FormItem label="">
               {getFieldDecorator('quarter', {})(<Select placeholder="季度" style={{width: '70%'}}>
-                <Option value={1}>第一季度</Option>
-                <Option value={2}>第二季度</Option>
-                <Option value={3}>第三季度</Option>
-                <Option value={4}>第四季度</Option>
+                <Option value={1}>第1季度</Option>
+                <Option value={2}>第2季度</Option>
+                <Option value={3}>第3季度</Option>
+                <Option value={4}>第4季度</Option>
               </Select>)}
             </FormItem>
           </Col>

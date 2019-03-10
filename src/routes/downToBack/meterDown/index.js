@@ -18,7 +18,7 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable, PreFile} from 'components'
 import styles from './index.less'
-import {getButtons, cleanObject, QiNiuOss, ImageUrl,getPage} from 'utils'
+import {getButtons, cleanObject, QiNiuOss, ImageUrl,getPage,fixNumber} from 'utils'
 import {DOWN_EXPORT} from 'common/urls'
 import {createURL} from 'services/app'
 
@@ -581,11 +581,11 @@ class MeterDown extends Component {
         }]
     },
     {
-      title: '对下计价率',
+      title: '对下计价率(%)',
       dataIndex: 'underRate',
       width:110,
       render: (val) => {
-        return <span>{Math.floor(val * 100) + '%'}</span>
+        return <span>{fixNumber(val,100)}</span>
       }
     },
     {
@@ -670,7 +670,7 @@ class MeterDown extends Component {
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    this.searchList(null,pagination.current, pagination.pageSize)
+    this.searchList(null,pagination.current)
   };
 
   handleFormReset = () => {
