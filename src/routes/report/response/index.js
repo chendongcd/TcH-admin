@@ -714,6 +714,7 @@ class Response extends Component {
   handleFormReset = () => {
     const {form} = this.props;
     this.CustomPicker.resetValue()
+    this.CustomPickerM.resetValue()
     form.resetFields();
     this.setState({
       formValues: {},
@@ -823,7 +824,7 @@ class Response extends Component {
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="">
-              {getFieldDecorator('month', {})(<DatePicker.MonthPicker placeholder={'月'} format="MM"/>)}
+              {getFieldDecorator('month', {})(<CustomPicker ref={(e) => this.CustomPickerM = e} topMode="month" setValue={this.setMonth} placeholder={'月'} format="MM"/>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
@@ -845,6 +846,10 @@ class Response extends Component {
 
   setYear = (value) => {
     this.props.form.setFieldsValue({'year': value})
+  }
+
+  setMonth = (value) => {
+    this.props.form.setFieldsValue({'month': value})
   }
 
   renderForm() {
