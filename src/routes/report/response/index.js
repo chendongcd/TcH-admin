@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import {connect} from 'dva'
 import moment from 'moment';
 
@@ -11,7 +11,7 @@ import {
   Select,
   Button,
   DatePicker,
-  Modal, Divider,
+  Modal, Divider, Badge,
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable, CustomPicker} from 'components'
 import styles from './index.less'
@@ -27,93 +27,7 @@ const info_css = {
   color: '#fa541c'
 }
 const status = [{id: 0, name: '在建'}, {id: 1, name: '完工未结算'}, {id: 2, name: '完工已结算'}, {id: 3, name: '停工'}];
-
-const _data = [{
-  "projectName": "测试",
-  "projectType": "市政工程",
-  "projectStatus": "0",
-  "contractStartTime": "2019-01-21 08:00:00",
-  "contractEndTime": "2019-01-22 08:00:00",
-  "lastYear": {
-    "contractPrice": 0,
-    "constructionOutputValue": 0,
-    "advancePricing": 0,
-    "completedUncalculated": 0,
-    "shouldPrice": 0,
-    "ownerTotal": 0,
-    "sumOwnerTotal": 0,
-    "budget": 0,
-    "actualSum": 0,
-    "actualManage": 0,
-    "confirmPrice": 0,
-    "comprehensiveIncome": 0,
-    "comprehensiveIncomePercentage": 0,
-    "costSuperPercentage": 0,
-    "productionValuePercentage": 0,
-    "managementPercentage": 0,
-    "unconfirmPrice": 0,
-    "shouldAppropriation": 0,
-    "realAppropriation": 0,
-    "inPlacePercentage": 0
-  },
-  "openTired": {
-    "id": 1,
-    "projectId": 24,
-    "reportTime": 1552125600000,
-    "contractPrice": 1000,
-    "constructionOutputValue": 1000,
-    "advancePricing": 2000,
-    "completedUncalculated": 1000,
-    "shouldPrice": 1000,
-    "ownerTotal": 2000,
-    "sumOwnerTotal": 5000,
-    "budget": 1000,
-    "actualSum": 1000,
-    "actualManage": 1000,
-    "confirmPrice": 2000,
-    "comprehensiveIncome": 4000,
-    "comprehensiveIncomePercentage": 0.8,
-    "costSuperPercentage": 0,
-    "productionValuePercentage": 2,
-    "managementPercentage": 0.2,
-    "unconfirmPrice": 2000,
-    "shouldAppropriation": 2000,
-    "realAppropriation": 1000,
-    "inPlacePercentage": 1,
-    "createTime": 1552099647000,
-    "createUser": 4,
-    "updateTime": 1552099718000,
-    "updateUser": 4,
-    "remark": "备注2",
-    "projectName": "测试",
-    "projectType": "市政工程",
-    "projectStatus": "0",
-    "contractStartTime": "2019-01-21 08:00:00",
-    "contractEndTime": "2019-01-22 08:00:00"
-  },
-  "thisYear": {
-    "contractPrice": 1000,
-    "constructionOutputValue": 1000,
-    "advancePricing": 2000,
-    "completedUncalculated": 1000,
-    "shouldPrice": 1000,
-    "ownerTotal": 2000,
-    "sumOwnerTotal": 5000,
-    "budget": 1000,
-    "actualSum": 1000,
-    "actualManage": 1000,
-    "confirmPrice": 2000,
-    "comprehensiveIncome": 4000,
-    "comprehensiveIncomePercentage": 0.8,
-    "costSuperPercentage": 0,
-    "productionValuePercentage": 2,
-    "managementPercentage": 0.2,
-    "unconfirmPrice": 2000,
-    "shouldAppropriation": 2000,
-    "realAppropriation": 1000,
-    "inPlacePercentage": 1
-  }
-}]
+const statusMap = ['processing', 'processing', 'success', 'error'];
 
 @Form.create()
 class CreateForm extends Component {
@@ -468,16 +382,17 @@ class Response extends Component {
     {
       title: '工程类别',
       dataIndex: 'projectType',
-      width: 100
+      width: 120
       // fixed: 'left',
       //width: 110,
     },
     {
       title: '项目状态',
       dataIndex: 'projectStatus',
-      width: 150
-      // fixed: 'left',
-      //width: 110,
+      width: 120,
+      render(val) {
+        return <Badge status={statusMap[val]} text={status[val].name}/>;
+      }
     },
     {
       title: '填报时间',
@@ -518,7 +433,6 @@ class Response extends Component {
     {
       title: '调整后合同额(不含税)',
       dataIndex: 'contractPrice',
-      // fixed: 'left',
       width: 180,
     },
     {
@@ -668,6 +582,27 @@ class Response extends Component {
       dataIndex: 'remark',
       width: 150,
     },
+    {
+      title: '操作',
+      // fixed:'right',
+      width:120,
+      render: (val, record) => {
+        const user = this.props.app.user
+        if (!user.token) {
+          return null
+        }
+        const button = user.permissionsMap.button
+        return (
+          <Fragment>
+            {getButtons(button, pageButtons[1]) ?
+              <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a> : null}
+            <Divider type="vertical"/>
+            {getButtons(button, pageButtons[2]) ?
+              <a onClick={() => this.handleCheckDetail(true, record)}>查看</a> : null}
+          </Fragment>
+        )
+      }
+    },
   ];
 
   renderColumns = (val, props, isRate) => {
@@ -815,6 +750,12 @@ class Response extends Component {
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
+            <FormItem label="填报时间">
+            {getFieldDecorator('reportTime', {})(<DatePicker.MonthPicker />)}
+          </FormItem>
+            </Col>
+
+     {/*     <Col md={6} sm={24}>
             <FormItem label="填报日期">
               {getFieldDecorator('year', {
                 initialValue: null
@@ -826,7 +767,7 @@ class Response extends Component {
             <FormItem label="">
               {getFieldDecorator('month', {})(<CustomPicker ref={(e) => this.CustomPickerM = e} topMode="month" setValue={this.setMonth} placeholder={'月'} format="MM"/>)}
             </FormItem>
-          </Col>
+          </Col>*/}
           <Col md={6} sm={24}>
             <div style={{overflow: 'hidden'}}>
               <div style={{float: 'right', marginBottom: 24}}>
@@ -846,10 +787,6 @@ class Response extends Component {
 
   setYear = (value) => {
     this.props.form.setFieldsValue({'year': value})
-  }
-
-  setMonth = (value) => {
-    this.props.form.setFieldsValue({'month': value})
   }
 
   renderForm() {
@@ -951,11 +888,11 @@ class Response extends Component {
         page: page,
         pageSize: pageSize,
         projectName: fieldsValue.projectName,
-        year: fieldsValue.year?fieldsValue.year.format('YYYY'):null,
-        month:fieldsValue.month
+        reportTime: fieldsValue.reportTime?fieldsValue.reportTime.format('YYYY-MM-DD'):null,
       }
       cleanObject(payload)
       this.exportParams = payload
+      console.log(payload)
       this.props.dispatch({
         type: 'response/fetch',
         payload: payload,
