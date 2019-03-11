@@ -17,7 +17,6 @@ export default {
     *fetch({ payload ,token}, { call, put }) {
       const response = yield call(queryResponse, payload,token);
       if(response.code == '200'){
-        console.log(response)
         yield put({
           type: 'save',
           payload: response,
