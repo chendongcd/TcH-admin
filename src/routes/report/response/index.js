@@ -930,13 +930,12 @@ class Response extends Component {
 
   renderColumns = (val, props, isRate) => {
     if (isRate) {
-      //Number.isInteger(val * 100)?(val*100):(val*100).toFixed(2)
       return <div>
-        <span>{val && fixNumber(val.lastYear[props], 100)}</span>
+        <span>{val && fixNumber(val.lastYear[props], 100)+'%'}</span>
         <Divider className={styles.customDivider} type="horizontal"/>
-        <span>{val && fixNumber(val.openTired[props], 100)}</span>
+        <span>{val && fixNumber(val.openTired[props], 100)+'%'}</span>
         <Divider className={styles.customDivider} type="horizontal"/>
-        <span>{val && fixNumber(val.thisYear[props], 100)}</span>
+        <span>{val && fixNumber(val.thisYear[props], 100)+'%'}</span>
       </div>
     }
     return <div>

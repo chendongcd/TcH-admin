@@ -585,7 +585,7 @@ class MeterDown extends Component {
       dataIndex: 'underRate',
       width:110,
       render: (val) => {
-        return <span>{fixNumber(val,100)}</span>
+        return <span>{fixNumber(val,100)+'%'}</span>
       }
     },
     {

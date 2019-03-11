@@ -15,7 +15,7 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable, CustomPicker} from 'components'
 import styles from './index.less'
-import {getButtons, cleanObject,getPage} from 'utils'
+import {getButtons, cleanObject,getPage,fixNumber} from 'utils'
 import {CONTRACT_EXPORT} from 'common/urls'
 import {createURL} from 'services/app'
 
@@ -507,7 +507,7 @@ class ExpenseForm extends Component {
       dataIndex: 'dailyPercentage',
       width: 180,
       render:(val)=>{
-        return<span>{isNaN(val)?'':(val*100).toFixed(2)}</span>
+        return<span>{fixNumber(val,100)+'%'}</span>
       }
     },
     {
@@ -515,7 +515,7 @@ class ExpenseForm extends Component {
       dataIndex: 'compensationPercentage',
       width: 180,
       render:(val)=>{
-        return<span>{isNaN(val)?'':(val*100).toFixed(2)}</span>
+        return<span>{fixNumber(val,100)+'%'}</span>
       }
     },
     {
@@ -528,7 +528,7 @@ class ExpenseForm extends Component {
       dataIndex: 'disbursedPercentage',
       width: 180,
       render:(val)=>{
-        return<span>{isNaN(val)?'':(val*100).toFixed(2)}</span>
+        return<span>{fixNumber(val,100)+'%'}</span>
       }
     },
     {

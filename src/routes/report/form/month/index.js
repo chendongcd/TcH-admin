@@ -15,7 +15,7 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable, CustomPicker} from 'components'
 import styles from './index.less'
-import {getButtons, cleanObject,getPage} from 'utils'
+import {getButtons, cleanObject,getPage,fixNumber} from 'utils'
 import {ENGINEER_EXPORT} from 'common/urls'
 import {createURL} from 'services/app'
 
@@ -232,11 +232,11 @@ class ReportForm extends Component {
       width: 180
     },
     {
-      title: '变更索赔率',
+      title: '变更索赔率(%)',
       dataIndex: 'percentage',
       width: 180,
       render:(val)=>{
-        return<span>{isNaN(val)?'':(val*100).toFixed(2)}</span>
+        return<span>{fixNumber(val,100)+'%'}</span>
       }
     },
     {
@@ -247,7 +247,6 @@ class ReportForm extends Component {
     {
       title: '操作',
       width: 120,
-    //  fixed: 'right',
       render: (val, record) => {
         if (record.id == '合计:') {
           return null
