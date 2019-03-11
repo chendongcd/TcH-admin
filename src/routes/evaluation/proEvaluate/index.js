@@ -19,7 +19,7 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable, PreFile,ExportModal} from 'components'
 import styles from './index.less'
-import {QiNiuOss, ImageUrl, cleanObject, getButtons,getPage} from 'utils'
+import {QiNiuOss, ImageUrl, cleanObject, getButtons,getPage,fixNumber} from 'utils'
 import {EVAL_EXPORT} from 'common/urls'
 import {createURL} from 'services/app'
 
@@ -773,18 +773,24 @@ class ProEvaluate extends Component {
         width:130,
         dataIndex: 'evaluationTime',
         render(val) {
-          return <span>{moment(val).format('YYYY/MM/DD')}</span>;
+          return <span>{val?moment(val).format('YYYY/MM/DD'):''}</span>;
         },
       }, {
         title: '评估效益点(%)',
         key: 'evaluationBenefit',
         dataIndex: 'evaluationBenefit',
         width:120,
+        render:(val)=>{
+          return <span>{fixNumber(val,100)+'%'}</span>
+        }
       }, {
         title: '含分包差及经营费(%)',
         key: 'evaluationCost',
         dataIndex: 'evaluationCost',
         width:150,
+        render:(val)=>{
+          return <span>{fixNumber(val,100)+'%'}</span>
+        }
       }, {
         title: '评估编号',
         key: 'evaluationCode',
@@ -815,6 +821,9 @@ class ProEvaluate extends Component {
         key: 'jointHearingCost',
         dataIndex: 'jointHearingCost',
         width:150,
+        render:(val)=>{
+          return <span>{fixNumber(val,100)+'%'}</span>
+        }
       }, {
         title: '上会时间',
         key: 'jointHearingTime',
@@ -890,7 +899,6 @@ class ProEvaluate extends Component {
     {
       title: '操作',
       width: 110,
-     // fixed: 'right',
       render: (val, record) => {
         const user = this.props.app.user
         if (!user.token) {
@@ -919,7 +927,7 @@ class ProEvaluate extends Component {
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    this.searchList(null,pagination.current, pagination.pageSize)
+    this.searchList(null,pagination.current)
   };
 
   handleFormReset = () => {

@@ -699,7 +699,7 @@ class TeamAccount extends Component {
               width:150,
               dataIndex: 'shouldAmount'
             }, {
-              title: '实际缴金额（万元）',
+              title: '实缴金额（万元）',
               width:150,
               dataIndex: 'realAmount'
             }]
@@ -885,7 +885,7 @@ class TeamAccount extends Component {
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    this.searchList(null, pagination.current, pagination.pageSize)
+    this.searchList(null, pagination.current)
   };
 
   handleFormReset = () => {
@@ -1017,11 +1017,11 @@ class TeamAccount extends Component {
     const {dispatch, app: {user}} = this.props;
     let payload = {
       id: selectedValues.id,
-      teamTime: fields.teamTime.format('YYYY-MM-DD'),
+      teamTime: fields.teamTime?fields.teamTime.format('YYYY-MM-DD'):null,
       settlementFiling: fields.settlementFiling,
-      settlementTime: fields.settlementTime.format('YYYY-MM-DD'),
+      settlementTime: fields.settlementTime?fields.settlementTime.format('YYYY-MM-DD'):null,
       settlementRemark: fields.settlementRemark,
-      approvalTime: fields.approvalTime.format('YYYY-MM-DD')
+      approvalTime: fields.settlementTime?fields.approvalTime.format('YYYY-MM-DD'):null
     }
     cleanObject(payload)
     dispatch({
@@ -1031,7 +1031,7 @@ class TeamAccount extends Component {
     }).then(res => {
       if (res) {
         this.handleComModalVisible()
-        this.getList()
+        this.getList(this.exportParams.page)
       }
     })
   }

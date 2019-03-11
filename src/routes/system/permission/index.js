@@ -244,11 +244,11 @@ class Permission extends Component {
   }
 
   columns = [
-    {
+/*    {
       title: '角色编码',
       dataIndex: 'id',
       width:60,
-    },
+    },*/
     {
       title: '角色名称',
       dataIndex: 'name',

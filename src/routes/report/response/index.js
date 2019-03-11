@@ -66,7 +66,7 @@ class CreateForm extends Component {
     this.selectProject = option.props.item
     this.props.form.setFieldsValue({
       projectType: this.selectProject.projectType,
-      status:this.selectProject.projectStatus
+      status: this.selectProject.projectStatus
     });
   }
 
@@ -107,53 +107,48 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
             <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 7}} wrapperCol={{span: 13}} label="工程类别">
-                {form.getFieldDecorator('projectType', {
-                  rules: [{required: true, message: '请选择项目'}],
-                  initialValue: selectedValues.projectType ? selectedValues.projectType : '',
-                })(<Input disabled={true} placeholder="自动带出"/>)}
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 13}} label="填报时间">
+                {form.getFieldDecorator('reportTime', {
+                  rules: [{required: false, message: '请选择填报日期'}],
+                  initialValue: selectedValues.reportTime ? moment(selectedValues.reportTime) : null,
+                })(<DatePicker.MonthPicker disabled={checkDetail} style={{width: '100%'}}/>)}
               </FormItem>
             </Col>
+            {checkDetail ? <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 7}} wrapperCol={{span: 13}} label="工程类别">
+                {form.getFieldDecorator('projectType', {
+                  rules: [{required: false, message: '请选择项目'}],
+                  initialValue: selectedValues.projectType ? selectedValues.projectType : '',
+                })(<Input disabled={true}/>)}
+              </FormItem>
+            </Col> : null}
+          </Row>
+          {checkDetail ? <Row gutter={8}>
             <Col md={8} sm={24}>
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 13}} label="工程状态">
                 {form.getFieldDecorator('status', {
                   rules: [{required: false, message: '请选择项目'}],
-                  initialValue: selectedValues.status || selectedValues.status == 0 ? selectedValues.status : '',
-                })(<Select placeholder="自动带出"  className={styles.customSelect} disabled={true}
-                           style={{width: '100%'}}>
-                  {status.map((item, index) => {
-                    return <Option key={item.id} item={item} name={item.name} value={item.id}>{item.name}</Option>
-                  })}
-                </Select>)}
-              </FormItem>
-            </Col>
-          </Row>
-          <Row gutter={8}>
-            <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 7}} wrapperCol={{span: 13}} label="填报时间">
-                {form.getFieldDecorator('reportTime', {
-                  rules: [{required: true, message: '请选择填报日期'}],
-                  initialValue: selectedValues.reportTime ? moment(selectedValues.reportTime) : null,
-                })(<DatePicker.MonthPicker disabled={checkDetail} style={{width: '100%'}}/>)}
+                  initialValue: selectedValues.projectStatus || selectedValues.projectStatus == 0 ? status[selectedValues.projectStatus].name : '',
+                })(<Input disabled={true}/>)}
               </FormItem>
             </Col>
             <Col md={8} sm={24}>
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 13}} label="开工日期">
                 {form.getFieldDecorator('contractStartTime', {
-                  rules: [{required: true, message: '请选择开工日期'}],
+                  rules: [{required: false, message: '请选择开工日期'}],
                   initialValue: selectedValues.contractStartTime ? moment(selectedValues.contractStartTime) : null,
-                })(<DatePicker disabled={checkDetail} style={{width: '100%'}}/>)}
+                })(<DatePicker disabled={true} style={{width: '100%'}}/>)}
               </FormItem>
             </Col>
             <Col md={8} sm={24}>
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 13}} label="竣工日期">
                 {form.getFieldDecorator('contractEndTime', {
-                  rules: [{required: true, message: '请选择竣工日期'}],
+                  rules: [{required: false, message: '请选择竣工日期'}],
                   initialValue: selectedValues.contractEndTime ? moment(selectedValues.contractEndTime) : null,
-                })(<DatePicker disabled={checkDetail} style={{width: '100%'}}/>)}
+                })(<DatePicker disabled={true} style={{width: '100%'}}/>)}
               </FormItem>
             </Col>
-          </Row>
+          </Row> : null}
           <Row gutter={8}>
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 8}} wrapperCol={{span: 12}} label="调整后合同额(不含税)">
@@ -166,6 +161,169 @@ class CreateForm extends Component {
             <Col md={12} sm={24} style={{marginTop: 11}}><span style={info_css}>备注:填报暂估项目工程信息卡里面的暂估合同额不含税值</span></Col>
           </Row>
         </div>
+        {checkDetail ? <Fragment>
+          <Row align={'middle'} gutter={0} className={styles.titleView}>
+            <div className={styles.title}>年初</div>
+          </Row>
+          <div className={styles.modalContent}>
+            <Row gutter={8}>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 15}} wrapperCol={{span: 9}} label="施工产值(不含销项税)">
+                  {form.getFieldDecorator('constructionOutputValue', {
+                    rules: [{required: true, message: '请输入施工产值(不含销项税)'}],
+                    initialValue: global._checkNum(selectedValues.lastYear.constructionOutputValue),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="小计">
+                  {form.getFieldDecorator('ownerTotal', {
+                    rules: [{required: true, message: '请输入小计'}],
+                    initialValue: global._checkNum(selectedValues.lastYear.ownerTotal),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="已完工未计价">
+                  {form.getFieldDecorator('completedUncalculated', {
+                    rules: [{required: true, message: '请输入已完工未计价'}],
+                    initialValue: global._checkNum(selectedValues.lastYear.completedUncalculated),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={8}>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="超前计价">
+                  {form.getFieldDecorator('advancePricing', {
+                    rules: [{required: true, message: '请输入超前计价'}],
+                    initialValue: global._checkNum(selectedValues.lastYear.advancePricing),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 15}} wrapperCol={{span: 9}} label="其中:上年应计未计本年计价金额">
+                  {form.getFieldDecorator('shouldPrice', {
+                    rules: [{required: true, message: '请输入其中:上年应计未计本年计价金额'}],
+                    initialValue: global._checkNum(selectedValues.lastYear.shouldPrice),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="责任预算成本">
+                  {form.getFieldDecorator('budget', {
+                    rules: [{required: true, message: '请输入责任预算成本'}],
+                    initialValue: global._checkNum(selectedValues.lastYear.budget),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={8}>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="小计">
+                  {form.getFieldDecorator('actualSum', {
+                    rules: [{required: true, message: '请输入小计'}],
+                    initialValue: global._checkNum(selectedValues.lastYear.actualSum),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="其中:现场管理费">
+                  {form.getFieldDecorator('actualManage', {
+                    rules: [{required: true, message: '请输入其中:现场管理费'}],
+                    initialValue: global._checkNum(selectedValues.lastYear.actualManage),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 12}} wrapperCol={{span: 12}} label="财务决算已确认利润总额">
+                  {form.getFieldDecorator('confirmPrice', {
+                    rules: [{required: true, message: '请输入财务决算已确认利润总额'}],
+                    initialValue: global._checkNum(selectedValues.lastYear.confirmPrice),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={8}>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="项目综合收益额">
+                  {form.getFieldDecorator('comprehensiveIncome', {
+                    rules: [{required: true, message: '请输入项目综合收益额'}],
+                    initialValue: global._checkNum(selectedValues.lastYear.comprehensiveIncome),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="项目综合收益率">
+                  {form.getFieldDecorator('comprehensiveIncomePercentage', {
+                    rules: [{required: true, message: '请输入项目综合收益率'}],
+                    initialValue: global._checkNum(fixNumber(selectedValues.lastYear.comprehensiveIncomePercentage, 100)),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="%"/>)}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="责任成本节超率">
+                  {form.getFieldDecorator('costSuperPercentage', {
+                    rules: [{required: true, message: '请输入责任成本节超率'}],
+                    initialValue: global._checkNum(fixNumber(selectedValues.lastYear.costSuperPercentage, 100)),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="%"/>)}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={8}>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="产值计价率">
+                  {form.getFieldDecorator('productionValuePercentage', {
+                    rules: [{required: true, message: '请输入产值计价率'}],
+                    initialValue: global._checkNum(fixNumber(selectedValues.lastYear.productionValuePercentage, 100)),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="%"/>)}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="产值管理费">
+                  {form.getFieldDecorator('managementPercentage', {
+                    rules: [{required: true, message: '请输入产值管理费'}],
+                    initialValue: global._checkNum(fixNumber(selectedValues.lastYear.managementPercentage, 100)),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="%"/>)}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 15}} wrapperCol={{span: 9}} label="财务未确认利润(+潜盈-潜亏)">
+                  {form.getFieldDecorator('unconfirmPrice', {
+                    rules: [{required: true, message: '请输入财务未确认利润(+潜盈-潜亏)'}],
+                    initialValue: global._checkNum(selectedValues.lastYear.unconfirmPrice),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={8}>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="应拨款">
+                  {form.getFieldDecorator('shouldAppropriation', {
+                    rules: [{required: true, message: '请输入应拨款'}],
+                    initialValue: global._checkNum(selectedValues.lastYear.shouldAppropriation),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="实际拨款">
+                  {form.getFieldDecorator('realAppropriation', {
+                    rules: [{required: true, message: '请输入实际拨款'}],
+                    initialValue: global._checkNum(selectedValues.lastYear.realAppropriation),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="项目资金拨付到位率">
+                  {form.getFieldDecorator('inPlacePercentage', {
+                    rules: [{required: true, message: '请输入项目资金拨付到位率'}],
+                    initialValue: global._checkNum(fixNumber(selectedValues.lastYear.inPlacePercentage, 100)),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="%"/>)}
+                </FormItem>
+              </Col>
+            </Row>
+          </div>
+        </Fragment> : null}
         <Row align={'middle'} gutter={0} className={styles.titleView}>
           <div className={styles.title}>开累</div>
         </Row>
@@ -175,7 +333,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 15}} wrapperCol={{span: 9}} label="施工产值(不含销项税)">
                 {form.getFieldDecorator('constructionOutputValue', {
                   rules: [{required: true, message: '请输入施工产值(不含销项税)'}],
-                  initialValue: global._checkNum(selectedValues.constructionOutputValue),
+                  initialValue: global._checkNum(selectedValues.openTired ? selectedValues.openTired.constructionOutputValue : ''),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
               </FormItem>
             </Col>
@@ -183,7 +341,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="小计">
                 {form.getFieldDecorator('ownerTotal', {
                   rules: [{required: true, message: '请输入小计'}],
-                  initialValue: global._checkNum(selectedValues.ownerTotal),
+                  initialValue: global._checkNum(selectedValues.openTired ? selectedValues.openTired.ownerTotal : ''),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
               </FormItem>
             </Col>
@@ -191,7 +349,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="已完工未计价">
                 {form.getFieldDecorator('completedUncalculated', {
                   rules: [{required: true, message: '请输入已完工未计价'}],
-                  initialValue: global._checkNum(selectedValues.completedUncalculated),
+                  initialValue: global._checkNum(selectedValues.openTired ? selectedValues.openTired.completedUncalculated : ''),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
               </FormItem>
             </Col>
@@ -201,7 +359,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="超前计价">
                 {form.getFieldDecorator('advancePricing', {
                   rules: [{required: true, message: '请输入超前计价'}],
-                  initialValue: global._checkNum(selectedValues.advancePricing),
+                  initialValue: global._checkNum(selectedValues.openTired ? selectedValues.openTired.advancePricing : ''),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
               </FormItem>
             </Col>
@@ -209,7 +367,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 15}} wrapperCol={{span: 9}} label="其中:上年应计未计本年计价金额">
                 {form.getFieldDecorator('shouldPrice', {
                   rules: [{required: true, message: '请输入其中:上年应计未计本年计价金额'}],
-                  initialValue: global._checkNum(selectedValues.shouldPrice),
+                  initialValue: global._checkNum(selectedValues.openTired ? selectedValues.openTired.shouldPrice : ''),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
               </FormItem>
             </Col>
@@ -217,7 +375,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="责任预算成本">
                 {form.getFieldDecorator('budget', {
                   rules: [{required: true, message: '请输入责任预算成本'}],
-                  initialValue: global._checkNum(selectedValues.budget),
+                  initialValue: global._checkNum(selectedValues.openTired ? selectedValues.openTired.budget : ''),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
               </FormItem>
             </Col>
@@ -227,7 +385,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="小计">
                 {form.getFieldDecorator('actualSum', {
                   rules: [{required: true, message: '请输入小计'}],
-                  initialValue: global._checkNum(selectedValues.actualSum),
+                  initialValue: global._checkNum(selectedValues.openTired ? selectedValues.openTired.actualSum : ''),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
               </FormItem>
             </Col>
@@ -235,7 +393,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="其中:现场管理费">
                 {form.getFieldDecorator('actualManage', {
                   rules: [{required: true, message: '请输入其中:现场管理费'}],
-                  initialValue: global._checkNum(selectedValues.actualManage),
+                  initialValue: global._checkNum(selectedValues.openTired ? selectedValues.openTired.actualManage : ''),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
               </FormItem>
             </Col>
@@ -243,69 +401,69 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 12}} wrapperCol={{span: 12}} label="财务决算已确认利润总额">
                 {form.getFieldDecorator('confirmPrice', {
                   rules: [{required: true, message: '请输入财务决算已确认利润总额'}],
-                  initialValue: global._checkNum(selectedValues.confirmPrice),
+                  initialValue: global._checkNum(selectedValues.openTired ? selectedValues.openTired.confirmPrice : ''),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
               </FormItem>
             </Col>
           </Row>
-          {/*<Row gutter={8}>
+          {checkDetail?<Fragment><Row gutter={8}>
             <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="项目综合收益额" >
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="项目综合收益额">
                 {form.getFieldDecorator('comprehensiveIncome', {
                   rules: [{required: true, message: '请输入项目综合收益额'}],
-                  initialValue: global._checkNum(selectedValues.comprehensiveIncome),
+                  initialValue: global._checkNum(selectedValues.openTired ? selectedValues.openTired.comprehensiveIncome : ''),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
               </FormItem>
             </Col>
             <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="项目综合收益率" >
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="项目综合收益率">
                 {form.getFieldDecorator('comprehensiveIncomePercentage', {
                   rules: [{required: true, message: '请输入项目综合收益率'}],
-                  initialValue: global._checkNum(selectedValues.comprehensiveIncomePercentage),
+                  initialValue: global._checkNum(fixNumber(selectedValues.openTired.comprehensiveIncomePercentage, 100)),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="%"/>)}
               </FormItem>
             </Col>
             <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="责任成本节超率" >
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="责任成本节超率">
                 {form.getFieldDecorator('costSuperPercentage', {
                   rules: [{required: true, message: '请输入责任成本节超率'}],
-                  initialValue: global._checkNum(selectedValues.costSuperPercentage),
+                  initialValue: global._checkNum(fixNumber(selectedValues.openTired.costSuperPercentage, 100)),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="%"/>)}
               </FormItem>
             </Col>
-          </Row>*/}
-          {/*<Row gutter={8}>
-           <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="产值计价率" >
-                {form.getFieldDecorator('productionValuePercentage', {
-                  rules: [{required: true, message: '请输入产值计价率'}],
-                  initialValue: global._checkNum(selectedValues.productionValuePercentage),
-                })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="%"/>)}
-              </FormItem>
-            </Col>
-            <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="产值管理费" >
-                {form.getFieldDecorator('managementPercentage', {
-                  rules: [{required: true, message: '请输入产值管理费'}],
-                  initialValue: global._checkNum(selectedValues.managementPercentage),
-                })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="%"/>)}
-              </FormItem>
-            </Col>
-            <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 15}} wrapperCol={{span: 9}} label="财务未确认利润(+潜盈-潜亏)" >
-                {form.getFieldDecorator('unconfirmPrice', {
-                  rules: [{required: true, message: '请输入财务未确认利润(+潜盈-潜亏)'}],
-                  initialValue: global._checkNum(selectedValues.unconfirmPrice),
-                })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
-              </FormItem>
-            </Col>
-          </Row>*/}
+          </Row>
+            <Row gutter={8}>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="产值计价率">
+                  {form.getFieldDecorator('productionValuePercentage', {
+                    rules: [{required: true, message: '请输入产值计价率'}],
+                    initialValue: global._checkNum(fixNumber(selectedValues.openTired.productionValuePercentage, 100)),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="%"/>)}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="产值管理费">
+                  {form.getFieldDecorator('managementPercentage', {
+                    rules: [{required: true, message: '请输入产值管理费'}],
+                    initialValue: global._checkNum(fixNumber(selectedValues.openTired.managementPercentage, 100)),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="%"/>)}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 15}} wrapperCol={{span: 9}} label="财务未确认利润(+潜盈-潜亏)">
+                  {form.getFieldDecorator('unconfirmPrice', {
+                    rules: [{required: true, message: '请输入财务未确认利润(+潜盈-潜亏)'}],
+                    initialValue: global._checkNum(selectedValues.unconfirmPrice),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
+                </FormItem>
+              </Col>
+            </Row></Fragment>:null}
           <Row gutter={8}>
             <Col md={8} sm={24}>
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="应拨款">
                 {form.getFieldDecorator('shouldAppropriation', {
                   rules: [{required: true, message: '请输入应拨款'}],
-                  initialValue: global._checkNum(selectedValues.shouldAppropriation),
+                  initialValue: global._checkNum(selectedValues.openTired ? selectedValues.openTired.shouldAppropriation : ''),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
               </FormItem>
             </Col>
@@ -313,19 +471,184 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="实际拨款">
                 {form.getFieldDecorator('realAppropriation', {
                   rules: [{required: true, message: '请输入实际拨款'}],
-                  initialValue: global._checkNum(selectedValues.realAppropriation),
+                  initialValue: global._checkNum(selectedValues.openTired ? selectedValues.openTired.realAppropriation : ''),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
               </FormItem>
             </Col>
-            {/* <Col md={8} sm={24}>
-              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="项目资金拨付到位率" >
+            {checkDetail ? <Col md={8} sm={24}>
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="项目资金拨付到位率">
                 {form.getFieldDecorator('inPlacePercentage', {
                   rules: [{required: true, message: '请输入项目资金拨付到位率'}],
-                  initialValue: global._checkNum(selectedValues.inPlacePercentage),
+                  initialValue: global._checkNum(fixNumber(selectedValues.openTired.inPlacePercentage, 100)),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="%"/>)}
               </FormItem>
-            </Col>*/}
+            </Col> : null}
           </Row>
+        </div>
+        {checkDetail ? <Fragment>
+          <Row align={'middle'} gutter={0} className={styles.titleView}>
+            <div className={styles.title}>本年</div>
+          </Row>
+          <div className={styles.modalContent}>
+            <Row gutter={8}>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 15}} wrapperCol={{span: 9}} label="施工产值(不含销项税)">
+                  {form.getFieldDecorator('constructionOutputValue', {
+                    rules: [{required: true, message: '请输入施工产值(不含销项税)'}],
+                    initialValue: global._checkNum(selectedValues.thisYear.constructionOutputValue),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="小计">
+                  {form.getFieldDecorator('ownerTotal', {
+                    rules: [{required: true, message: '请输入小计'}],
+                    initialValue: global._checkNum(selectedValues.thisYear.ownerTotal),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="已完工未计价">
+                  {form.getFieldDecorator('completedUncalculated', {
+                    rules: [{required: true, message: '请输入已完工未计价'}],
+                    initialValue: global._checkNum(selectedValues.thisYear.completedUncalculated),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={8}>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="超前计价">
+                  {form.getFieldDecorator('advancePricing', {
+                    rules: [{required: true, message: '请输入超前计价'}],
+                    initialValue: global._checkNum(selectedValues.thisYear.advancePricing),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 15}} wrapperCol={{span: 9}} label="其中:上年应计未计本年计价金额">
+                  {form.getFieldDecorator('shouldPrice', {
+                    rules: [{required: true, message: '请输入其中:上年应计未计本年计价金额'}],
+                    initialValue: global._checkNum(selectedValues.thisYear.shouldPrice),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="责任预算成本">
+                  {form.getFieldDecorator('budget', {
+                    rules: [{required: true, message: '请输入责任预算成本'}],
+                    initialValue: global._checkNum(selectedValues.thisYear.budget),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={8}>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="小计">
+                  {form.getFieldDecorator('actualSum', {
+                    rules: [{required: true, message: '请输入小计'}],
+                    initialValue: global._checkNum(selectedValues.thisYear.actualSum),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="其中:现场管理费">
+                  {form.getFieldDecorator('actualManage', {
+                    rules: [{required: true, message: '请输入其中:现场管理费'}],
+                    initialValue: global._checkNum(selectedValues.thisYear.actualManage),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 12}} wrapperCol={{span: 12}} label="财务决算已确认利润总额">
+                  {form.getFieldDecorator('confirmPrice', {
+                    rules: [{required: true, message: '请输入财务决算已确认利润总额'}],
+                    initialValue: global._checkNum(selectedValues.thisYear.confirmPrice),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={8}>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="项目综合收益额">
+                  {form.getFieldDecorator('comprehensiveIncome', {
+                    rules: [{required: true, message: '请输入项目综合收益额'}],
+                    initialValue: global._checkNum(fixNumber(selectedValues.thisYear.comprehensiveIncome, 100)),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="项目综合收益率">
+                  {form.getFieldDecorator('comprehensiveIncomePercentage', {
+                    rules: [{required: true, message: '请输入项目综合收益率'}],
+                    initialValue: global._checkNum(fixNumber(selectedValues.thisYear.comprehensiveIncomePercentage, 100)),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="%"/>)}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="责任成本节超率">
+                  {form.getFieldDecorator('costSuperPercentage', {
+                    rules: [{required: true, message: '请输入责任成本节超率'}],
+                    initialValue: global._checkNum(fixNumber(selectedValues.thisYear.costSuperPercentage, 100)),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="%"/>)}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={8}>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="产值计价率">
+                  {form.getFieldDecorator('productionValuePercentage', {
+                    rules: [{required: true, message: '请输入产值计价率'}],
+                    initialValue: global._checkNum(fixNumber(selectedValues.thisYear.productionValuePercentage, 100)),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="%"/>)}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="产值管理费">
+                  {form.getFieldDecorator('managementPercentage', {
+                    rules: [{required: true, message: '请输入产值管理费'}],
+                    initialValue: global._checkNum(fixNumber(selectedValues.thisYear.managementPercentage, 100)),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="%"/>)}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 15}} wrapperCol={{span: 9}} label="财务未确认利润(+潜盈-潜亏)">
+                  {form.getFieldDecorator('unconfirmPrice', {
+                    rules: [{required: true, message: '请输入财务未确认利润(+潜盈-潜亏)'}],
+                    initialValue: global._checkNum(selectedValues.thisYear.unconfirmPrice),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={8}>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="应拨款">
+                  {form.getFieldDecorator('shouldAppropriation', {
+                    rules: [{required: true, message: '请输入应拨款'}],
+                    initialValue: global._checkNum(selectedValues.thisYear.shouldAppropriation),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="实际拨款">
+                  {form.getFieldDecorator('realAppropriation', {
+                    rules: [{required: true, message: '请输入实际拨款'}],
+                    initialValue: global._checkNum(selectedValues.thisYear.realAppropriation),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万"/>)}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="项目资金拨付到位率">
+                  {form.getFieldDecorator('inPlacePercentage', {
+                    rules: [{required: true, message: '请输入项目资金拨付到位率'}],
+                    initialValue: global._checkNum(fixNumber(selectedValues.thisYear.inPlacePercentage, 100)),
+                  })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="%"/>)}
+                </FormItem>
+              </Col>
+            </Row>
+          </div>
+        </Fragment> : null}
+        <div className={styles.modalContent}>
           <Row gutter={8}>
             <Col md={24} sm={24}>
               <FormItem style={{marginLeft: 15 + 'px'}} labelCol={{span: 2}} wrapperCol={{span: 15}} label="备注">
@@ -585,7 +908,7 @@ class Response extends Component {
     {
       title: '操作',
       // fixed:'right',
-      width:120,
+      width: 120,
       render: (val, record) => {
         const user = this.props.app.user
         if (!user.token) {
@@ -607,13 +930,12 @@ class Response extends Component {
 
   renderColumns = (val, props, isRate) => {
     if (isRate) {
-      //Number.isInteger(val * 100)?(val*100):(val*100).toFixed(2)
       return <div>
-        <span>{val && fixNumber(val.lastYear[props], 100)}</span>
+        <span>{val && fixNumber(val.lastYear[props], 100)+'%'}</span>
         <Divider className={styles.customDivider} type="horizontal"/>
-        <span>{val && fixNumber(val.openTired[props], 100)}</span>
+        <span>{val && fixNumber(val.openTired[props], 100)+'%'}</span>
         <Divider className={styles.customDivider} type="horizontal"/>
-        <span>{val && fixNumber(val.thisYear[props], 100)}</span>
+        <span>{val && fixNumber(val.thisYear[props], 100)+'%'}</span>
       </div>
     }
     return <div>
@@ -630,16 +952,16 @@ class Response extends Component {
       this.getProNames([])
       this.getList()
     }
-    let num = 0
-    let res = (arr) => arr.map(a => {
-      if (a.width) {
-        num = num + a.width
-      } else {
-        res(a.children)
-      }
-    })
-    res(this.columns)
-    console.log(num)
+    // let num = 0
+    // let res = (arr) => arr.map(a => {
+    //   if (a.width) {
+    //     num = num + a.width
+    //   } else {
+    //     res(a.children)
+    //   }
+    // })
+    // res(this.columns)
+    // console.log(num)
   }
 
   handleStandardTableChange = (pagination) => {
@@ -649,7 +971,6 @@ class Response extends Component {
   handleFormReset = () => {
     const {form} = this.props;
     this.CustomPicker.resetValue()
-    this.CustomPickerM.resetValue()
     form.resetFields();
     this.setState({
       formValues: {},
@@ -710,6 +1031,7 @@ class Response extends Component {
       realAppropriation: fields.realAppropriation,
       remark: fields.remark
     }
+    cleanObject(payload)
     if (updateModalVisible) {
       dispatch({
         type: 'response/update',
@@ -749,13 +1071,8 @@ class Response extends Component {
               {getFieldDecorator('projectName', {})(<Input/>)}
             </FormItem>
           </Col>
-          <Col md={6} sm={24}>
-            <FormItem label="填报时间">
-            {getFieldDecorator('reportTime', {})(<DatePicker.MonthPicker />)}
-          </FormItem>
-            </Col>
 
-     {/*     <Col md={6} sm={24}>
+               <Col md={6} sm={24}>
             <FormItem label="填报日期">
               {getFieldDecorator('year', {
                 initialValue: null
@@ -765,9 +1082,9 @@ class Response extends Component {
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="">
-              {getFieldDecorator('month', {})(<CustomPicker ref={(e) => this.CustomPickerM = e} topMode="month" setValue={this.setMonth} placeholder={'月'} format="MM"/>)}
+              {getFieldDecorator('month', {})(<DatePicker.MonthPicker  topMode="month" placeholder={'月'} format="MM"/>)}
             </FormItem>
-          </Col>*/}
+          </Col>*
           <Col md={6} sm={24}>
             <div style={{overflow: 'hidden'}}>
               <div style={{float: 'right', marginBottom: 24}}>
@@ -888,7 +1205,8 @@ class Response extends Component {
         page: page,
         pageSize: pageSize,
         projectName: fieldsValue.projectName,
-        reportTime: fieldsValue.reportTime?fieldsValue.reportTime.format('YYYY-MM-DD'):null,
+        year: fieldsValue.year ? fieldsValue.year.format('YYYY') : null,
+        month: fieldsValue.month ? fieldsValue.month.format('MM') : null,
       }
       cleanObject(payload)
       this.exportParams = payload

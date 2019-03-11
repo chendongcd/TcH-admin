@@ -18,7 +18,7 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable, PreFile, ExportModal} from 'components'
 import styles from './index.less'
-import {getButtons, cleanObject, QiNiuOss, ImageUrl,getPage} from 'utils'
+import {getButtons, cleanObject, QiNiuOss, ImageUrl,getPage,fixNumber} from 'utils'
 import {METER_EXPORT} from 'common/urls'
 import {createURL} from 'services/app'
 
@@ -500,7 +500,7 @@ class MeterUp extends Component {
       width: 130,
       dataIndex: 'productionValue',
       render(val) {
-        return <span>{Number.isInteger(val * 100)?(val*100):(val*100).toFixed(2)}</span>;
+        return <span>{fixNumber(val,100)+'%'}</span>;
       }
     },
     {
