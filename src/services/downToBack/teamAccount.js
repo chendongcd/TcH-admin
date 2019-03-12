@@ -8,6 +8,12 @@ export async function queryTeamList(params,token) {
     body: params
   },token);
 }
+export async function querySum(params,token) {
+  return request(`${api}/total/v1.1`,{
+    method: 'GET',
+    body: params
+  },token);
+}
 export async function queryContractCodes(params,token) {
   return request(`${api}/list/v1.1`,{
     method: 'GET',

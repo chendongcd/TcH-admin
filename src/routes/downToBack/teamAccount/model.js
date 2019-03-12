@@ -1,4 +1,4 @@
-import {queryTeamList, addTeam, updateCompany, updateTeam,queryContractCodes} from '../../../services/downToBack/teamAccount'
+import {queryTeamList, addTeam, updateCompany, updateTeam,queryContractCodes,querySum} from '../../../services/downToBack/teamAccount'
 import {queryProPerList} from "../../../services/system/sys_project";
 import {querySubList} from "../../../services/sub/resume";
 
@@ -19,12 +19,47 @@ export default {
     * fetch({payload, token}, {call, put}) {
       const response = yield call(queryTeamList, payload, token);
       if (response.code == '200') {
+        if(response.list.length>0){
+          if(global._getTotalPage(response.pagination.total)===response.pagination.current){
+            yield put({
+              type:'fetchSum',
+              payload:payload,
+              token:token
+            })
+          }
+        }
         yield put({
           type: 'save',
           payload: response,
         });
       }
       if (response.code == '401') {
+        yield put({type: 'app/logout'})
+        return false
+      }
+    },
+    * fetchSum({payload, token}, {call, put,select}) {
+      const response = yield call(querySum, payload, token);
+      if (response.code == '200') {
+        const data = yield (select(_ => _.teamAccount.data))
+        let sum = {
+          id: '合计:',
+          estimatedContractAmount: response.entity.sumEstimatedContractAmount,
+          realAmount: response.entity.sumRealAmount,
+          settlementAmount: response.entity.sumSettlementAmount,
+          shouldAmount: response.entity.sumShouldAmount
+        }
+        for(let a in sum){
+            sum[a] = Number.isInteger(Number(sum[a]))?Number(sum[a]):Number(sum[a]).toFixed(2)
+        }
+        data.list = [...data.list,sum]
+        data.pagination.pageSize = data.pagination.pageSize+1
+        yield put({
+          type: 'save',
+          payload: data,
+        });
+      }
+      if (global.checkToken(response)) {
         yield put({type: 'app/logout'})
         return false
       }
