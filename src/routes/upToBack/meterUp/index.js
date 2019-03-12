@@ -687,7 +687,7 @@ class MeterUp extends Component {
               {getFieldDecorator('meteringTime', {
                 initialValue: null
               })(
-                <DatePicker.MonthPicker style={{width: '100%'}}/>
+                <DatePicker.MonthPicker placeholder={''} style={{width: '100%'}}/>
               )}
             </FormItem>
           </Col>
