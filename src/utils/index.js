@@ -123,7 +123,7 @@ export function getPage(id) {
 /*删除对象中的空对象*/
 export function cleanObject(obj) {
   for(let o in obj){
-    if(!obj[o]&&obj[o]!=0){
+    if((!obj[o]&&obj[o]!=0)||(Array.isArray(obj[o])&&obj[o].length<=0)){
       delete obj[o]
     }
   }

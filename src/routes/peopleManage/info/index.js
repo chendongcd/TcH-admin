@@ -292,7 +292,8 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('workTime', {
                   rules: [{required: true, message: '请输入参加工作年限'}],
                   initialValue: selectedValues.workTime ? selectedValues.workTime : testValue,
-                })(<Input disabled={checkDetail} style={{marginTop: 4}} placehloder='请输入参加工作年限' addonAfter={'年'}/>)}
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placehloder='请输入参加工作年限(整数)' addonAfter={'年'}/>)}
+                <span style={info_css}>请输入整数</span>
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
