@@ -1218,7 +1218,6 @@ class TeamAccount extends Component {
       }
       cleanObject(payload)
       this.exportParams = payload
-      console.log(payload)
       this.props.dispatch({
         type: 'teamAccount/fetch',
         payload: payload,

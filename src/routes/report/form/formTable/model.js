@@ -18,7 +18,8 @@ export default {
             yield put({
               type:'fetchSum',
               payload:payload,
-              token:token
+              token:token,
+              list:response.list.length
             })
           }
         }
@@ -32,7 +33,7 @@ export default {
         return false
       }
     },
-    * fetchSum({payload, token}, {call, put,select}) {
+    * fetchSum({payload, token,list}, {call, put,select}) {
       const response = yield call(queryFormSum, payload, token);
       if (response.code == '200') {
         const data = yield (select(_ => _.reportFormTable.data))
@@ -49,7 +50,9 @@ export default {
           }
         }
         data.list = [...data.list,sum]
-        data.pagination.pageSize = data.pagination.pageSize+1,
+        if(list===10) {
+          data.pagination.pageSize = data.pagination.pageSize + 1
+        }
           yield put({
           type: 'save',
           payload: data,
