@@ -101,14 +101,22 @@ class CreateForm extends Component {
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
+      const {jointHearingAnnex,responsibilityAnnex,evaluationAnnex} = this.state
       for (let prop in fieldsValue) {
         if (fieldsValue[prop] instanceof moment) {
           fieldsValue[prop] = fieldsValue[prop].format('YYYY-MM-DD')
         }
       }
-      fieldsValue.jointHearingAnnex = `{"url":"${this.state.jointHearingAnnex[0].url}","fileName":"${this.state.jointHearingAnnex[0].name}"}`
-      fieldsValue.responsibilityAnnex = `{"url":"${this.state.responsibilityAnnex[0].url}","fileName":"${this.state.responsibilityAnnex[0].name}"}`
-      fieldsValue.evaluationAnnex = `{"url":"${this.state.evaluationAnnex[0].url}","fileName":"${this.state.evaluationAnnex[0].name}"}`
+      if(jointHearingAnnex.length>0) {
+        fieldsValue.jointHearingAnnex = `{"url":"${jointHearingAnnex[0].url}","fileName":"${this.state.jointHearingAnnex[0].name}"}`
+      }
+      if(responsibilityAnnex.length>0) {
+        fieldsValue.responsibilityAnnex = `{"url":"${responsibilityAnnex[0].url}","fileName":"${this.state.responsibilityAnnex[0].name}"}`
+      }
+      if(evaluationAnnex.length>0) {
+        fieldsValue.evaluationAnnex = `{"url":"${evaluationAnnex[0].url}","fileName":"${this.state.evaluationAnnex[0].name}"}`
+      }
+
       handleAdd(fieldsValue, updateModalVisible, selectedValues,this.cleanState);
     });
   };
@@ -195,17 +203,6 @@ class CreateForm extends Component {
           </Row>
           <Row gutter={8}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="评估状态">
-                {form.getFieldDecorator('evaluationStatus', {
-                  rules: [{required: true, message: '请选择评估状态'}],
-                  initialValue: selectedValues.evaluationStatus ? selectedValues.evaluationStatus : ''
-                })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择评估状态"
-                           style={{width: '100%'}}>
-                  {reStatus.map((a, index) => <Option key={index} value={a}>{a}</Option>)}
-                </Select>)}
-              </FormItem>
-            </Col>
-            <Col md={12} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="工程状态">
                 {form.getFieldDecorator('engineeringStatus', {
                   rules: [{required: true,message:'请先选择项目'}],
@@ -218,6 +215,17 @@ class CreateForm extends Component {
                 </Select>))}
               </FormItem>
             </Col>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="评估状态">
+                {form.getFieldDecorator('evaluationStatus', {
+                  rules: [{required: false, message: '请选择评估状态'}],
+                  initialValue: selectedValues.evaluationStatus ? selectedValues.evaluationStatus : ''
+                })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择评估状态"
+                           style={{width: '100%'}}>
+                  {reStatus.map((a, index) => <Option key={index} value={a}>{a}</Option>)}
+                </Select>)}
+              </FormItem>
+            </Col>
           </Row>
         </div>
         <Row align={'middle'} gutter={0} className={styles.titleView}>
@@ -228,7 +236,7 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="中标">
                 {form.getFieldDecorator('winningBid', {
-                  rules: [{required: true, message: '请输入中标金额'}],
+                  rules: [{required: false, message: '请输入中标金额'}],
                   initialValue: selectedValues.winningBid ? selectedValues.winningBid : testValue
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入中标金额" addonAfter="万元"/>)}
               </FormItem>
@@ -236,7 +244,7 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="有效收入">
                 {form.getFieldDecorator('effectiveIncome', {
-                  rules: [{required: true, message: '请输入有效金额'}],
+                  rules: [{required: false, message: '请输入有效金额'}],
                   initialValue: selectedValues.effectiveIncome ? selectedValues.effectiveIncome : testValue
 
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入有效金额" addonAfter="万元"/>)}
@@ -252,7 +260,7 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="是否签订">
                 {form.getFieldDecorator('isSign', {
-                  rules: [{required: true, message: '请选择是否签订'}],
+                  rules: [{required: false, message: '请选择是否签订'}],
                   initialValue: selectedValues.isSign ? selectedValues.isSign : ''
                 })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择"
                            style={{width: '100%'}}>
@@ -264,7 +272,7 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="签订日期">
                 {form.getFieldDecorator('signTime', {
-                  rules: [{required: true, message: '请选择签订日期'}],
+                  rules: [{required: false, message: '请选择签订日期'}],
                   initialValue: selectedValues.signTime ? moment(selectedValues.signTime) : null
 
                 })(<DatePicker disabled={checkDetail} style={{width: '100%'}} placeholder='请选择签订日期'/>)}
@@ -280,7 +288,7 @@ class CreateForm extends Component {
             <Col md={8} sm={24}>
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="合同开工日期">
                 {form.getFieldDecorator('contractStartTime', {
-                  rules: [{required: true,message:'请先完善该项目工程信息卡'}],
+                  rules: [{required: false,message:'请先完善该项目工程信息卡'}],
                   initialValue: selectedValues.contractStartTime ? moment(selectedValues.contractStartTime).format('YYYY-MM-DD') : ''
                 })(<Input disabled={true} placeholder='自动带出'/>)}
               </FormItem>
@@ -288,7 +296,7 @@ class CreateForm extends Component {
             <Col md={8} sm={24}>
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="合同竣工日期">
                 {form.getFieldDecorator('contractEndTime', {
-                  rules: [{required: true,message:'请先完善该项目工程信息卡'}],
+                  rules: [{required: false,message:'请先完善该项目工程信息卡'}],
                   initialValue: selectedValues.contractEndTime ? moment(selectedValues.contractEndTime).format('YYYY-MM-DD') : ''
                 })(<Input disabled={true} placeholder='自动带出'/>)}
               </FormItem>
@@ -296,7 +304,7 @@ class CreateForm extends Component {
             <Col md={8} sm={24}>
               <FormItem labelCol={{span:9}} wrapperCol={{span: 15}} label="工期(月)">
                 {form.getFieldDecorator('duration', {
-                  rules: [{required: true,message:'请先完善该项目工程信息卡'}],
+                  rules: [{required: false,message:'请先完善该项目工程信息卡'}],
                   initialValue: selectedValues.duration||selectedValues.duration==0 ? selectedValues.duration : ''
                 })(<Input disabled={true} placeholder='自动带出'/>)}
               </FormItem>
@@ -311,7 +319,7 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="评估时间">
                 {form.getFieldDecorator('evaluationTime', {
-                  rules: [{required: true, message: '请选择评估时间'}],
+                  rules: [{required: false, message: '请选择评估时间'}],
                   initialValue: selectedValues.evaluationTime ? moment(selectedValues.evaluationTime) : null
 
                 })(<DatePicker disabled={checkDetail} width={'100%'} placeholder='请选择评估时间'/>)}
@@ -320,7 +328,7 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 14}} label="评估效益点(%)">
                 {form.getFieldDecorator('evaluationBenefit', {
-                  rules: [{required: true, message: '请输入评估效益点(%)'}],
+                  rules: [{required: false, message: '请输入评估效益点(%)'}],
                   initialValue: selectedValues.evaluationBenefit ? selectedValues.evaluationBenefit : testValue
 
                 })(<Input disabled={checkDetail} style={{marginTop:4}} placeholder='请输入(保留小数点后两位)' addonAfter={'%'}/>)}
@@ -331,7 +339,7 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="含分包差及经营费(%)">
                 {form.getFieldDecorator('evaluationCost', {
-                  rules: [{required: true, message: '请输入含分包差及经营费(%)'}],
+                  rules: [{required: false, message: '请输入含分包差及经营费(%)'}],
                   initialValue: selectedValues.evaluationCost ? selectedValues.evaluationCost : testValue
 
                 })(<Input disabled={checkDetail} style={{marginTop:4}} placeholder='请输入(保留小数点后两位)' addonAfter={'%'}/>)}
@@ -340,7 +348,7 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem  labelCol={{span: 9}} wrapperCol={{span: 14}} label="评估编号">
                 {form.getFieldDecorator('evaluationCode', {
-                  rules: [{required: true, message: '请输入评估编号'}],
+                  rules: [{required: false, message: '请输入评估编号'}],
                   initialValue: selectedValues.evaluationCode ? selectedValues.evaluationCode : testValue
 
                 })(<Input disabled={checkDetail} placeholder="请输入评估编号"/>)}
@@ -351,7 +359,7 @@ class CreateForm extends Component {
             <Col md={24} sm={24}>
               <FormItem style={{marginLeft: 21 + 'px'}} labelCol={{span: 4}} wrapperCol={{span: 15}} label="附件">
                 {form.getFieldDecorator('evaluationAnnex', {
-                  rules: [{required: true, message: '请上传附件'}],
+                  rules: [{required: false, message: '请上传附件'}],
                   valuePropName: 'fileList',
                   getValueFromEvent: normFile,
                   initialValue: selectedValues.evaluationAnnex ? [selectedValues.evaluationAnnex] : [],
@@ -389,7 +397,7 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="效益点">
                 {form.getFieldDecorator('jointHearingBenefit', {
-                  rules: [{required: true, message: '请输入效益点'}],
+                  rules: [{required: false, message: '请输入效益点'}],
                   initialValue: selectedValues.jointHearingBenefit ? selectedValues.jointHearingBenefit : testValue
 
                 })(<Input disabled={checkDetail} placeholder='请输入(保留小数点后两位)'/>)}
@@ -398,7 +406,7 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 14}} label="含分包差及经营费(%)">
                 {form.getFieldDecorator('jointHearingCost', {
-                  rules: [{required: true, message: '请输入含分包差及经营费(%)'}],
+                  rules: [{required: false, message: '请输入含分包差及经营费(%)'}],
                   initialValue: selectedValues.jointHearingCost ? selectedValues.jointHearingCost : testValue
 
                 })(<Input disabled={checkDetail} placeholder='请输入(保留小数点后两位)' addonAfter={'%'}/>)}
@@ -409,7 +417,7 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="上会时间">
                 {form.getFieldDecorator('jointHearingTime', {
-                  rules: [{required: true, message: '请选择上会时间'}],
+                  rules: [{required: false, message: '请选择上会时间'}],
                   initialValue: selectedValues.jointHearingTime ? moment(selectedValues.jointHearingTime) : null
                 })(<DatePicker disabled={checkDetail} placeholder='请选择上会时间)'/>)}
               </FormItem>
@@ -419,7 +427,7 @@ class CreateForm extends Component {
             <Col md={24} sm={24}>
               <FormItem style={{marginLeft: 21 + 'px'}} labelCol={{span: 4}} wrapperCol={{span: 15}} label="附件">
                 {form.getFieldDecorator('jointHearingAnnex', {
-                  rules: [{required: true, message: '请上传附件'}],
+                  rules: [{required: false, message: '请上传附件'}],
                   valuePropName: 'fileList',
                   getValueFromEvent: normFile,
                   initialValue: selectedValues.jointHearingAnnex ? [selectedValues.jointHearingAnnex] : [],
@@ -457,7 +465,7 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
             <FormItem labelCol={{span: 9}} wrapperCol={{span: 8}} label="责任状是否签订">
               {form.getFieldDecorator('isResponsibility', {
-                rules: [{required: true, message: '请选择责任状是否签订'}],
+                rules: [{required: false, message: '请选择责任状是否签订'}],
                 initialValue: selectedValues.isResponsibility=='0'||!selectedValues.isResponsibility ? '0' : '1'
               })(<Select onSelect={this._onSelect} className={styles.customSelect} disabled={checkDetail}
                          placeholder="请选择"
@@ -473,7 +481,7 @@ class CreateForm extends Component {
               <Col md={12} sm={24}>
                 <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="效益点">
                   {form.getFieldDecorator('responsibilityBenefiy', {
-                    rules: [{required: true, message: '请输入效益点'}],
+                    rules: [{required: false, message: '请输入效益点'}],
                     initialValue: selectedValues.responsibilityBenefiy ? selectedValues.responsibilityBenefiy : testValue
 
                   })(<Input disabled={checkDetail} placeholder='请输入(保留小数点后两位)'/>)}
@@ -482,7 +490,7 @@ class CreateForm extends Component {
               <Col md={12} sm={24}>
                 <FormItem labelCol={{span: 9}} wrapperCol={{span: 14}} label="签订时间">
                   {form.getFieldDecorator('responsibilityTime', {
-                    rules: [{required: true, message: '请选择签订时间'}],
+                    rules: [{required: false, message: '请选择签订时间'}],
                     initialValue: selectedValues.responsibilityTime ? moment(selectedValues.responsibilityTime) : null
 
                   })(<DatePicker disabled={checkDetail} width={'100%'} placeholder='请选择签订时间'/>)}
@@ -493,7 +501,7 @@ class CreateForm extends Component {
               <Col md={12} sm={24}>
                 <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="项目经理">
                   {form.getFieldDecorator('responsibilityPeople', {
-                    rules: [{required: true, message: '请输入项目经理'}],
+                    rules: [{required: false, message: '请输入项目经理'}],
                     initialValue: selectedValues.responsibilityPeople ? selectedValues.responsibilityPeople : testValue
                   })(<Input disabled={checkDetail} placeholder='请输入项目经理'/>)}
                 </FormItem>
@@ -501,7 +509,7 @@ class CreateForm extends Component {
               <Col md={12} sm={24}>
                 <FormItem labelCol={{span: 9}} wrapperCol={{span: 14}} label="项目书记">
                   {form.getFieldDecorator('responsibilitySecretary', {
-                    rules: [{required: true, message: '请输入项目书记'}],
+                    rules: [{required: false, message: '请输入项目书记'}],
                     initialValue: selectedValues.responsibilitySecretary ? selectedValues.responsibilitySecretary : testValue
 
                   })(<Input disabled={checkDetail} placeholder="项目书记"/>)}
@@ -512,7 +520,7 @@ class CreateForm extends Component {
               <Col md={24} sm={24}>
                 <FormItem style={{marginLeft: 21 + 'px'}} labelCol={{span: 4}} wrapperCol={{span: 15}} label="附件">
                   {form.getFieldDecorator('responsibilityAnnex', {
-                    rules: [{required: true, message: '请上传附件'}],
+                    rules: [{required: false, message: '请上传附件'}],
                     valuePropName: 'fileList',
                     getValueFromEvent: normFile,
                     initialValue: selectedValues.responsibilityAnnex ? [selectedValues.responsibilityAnnex] : [],
@@ -704,10 +712,7 @@ class ProEvaluate extends Component {
     {
       title: '评估状态',
       dataIndex: 'evaluationStatus',
-      width:100,
-      render(val){
-        return <span>{val}</span>
-      }
+      width:100
     },
     {
       title: '合同额',
@@ -736,7 +741,7 @@ class ProEvaluate extends Component {
         key: 'signTime',
         width:130,
         render(val) {
-          return <span>{moment(val).format('YYYY/MM/DD')}</span>;
+          return <span>{val?moment(val).format('YYYY/MM/DD'):''}</span>;
         },
       },]
     },
@@ -781,7 +786,7 @@ class ProEvaluate extends Component {
         dataIndex: 'evaluationBenefit',
         width:120,
         render:(val)=>{
-          return <span>{fixNumber(val,100)+'%'}</span>
+          return <span>{val?(fixNumber(val,100)+'%'):''}</span>
         }
       }, {
         title: '含分包差及经营费(%)',
@@ -789,7 +794,7 @@ class ProEvaluate extends Component {
         dataIndex: 'evaluationCost',
         width:150,
         render:(val)=>{
-          return <span>{fixNumber(val,100)+'%'}</span>
+          return <span>{val?(fixNumber(val,100)+'%'):''}</span>
         }
       }, {
         title: '评估编号',
@@ -802,6 +807,9 @@ class ProEvaluate extends Component {
         dataIndex: 'evaluationAnnex',
         width:100,
         render(val) {
+          if(!val){
+            return null
+          }
           let href = ''
           let annex = JSON.parse(val)
           href = annex.url + '?attname=' + annex.fileName
@@ -822,14 +830,14 @@ class ProEvaluate extends Component {
         dataIndex: 'jointHearingCost',
         width:150,
         render:(val)=>{
-          return <span>{fixNumber(val,100)+'%'}</span>
+          return <span>{val?(fixNumber(val,100)+'%'):''}</span>
         }
       }, {
         title: '上会时间',
         key: 'jointHearingTime',
         dataIndex: 'jointHearingTime',
         render(val) {
-          return <span>{moment(val).format('YYYY/MM/DD')}</span>;
+          return <span>{val?moment(val).format('YYYY/MM/DD'):''}</span>;
         },
         width:130,
       }, {
@@ -837,6 +845,9 @@ class ProEvaluate extends Component {
         key: 'jointHearingAnnex',
         dataIndex: 'jointHearingAnnex',
         render(val) {
+          if(!val){
+            return null
+          }
           let href = ''
             let annex = JSON.parse(val)
             href = annex.url + '?attname=' + annex.fileName
@@ -853,7 +864,7 @@ class ProEvaluate extends Component {
         key: 'isResponsibility',
         width:120,
         render(val,record){
-          return<span>{val==1?'是':'否'}</span>
+          return<span>{val.length>0?(val==1?'是':'否'):''}</span>
         }
       },{
         title: '效益点',
@@ -866,7 +877,7 @@ class ProEvaluate extends Component {
         width:130,
         dataIndex: 'responsibilityTime',
         render(val) {
-          return <span>{moment(val).format('YYYY/MM/DD')}</span>;
+          return <span>{val?moment(val).format('YYYY/MM/DD'):''}</span>;
         },
       }, {
         title: '项目经理',
@@ -884,6 +895,9 @@ class ProEvaluate extends Component {
         width:100,
         dataIndex: 'responsibilityAnnex',
         render(val) {
+          if(!val){
+            return null
+          }
           let href = ''
           let annex = JSON.parse(val)
           href = annex.url + '?attname=' + annex.fileName
@@ -1034,6 +1048,8 @@ class ProEvaluate extends Component {
       responsibilityAnnex: fields.responsibilityAnnex,
       isResponsibility:fields.isResponsibility
     }
+    cleanObject(payload)
+    console.log(payload)
     if (updateModalVisible) {
       dispatch({
         type: 'proEvaluate/update',
