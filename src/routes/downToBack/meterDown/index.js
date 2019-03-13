@@ -147,7 +147,7 @@ class CreateForm extends Component {
     arr[type-1] = value
    // return
     let test = (i)=>{
-      return (typeof Number(i)==='number'&&i.length>0)
+      return ((typeof i ==='number')||(typeof Number(i))==='number'&&i.length>0)
     }
     if(arr.every(test)){
       let pay = arr[0]-arr[1]-arr[2]-arr[3]

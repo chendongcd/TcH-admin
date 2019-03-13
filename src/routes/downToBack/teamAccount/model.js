@@ -50,7 +50,9 @@ export default {
           shouldAmount: response.entity.sumShouldAmount
         }
         for(let a in sum){
-            sum[a] = Number.isInteger(Number(sum[a]))?Number(sum[a]):Number(sum[a]).toFixed(2)
+          if(sum[a]&&!isNaN(sum[a])) {
+            sum[a] = Number.isInteger(Number(sum[a])) ? Number(sum[a]) : Number(sum[a]).toFixed(2)
+          }
         }
         data.list = [...data.list,sum]
         data.pagination.pageSize = data.pagination.pageSize+1
