@@ -1021,7 +1021,7 @@ class TeamAccount extends Component {
       settlementFiling: fields.settlementFiling,
       settlementTime: fields.settlementTime?fields.settlementTime.format('YYYY-MM-DD'):null,
       settlementRemark: fields.settlementRemark,
-      approvalTime: fields.settlementTime?fields.approvalTime.format('YYYY-MM-DD'):null
+      approvalTime: fields.approvalTime?fields.approvalTime.format('YYYY-MM-DD'):null
     }
     cleanObject(payload)
     dispatch({
