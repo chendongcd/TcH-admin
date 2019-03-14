@@ -31,7 +31,7 @@ const status = [{id: 0, name: '在建'}, {id: 1, name: '完工未结算'}, {id: 
 const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/
 let uuid = 0;
 const pageButtons = getPage('31').buttons.map(a => a.permission)
-const testValue = ''
+const testValue = '123'
 const plainOptions = [{label: '项目工期', value: '1'},
   {label: '项目主要人员', value: '2'},
 ]
@@ -183,7 +183,7 @@ class CreateForm extends Component {
         a.time = this.handleRange(a.time)
       }
     })
-    let res = params.filter(a =>a.time && a.name && a.phone)
+    let res = params.filter(a =>a.time || a.name || a.phone)
     return res.length == 0 ? undefined : res
   }
 
