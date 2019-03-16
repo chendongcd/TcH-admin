@@ -393,7 +393,7 @@ class CreateForm extends Component {
                 )}
                 <PreFile disabled={checkDetail} onClose={this.remove} onPreview={this.handlePreview} progress={progress}
                          file={fileList[0]}/>
-                <span style={info_css}>备注：中期计价附件（封面、验工计价批复表、汇总表）；</span>
+                <span style={info_css}>备注：中期计价附件（封面、当期验工计价结算单、验工计价批复表、汇总表）；</span>
                 <span style={info_css}>末次计价附件（公司批复的《劳务结算审批》、结算资料），当期计价合同外费用需上传支撑凭证,请以一份PDF格式文件上传</span>
               </FormItem>
             </Col>
