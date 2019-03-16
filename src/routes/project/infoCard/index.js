@@ -31,7 +31,7 @@ const status = [{id: 0, name: '在建'}, {id: 1, name: '完工未结算'}, {id: 
 const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/
 let uuid = 0;
 const pageButtons = getPage('31').buttons.map(a => a.permission)
-const testValue = '123'
+const testValue = ''
 const plainOptions = [{label: '项目工期', value: '1'},
   {label: '项目主要人员', value: '2'},
 ]
@@ -209,9 +209,10 @@ class CreateForm extends Component {
           <Col className={styles.colPeople} md={9} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
               {getFieldDecorator(`Mtime[${index}]`, {
-                initialValue: key.time ? this._setTime(key.time) : []
+                initialValue: key.time&&key.time!==',' ? this._setTime(key.time) : []
               })(<DatePicker.RangePicker disabled={checkDetail}
                                          required={true}
+
                                          onChange={(e, dateString) => {
                                            this.manager[index].time = this.handleRange(dateString)
                                          }}
@@ -262,7 +263,7 @@ class CreateForm extends Component {
           <Col className={styles.colPeople} md={9} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
               {getFieldDecorator(`Stime[${index}]`, {
-                initialValue: key.time ? this._setTime(key.time) : []
+                initialValue: key.time&&key.time!==',' ? this._setTime(key.time) : []
               })(<DatePicker.RangePicker disabled={checkDetail}
                                          required={true}
                                          onChange={(e, dateString) => this.secretary[index].time = this.handleRange(dateString)}
@@ -309,7 +310,7 @@ class CreateForm extends Component {
           <Col className={styles.colPeople} md={9} sm={24}>
             <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
               {getFieldDecorator(`Etime[${index}]`, {
-                initialValue: key.time ? this._setTime(key.time) : []
+                initialValue: key.time&&key.time!==',' ? this._setTime(key.time) : []
               })(<DatePicker.RangePicker disabled={checkDetail}
                                          required={true}
                                          onChange={(e, dateString) => this.engineer[index].time = this.handleRange(dateString)}
@@ -351,6 +352,7 @@ class CreateForm extends Component {
       fieldsValue.manager = this.handleRanges(this.manager)
       fieldsValue.secretary = this.handleRanges(this.secretary)
       fieldsValue.engineer = this.handleRanges(this.engineer)
+      console.log(fieldsValue.manager)
       handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
   };
