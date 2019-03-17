@@ -14,11 +14,12 @@ import {
   DatePicker,
   Modal,
   Badge,
+  Tag,
   Divider
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable, ExportModal} from 'components'
 import styles from './index.less'
-import {getButtons, cleanObject, cloneObject,getPage} from 'utils'
+import {getButtons, cleanObject, cloneObject, getPage} from 'utils'
 import {apiDev} from 'utils/config'
 import {PRO_PDF, PRO_EXPORT} from 'common/urls'
 import {createURL} from 'services/app'
@@ -35,6 +36,48 @@ const testValue = ''
 const plainOptions = [{label: '项目工期', value: '1'},
   {label: '项目主要人员', value: '2'},
 ]
+const toDate = '2200-01-01'
+
+@Form.create()
+class MyTag extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      checked: -1
+    };
+  }
+
+  handleChange = (checked, index,type) => {
+    this.props.handleToDate(checked, index,type)
+    this.setState({checked: checked ? 1 : 2});
+  }
+
+  render() {
+    const {getFieldDecorator, index, item, checkDetail, _setTime, handleEndDate, toDate,fName,type} = this.props
+    const {checked} = this.state
+    return (
+      <Fragment>
+        <Col className={styles.colPeople} md={4} sm={24}>
+          <FormItem labelCol={{span: 4}} wrapperCol={{span: 20}} label="至">
+            {(toDate && checked === -1) || (checked !== -1 && checked === 1) ?
+              <Tag style={{marginLeft: 10}} closable={!checkDetail} onClose={() => this.handleChange(false, index,type)}
+                   color="#108ee9">至今</Tag>
+              :
+              getFieldDecorator(`${fName}[${index}]`, {
+                initialValue: item && item.time && item.time !== ',' ? _setTime(item.time, 1) : null
+              })(<DatePicker disabled={checkDetail}
+                             renderExtraFooter={() => <a onClick={() => this.handleChange(true, index,type)}>至今</a>}
+                             onChange={(e, dateString) => handleEndDate(index, dateString,type)}
+                             style={{width: '100%'}}/>)}
+          </FormItem>
+        </Col>
+      </Fragment>
+    )
+  }
+
+
+}
+
 
 @Form.create()
 class CreateForm extends Component {
@@ -49,7 +92,7 @@ class CreateForm extends Component {
     this.manager = [{
       name: '',
       time: '',
-      phone: ''
+      phone: '',
     }]
     this.secretary = [{
       name: '',
@@ -106,23 +149,16 @@ class CreateForm extends Component {
     }
   }
 
-  setRange = (item, index, arr) => {
-    if (item.time.length > 0 && !isMoment(item.time[0])) {
-      item.time = item.time.split(',').map(a => moment(a))
-    }
-  }
-
-  setTime = (param) => {
-    let obj = JSON.parse(JSON.stringify(param))
-    obj.forEach(this.setRange)
-    return obj
-  }
-
-  _setTime = (param) => {
+  _setTime = (param, isStart = -1) => {
     if (!Array.isArray(param)) {
+      if (isStart != -1) {
+        return param.split(',')[isStart] && param.split(',')[isStart] !== 'null' ? moment(param.split(',')[isStart]) : null
+      }
+
       return param.split(',').map(a => moment(a))
     }
-    return param
+
+    return param[isStart] ? param[isStart] : null
 
   }
 
@@ -172,29 +208,70 @@ class CreateForm extends Component {
       }
       this.engineer = this.engineer.concat({name: '', time: '', phone: ''})
     } else {
-      this.manager = this.manager.concat({name: '', time: '', phone: ''})
+      this.manager = this.manager.concat({name: '', time: '', phone: '', toDate: ''})
     }
     form.setFieldsValue(object);
   }
 
   handleRanges = (params) => {
-    params.forEach((a) => {
-      if (Array.isArray(a.time)) {
-        a.time = this.handleRange(a.time)
-      }
-    })
-    let res = params.filter(a =>a.time || a.name || a.phone)
+    let res = params.filter(a => a.time || a.name || a.phone)
     return res.length == 0 ? undefined : res
   }
 
-  handleRange = (param) => {
-    return param[0] + ',' + param[1]
+  handleRange = (param, end) => {
+    return param + ',' + end
+  }
+
+  handleEndDate = (index, dateString,type) => {
+    if(type===0) {
+      this.manager[index].time = this.handleRange(this.props.form.getFieldValue(`MtimeS[${index}]`)
+        ?
+        moment(this.props.form.getFieldValue(`MtimeS${index}]`)).format('YYYY-MM-DD') : null, dateString)
+    }
+    if(type===1){
+      this.secretary[index].time = this.handleRange(this.props.form.getFieldValue(`Stime[${index}]`)
+        ?
+        moment(this.props.form.getFieldValue(`Stime${index}]`)).format('YYYY-MM-DD') : null, dateString)
+    }
+    if(type===2){
+      this.engineer[index].time = this.handleRange(this.props.form.getFieldValue(`Etime[${index}]`)
+        ?
+        moment(this.props.form.getFieldValue(`Etime${index}]`)).format('YYYY-MM-DD') : null, dateString)
+    }
+  }
+
+  //处理至今
+  handleToDate = (checked, index,type) => {
+    let target = type===0?this.manager:type===1?this.secretary:this.engineer
+    target[index].toDate = checked
+    let t = target[index].time
+    if (checked) {
+      if (t) {
+        target[index].time = t.split(',')[0] + ',' + toDate
+      } else {
+        target[index].time = ',' + toDate
+      }
+    } else {
+      target[index].time = t.split(',')[0] + ','
+    }
   }
 
   formManager = (managers, checkDetail, form, getFieldDecorator) => {
     if (managers) {
       return managers.map((key, index) => {
         let isLast = (managers.length == index + 1)
+        let fatherProps = {
+          getFieldDecorator,
+          checkDetail,
+          item: key,
+          index,
+          handleToDate: this.handleToDate,
+          _setTime: this._setTime,
+          handleEndDate: this.handleEndDate,
+          fName:'MtimeE',
+          type:0,
+          toDate: key.time && key.time !== ',' && key.time.length > 0 ? (key.time.split(',')[1] === toDate) : false
+        }
         return (<Row key={`manager${index}`} gutter={8}>
           <Col className={styles.colPeople} md={6} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="姓名">
@@ -206,21 +283,24 @@ class CreateForm extends Component {
                         disabled={checkDetail} placeholder="请输入姓名"/>)}
             </FormItem>
           </Col>
-          <Col className={styles.colPeople} md={9} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
-              {getFieldDecorator(`Mtime[${index}]`, {
-                initialValue: key.time&&key.time!==',' ? this._setTime(key.time) : []
-              })(<DatePicker.RangePicker disabled={checkDetail}
-                                         required={true}
-
-                                         onChange={(e, dateString) => {
-                                           this.manager[index].time = this.handleRange(dateString)
-                                         }}
-                                         style={{width: '100%'}} placeholder="请选择任职时间"/>)}
+          <Col className={styles.colPeople} md={6} sm={24}>
+            <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="任职时间">
+              {getFieldDecorator(`MtimeS[${index}]`, {
+                initialValue: key.time && key.time !== ',' ? this._setTime(key.time, 0) : null
+              })(<DatePicker disabled={checkDetail}
+                             onChange={(e, dateString) => {
+                               this.manager[index].time
+                                 =
+                                 this.handleRange(dateString, form.getFieldValue(`MtimeE[${index}]`)
+                                   ?
+                                   moment(form.getFieldValue(`MtimeE[${index}]`)).format('YYYY-MM-DD') : null)
+                             }}
+                             style={{width: '100%'}}/>)}
             </FormItem>
           </Col>
-          <Col className={styles.colPeople} md={7} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系电话">
+          <MyTag {...fatherProps}/>
+          <Col className={styles.colPeople} md={6} sm={24}>
+            <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="联系电话">
               {getFieldDecorator(`Mphone[${index}]`, {
                 initialValue: key.phone ? key.phone : ''
               })(<Input disabled={checkDetail}
@@ -249,6 +329,18 @@ class CreateForm extends Component {
     if (secretary) {
       return secretary.map((key, index) => {
         let isLast = (secretary.length == index + 1)
+        let fatherProps = {
+          getFieldDecorator,
+          checkDetail,
+          item: key,
+          index,
+          handleToDate: this.handleToDate,
+          _setTime: this._setTime,
+          handleEndDate: this.handleEndDate,
+          fName:'StimeE',
+          type:1,
+          toDate: key.time && key.time !== ',' && key.time.length > 0 ? (key.time.split(',')[1] === toDate) : false
+        }
         return (<Row key={`secretary${index}`} gutter={8}>
           <Col className={styles.colPeople} md={6} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="姓名">
@@ -260,18 +352,24 @@ class CreateForm extends Component {
                         disabled={checkDetail} placeholder="请输入姓名"/>)}
             </FormItem>
           </Col>
-          <Col className={styles.colPeople} md={9} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
+          <Col className={styles.colPeople} md={6} sm={24}>
+            <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="任职时间">
               {getFieldDecorator(`Stime[${index}]`, {
-                initialValue: key.time&&key.time!==',' ? this._setTime(key.time) : []
-              })(<DatePicker.RangePicker disabled={checkDetail}
-                                         required={true}
-                                         onChange={(e, dateString) => this.secretary[index].time = this.handleRange(dateString)}
-                                         style={{width: '100%'}} placeholder="请选择任职时间"/>)}
+                initialValue: key.time && key.time !== ',' ? this._setTime(key.time, 0) : null
+              })(<DatePicker disabled={checkDetail}
+                             onChange={(e, dateString) => {
+                               this.secretary[index].time
+                                 =
+                                 this.handleRange(dateString, form.getFieldValue(`StimeE[${index}]`)
+                                   ?
+                                   moment(form.getFieldValue(`StimeE[${index}]`)).format('YYYY-MM-DD') : null)
+                             }}
+                             style={{width: '100%'}}/>)}
             </FormItem>
           </Col>
-          <Col className={styles.colPeople} md={7} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系电话">
+          <MyTag {...fatherProps}/>
+          <Col className={styles.colPeople} md={6} sm={24}>
+            <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="联系电话">
               {getFieldDecorator(`Sphone[${index}]`, {
                 initialValue: key.phone ? key.phone : ''
               })(<Input disabled={checkDetail}
@@ -298,6 +396,18 @@ class CreateForm extends Component {
     if (chiefEngineer) {
       return chiefEngineer.map((key, index) => {
         let isLast = (chiefEngineer.length == index + 1)
+        let fatherProps = {
+          getFieldDecorator,
+          checkDetail,
+          item: key,
+          index,
+          handleToDate: this.handleToDate,
+          _setTime: this._setTime,
+          handleEndDate: this.handleEndDate,
+          fName:'EtimeE',
+          type:2,
+          toDate: key.time && key.time !== ',' && key.time.length > 0 ? (key.time.split(',')[1] === toDate) : false
+        }
         return (<Row key={`engineer${index}`} gutter={8}>
           <Col className={styles.colPeople} md={6} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="姓名">
@@ -307,18 +417,24 @@ class CreateForm extends Component {
                         disabled={checkDetail} placeholder="请输入姓名"/>)}
             </FormItem>
           </Col>
-          <Col className={styles.colPeople} md={9} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="任职时间">
+          <Col className={styles.colPeople} md={6} sm={24}>
+            <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="任职时间">
               {getFieldDecorator(`Etime[${index}]`, {
-                initialValue: key.time&&key.time!==',' ? this._setTime(key.time) : []
-              })(<DatePicker.RangePicker disabled={checkDetail}
-                                         required={true}
-                                         onChange={(e, dateString) => this.engineer[index].time = this.handleRange(dateString)}
-                                         style={{width: '100%'}} placeholder="请选择任职时间"/>)}
+                initialValue: key.time && key.time !== ',' ? this._setTime(key.time, 0) : null
+              })(<DatePicker disabled={checkDetail}
+                             onChange={(e, dateString) => {
+                               this.engineer[index].time
+                                 =
+                                 this.handleRange(dateString, form.getFieldValue(`EtimeE[${index}]`)
+                                   ?
+                                   moment(form.getFieldValue(`EtimeE[${index}]`)).format('YYYY-MM-DD') : null)
+                             }}
+                             style={{width: '100%'}}/>)}
             </FormItem>
           </Col>
-          <Col className={styles.colPeople} md={7} sm={24}>
-            <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="联系电话">
+          <MyTag {...fatherProps}/>
+          <Col className={styles.colPeople} md={6} sm={24}>
+            <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="联系电话">
               {getFieldDecorator(`Ephone[${index}]`, {
                 initialValue: key.phone ? key.phone : ''
               })(<Input disabled={checkDetail}
@@ -352,7 +468,7 @@ class CreateForm extends Component {
       fieldsValue.manager = this.handleRanges(this.manager)
       fieldsValue.secretary = this.handleRanges(this.secretary)
       fieldsValue.engineer = this.handleRanges(this.engineer)
-      console.log(fieldsValue.manager)
+    //  return
       handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
   };
@@ -543,14 +659,16 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('realContractStartTime', {
                   rules: [{required: true, message: '请选择实际开工日期'}],
                   initialValue: selectedValues.realContractStartTime ? moment(selectedValues.realContractStartTime) : null,
-                })(<DatePicker onChange={(date, dateString) => this.setRealTime(date, dateString, true)} disabled={checkDetail} style={{width: '100%'}} placeholder="请选择实际开工日期"/>)}
+                })(<DatePicker onChange={(date, dateString) => this.setRealTime(date, dateString, true)}
+                               disabled={checkDetail} style={{width: '100%'}} placeholder="请选择实际开工日期"/>)}
               </FormItem>
             </Col>
             <Col md={8} sm={24}>
               <FormItem labelCol={{span: 10}} wrapperCol={{span: 14}} label="实际竣工日期">
                 {form.getFieldDecorator('realContractEndTime', {
                   initialValue: selectedValues.realContractEndTime ? moment(selectedValues.realContractEndTime) : null,
-                })(<DatePicker  onChange={(date, dateString) => this.setRealTime(date, dateString, false)} disabled={checkDetail} style={{width: '100%'}} placeholder="请选择实际竣工日期"/>)}
+                })(<DatePicker onChange={(date, dateString) => this.setRealTime(date, dateString, false)}
+                               disabled={checkDetail} style={{width: '100%'}} placeholder="请选择实际竣工日期"/>)}
               </FormItem>
             </Col>
             <Col md={8} sm={24}>
@@ -680,17 +798,17 @@ class CreateForm extends Component {
     let month = end.get('month') - start.get('month')
     let date = end.get('date') - start.get('date')
     if (year === 0) {
-      if(month===0&&date<0){
+      if (month === 0 && date < 0) {
         return -1
       }
-      return month>=0? (month + 1):-1
+      return month >= 0 ? (month + 1) : -1
     } else if (year > 0) {
       if (month > 0) {
         return year * 12 + month + 1
-      } else if(month===0){
-        return year * 12  + 1
-      }else{
-        return (year-1) * 12+13-start.get('month') +end.get('month')
+      } else if (month === 0) {
+        return year * 12 + 1
+      } else {
+        return (year - 1) * 12 + 13 - start.get('month') + end.get('month')
       }
     }
     return -1
@@ -704,14 +822,14 @@ class CreateForm extends Component {
 
     if (start && end) {
       let res = this.calculateDuration(start, end)
-      if(res==-1){
-      form.setFields({
-        contractDay: {
+      if (res == -1) {
+        form.setFields({
+          contractDay: {
             value: '时间不合法',
             errors: [new Error('结束时间应该大于开始时间')],
           },
         });
-      }else {
+      } else {
         form.setFieldsValue({'contractDay': res})
       }
     }
@@ -720,17 +838,18 @@ class CreateForm extends Component {
   setRealTime = (date, dateString, type) => {
     const form = this.props.form
     const {getFieldValue} = form
-    let start = type ? date : getFieldValue('realContractStartTime'), end = !type ? date : getFieldValue('realContractEndTime')
+    let start = type ? date : getFieldValue('realContractStartTime'),
+      end = !type ? date : getFieldValue('realContractEndTime')
     if (start && end) {
       let res = this.calculateDuration(start, end)
-      if(res==-1){
+      if (res == -1) {
         form.setFields({
           realContractDay: {
             value: '时间不合法',
             errors: [new Error('结束时间应该大于开始时间')],
           },
         });
-      }else {
+      } else {
         form.setFieldsValue({'realContractDay': res})
       }
     }
@@ -761,27 +880,27 @@ class InfoCard extends Component {
 
   columns = [
     {
-      title:'序号',
-      dataIndex:'id',
-      width:100,
+      title: '序号',
+      dataIndex: 'id',
+      width: 100,
       //fixed: 'left'
     },
     {
       title: '项目编码',
       dataIndex: 'code',
-      width:160,
+      width: 160,
       //fixed: 'left'
     },
     {
       title: '项目名称',
       dataIndex: 'projectName',
-      width:180,
+      width: 180,
       //fixed: 'left'
     },
     {
       title: '工程状态',
       dataIndex: 'status',
-      width:100,
+      width: 100,
       render(val) {
         return <Badge status={statusMap[val]} text={status[val].name}/>;
       },
@@ -792,7 +911,7 @@ class InfoCard extends Component {
         title: '合同开工日期',
         dataIndex: 'contractStartTime',
         key: 'contractStartTime',
-        width:130,
+        width: 130,
         render(val) {
           return <span>{moment(val).format('YYYY/MM/DD')}</span>;
         },
@@ -801,7 +920,7 @@ class InfoCard extends Component {
           title: '合同完工日期',
           dataIndex: 'contractEndTime',
           key: 'contractEndTime',
-          width:130,
+          width: 130,
           render(val) {
             return <span>{moment(val).format('YYYY/MM/DD')}</span>;
           },
@@ -813,7 +932,7 @@ class InfoCard extends Component {
         title: '实际开工日期',
         dataIndex: 'realContractStartTime',
         key: 'realContractStartTime',
-        width:130,
+        width: 130,
         render(val) {
           return <span>{moment(val).format('YYYY/MM/DD')}</span>;
         },
@@ -822,9 +941,9 @@ class InfoCard extends Component {
           title: '实际完工日期',
           dataIndex: 'realContractEndTime',
           key: 'realContractEndTime',
-          width:130,
+          width: 130,
           render(val) {
-            return <span>{val?moment(val).format('YYYY/MM/DD'):''}</span>;
+            return <span>{val ? moment(val).format('YYYY/MM/DD') : ''}</span>;
           },
         },]
     },
@@ -833,7 +952,7 @@ class InfoCard extends Component {
       children: [{
         title: '暂估合同额',
         dataIndex: 'temporarilyPrice',
-        width:150,
+        width: 150,
         render(val) {
           return <span>{val}</span>;
         },
@@ -841,7 +960,7 @@ class InfoCard extends Component {
         {
           title: '有效合同额',
           dataIndex: 'totalPrice',
-          width:150,
+          width: 150,
           render(val) {
             return <span>{val}</span>;
           },
@@ -850,7 +969,7 @@ class InfoCard extends Component {
     {
       title: '项目经理',
       dataIndex: 'manager',
-      width:100,
+      width: 100,
       render(val) {
         return <span>{val ? val[val.length - 1].name : ''}</span>;
       },
@@ -858,14 +977,14 @@ class InfoCard extends Component {
     {
       title: '项目书记',
       dataIndex: 'secretary',
-      width:100,
+      width: 100,
       render(val) {
-        return <span>{val? val[val.length - 1].name : ''}</span>;
+        return <span>{val ? val[val.length - 1].name : ''}</span>;
       },
     },
     {
       title: '总工',
-      width:100,
+      width: 100,
       dataIndex: 'engineer',
       render(val) {
         return <span>{val ? val[val.length - 1].name : ''}</span>;
@@ -873,15 +992,15 @@ class InfoCard extends Component {
     },
     {
       title: '下载信息卡',
-      width:130,
+      width: 130,
       render(val) {
         return <a href={apiDev + PRO_PDF + val.id} download={'信息卡'}>下载</a>;
       },
     },
     {
       title: '操作',
-     // fixed:'right',
-      width:120,
+      // fixed:'right',
+      width: 120,
       render: (val, record) => {
         const user = this.props.app.user
         if (!user.token) {
@@ -909,7 +1028,7 @@ class InfoCard extends Component {
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    this.searchList(null,pagination.current, pagination.pageSize)
+    this.searchList(null, pagination.current, pagination.pageSize)
   };
 
   handleFormReset = () => {
@@ -935,6 +1054,9 @@ class InfoCard extends Component {
     this.setState({
       modalVisible: !!flag,
     });
+    if (!flag) {
+      this.setState({selectedValues: {}})
+    }
   };
 
   handleExportModalVisible = (flag = false) => {
@@ -1000,7 +1122,7 @@ class InfoCard extends Component {
       }).then(res => {
         if (res) {
           this.handleUpdateModalVisible()
-          this.searchList(false,this.exportParams.page,this.exportParams.pageSize)
+          this.searchList(false, this.exportParams.page, this.exportParams.pageSize)
         }
       })
     } else {
@@ -1185,7 +1307,7 @@ class InfoCard extends Component {
                 selectedRows={selectedRows}
                 loading={loading.effects['pro_proInfo/fetch']}
                 data={data}
-                scroll={{x: 1920,y: global._scollY}}
+                scroll={{x: 1920, y: global._scollY}}
                 rowKey="id"
                 bordered
                 columns={this.columns}
@@ -1221,8 +1343,8 @@ class InfoCard extends Component {
     });
   }
 
-  searchList = (e,page = 1, pageSize = 10) => {
-    e&&e.preventDefault?e.preventDefault():null
+  searchList = (e, page = 1, pageSize = 10) => {
+    e && e.preventDefault ? e.preventDefault() : null
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
       //  form.resetFields();
@@ -1248,4 +1370,4 @@ class InfoCard extends Component {
 
 InfoCard.propTypes = {}
 
-export default connect(({app, loading, pro_proInfo}) => ({app,  loading, pro_proInfo}))(InfoCard)
+export default connect(({app, loading, pro_proInfo}) => ({app, loading, pro_proInfo}))(InfoCard)
