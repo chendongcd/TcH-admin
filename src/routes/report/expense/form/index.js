@@ -300,6 +300,16 @@ class CreateForm extends Component {
               </FormItem>
             </Col>
           </Row>
+          <Row gutter={8}>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="合同内计量">
+                {form.getFieldDecorator('totalAmountContract', {
+                  rules: [{required: true, message: '请输入合同内计量'}],
+                  initialValue: selectedValues.totalAmountContract ? selectedValues.totalAmountContract : testValue,
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="元"/>)}
+              </FormItem>
+            </Col>
+          </Row>
         </div>
         <Row align={'middle'} gutter={0} className={styles.titleView}>
           <div className={styles.title}>合同外计日工及赔偿预估金额(元)</div>
@@ -507,7 +517,7 @@ class ExpenseForm extends Component {
       dataIndex: 'dailyPercentage',
       width: 180,
       render:(val)=>{
-        return<span>{fixNumber(val,100)+'%'}</span>
+        return<span>{val?`${fixNumber(val,100)}%`:''}</span>
       }
     },
     {
@@ -515,7 +525,7 @@ class ExpenseForm extends Component {
       dataIndex: 'compensationPercentage',
       width: 180,
       render:(val)=>{
-        return<span>{fixNumber(val,100)+'%'}</span>
+        return<span>{val?`${fixNumber(val,100)}%`:''}</span>
       }
     },
     {
@@ -528,7 +538,7 @@ class ExpenseForm extends Component {
       dataIndex: 'disbursedPercentage',
       width: 180,
       render:(val)=>{
-        return<span>{fixNumber(val,100)+'%'}</span>
+        return<span>{val?`${fixNumber(val,100)}%`:''}</span>
       }
     },
     {
@@ -711,7 +721,9 @@ class ExpenseForm extends Component {
       estimateDisasterDamage: fields.estimateDisasterDamage,
       estimateWorkStop: fields.estimateWorkStop,
       estimateOther: fields.estimateOther,
+      totalAmountContract:fields.totalAmountContract,
     }
+    cleanObject(payload)
     if (updateModalVisible) {
       dispatch({
         type: 'expenseForm/update',
