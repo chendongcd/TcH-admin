@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react'
 import {connect} from 'dva'
-import moment, {isMoment} from 'moment';
+import moment from 'moment';
 
 import {
   Row,
