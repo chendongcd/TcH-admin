@@ -208,7 +208,11 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 11}} wrapperCol={{span: 10}} label="计日工及补偿已拨付金额">
                 {form.getFieldDecorator('amountAlreadyDisbursed', {
-                  rules: [{required: true, message: '请输入计日工及补偿已拨付金额'}],
+                  rules: [{required: true,message: '请输入计日工及补偿已拨付金额(数字)',type:'number',transform(value) {
+                      if(value){
+                        return Number(value);
+                      }
+                    }}],
                   initialValue: selectedValues.amountAlreadyDisbursed ? selectedValues.amountAlreadyDisbursed : testValue,
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="元"/>)}
               </FormItem>
@@ -251,7 +255,11 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="机械台班">
                 {form.getFieldDecorator('mechanicalClass', {
-                  rules: [{required: true, message: '请输入机械台班'}],
+                  rules: [{required: true, message: '请输入机械台班(数字)',type:'number',transform(value) {
+                      if(value){
+                        return Number(value);
+                      }
+                    }}],
                   initialValue: selectedValues.mechanicalClass ? selectedValues.mechanicalClass : testValue,
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="元"/>)}
               </FormItem>
@@ -259,7 +267,11 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="零星用工">
                 {form.getFieldDecorator('sporadicEmployment', {
-                  rules: [{required: true, message: '请输入零星用工'}],
+                  rules: [{required: true, message: '请输入零星用工(数字)',type:'number',transform(value) {
+                      if(value){
+                        return Number(value);
+                      }
+                    }}],
                   initialValue: selectedValues.sporadicEmployment ? selectedValues.sporadicEmployment : testValue,
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter={'元'}/>)}
               </FormItem>
@@ -269,7 +281,11 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="进出场">
                 {form.getFieldDecorator('outIn', {
-                  rules: [{required: true, message: '请输入进出场'}],
+                  rules: [{required: true, message: '请输入进出场(数字)',type:'number',transform(value) {
+                      if(value){
+                        return Number(value);
+                      }
+                    }}],
                   initialValue: selectedValues.outIn ? selectedValues.outIn : testValue,
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="元"/>)}
               </FormItem>
@@ -277,7 +293,11 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="灾损">
                 {form.getFieldDecorator('disasterDamage', {
-                  rules: [{required: true, message: '请输入灾损'}],
+                  rules: [{required: true, message: '请输入灾损(数字)',type:'number',transform(value) {
+                      if(value){
+                        return Number(value);
+                      }
+                    }}],
                   initialValue: selectedValues.disasterDamage ? selectedValues.disasterDamage : testValue,
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="元"/>)}
               </FormItem>
@@ -287,7 +307,11 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="窝工/停工">
                 {form.getFieldDecorator('workStop', {
-                  rules: [{required: true, message: '请输入窝工/停工'}],
+                  rules: [{required: true, message: '请输入窝工/停工(数字)',type:'number',transform(value) {
+                      if(value){
+                        return Number(value);
+                      }
+                    }}],
                   initialValue: selectedValues.workStop ? selectedValues.workStop : testValue,
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="元"/>)}
               </FormItem>
@@ -295,6 +319,11 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="其他">
                 {form.getFieldDecorator('other', {
+                  rules:[{message: '请输入金额(数字)',type:'number',transform(value) {
+                  if(value){
+                  return Number(value);
+                }
+                }}],
                   initialValue: selectedValues.other ? selectedValues.other : testValue,
                 })(<Input disabled={checkDetail} style={{marginTop: 4}}  addonAfter="元"/>)}
               </FormItem>
@@ -304,7 +333,11 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="合同内计量">
                 {form.getFieldDecorator('totalAmountContract', {
-                  rules: [{required: true, message: '请输入合同内计量'}],
+                  rules: [{required: true, message: '请输入合同内计量(数字)',type:'number',transform(value) {
+                      if(value){
+                        return Number(value);
+                      }
+                    }}],
                   initialValue: selectedValues.totalAmountContract ? selectedValues.totalAmountContract : testValue,
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="元"/>)}
               </FormItem>
@@ -319,7 +352,11 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="机械台班">
                 {form.getFieldDecorator('estimateMechanicalClass', {
-                  rules: [{required: true, message: '请输入机械台班'}],
+                  rules: [{required: true, message: '请输入机械台班(数字)',type:'number',transform(value) {
+                  if(value){
+                  return Number(value);
+                }
+                }}],
                   initialValue: selectedValues.estimateMechanicalClass ? selectedValues.estimateMechanicalClass : testValue,
                 })(<Input disabled={checkDetail} style={{marginTop: 4}}  addonAfter="元"/>)}
               </FormItem>
@@ -327,7 +364,11 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="零星用工">
                 {form.getFieldDecorator('estimateSporadicEmployment', {
-                  rules: [{required: true, message: '请输入零星用工'}],
+                  rules: [{required: true, message: '请输入零星用工(元)',type:'number',transform(value) {
+                      if(value){
+                        return Number(value);
+                      }
+                    }}],
                   initialValue: selectedValues.estimateSporadicEmployment ? selectedValues.estimateSporadicEmployment : testValue,
                 })(<Input disabled={checkDetail} style={{marginTop: 4}}  addonAfter={'元'}/>)}
               </FormItem>
@@ -337,7 +378,11 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="进出场">
                 {form.getFieldDecorator('estimateOutIn', {
-                  rules: [{required: true, message: '请输入进出场'}],
+                  rules: [{required: true, message: '请输入进出场(元)',type:'number',transform(value) {
+                      if(value){
+                        return Number(value);
+                      }
+                    }}],
                   initialValue: selectedValues.estimateOutIn ? selectedValues.estimateOutIn : testValue,
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="元"/>)}
               </FormItem>
@@ -345,7 +390,11 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="灾损">
                 {form.getFieldDecorator('estimateDisasterDamage', {
-                  rules: [{required: true, message: '请输入灾损'}],
+                  rules: [{required: true, message: '请输入灾损(元)',type:'number',transform(value) {
+                      if(value){
+                        return Number(value);
+                      }
+                    }}],
                   initialValue: selectedValues.estimateDisasterDamage ? selectedValues.estimateDisasterDamage : testValue,
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="元"/>)}
               </FormItem>
@@ -355,7 +404,11 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="窝工/停工">
                 {form.getFieldDecorator('estimateWorkStop', {
-                  rules: [{required: true, message: '请输入窝工/停工'}],
+                  rules: [{required: true, message: '请输入窝工/停工(元)',type:'number',transform(value) {
+                      if(value){
+                        return Number(value);
+                      }
+                    }}],
                   initialValue: selectedValues.estimateWorkStop ? selectedValues.estimateWorkStop : testValue,
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="元"/>)}
               </FormItem>
@@ -363,6 +416,11 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="其他">
                 {form.getFieldDecorator('estimateOther', {
+                  rules:[{message:'请输入金额(数字)',type:'number',transform(value) {
+                  if(value){
+                  return Number(value);
+                }
+                }}],
                   initialValue: selectedValues.estimateOther ? selectedValues.estimateOther : testValue,
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="元"/>)}
               </FormItem>
