@@ -17,6 +17,7 @@ export default {
       const response = yield call(queryLossList, payload,token);
       if(response.code == '200'){
         if(response.list.length>0){
+          response.list = global.calcuIndex(response)
           if(global._getTotalPage(response.pagination.total)===response.pagination.current){
             yield put({
               type:'fetchSum',

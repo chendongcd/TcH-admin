@@ -188,7 +188,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 11}} wrapperCol={{span: 13}} label="本年截至本期完成产值">
                 {form.getFieldDecorator('currentProductionValue', {
                   rules: [{required: true, message: '请输入截至本期完成产值'}],
-                  initialValue: global._checkNum(selectedValues.currentProductionValue,testValue),
+                  initialValue: global._checkNum(selectedValues.currentProductionValue),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>
@@ -203,7 +203,7 @@ class CreateForm extends Component {
             <FormItem labelCol={{span: 13}} wrapperCol={{span: 11}} label="上年末已完工本年计价">
               {form.getFieldDecorator('halfCompletedValue', {
                 rules: [{required: true, message: '请输入上年末已完工本年计价'}],
-                initialValue: global._checkNum(selectedValues.halfCompletedValue,testValue),
+                initialValue: global._checkNum(selectedValues.halfCompletedValue),
               })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万元"/>)}
             </FormItem>
           </Col>
@@ -211,7 +211,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 13}} wrapperCol={{span: 11}} label="当年完成产值当年验工计价">
                 {form.getFieldDecorator('oneCompletedValue', {
                   rules: [{required: true, message: '请输入当年完成产值当年验工计价'}],
-                  initialValue: global._checkNum(selectedValues.oneCompletedValue,testValue),
+                  initialValue: global._checkNum(selectedValues.oneCompletedValue),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>
@@ -221,7 +221,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 13}} wrapperCol={{span: 11}} label="小计" addonAfter={'万元'}>
                 {form.getFieldDecorator('sumHalfOne', {
                   rules: [{required: true, message: '请输入小计'}],
-                  initialValue: global._checkNum(selectedValues.sumHalfOne,testValue),
+                  initialValue: global._checkNum(selectedValues.sumHalfOne),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>
@@ -229,7 +229,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 11}} wrapperCol={{span: 10}} label="变更索赔预计额" addonAfter={'万元'}>
                 {form.getFieldDecorator('changeValue', {
                   rules: [{required: true, message: '请输入变更索赔预计额'}],
-                  initialValue:  global._checkNum(selectedValues.changeValue,testValue),
+                  initialValue:  global._checkNum(selectedValues.changeValue),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>
@@ -244,7 +244,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 13}} wrapperCol={{span: 11}} label="开累完成产值">
                 {form.getFieldDecorator('completedValue', {
                   rules: [{required: true, message: '请输入开累完成产值'}],
-                  initialValue: global._checkNum(selectedValues.completedValue,testValue),
+                  initialValue: global._checkNum(selectedValues.completedValue),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}}  addonAfter={'万元'}/>)}
               </FormItem>
             </Col>
@@ -252,7 +252,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 13}} wrapperCol={{span: 11}} label="开累验工计价">
                 {form.getFieldDecorator('inspection', {
                   rules: [{required: true, message: '请输入开累验工计价'}],
-                  initialValue: global._checkNum(selectedValues.inspection, testValue),
+                  initialValue: global._checkNum(selectedValues.inspection),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>
@@ -267,7 +267,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 13}} wrapperCol={{span: 11}} label="其中:合同内应计未计">
                 {form.getFieldDecorator('finalPeriodShould', {
                   rules: [{required: true, message: '请输入合同内应计未计'}],
-                  initialValue: global._checkNum(selectedValues.finalPeriodShould, testValue),
+                  initialValue: global._checkNum(selectedValues.finalPeriodShould),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}}  addonAfter={'万元'}/>)}
               </FormItem>
             </Col>
@@ -275,7 +275,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 13}} wrapperCol={{span: 11}} label="其中:变更索赔预计额">
                 {form.getFieldDecorator('finalPeriodChange', {
                   rules: [{required: true, message: '请输入变更索赔预计额'}],
-                  initialValue: global._checkNum(selectedValues.finalPeriodChange, testValue),
+                  initialValue: global._checkNum(selectedValues.finalPeriodChange),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}}  addonAfter={'万元'}/>)}
               </FormItem>
             </Col>
@@ -285,7 +285,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 13}} wrapperCol={{span: 11}} label="小计">
                 {form.getFieldDecorator('sumFinalPeriod', {
                   rules: [{required: true,message: '请输入小计'}],
-                  initialValue: global._checkNum(selectedValues.sumFinalPeriod, testValue),
+                  initialValue: global._checkNum(selectedValues.sumFinalPeriod),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}}  addonAfter={'万元'}/>)}
               </FormItem>
             </Col>

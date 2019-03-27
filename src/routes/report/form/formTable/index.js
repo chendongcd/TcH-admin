@@ -11,7 +11,7 @@ import {
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-import {getButtons, cleanObject,getPage} from 'utils'
+import {getButtons, cleanObject,getPage,fixNumber} from 'utils'
 import {ENGINEER_STAT_EXPORT} from 'common/urls'
 import {createURL} from 'services/app'
 
@@ -76,14 +76,14 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="施工产值">
                 {form.getFieldDecorator('constructionOutputValueStatistics', {
-                  initialValue: selectedValues.constructionOutputValueStatistics ? selectedValues.constructionOutputValueStatistics : '',
+                  initialValue: global._checkNum(selectedValues.constructionOutputValueStatistics),
                 })(<Input disabled={checkDetail} style={{marginTop:4}} addonAfter={'万'}/>)}
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="变更索赔额">
                 {form.getFieldDecorator('changeClaimAmountStatistics', {
-                  initialValue: selectedValues.changeClaimAmountStatistics ? selectedValues.changeClaimAmountStatistics : '',
+                  initialValue: global._checkNum(selectedValues.changeClaimAmountStatistics),
                 })(<Input disabled={checkDetail} style={{marginTop:4}} addonAfter={'万'}/>)}
               </FormItem>
             </Col>
@@ -92,7 +92,7 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="合同金额">
                 {form.getFieldDecorator('temporarilyPriceStatistics', {
-                  initialValue: selectedValues.temporarilyPriceStatistics ? selectedValues.temporarilyPriceStatistics : '',
+                  initialValue: global._checkNum(selectedValues.temporarilyPriceStatistics),
                 })(<Input disabled={checkDetail} style={{marginTop:4}} addonAfter={'万'}/>)}
               </FormItem>
             </Col>
@@ -164,7 +164,7 @@ class ReportFormTable extends Component {
       title: '变更索赔率',
       dataIndex: 'percentageStatistics',
       render:(val)=>{
-        return<span>{isNaN(val)?'':(val*100).toFixed(2)}</span>
+        return<span>{`${fixNumber(val,100)}%`}</span>
       },
       width: 120
     },

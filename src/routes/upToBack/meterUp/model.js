@@ -18,12 +18,13 @@ export default {
       const response = yield call(queryUpList, payload, token);
       if (response.code == '200') {
         if (response.list.length > 0) {
-          if (response.pagination.total===0||(global._getTotalPage(response.pagination.total) === response.pagination.current)) {
+          response.list = global.calcuIndex(response)
+          if (response.pagination.total === 0 || (global._getTotalPage(response.pagination.total) === response.pagination.current)) {
             yield put({
               type: 'fetchSum',
               payload: payload,
               token: token,
-              list:response.list.length
+              list: response.list.length
             })
           }
         }
@@ -37,13 +38,13 @@ export default {
         return false
       }
     },
-    * fetchSum({payload, token,list}, {call, put, select}) {
+    * fetchSum({payload, token, list}, {call, put, select}) {
       const response = yield call(querySum, payload, token);
       if (response.code == '200') {
         const data = yield (select(_ => _.meterUp.data))
         let sum = {
-          payProportion: response.entity.percentagePayProportion/100,
-          productionValue: response.entity.percentageProductionValue/100,
+          payProportion: response.entity.percentagePayProportion / 100,
+          productionValue: response.entity.percentageProductionValue / 100,
           id: '合计:',
           prepaymentAmount: response.entity.sumPrepaymentAmount,
           valuationAmountTax: response.entity.sumTaxAmount,
@@ -56,15 +57,15 @@ export default {
           extraAmount: response.entity.sumExtraAmount
         }
         for (let a in sum) {
-          if (sum[a] && !isNaN(sum[a]) && a !== 'payProportion'&& a !== 'productionValue') {
+          if (sum[a] && !isNaN(sum[a]) && a !== 'payProportion' && a !== 'productionValue') {
             sum[a] = Number.isInteger(Number(sum[a])) ? Number(sum[a]) : Number(sum[a]).toFixed(2)
           }
         }
         data.list = [...data.list, sum]
-        if(list===10) {
+        if (list === 10) {
           data.pagination.pageSize = data.pagination.pageSize + 1
         }
-          yield put({
+        yield put({
           type: 'save',
           payload: data,
         });

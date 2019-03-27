@@ -19,6 +19,7 @@ export default {
     * fetch({payload,token}, {call, put}) {
       const response = yield call(queryResList, payload,token);
       if (response.code == '200') {
+        response.list = global.calcuIndex(response)
         yield put({
           type: 'save',
           payload: response,

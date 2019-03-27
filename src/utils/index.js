@@ -193,5 +193,11 @@ export function cloneObject(obj){
 }
 
 export function fixNumber(val,rate=1,points=2) {
+  if(val===0){
+    return 0
+  }
+  if(!val){
+    return ''
+  }
   return Number.isInteger(val * rate)?(val*rate):(val*rate).toFixed(points)
 }
