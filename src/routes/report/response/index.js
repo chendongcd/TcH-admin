@@ -154,7 +154,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 8}} wrapperCol={{span: 12}} label="调整后合同额(不含税)">
                 {form.getFieldDecorator('contractPrice', {
                   rules: [{required: true, message: '调整后合同额(不含税)'}],
-                  initialValue: selectedValues.contractPrice ? selectedValues.contractPrice : testValue,
+                  initialValue: global._checkNum(selectedValues.contractPrice),
                 })(<Input disabled={checkDetail} addonAfter={'万'}/>)}
               </FormItem>
             </Col>

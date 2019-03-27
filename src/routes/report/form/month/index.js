@@ -121,7 +121,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="施工产值">
                 {form.getFieldDecorator('constructionOutputValue', {
                   rules: [{required: true, message: '请输入施工产值'}],
-                  initialValue: selectedValues.constructionOutputValue ? selectedValues.constructionOutputValue : '',
+                  initialValue: global._checkNum(selectedValues.constructionOutputValue),
                 })(<Input disabled={checkDetail} style={{marginTop:4}} addonAfter={'万'} placeholder={'请输入施工产值'}/>)}
               </FormItem>
             </Col>
@@ -129,7 +129,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="变更索赔额">
                 {form.getFieldDecorator('changeClaimAmount', {
                   rules: [{required: true, message: '请输入变更索赔额'}],
-                  initialValue: selectedValues.changeClaimAmount ? selectedValues.changeClaimAmount : '',
+                  initialValue: global._checkNum(selectedValues.changeClaimAmount),
                 })(<Input disabled={checkDetail} style={{marginTop:4}} addonAfter={'万'} placeholder={'请输入变更索赔额'}/>)}
               </FormItem>
             </Col>
@@ -138,7 +138,7 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="合同金额">
                 {form.getFieldDecorator('temporarilyPrice', {
-                  initialValue: selectedValues.temporarilyPrice ? selectedValues.temporarilyPrice : '',
+                  initialValue: global._checkNum(selectedValues.temporarilyPrice),
                 })(<Input disabled={checkDetail} style={{marginTop:4}} addonAfter={'万'}/>)}
               </FormItem>
             </Col>

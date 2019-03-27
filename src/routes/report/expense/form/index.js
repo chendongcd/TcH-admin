@@ -213,7 +213,7 @@ class CreateForm extends Component {
                         return Number(value);
                       }
                     }}],
-                  initialValue: selectedValues.amountAlreadyDisbursed ? selectedValues.amountAlreadyDisbursed : testValue,
+                  initialValue: global._checkNum(selectedValues.amountAlreadyDisbursed),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="元"/>)}
               </FormItem>
             </Col>
@@ -260,7 +260,7 @@ class CreateForm extends Component {
                         return Number(value);
                       }
                     }}],
-                  initialValue: selectedValues.mechanicalClass ? selectedValues.mechanicalClass : testValue,
+                  initialValue: global._checkNum(selectedValues.mechanicalClass),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="元"/>)}
               </FormItem>
             </Col>
@@ -272,7 +272,7 @@ class CreateForm extends Component {
                         return Number(value);
                       }
                     }}],
-                  initialValue: selectedValues.sporadicEmployment ? selectedValues.sporadicEmployment : testValue,
+                  initialValue: global._checkNum(selectedValues.sporadicEmployment),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter={'元'}/>)}
               </FormItem>
             </Col>
@@ -286,7 +286,7 @@ class CreateForm extends Component {
                         return Number(value);
                       }
                     }}],
-                  initialValue: selectedValues.outIn ? selectedValues.outIn : testValue,
+                  initialValue: global._checkNum(selectedValues.outIn),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="元"/>)}
               </FormItem>
             </Col>
@@ -298,7 +298,7 @@ class CreateForm extends Component {
                         return Number(value);
                       }
                     }}],
-                  initialValue: selectedValues.disasterDamage ? selectedValues.disasterDamage : testValue,
+                  initialValue: global._checkNum(selectedValues.disasterDamage),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="元"/>)}
               </FormItem>
             </Col>
@@ -312,7 +312,7 @@ class CreateForm extends Component {
                         return Number(value);
                       }
                     }}],
-                  initialValue: selectedValues.workStop ? selectedValues.workStop : testValue,
+                  initialValue: global._checkNum(selectedValues.workStop),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="元"/>)}
               </FormItem>
             </Col>
@@ -324,7 +324,7 @@ class CreateForm extends Component {
                   return Number(value);
                 }
                 }}],
-                  initialValue: selectedValues.other ? selectedValues.other : testValue,
+                  initialValue: global._checkNum(selectedValues.other),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}}  addonAfter="元"/>)}
               </FormItem>
             </Col>
@@ -338,7 +338,7 @@ class CreateForm extends Component {
                         return Number(value);
                       }
                     }}],
-                  initialValue: selectedValues.totalAmountContract ? selectedValues.totalAmountContract : testValue,
+                  initialValue: global._checkNum(selectedValues.totalAmountContract),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="元"/>)}
               </FormItem>
             </Col>
@@ -357,7 +357,7 @@ class CreateForm extends Component {
                   return Number(value);
                 }
                 }}],
-                  initialValue: selectedValues.estimateMechanicalClass ? selectedValues.estimateMechanicalClass : testValue,
+                  initialValue: global._checkNum(selectedValues.estimateMechanicalClass),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}}  addonAfter="元"/>)}
               </FormItem>
             </Col>
@@ -369,7 +369,7 @@ class CreateForm extends Component {
                         return Number(value);
                       }
                     }}],
-                  initialValue: selectedValues.estimateSporadicEmployment ? selectedValues.estimateSporadicEmployment : testValue,
+                  initialValue: global._checkNum(selectedValues.estimateSporadicEmployment),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}}  addonAfter={'元'}/>)}
               </FormItem>
             </Col>
@@ -383,7 +383,7 @@ class CreateForm extends Component {
                         return Number(value);
                       }
                     }}],
-                  initialValue: selectedValues.estimateOutIn ? selectedValues.estimateOutIn : testValue,
+                  initialValue: global._checkNum(selectedValues.estimateOutIn),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="元"/>)}
               </FormItem>
             </Col>
@@ -395,7 +395,7 @@ class CreateForm extends Component {
                         return Number(value);
                       }
                     }}],
-                  initialValue: selectedValues.estimateDisasterDamage ? selectedValues.estimateDisasterDamage : testValue,
+                  initialValue: global._checkNum(selectedValues.estimateDisasterDamage),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="元"/>)}
               </FormItem>
             </Col>
@@ -409,7 +409,7 @@ class CreateForm extends Component {
                         return Number(value);
                       }
                     }}],
-                  initialValue: selectedValues.estimateWorkStop ? selectedValues.estimateWorkStop : testValue,
+                  initialValue: global._checkNum(selectedValues.estimateWorkStop),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="元"/>)}
               </FormItem>
             </Col>
@@ -421,7 +421,7 @@ class CreateForm extends Component {
                   return Number(value);
                 }
                 }}],
-                  initialValue: selectedValues.estimateOther ? selectedValues.estimateOther : testValue,
+                  initialValue: global._checkNum(selectedValues.estimateOther),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="元"/>)}
               </FormItem>
             </Col>
@@ -575,7 +575,7 @@ class ExpenseForm extends Component {
       dataIndex: 'dailyPercentage',
       width: 180,
       render:(val)=>{
-        return<span>{val?`${fixNumber(val,100)}%`:''}</span>
+        return<span>{`${fixNumber(val,100)}%`}</span>
       }
     },
     {
@@ -583,7 +583,7 @@ class ExpenseForm extends Component {
       dataIndex: 'compensationPercentage',
       width: 180,
       render:(val)=>{
-        return<span>{val?`${fixNumber(val,100)}%`:''}</span>
+        return<span>{`${fixNumber(val,100)}%`}</span>
       }
     },
     {
@@ -596,7 +596,7 @@ class ExpenseForm extends Component {
       dataIndex: 'disbursedPercentage',
       width: 180,
       render:(val)=>{
-        return<span>{val?`${fixNumber(val,100)}%`:''}</span>
+        return<span>{`${fixNumber(val,100)}%`}</span>
       }
     },
     {
