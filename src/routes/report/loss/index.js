@@ -54,6 +54,11 @@ class CreateForm extends Component {
   cleanState = () => {
   }
 
+  onSelect=(item)=>{
+    const contractPrice = item.props.item.contractPrice?item.props.item.contractPrice:''
+    this.props.form.setFieldsValue({'temporarilyPrice': contractPrice})
+  }
+
   componentWillUnmount() {
   }
 
@@ -83,6 +88,7 @@ class CreateForm extends Component {
                   initialValue: selectedValues.projectId ? selectedValues.projectId : '',
                 })(<Select className={styles.customSelect}
                            showSearch={true}
+                           onSelect={(value,item) => this.onSelect(item)}
                            optionFilterProp={'name'}
                            disabled={checkDetail}
                            style={{width: '100%'}}>
@@ -97,7 +103,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('temporarilyPrice', {
                   rules: [{required: true, message: '请输入合同金额(万元)'}],
                   initialValue: global._checkNum(selectedValues.temporarilyPrice),
-                })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="万元"/>)}
+                })(<Input disabled={true} style={{marginTop: 4}} addonAfter="万元"/>)}
               </FormItem>
             </Col>
           </Row>
@@ -119,9 +125,9 @@ class CreateForm extends Component {
           <Row gutter={8}>
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 6}} wrapperCol={{span: 15}} label="已计价">
-                {form.getFieldDecorator('alreadyPrice', {
+                {form.getFieldDecorator('alreadyPriced', {
                   rules: [{required: true, message: '请输入已计价'}],
-                  initialValue: global._checkNum(selectedValues.alreadyPrice),
+                  initialValue: global._checkNum(selectedValues.alreadyPriced),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入已计价" addonAfter="万元"/>)}
               </FormItem>
             </Col>
@@ -254,7 +260,7 @@ class LossForm extends Component {
   columns = [
     {
       title: '序号',
-      dataIndex: 'id',
+      dataIndex: 'ids',
      // fixed: 'left',
       width: 100
     },
@@ -282,7 +288,7 @@ class LossForm extends Component {
       children: [
         {
           title: '已计价',
-          dataIndex: 'alreadyPrice',
+          dataIndex: 'alreadyPriced',
           width: 100,
         },
         {
@@ -400,7 +406,7 @@ class LossForm extends Component {
       width: 120,
       //fixed: 'right',
       render: (val, record) => {
-        if (record.id == '合计:') {
+        if (record.ids === '合计:') {
           return null
         }
         const user = this.props.app.user
@@ -485,7 +491,7 @@ class LossForm extends Component {
     const payload = {
       projectId: fields.projectId,
       temporarilyPrice: fields.temporarilyPrice,
-      alreadyPrice: fields.alreadyPrice,
+      alreadyPriced: fields.alreadyPriced,
       unPriced: fields.unPriced,
       confirmPriced: fields.confirmPriced,
       inBookCost: fields.inBookCost,
@@ -497,6 +503,7 @@ class LossForm extends Component {
       remark: fields.remark,
       other: fields.other,
     }
+    console.log(payload)
     if (updateModalVisible) {
       dispatch({
         type: 'lossForm/update',
@@ -626,7 +633,7 @@ class LossForm extends Component {
                 loading={loading.effects['lossForm/fetch']}
                 bordered
                 data={data}
-                rowKey={'id'}
+                rowKey={'ids'}
                 scroll={{x: 3010, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}

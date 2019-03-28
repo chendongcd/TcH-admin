@@ -179,7 +179,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="预付款">
                 {form.getFieldDecorator('prepaymentAmount', {
                   rules: [{required: true, message: '请输入预付款'}],
-                  initialValue: selectedValues.prepaymentAmount ? selectedValues.prepaymentAmount : testValue,
+                  initialValue: global._checkNum(selectedValues.prepaymentAmount),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入预付款" addonAfter="元"/>)}
               </FormItem>
             </Col>
@@ -194,7 +194,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="含税金额">
                 {form.getFieldDecorator('valuationAmountTax', {
                   rules: [{required: true, message: '请输入含税金额'}],
-                  initialValue: selectedValues.valuationAmountTax ? selectedValues.valuationAmountTax : testValue,
+                  initialValue: global._checkNum(selectedValues.valuationAmountTax),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入含税金额" addonAfter="元"/>)}
               </FormItem>
             </Col>
@@ -217,7 +217,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="含税金额">
                 {form.getFieldDecorator('realAmountTax', {
                   rules: [{required: true, message: '请输入含税金额'}],
-                  initialValue: selectedValues.realAmountTax ? selectedValues.realAmountTax : testValue,
+                  initialValue: global._checkNum(selectedValues.realAmountTax),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入含税金额" addonAfter="元"/>)}
               </FormItem>
             </Col>
@@ -233,7 +233,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="已支付金额">
                 {form.getFieldDecorator('alreadyPaidAmount', {
                   rules: [{required: true, message: '请输入已支付金额'}],
-                  initialValue: selectedValues.alreadyPaidAmount ? selectedValues.alreadyPaidAmount : testValue,
+                  initialValue: global._checkNum(selectedValues.alreadyPaidAmount),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入已支付金额" addonAfter="元"/>)}
               </FormItem>
             </Col>
@@ -252,7 +252,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="超计价金额">
                 {form.getFieldDecorator('extraAmount', {
                   rules: [{required: true, message: '请输入超计价金额'}],
-                  initialValue: selectedValues.extraAmount ? selectedValues.extraAmount : testValue,
+                  initialValue: global._checkNum(selectedValues.extraAmount),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入超计价金额" addonAfter="元"/>)}
               </FormItem>
             </Col>
@@ -260,7 +260,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 7}} wrapperCol={{span: 15}} label="已完未计价金额">
                 {form.getFieldDecorator('notCalculatedAmount', {
                   rules: [{required: true, message: '请输入已完未计价金额'}],
-                  initialValue: selectedValues.notCalculatedAmount ? selectedValues.notCalculatedAmount : testValue,
+                  initialValue: global._checkNum(selectedValues.notCalculatedAmount),
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入已完未计价金额" addonAfter="元"/>)}
               </FormItem>
             </Col>
@@ -392,7 +392,7 @@ class MeterUp extends Component {
       title: '序号',
      // fixed: 'left',
       width: 100,
-      dataIndex: 'id',
+      dataIndex: 'ids',
     },
     {
       title: '项目名称',
@@ -513,7 +513,7 @@ class MeterUp extends Component {
       //fixed: 'right',
       width: 200,
       render: (val, record) => {
-        if (record.id === '合计:') {
+        if (record.ids === '合计:') {
           return null
         }
         const user = this.props.app.user
@@ -803,7 +803,7 @@ class MeterUp extends Component {
                 loading={loading.effects['meterUp/fetch']}
                 bordered
                 data={data}
-                rowKey={'id'}
+                rowKey={'ids'}
                 scroll={{x: 2420, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}

@@ -320,7 +320,7 @@ class Confirmation extends Component {
   columns = [
     {
       title: '序号',
-      dataIndex: 'id',
+      dataIndex: 'ids',
      // fixed: 'left',
       width: 100
     },
@@ -449,7 +449,7 @@ class Confirmation extends Component {
       width: 120,
       //fixed: 'right',
       render: (val, record) => {
-        if (record.id == '总计:') {
+        if (record.ids === '总计:') {
           return null
         }
         const user = this.props.app.user
@@ -670,7 +670,7 @@ class Confirmation extends Component {
                 loading={loading.effects['confirmation/fetch']}
                 bordered
                 data={data}
-                rowKey={'id'}
+                rowKey={'ids'}
                 scroll={{x:2940, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}

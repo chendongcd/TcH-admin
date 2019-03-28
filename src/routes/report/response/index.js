@@ -690,7 +690,7 @@ class Response extends Component {
   columns = [
     {
       title: '序号',
-      dataIndex: 'id',
+      dataIndex: 'ids',
       width: 80
       // fixed: 'left',
       //width: 100,
@@ -910,6 +910,9 @@ class Response extends Component {
       // fixed:'right',
       width: 120,
       render: (val, record) => {
+        if (record.ids === '合计:') {
+          return null
+        }
         const user = this.props.app.user
         if (!user.token) {
           return null
@@ -1032,6 +1035,7 @@ class Response extends Component {
       remark: fields.remark
     }
     cleanObject(payload)
+    console.log(payload)
     if (updateModalVisible) {
       dispatch({
         type: 'response/update',
@@ -1163,7 +1167,7 @@ class Response extends Component {
                 loading={loading.effects['response/fetch']}
                 bordered
                 data={data}
-                rowKey={'id'}
+                rowKey={'ids'}
                 scroll={{x: 4560, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}

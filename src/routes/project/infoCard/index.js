@@ -881,7 +881,7 @@ class InfoCard extends Component {
   columns = [
     {
       title: '序号',
-      dataIndex: 'id',
+      dataIndex: 'ids',
       width: 100,
       //fixed: 'left'
     },
@@ -1002,6 +1002,9 @@ class InfoCard extends Component {
       // fixed:'right',
       width: 120,
       render: (val, record) => {
+        if (record.ids === '合计:') {
+          return null
+        }
         const user = this.props.app.user
         if (!user.token) {
           return null
@@ -1308,7 +1311,7 @@ class InfoCard extends Component {
                 loading={loading.effects['pro_proInfo/fetch']}
                 data={data}
                 scroll={{x: 1920, y: global._scollY}}
-                rowKey="id"
+                rowKey="ids"
                 bordered
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}

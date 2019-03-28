@@ -42,7 +42,7 @@ export default {
       if (response.code == '200') {
         const data = yield (select(_ => _.lossForm.data))
         let sum = {
-          id: '合计:',
+          ids: '合计:',
           alreadyPriced: response.entity.sumAlreadyPriced,
           confirmPriced: response.entity.sumConfirmPriced,
           confirmedNetProfit: response.entity.sumConfirmedNetProfit,

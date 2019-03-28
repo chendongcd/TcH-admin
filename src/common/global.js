@@ -20,7 +20,7 @@ export default ()=> {
     const  {list,pagination:{total,current,pageSize}} = response
     const max = total-(current-1)*pageSize
     return list.map((record,index)=>{
-      record.id = max-Number(index)
+      record.ids = max-Number(index)
       return record
     })
     //return max-index+1

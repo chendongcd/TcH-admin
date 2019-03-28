@@ -45,7 +45,7 @@ export default {
       if (response.code == '200') {
         const data = yield (select(_ => _.expenseForm.data))
         let sum = {
-          id: '合计:',
+          ids: '合计:',
           totalAmountContract: response.entity.sumTotalAmountContract,
           mechanicalClass: response.entity.sumMechanicalClass,
           sporadicEmployment: response.entity.sumSporadicEmployment,

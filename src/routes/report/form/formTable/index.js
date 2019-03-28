@@ -356,7 +356,7 @@ class ReportFormTable extends Component {
                 loading={loading.effects['reportFormTable/fetch']}
                 bordered
                 data={data}
-                rowKey={'id'}
+                rowKey={'projectName'}
                 scroll={{x:1070, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}

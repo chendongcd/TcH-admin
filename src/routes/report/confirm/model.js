@@ -18,6 +18,7 @@ export default {
       const response = yield call(queryConfirm, payload,token);
       if(response.code == '200'){
         if(response.list.length>0){
+          response.list = global.calcuIndex(response)
           if(global._getTotalPage(response.pagination.total)===response.pagination.current){
             yield put({
               type:'fetchSum',
@@ -42,7 +43,7 @@ export default {
       if (response.code == '200') {
         const data = yield (select(_ => _.confirmation.data))
         let sum = {
-          id: '合计:',
+          ids: '合计:',
           balanceChange: response.entity.sumBalanceChange,
           balanceCompleteValue: response.entity.sumBalanceCompleteValue,
           balanceInspectionValue: response.entity.sumBalanceInspectionValue,

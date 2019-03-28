@@ -222,7 +222,7 @@ class FileRead extends Component {
     {
       title: '序号',
       width:100,
-      dataIndex: 'id',
+      dataIndex: 'ids',
     },
     {
       title: '文件名称',
@@ -258,6 +258,9 @@ class FileRead extends Component {
     {
       title: '操作',
       render: (val, record) => {
+        if (record.ids === '合计:') {
+          return null
+        }
         const user = this.props.app.user
         if (!user.token) {
           return null
@@ -476,7 +479,7 @@ class FileRead extends Component {
                 data={data}
                 scroll={{y: global._scollY}}
                 bordered
-                rowKey={'id'}
+                rowKey={'ids'}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
