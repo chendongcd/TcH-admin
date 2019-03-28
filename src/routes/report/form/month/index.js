@@ -192,7 +192,7 @@ class ReportForm extends Component {
   columns = [
     {
       title: '序号',
-      dataIndex: 'id',
+      dataIndex: 'ids',
       //fixed: 'left',
       width: 100
     },
@@ -248,7 +248,7 @@ class ReportForm extends Component {
       title: '操作',
       width: 120,
       render: (val, record) => {
-        if (record.id == '合计:') {
+        if (record.ids === '合计:') {
           return null
         }
         const user = this.props.app.user
@@ -467,7 +467,7 @@ class ReportForm extends Component {
                 loading={loading.effects['reportForm/fetch']}
                 bordered
                 data={data}
-                rowKey={'id'}
+                rowKey={'ids'}
                 scroll={{x: 1520, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}

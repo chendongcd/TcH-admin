@@ -47,11 +47,10 @@ export default {
       if (response.code == '200') {
         const data = yield (select(_ => _.meterDown.data))
         let sum = {
-          id: '合计:',
+          ids: '合计:',
           valuationPrice: response.entity.sumValuationPrice,
           endedPrice: response.entity.sumEndedPrice,
           underRate: response.entity.percentage/100,
-          code: '合计:',
           valuationPriceReduce: response.entity.sumValuationPriceReduce,
           warranty: response.entity.sumWarranty,
           performanceBond: response.entity.sumPerformanceBond,

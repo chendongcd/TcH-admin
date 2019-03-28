@@ -45,7 +45,7 @@ export default {
         let sum = {
           payProportion: response.entity.percentagePayProportion / 100,
           productionValue: response.entity.percentageProductionValue / 100,
-          id: '合计:',
+          ids: '合计:',
           prepaymentAmount: response.entity.sumPrepaymentAmount,
           valuationAmountTax: response.entity.sumTaxAmount,
           valuationAmountNotTax: response.entity.sumAmountNotTax,

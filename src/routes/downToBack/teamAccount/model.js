@@ -42,11 +42,10 @@ export default {
     },
     * fetchSum({payload, token,list}, {call, put,select}) {
       const response = yield call(querySum, payload, token);
-      console.log(response)
       if (response.code == '200') {
         const data = yield (select(_ => _.teamAccount.data))
         let sum = {
-          id: '合计:',
+          ids: '合计:',
           estimatedContractAmount: response.entity.sumEstimatedContractAmount,
           realAmount: response.entity.sumRealAmount,
           settlementAmount: response.entity.sumSettlementAmount,

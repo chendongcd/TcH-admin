@@ -379,7 +379,7 @@ class Daily extends Component {
                 loading={loading.effects['expenseDaily/fetch']}
                 bordered
                 data={data}
-                rowKey={'id'}
+                rowKey={'projectName'}
                 scroll={{x: 1480, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}

@@ -188,7 +188,8 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('projectId', {
                   rules: [{required: true, message: '请选择项目'}],
                   initialValue: selectedValues.projectId ? selectedValues.projectId : '',
-                })(<Select className={styles.customSelect} onSelect={(value) => this.handleAmount(value, 0)}
+                })(<Select className={styles.customSelect}
+                           onSelect={(value) => this.handleAmount(value, 0)}
                            showSearch={true} optionFilterProp={'name'}
                            disabled={checkDetail} placeholder="请选择" style={{width: '100%'}}>
                   {proNames.map((item, index) => {
@@ -479,7 +480,7 @@ class MeterDown extends Component {
     {
       title: '序号',
       width:100,
-      dataIndex: 'id',
+      dataIndex: 'ids',
      // fixed: 'left'
     },
     {
@@ -639,7 +640,7 @@ class MeterDown extends Component {
       width: 120,
     //  fixed: 'right',
       render: (val, record) => {
-        if (record.id == '合计:') {
+        if (record.ids === '合计:') {
           return null
         }
         const user = this.props.app.user
@@ -913,7 +914,7 @@ class MeterDown extends Component {
                 loading={loading.effects['meterDown/fetch']}
                 bordered
                 data={data}
-                rowKey={'id'}
+                rowKey={'ids'}
                 scroll={{x: 2600,y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}

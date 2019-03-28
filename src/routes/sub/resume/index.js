@@ -216,7 +216,7 @@ class Resume extends Component {
   columns = [
     {
       title:'序号',
-      dataIndex:'id',
+      dataIndex:'ids',
       width:100,
       //fixed:'left'
     },
@@ -298,6 +298,9 @@ class Resume extends Component {
       width:200,
       //fixed:'right',
       render: (val, record) => {
+        if (record.ids === '合计:') {
+          return null
+        }
         const user = this.props.app.user
         if (!user.token) {
           return null
@@ -577,7 +580,7 @@ class Resume extends Component {
                 loading={loading.effects['sub_resume/fetch']}
                 bordered
                 filterMultiple={false}
-                rowKey={'id'}
+                rowKey={'ids'}
                 data={data}
                 scroll={{x: 2200,y: global._scollY}}
                 columns={this.columns}

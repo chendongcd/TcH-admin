@@ -42,7 +42,7 @@ export default {
       if (response.code == '200') {
         const data = yield (select(_ => _.reportForm.data))
         let sum = {
-          id: '合计:',
+          ids: '合计:',
           temporarilyPrice: response.entity.sumTemporarilyPrice,
           constructionOutputValue: response.entity.sumConstructionOutputValue,
           changeClaimAmount: response.entity.sumChangeClaimAmount,

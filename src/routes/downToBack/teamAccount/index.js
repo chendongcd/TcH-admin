@@ -625,7 +625,7 @@ class TeamAccount extends Component {
     {
       title: '序号',
       width:100,
-      dataIndex: 'id',
+      dataIndex: 'ids',
       //fixed: 'left'
     },
     {
@@ -857,6 +857,9 @@ class TeamAccount extends Component {
       width: 200,
       //fixed: 'right',
       render: (val, record) => {
+        if (record.ids === '合计:') {
+          return null
+        }
         const user = this.props.app.user
         if (!user.token) {
           return null
@@ -1165,7 +1168,7 @@ class TeamAccount extends Component {
                 loading={loading.effects['teamAccount/fetch']}
                 bordered
                 data={data}
-                rowKey={'id'}
+                rowKey={'ids'}
                 scroll={{x: 3270, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}

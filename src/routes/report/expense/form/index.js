@@ -457,7 +457,7 @@ class ExpenseForm extends Component {
   columns = [
     {
       title: '序号',
-      dataIndex: 'id',
+      dataIndex: 'ids',
      // fixed: 'left',
       width: 100
     },
@@ -674,7 +674,7 @@ class ExpenseForm extends Component {
       width: 150,
      // fixed: 'right',
       render: (val, record) => {
-        if (record.id == '合计:') {
+        if (record.ids === '合计:') {
           return null
         }
         const user = this.props.app.user
@@ -931,7 +931,7 @@ class ExpenseForm extends Component {
                 loading={loading.effects['expenseForm/fetch']}
                 bordered
                 data={data}
-                rowKey={'id'}
+                rowKey={'ids'}
                 scroll={{x: 4130, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}

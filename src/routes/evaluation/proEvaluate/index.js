@@ -237,7 +237,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="中标">
                 {form.getFieldDecorator('winningBid', {
                   rules: [{required: false, message: '请输入中标金额'}],
-                  initialValue: selectedValues.winningBid ? selectedValues.winningBid : testValue
+                  initialValue: global._checkNum(selectedValues.winningBid)
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入中标金额" addonAfter="万元"/>)}
               </FormItem>
             </Col>
@@ -245,8 +245,7 @@ class CreateForm extends Component {
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="有效收入">
                 {form.getFieldDecorator('effectiveIncome', {
                   rules: [{required: false, message: '请输入有效金额'}],
-                  initialValue: selectedValues.effectiveIncome ? selectedValues.effectiveIncome : testValue
-
+                  initialValue: global._checkNum(selectedValues.effectiveIncome)
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入有效金额" addonAfter="万元"/>)}
               </FormItem>
             </Col>
@@ -590,7 +589,7 @@ class CreateForm extends Component {
   }
 
   onError = (error) => {
-    console.log('上传失败', error)
+    message.error('上传失败')
   }
 
   onSuccess = (res, index) => {
@@ -686,7 +685,7 @@ class ProEvaluate extends Component {
   columns = [
     {
       title: '序号',
-      dataIndex: 'id',
+      dataIndex: 'ids',
       width:100,
     //  fixed: 'left'
     },
@@ -914,6 +913,9 @@ class ProEvaluate extends Component {
       title: '操作',
       width: 110,
       render: (val, record) => {
+        if (record.ids === '合计:') {
+          return null
+        }
         const user = this.props.app.user
         if (!user.token) {
           return null
@@ -1049,7 +1051,6 @@ class ProEvaluate extends Component {
       isResponsibility:fields.isResponsibility
     }
     cleanObject(payload)
-    console.log(payload)
     if (updateModalVisible) {
       dispatch({
         type: 'proEvaluate/update',
@@ -1206,7 +1207,7 @@ class ProEvaluate extends Component {
                 loading={loading.effects['proEvaluate/fetch']}
                 bordered
                 data={data}
-                rowKey={'id'}
+                rowKey={'ids'}
                 scroll={{x: 3430,y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
