@@ -1,5 +1,6 @@
-import {queryEvaList,addEva,updateEva} from '../../../services/evaluation/proEvalution'
+import {queryEvaList,addEva,updateEva,del} from '../../../services/evaluation/proEvalution'
 import {queryProPerList} from "../../../services/system/sys_project";
+import {message} from "antd";
 export default {
   namespace: 'proEvaluate',
 
@@ -62,6 +63,18 @@ export default {
         yield put({type:'app/logout'})
         return false
       }
+    },
+    * del({payload, token}, {call, put}) {
+      const response = yield call(del, payload, token);
+      if (response.code == '200') {
+        message.success('删除成功');
+        return true
+      }
+      if (global.checkToken(response)) {
+        yield put({type: 'app/logout'})
+        return false
+      }
+      return false
     },
 
   },

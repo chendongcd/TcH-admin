@@ -100,6 +100,7 @@ export const menuData = [
       {name:'编辑',permission:'PERMISSIONS_UP_MANAGER_ACCOUNT_UPDATE'},
       {name:'查看',permission:'PERMISSIONS_UP_MANAGER_ACCOUNT_LOOK'},
       {name:'导出',permission:'PERMISSIONS_UP_MANAGER_ACCOUNT_EXPORT'},
+      {name:'删除',permission:'PERMISSIONS_UP_MANAGER_ACCOUNT_DELETE'},
     ]
   },
   {
@@ -125,6 +126,7 @@ export const menuData = [
       {name:'股份公司综合荣誉评价',permission:'PERMISSIONS_SUB_MANAGER_INFO_EVALUATION_GF'},
       {name:'集团公司综合荣誉评价',permission:'PERMISSIONS_SUB_MANAGER_INFO_EVALUATION_GROUP'},
       {name:'公司本级综合荣誉评价',permission:'PERMISSIONS_SUB_MANAGER_INFO_EVALUATION_COMPANY'},
+      {name:'删除',permission:'PERMISSIONS_SUB_MANAGER_INFO_DELETE'},
     ]
   },
   {
@@ -140,6 +142,7 @@ export const menuData = [
       {name:'查看',permission:'PERMISSIONS_SUB_MANAGER_RESUME_LOOK'},
       {name:'导出',permission:'PERMISSIONS_SUB_MANAGER_RESUME_EXPORT'},
       {name:'项目部评价',permission:'PERMISSIONS_SUB_MANAGER_RESUME_EVALUATION_PROJECT'},
+      {name:'删除',permission:'PERMISSIONS_SUB_MANAGER_RESUME_DELETE'},
     ]
   },
   {
@@ -163,6 +166,7 @@ export const menuData = [
       {name:'查看',permission:'PERMISSIONS_DOWN_MANAGER_TEAM_LOOK'},
       {name:'公司编辑',permission:'PERMISSIONS_DOWN_MANAGER_TEAM_COMPANY'},
       {name:'导出',permission:'PERMISSIONS_DOWN_MANAGER_TEAM_EXPORT'},
+      {name:'删除',permission:'PERMISSIONS_DOWN_MANAGER_TEAM_DELETE'},
     ]
   },
   {
@@ -177,6 +181,7 @@ export const menuData = [
       {name:'编辑',permission:'PERMISSIONS_DOWN_MANAGER_CHECK_UPDATE'},
       {name:'查看',permission:'PERMISSIONS_DOWN_MANAGER_CHECK_LOOK'},
       {name:'导出',permission:'PERMISSIONS_DOWN_MANAGER_CHECK_EXPORT'},
+      {name:'删除',permission:'PERMISSIONS_DOWN_MANAGER_CHECK_DELETE'},
     ]
   },
   {
@@ -199,6 +204,7 @@ export const menuData = [
       {name:'编辑',permission:'PERMISSIONS_PEOPLE_MANAGER_INFO_UPDATE'},
       {name:'查看',permission:'PERMISSIONS_PEOPLE_MANAGER_INFO_LOOK'},
       {name:'导出',permission:'PERMISSIONS_PEOPLE_MANAGER_INFO_EXPORT'},
+      {name:'删除',permission:'PERMISSIONS_PEOPLE_MANAGER_INFO_DELETE'},
     ]
   },
   {
@@ -221,6 +227,7 @@ export const menuData = [
       {name:'编辑',permission:'PERMISSIONS_PROJECT_ACCOUNT_EVALUATION_UPDATE'},
       {name:'查看',permission:'PERMISSIONS_PROJECT_ACCOUNT_EVALUATION_LOOK'},
       {name:'导出',permission:'PERMISSIONS_PROJECT_ACCOUNT_EVALUATION_EXPORT'},
+      {name:'删除',permission:'PERMISSIONS_PROJECT_ACCOUNT_EVALUATION_DELETE'},
     ]
   },
   {
@@ -252,6 +259,7 @@ export const menuData = [
       {name:'编辑',permission:'PERMISSIONS_REPORT_CONTRACT_DAILY_UPDATE'},
       {name:'查看',permission:'PERMISSIONS_REPORT_CONTRACT_DAILY_LOOK'},
       {name:'导出',permission:'PERMISSIONS_REPORT_CONTRACT_DAILY_EXPORT'},
+      {name:'删除',permission:'PERMISSIONS_REPORT_CONTRACT_DAILY_DELETE'},
     ]
   },
   {
@@ -264,7 +272,7 @@ export const menuData = [
     permission:'PERMISSIONS_REPORT_CONTRACT_STATISTICS',
     buttons:[
       {name:'查看',permission:'PERMISSIONS_REPORT_CONTRACT_STATISTICS_LOOK'},
-      {name:'导出',permission:'PERMISSIONS_REPORT_CONTRACT_STATISTICS_EXPORT'}
+      {name:'导出',permission:'PERMISSIONS_REPORT_CONTRACT_STATISTICS_EXPORT'},
     ]
   },
   {
@@ -287,6 +295,7 @@ export const menuData = [
       {name:'编辑',permission:'PERMISSIONS_REPORT_CHANGED_YUE_UPDATE'},
       {name:'查看',permission:'PERMISSIONS_REPORT_CHANGED_YUE_LOOK'},
       {name:'导出',permission:'PERMISSIONS_REPORT_CHANGED_YUE_EXPORT'},
+      {name:'删除',permission:'PERMISSIONS_REPORT_CHANGED_YUE_DELETE'},
     ]
   },
   {
@@ -313,6 +322,7 @@ export const menuData = [
       {name:'编辑',permission:'PERMISSIONS_REPORT_LOSS_UPDATE'},
       {name:'查看',permission:'PERMISSIONS_REPORT_LOSS_LOOK'},
       {name:'导出',permission:'PERMISSIONS_REPORT_LOSS_EXPORT'},
+      {name:'删除',permission:'PERMISSIONS_REPORT_LOSS_DELETE'},
     ]
   },
   {
@@ -327,6 +337,7 @@ export const menuData = [
       {name:'编辑',permission:'PERMISSIONS_REPORT_CONFIRMATION_UPDATE'},
       {name:'查看',permission:'PERMISSIONS_REPORT_CONFIRMATION_LOOK'},
       {name:'导出',permission:'PERMISSIONS_REPORT_CONFIRMATION_EXPORT'},
+      {name:'删除',permission:'PERMISSIONS_REPORT_CONFIRMATION_DELETE'},
     ]
   },
   {
@@ -340,7 +351,9 @@ export const menuData = [
       {name:'新增',permission:'PERMISSIONS_REPORT_LIABILITY_ADD'},
       {name:'编辑',permission:'PERMISSIONS_REPORT_LIABILITY_UPDATE'},
       {name:'查看',permission:'PERMISSIONS_REPORT_LIABILITY_LOOK'},
-     /* {name:'导出',permission:'PERMISSIONS_REPORT_CONFIRMATION_EXPORT'},*/
+      {name:'删除',permission:'PERMISSIONS_REPORT_LIABILITY_DELETE'},
+
+      /* {name:'导出',permission:'PERMISSIONS_REPORT_CONFIRMATION_EXPORT'},*/
     ]
   },
   {

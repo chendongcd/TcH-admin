@@ -1,4 +1,6 @@
-import {queryFormTableList, queryFormSum} from '../../../../services/report/form';
+import {queryFormTableList, queryFormSum, del} from '../../../../services/report/form';
+import {message} from "antd";
+
 export default {
   namespace: 'reportFormTable',
 
@@ -10,16 +12,16 @@ export default {
   },
 
   effects: {
-    *fetch({ payload ,token}, { call, put }) {
-      const response = yield call(queryFormTableList, payload,token);
-      if(response.code == '200'){
-        if(response.list.length>0){
-          if(global._getTotalPage(response.pagination.total)===response.pagination.current){
+    * fetch({payload, token}, {call, put}) {
+      const response = yield call(queryFormTableList, payload, token);
+      if (response.code == '200') {
+        if (response.list.length > 0) {
+          if (global._getTotalPage(response.pagination.total) === response.pagination.current) {
             yield put({
-              type:'fetchSum',
-              payload:payload,
-              token:token,
-              list:response.list.length
+              type: 'fetchSum',
+              payload: payload,
+              token: token,
+              list: response.list.length
             })
           }
         }
@@ -28,12 +30,12 @@ export default {
           payload: response,
         });
       }
-      if(global.checkToken(response)){
-        yield put({type:'app/logout'})
+      if (global.checkToken(response)) {
+        yield put({type: 'app/logout'})
         return false
       }
     },
-    * fetchSum({payload, token,list}, {call, put,select}) {
+    * fetchSum({payload, token, list}, {call, put, select}) {
       const response = yield call(queryFormSum, payload, token);
       if (response.code == '200') {
         const data = yield (select(_ => _.reportFormTable.data))
@@ -42,18 +44,18 @@ export default {
           temporarilyPriceStatistics: response.entity.sumTemporarilyPrice,
           constructionOutputValueStatistics: response.entity.sumConstructionOutputValue,
           changeClaimAmountStatistics: response.entity.sumChangeClaimAmount,
-          percentageStatistics: response.entity.sumPercentage/100,
+          percentageStatistics: response.entity.sumPercentage / 100,
         }
-        for(let a in sum){
-          if(sum[a]&&!isNaN(sum[a])&&a!=='percentageStatistics'){
-            sum[a] = Number.isInteger(Number(sum[a]))?Number(sum[a]):Number(sum[a]).toFixed(2)
+        for (let a in sum) {
+          if (sum[a] && !isNaN(sum[a]) && a !== 'percentageStatistics') {
+            sum[a] = Number.isInteger(Number(sum[a])) ? Number(sum[a]) : Number(sum[a]).toFixed(2)
           }
         }
-        data.list = [...data.list,sum]
-        if(list===10) {
+        data.list = [...data.list, sum]
+        if (list === 10) {
           data.pagination.pageSize = data.pagination.pageSize + 1
         }
-          yield put({
+        yield put({
           type: 'save',
           payload: data,
         });
@@ -62,7 +64,20 @@ export default {
         yield put({type: 'app/logout'})
         return false
       }
-    }
+    },
+    * del({payload, token}, {call, put}) {
+      const response = yield call(del, payload, token);
+      if (response.code == '200') {
+        message.success('删除成功');
+        return true
+      }
+      if (global.checkToken(response)) {
+        yield put({type: 'app/logout'})
+        return false
+      }
+      return false
+    },
+
   },
 
   reducers: {

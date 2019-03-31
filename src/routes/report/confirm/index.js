@@ -11,7 +11,7 @@ import {
   Select,
   Button,
   DatePicker,
-  Modal, Divider,
+  Modal, Divider, Popconfirm,
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
@@ -22,7 +22,6 @@ import {createURL} from 'services/app'
 const FormItem = Form.Item;
 const {Option} = Select;
 const pageButtons =getPage('94').buttons.map(a => a.permission)
-const testValue = ''
 
 
 @Form.create()
@@ -446,7 +445,7 @@ class Confirmation extends Component {
     },
     {
       title: '操作',
-      width: 120,
+      width: 170,
       //fixed: 'right',
       render: (val, record) => {
         if (record.ids === '总计:') {
@@ -468,6 +467,14 @@ class Confirmation extends Component {
               <Fragment>
                 <a onClick={() => this.handleCheckDetail(true, record)}>查看</a>
               </Fragment> : null}
+            {getButtons(button, pageButtons[4]) ?
+              <Fragment>
+                <Divider type="vertical"/>
+                <Popconfirm title="确定删除?" onConfirm={() => this.handleDelete(record.id)} okText="是" cancelText="否">
+                  <a>删除</a>
+                </Popconfirm>
+              </Fragment>
+              : null}
           </Fragment>
         )
       }
@@ -671,7 +678,7 @@ class Confirmation extends Component {
                 bordered
                 data={data}
                 rowKey={'ids'}
-                scroll={{x:2940, y: global._scollY}}
+                scroll={{x:2990, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
@@ -724,6 +731,22 @@ class Confirmation extends Component {
       });
     });
   }
+
+  handleDelete = (id) => {
+    this.props.dispatch({
+      type: 'confirmation/del',
+      payload: {id},
+      token: this.props.app.user.token
+    }).then(res => {
+      if (res) {
+        if (res) {
+          this.searchList(false, this.exportParams.page, this.exportParams.pageSize)
+        }
+      }
+    })
+  }
+
+
 
 }
 

@@ -38,3 +38,9 @@ export async function updateForm(params,token) {
     body: params
   },token);
 }
+export async function del(params,token) {
+  return request(`${api}/delete/v1.1`,{
+    method: 'POST',
+    body: params
+  },token);
+}

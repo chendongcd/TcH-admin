@@ -15,7 +15,7 @@ import {
   Modal,
   Upload,
   Divider,
-  message
+  message, Popconfirm
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable, PreFile,ExportModal} from 'components'
 import styles from './index.less'
@@ -911,7 +911,7 @@ class ProEvaluate extends Component {
     },
     {
       title: '操作',
-      width: 110,
+      width: 160,
       render: (val, record) => {
         if (record.ids === '合计:') {
           return null
@@ -930,6 +930,14 @@ class ProEvaluate extends Component {
               </Fragment> : null}
             {getButtons(button, pageButtons[2]) ?
               <a onClick={() => this.handleCheckDetail(true, record)}>查看</a>
+              : null}
+            {getButtons(button, pageButtons[4]) ?
+              <Fragment>
+                <Divider type="vertical"/>
+                <Popconfirm title="确定删除?" onConfirm={() => this.handleDelete(record.id)} okText="是" cancelText="否">
+                  <a>删除</a>
+                </Popconfirm>
+              </Fragment>
               : null}
           </Fragment>
         )
@@ -1208,7 +1216,7 @@ class ProEvaluate extends Component {
                 bordered
                 data={data}
                 rowKey={'ids'}
-                scroll={{x: 3430,y: global._scollY}}
+                scroll={{x: 3480,y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
@@ -1264,6 +1272,21 @@ class ProEvaluate extends Component {
       });
     });
   }
+
+  handleDelete = (id) => {
+    this.props.dispatch({
+      type: 'proEvaluate/del',
+      payload: {id},
+      token: this.props.app.user.token
+    }).then(res => {
+      if (res) {
+        if (res) {
+          this.searchList(false, this.exportParams.page, this.exportParams.pageSize)
+        }
+      }
+    })
+  }
+
 }
 
 ProEvaluate.propTypes = {}

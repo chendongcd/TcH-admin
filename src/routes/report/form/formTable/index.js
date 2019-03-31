@@ -7,7 +7,7 @@ import {
   Form,
   Input,
   Button,
-  Modal
+  Modal, Divider, Popconfirm
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
@@ -408,6 +408,7 @@ class ReportFormTable extends Component {
       });
     });
   }
+
 }
 
 ReportFormTable.propTypes = {}

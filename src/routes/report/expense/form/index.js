@@ -11,7 +11,7 @@ import {
   Select,
   Button,
   DatePicker,
-  Modal, Divider,
+  Modal, Divider, Popconfirm,
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable, CustomPicker} from 'components'
 import styles from './index.less'
@@ -22,7 +22,6 @@ import {createURL} from 'services/app'
 const FormItem = Form.Item;
 const {Option} = Select;
 const pageButtons = getPage('911').buttons.map(a => a.permission)
-const testValue = ''
 
 
 @Form.create()
@@ -671,7 +670,7 @@ class ExpenseForm extends Component {
     },
     {
       title: '操作',
-      width: 150,
+      width: 200,
      // fixed: 'right',
       render: (val, record) => {
         if (record.ids === '合计:') {
@@ -693,6 +692,14 @@ class ExpenseForm extends Component {
               <Fragment>
                 <a onClick={() => this.handleCheckDetail(true, record)}>查看</a>
               </Fragment> : null}
+            {getButtons(button, pageButtons[4]) ?
+              <Fragment>
+                <Divider type="vertical"/>
+                <Popconfirm title="确定删除?" onConfirm={() => this.handleDelete(record.id)} okText="是" cancelText="否">
+                  <a>删除</a>
+                </Popconfirm>
+              </Fragment>
+              : null}
           </Fragment>
         )
       }
@@ -932,7 +939,7 @@ class ExpenseForm extends Component {
                 bordered
                 data={data}
                 rowKey={'ids'}
-                scroll={{x: 4130, y: global._scollY}}
+                scroll={{x: 4180, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
@@ -1006,6 +1013,20 @@ class ExpenseForm extends Component {
         token: this.props.app.user.token
       }
     )
+  }
+
+  handleDelete = (id) => {
+    this.props.dispatch({
+      type: 'expenseForm/del',
+      payload: {id},
+      token: this.props.app.user.token
+    }).then(res => {
+      if (res) {
+        if (res) {
+          this.searchList(false, this.exportParams.page, this.exportParams.pageSize)
+        }
+      }
+    })
   }
 }
 

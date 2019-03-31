@@ -14,11 +14,11 @@ import {
   DatePicker,
   Modal,
   Upload,
-  Divider,
+  Divider, Popconfirm,
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable, PreFile} from 'components'
 import styles from './index.less'
-import {getButtons, cleanObject, QiNiuOss, ImageUrl,getPage,fixNumber} from 'utils'
+import {getButtons, cleanObject, QiNiuOss, ImageUrl, getPage, fixNumber} from 'utils'
 import {DOWN_EXPORT} from 'common/urls'
 import {createURL} from 'services/app'
 
@@ -28,7 +28,7 @@ const {Option} = Select;
 const info_css = {
   color: '#fa541c'
 }
-const vType = ['','中期计价', '末次结算'];
+const vType = ['', '中期计价', '末次结算'];
 const testValue = ''
 const qiShu = []
 for (let i = 1; i < 201; i++) {
@@ -67,8 +67,8 @@ class CreateForm extends Component {
     const {form, handleAdd, updateModalVisible, selectedValues} = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      if(updateModalVisible&&(typeof fieldsValue.valuationPeriod)==='string'&&fieldsValue.valuationPeriod.includes('第')){
-        fieldsValue.valuationPeriod = fieldsValue.valuationPeriod.slice(1,-1)
+      if (updateModalVisible && (typeof fieldsValue.valuationPeriod) === 'string' && fieldsValue.valuationPeriod.includes('第')) {
+        fieldsValue.valuationPeriod = fieldsValue.valuationPeriod.slice(1, -1)
       }
       for (let prop in fieldsValue) {
         if (fieldsValue[prop] instanceof moment) {
@@ -76,7 +76,7 @@ class CreateForm extends Component {
         }
       }
       fieldsValue.annexUrl = `{"url":"${this.state.fileList[0].url}","fileName":"${this.state.fileList[0].name}"}`
-      if(selectedValues.subcontractorId){
+      if (selectedValues.subcontractorId) {
         fieldsValue.subcontractorId = selectedValues.subcontractorId
         fieldsValue.laborAccountId = selectedValues.laborAccountId
       }
@@ -86,7 +86,7 @@ class CreateForm extends Component {
   };
 
   cleanState = () => {
-    this.setState({fileList: [], previewImage: '',selects: {}})
+    this.setState({fileList: [], previewImage: '', selects: {}})
   }
 
   handleCancel = () => this.setState({previewVisible: false})
@@ -140,20 +140,20 @@ class CreateForm extends Component {
     }
   }
 
-  shouldPay=(value,type)=>{
-    let form  = this.props.form
-    let  res = form.getFieldsValue(['valuationPrice','valuationPriceReduce','warranty','performanceBond','shouldAmount'])
-    let  arr = [res.valuationPrice,res.valuationPriceReduce,res.warranty,res.performanceBond]
-    arr[type-1] = value
-   // return
-    let test = (i)=>{
-      return ((typeof i ==='number')||(typeof Number(i))==='number'&&i.length>0)
+  shouldPay = (value, type) => {
+    let form = this.props.form
+    let res = form.getFieldsValue(['valuationPrice', 'valuationPriceReduce', 'warranty', 'performanceBond', 'shouldAmount'])
+    let arr = [res.valuationPrice, res.valuationPriceReduce, res.warranty, res.performanceBond]
+    arr[type - 1] = value
+    // return
+    let test = (i) => {
+      return ((typeof i === 'number') || (typeof Number(i)) === 'number' && i.length > 0)
     }
-    if(arr.every(test)){
-      let pay = arr[0]-arr[1]-arr[2]-arr[3]
-      form.setFieldsValue({shouldAmount:Number.isInteger(pay)?pay:pay.toFixed(2)})
-    }else if(res.shouldAmount||res.shouldAmount===0){
-      form.setFieldsValue({shouldAmount:''})
+    if (arr.every(test)) {
+      let pay = arr[0] - arr[1] - arr[2] - arr[3]
+      form.setFieldsValue({shouldAmount: Number.isInteger(pay) ? pay : pay.toFixed(2)})
+    } else if (res.shouldAmount || res.shouldAmount === 0) {
+      form.setFieldsValue({shouldAmount: ''})
     }
   }
 
@@ -301,7 +301,8 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('valuationPrice', {
                   rules: [{required: true, message: '请输入计价总金额'}],
                   initialValue: global._checkNum(selectedValues.valuationPrice),
-                })(<Input onChange={(e)=>this.shouldPay(e.target.value,1)} disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入计价总金额" addonAfter="元"/>)}
+                })(<Input onChange={(e) => this.shouldPay(e.target.value, 1)} disabled={checkDetail}
+                          style={{marginTop: 4}} placeholder="请输入计价总金额" addonAfter="元"/>)}
                 <span style={info_css}>备注:填报未扣款的合同内外计价总金额</span>
               </FormItem>
             </Col>
@@ -310,7 +311,8 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('valuationPriceReduce', {
                   rules: [{required: true, message: '请输入扣款金额'}],
                   initialValue: global._checkNum(selectedValues.valuationPriceReduce),
-                })(<Input onChange={(e)=>this.shouldPay(e.target.value,2)} disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入扣款金额" addonAfter="元"/>)}
+                })(<Input onChange={(e) => this.shouldPay(e.target.value, 2)} disabled={checkDetail}
+                          style={{marginTop: 4}} placeholder="请输入扣款金额" addonAfter="元"/>)}
               </FormItem>
             </Col>
           </Row>
@@ -320,7 +322,8 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('warranty', {
                   rules: [{required: true, message: '请输入扣除质保金'}],
                   initialValue: global._checkNum(selectedValues.warranty),
-                })(<Input onChange={(e)=>this.shouldPay(e.target.value,3)} disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入扣除质保金" addonAfter="元"/>)}
+                })(<Input onChange={(e) => this.shouldPay(e.target.value, 3)} disabled={checkDetail}
+                          style={{marginTop: 4}} placeholder="请输入扣除质保金" addonAfter="元"/>)}
               </FormItem>
             </Col>
           </Row>
@@ -330,7 +333,8 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('performanceBond', {
                   rules: [{required: true, message: '请输入扣除履约保证金'}],
                   initialValue: global._checkNum(selectedValues.performanceBond),
-                })(<Input onChange={(e)=>this.shouldPay(e.target.value,4)} disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入扣除履约保证金" addonAfter="元"/>)}
+                })(<Input onChange={(e) => this.shouldPay(e.target.value, 4)} disabled={checkDetail}
+                          style={{marginTop: 4}} placeholder="请输入扣除履约保证金" addonAfter="元"/>)}
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
@@ -338,7 +342,7 @@ class CreateForm extends Component {
                 {form.getFieldDecorator('compensation', {
                   rules: [{required: true, message: '请输入计日工及补偿费用'}],
                   initialValue: global._checkNum(selectedValues.compensation),
-                })(<Input  disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入计日工及补偿费用" addonAfter="元"/>)}
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder="请输入计日工及补偿费用" addonAfter="元"/>)}
               </FormItem>
             </Col>
           </Row>
@@ -410,7 +414,8 @@ class CreateForm extends Component {
             </Col>
           </Row>
         </div>
-        <Modal width={'100%'} style={{width: '100%', height: '100%',top:0}} bodyStyle={{width: '100%', height: 900,paddingTop:50}}
+        <Modal width={'100%'} style={{width: '100%', height: '100%', top: 0}}
+               bodyStyle={{width: '100%', height: 900, paddingTop: 50}}
                visible={previewVisible} footer={null} onCancel={this.handleCancel}>
           <iframe width={'100%'} height={'100%'} frameBorder={0} src={previewImage}/>
         </Modal>
@@ -448,7 +453,7 @@ class CreateForm extends Component {
     if (res.status == 'done') {
       this.props.form.setFieldsValue({annexUrl: []});
     } else {
-      if(this.upload&&this.upload.unsubscribe) {
+      if (this.upload && this.upload.unsubscribe) {
         this.upload.unsubscribe()
       }
     }
@@ -479,35 +484,35 @@ class MeterDown extends Component {
   columns = [
     {
       title: '序号',
-      width:100,
+      width: 100,
       dataIndex: 'ids',
-     // fixed: 'left'
+      // fixed: 'left'
     },
     {
       title: '项目名称',
-      width:180,
+      width: 180,
       dataIndex: 'projectName',
-     // fixed: 'left'
+      // fixed: 'left'
     },
     {
       title: '分包商名称',
-      width:180,
+      width: 180,
       dataIndex: 'subcontractorName',
     },
     {
       title: '队伍名称',
-      width:150,
+      width: 150,
       dataIndex: 'teamName',
     },
     {
       title: '合同金额',
-      width:130,
+      width: 130,
       dataIndex: 'sumContractAmount',
     },
     {
       title: '计价期数',
       dataIndex: 'valuationPeriod',
-      width:130,
+      width: 130,
       render(val) {
         return <span>{val !== undefined ? ('第' + val + '期') : ''}</span>;
       },
@@ -515,7 +520,7 @@ class MeterDown extends Component {
     {
       title: '计价日期',
       dataIndex: 'valuationTime',
-      width:130,
+      width: 130,
       render(val) {
         return <span>{val ? moment(val).format('YYYY/MM') : ''}</span>;
       },
@@ -523,7 +528,7 @@ class MeterDown extends Component {
     {
       title: '计价类型',
       dataIndex: 'valuationType',
-      width:110,
+      width: 110,
       render(val) {
         return <span>{vType[val]}</span>;
       },
@@ -535,7 +540,7 @@ class MeterDown extends Component {
           title: '计价总金额',
           dataIndex: 'valuationPrice',
           key: 'valuationPrice',
-          width:150,
+          width: 150,
           render(val) {
             return <span>{val}</span>;
           },
@@ -544,25 +549,25 @@ class MeterDown extends Component {
           title: '扣款',
           dataIndex: 'valuationPriceReduce',
           key: 'valuationPriceReduce',
-          width:120,
+          width: 120,
           render(val) {
             return <span>{val}</span>;
           },
         }, {
           title: '扣除质保金',
-          width:120,
+          width: 120,
           dataIndex: 'warranty',
           key: 'warranty',
         },
         {
           title: '扣除履约保证金',
-          width:120,
+          width: 120,
           dataIndex: 'performanceBond',
           key: 'performanceBond',
         },
         {
           title: '计日工及补偿费用',
-          width:120,
+          width: 120,
           dataIndex: 'compensation',
           key: 'compensation'
         },
@@ -570,7 +575,7 @@ class MeterDown extends Component {
           title: '应支付金额',
           dataIndex: 'shouldAmount',
           key: 'shouldAmount',
-          width:120,
+          width: 120,
           render(val) {
             return <span>{val}</span>;
           },
@@ -578,31 +583,31 @@ class MeterDown extends Component {
           title: '已完成未计',
           dataIndex: 'endedPrice',
           key: 'endedPrice',
-          width:120,
+          width: 120,
         }]
     },
     {
       title: '对下计价率(%)',
       dataIndex: 'underRate',
-      width:110,
+      width: 110,
       render: (val) => {
-        return <span>{fixNumber(val,100)+'%'}</span>
+        return <span>{fixNumber(val, 100) + '%'}</span>
       }
     },
     {
       title: '计价负责人',
-      width:110,
+      width: 110,
       dataIndex: 'valuationPerson',
     },
     {
       title: '备注',
-      width:180,
+      width: 180,
       dataIndex: 'remark',
     },
     {
       title: '下载附件',
       dataIndex: 'annexUrl',
-      width:100,
+      width: 100,
       render: (val) => {
         //if(JSON.parse(record.annexUrl))
         function isJSON(str) {
@@ -637,8 +642,8 @@ class MeterDown extends Component {
     },
     {
       title: '操作',
-      width: 120,
-    //  fixed: 'right',
+      width: 170,
+      //  fixed: 'right',
       render: (val, record) => {
         if (record.ids === '合计:') {
           return null
@@ -653,12 +658,20 @@ class MeterDown extends Component {
             {getButtons(button, pageButtons[1]) ?
               <Fragment>
                 <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
-                <Divider type="vertical"/>
               </Fragment> : null}
             {getButtons(button, pageButtons[2]) ?
               <Fragment>
+                <Divider type="vertical"/>
                 <a onClick={() => this.handleCheckDetail(true, record)}>查看</a>
               </Fragment> : null}
+            {getButtons(button, pageButtons[4]) ?
+              <Fragment>
+                <Divider type="vertical"/>
+                <Popconfirm title="确定删除?" onConfirm={() => this.handleDelete(record.id)} okText="是" cancelText="否">
+                  <a>删除</a>
+                </Popconfirm>
+              </Fragment>
+              : null}
           </Fragment>
         )
       }
@@ -671,7 +684,7 @@ class MeterDown extends Component {
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    this.searchList(null,pagination.current)
+    this.searchList(null, pagination.current)
   };
 
   handleFormReset = () => {
@@ -766,7 +779,7 @@ class MeterDown extends Component {
       }).then(res => {
         if (res) {
           this.handleUpdateModalVisible()
-          this.searchList(false,this.exportParams.page,this.exportParams.pageSize)
+          this.searchList(false, this.exportParams.page, this.exportParams.pageSize)
           cleanState()
         }
       })
@@ -794,13 +807,13 @@ class MeterDown extends Component {
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={6} sm={24}>
             <FormItem label="项目名称">
-              {getFieldDecorator('projectName')(<Input />)}
+              {getFieldDecorator('projectName')(<Input/>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="分包商名称">
               {getFieldDecorator('subcontractorName')(
-                <Input />
+                <Input/>
               )}
             </FormItem>
           </Col>
@@ -817,7 +830,7 @@ class MeterDown extends Component {
           <Col md={6} sm={24}>
             <FormItem label="计价日期">
               {getFieldDecorator('valuationTime')(
-                <DatePicker.MonthPicker style={{width: '100%'}} />
+                <DatePicker.MonthPicker style={{width: '100%'}}/>
               )}
             </FormItem>
           </Col>
@@ -825,7 +838,7 @@ class MeterDown extends Component {
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col style={{flexDirection: 'row', display: 'flex'}} md={12} sm={24}>
             <FormItem label="对下计价率">
-              {getFieldDecorator('minUnderRate')(<Input  addonAfter={'%'}/>)}
+              {getFieldDecorator('minUnderRate')(<Input addonAfter={'%'}/>)}
             </FormItem>
             <FormItem style={{marginLeft: 15 + 'px'}} label="至">
               {getFieldDecorator('maxUnderRate')(<Input addonAfter={'%'}/>)}
@@ -915,7 +928,7 @@ class MeterDown extends Component {
                 bordered
                 data={data}
                 rowKey={'ids'}
-                scroll={{x: 2600,y: global._scollY}}
+                scroll={{x: 2650, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
@@ -948,8 +961,8 @@ class MeterDown extends Component {
     });
   }
 
-  searchList = (e,page = 1, pageSize = 10) => {
-    e&&e.preventDefault?e.preventDefault():null
+  searchList = (e, page = 1, pageSize = 10) => {
+    e && e.preventDefault ? e.preventDefault() : null
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
       let payload = {
@@ -958,9 +971,9 @@ class MeterDown extends Component {
         projectName: fieldsValue.projectName,
         subcontractorName: fieldsValue.subcontractorName,
         valuationType: fieldsValue.valuationType,
-        valuationTime: fieldsValue.valuationTime?fieldsValue.valuationTime.format('YYYY-MM-DD'):null,
-        minUnderRate: fieldsValue.minUnderRate/100,
-        maxUnderRate: fieldsValue.maxUnderRate/100
+        valuationTime: fieldsValue.valuationTime ? fieldsValue.valuationTime.format('YYYY-MM-DD') : null,
+        minUnderRate: fieldsValue.minUnderRate / 100,
+        maxUnderRate: fieldsValue.maxUnderRate / 100
       }
       cleanObject(payload)
       this.exportParams = payload
@@ -1005,6 +1018,21 @@ class MeterDown extends Component {
       }
     })
   }
+
+  handleDelete = (id) => {
+    this.props.dispatch({
+      type: 'meterDown/del',
+      payload: {id},
+      token: this.props.app.user.token
+    }).then(res => {
+      if (res) {
+        if (res) {
+          this.searchList(false, this.exportParams.page, this.exportParams.pageSize)
+        }
+      }
+    })
+  }
+
 }
 
 MeterDown.propTypes = {}

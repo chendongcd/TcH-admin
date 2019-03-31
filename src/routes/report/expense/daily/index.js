@@ -8,7 +8,7 @@ import {
   Form,
   Input,
   Button,
-  Modal
+  Modal, Divider, Popconfirm
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
@@ -380,7 +380,7 @@ class Daily extends Component {
                 bordered
                 data={data}
                 rowKey={'projectName'}
-                scroll={{x: 1480, y: global._scollY}}
+                scroll={{x: 1430, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
