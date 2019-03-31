@@ -39,7 +39,7 @@ export async function updateForm(params,token) {
   },token);
 }
 export async function del(params,token) {
-  return request(`${api}/deleted/v1.1`,{
+  return request(`${api}/delete/v1.1`,{
     method: 'POST',
     body: params
   },token);

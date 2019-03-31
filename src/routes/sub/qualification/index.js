@@ -16,7 +16,7 @@ import {
   Upload,
   Divider,
   Badge,
-  Tag
+  Tag, Popconfirm
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable, PreFile, ExportModal} from 'components'
 import styles from './index.less'
@@ -760,7 +760,7 @@ class Qualification extends Component {
     {
       title: '操作',
       //fixed: 'right',
-      width: 200,
+      width: 250,
       render: (val, record) => {
         const user = this.props.app.user
         if (!user.token) {
@@ -794,6 +794,14 @@ class Qualification extends Component {
               <Divider type="vertical"/>
               {more}
             </Fragment>
+            {getButtons(button, pageButtons[7]) ?
+              <Fragment>
+                <Divider type="vertical"/>
+                <Popconfirm title="确定删除?" onConfirm={() => this.handleDelete(record.id)} okText="是" cancelText="否">
+                  <a>删除</a>
+                </Popconfirm>
+              </Fragment>
+              : null}
           </Fragment>
         )
       }
@@ -1114,7 +1122,7 @@ class Qualification extends Component {
                 bordered
                 rowKey="id"
                 data={data}
-                scroll={{x: 2480, y: global._scollY}}
+                scroll={{x: 2530, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
@@ -1201,6 +1209,21 @@ class Qualification extends Component {
       }
     })
   }
+
+  handleDelete = (id) => {
+    this.props.dispatch({
+      type: 'sub_qua/del',
+      payload: {id},
+      token: this.props.app.user.token
+    }).then(res => {
+      if (res) {
+        if (res) {
+          this.searchList(false, this.exportParams.page, this.exportParams.pageSize)
+        }
+      }
+    })
+  }
+
 }
 
 Qualification.propTypes = {}

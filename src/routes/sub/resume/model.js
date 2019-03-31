@@ -1,4 +1,4 @@
-import {addRes,updateRes,queryResList,querySubList} from '../../../services/sub/resume'
+import {addRes,updateRes,queryResList,querySubList,del} from '../../../services/sub/resume'
 import {message} from "antd";
 import {queryPerTeamList} from "../../../services/downToBack/teamAccount"
 import {queryProPerList} from "../../../services/system/sys_project";
@@ -50,6 +50,18 @@ export default {
       }
       if(global.checkToken(response)){
         yield put({type:'app/logout'})
+        return false
+      }
+      return false
+    },
+    * del({payload, token}, {call, put}) {
+      const response = yield call(del, payload, token);
+      if (response.code == '200') {
+        message.success('删除成功');
+        return true
+      }
+      if (global.checkToken(response)) {
+        yield put({type: 'app/logout'})
         return false
       }
       return false

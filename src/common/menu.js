@@ -126,6 +126,7 @@ export const menuData = [
       {name:'股份公司综合荣誉评价',permission:'PERMISSIONS_SUB_MANAGER_INFO_EVALUATION_GF'},
       {name:'集团公司综合荣誉评价',permission:'PERMISSIONS_SUB_MANAGER_INFO_EVALUATION_GROUP'},
       {name:'公司本级综合荣誉评价',permission:'PERMISSIONS_SUB_MANAGER_INFO_EVALUATION_COMPANY'},
+      {name:'删除',permission:'PERMISSIONS_SUB_MANAGER_INFO_DELETE'},
     ]
   },
   {
@@ -141,6 +142,7 @@ export const menuData = [
       {name:'查看',permission:'PERMISSIONS_SUB_MANAGER_RESUME_LOOK'},
       {name:'导出',permission:'PERMISSIONS_SUB_MANAGER_RESUME_EXPORT'},
       {name:'项目部评价',permission:'PERMISSIONS_SUB_MANAGER_RESUME_EVALUATION_PROJECT'},
+      {name:'删除',permission:'PERMISSIONS_SUB_MANAGER_RESUME_DELETE'},
     ]
   },
   {
@@ -202,6 +204,7 @@ export const menuData = [
       {name:'编辑',permission:'PERMISSIONS_PEOPLE_MANAGER_INFO_UPDATE'},
       {name:'查看',permission:'PERMISSIONS_PEOPLE_MANAGER_INFO_LOOK'},
       {name:'导出',permission:'PERMISSIONS_PEOPLE_MANAGER_INFO_EXPORT'},
+      {name:'删除',permission:'PERMISSIONS_PEOPLE_MANAGER_INFO_DELETE'},
     ]
   },
   {
@@ -224,6 +227,7 @@ export const menuData = [
       {name:'编辑',permission:'PERMISSIONS_PROJECT_ACCOUNT_EVALUATION_UPDATE'},
       {name:'查看',permission:'PERMISSIONS_PROJECT_ACCOUNT_EVALUATION_LOOK'},
       {name:'导出',permission:'PERMISSIONS_PROJECT_ACCOUNT_EVALUATION_EXPORT'},
+      {name:'删除',permission:'PERMISSIONS_PROJECT_ACCOUNT_EVALUATION_DELETE'},
     ]
   },
   {
@@ -269,7 +273,6 @@ export const menuData = [
     buttons:[
       {name:'查看',permission:'PERMISSIONS_REPORT_CONTRACT_STATISTICS_LOOK'},
       {name:'导出',permission:'PERMISSIONS_REPORT_CONTRACT_STATISTICS_EXPORT'},
-      {name:'删除',permission:'PERMISSIONS_REPORT_CONTRACT_STATISTICS_DELETE'},
     ]
   },
   {
@@ -305,7 +308,6 @@ export const menuData = [
     buttons:[
       {name:'查看',permission:'PERMISSIONS_REPORT_CHANGED_STATISTICS_LOOK'},
       {name:'导出',permission:'PERMISSIONS_REPORT_CHANGED_STATISTICS_EXPORT'},
-      {name:'删除',permission:'PERMISSIONS_REPORT_CHANGED_STATISTICS_DELETE'},
     ]
   },
   {

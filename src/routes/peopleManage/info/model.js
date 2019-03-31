@@ -1,4 +1,4 @@
-import {queryPeopleList,addPeople,updatePeople} from "../../../services/peopleManage/peopleManage";
+import {queryPeopleList,addPeople,updatePeople,del} from "../../../services/peopleManage/peopleManage";
 import {message} from "antd";
 import {queryProPerList} from "../../../services/system/sys_project";
 export default {
@@ -46,6 +46,18 @@ export default {
       }
       if(global.checkToken(response)){
         yield put({type:'app/logout'})
+        return false
+      }
+      return false
+    },
+    * del({payload, token}, {call, put}) {
+      const response = yield call(del, payload, token);
+      if (response.code == '200') {
+        message.success('删除成功');
+        return true
+      }
+      if (global.checkToken(response)) {
+        yield put({type: 'app/logout'})
         return false
       }
       return false

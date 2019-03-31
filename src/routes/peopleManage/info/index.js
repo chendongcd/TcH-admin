@@ -14,7 +14,7 @@ import {
   Modal,
   Divider,
   Icon,
-  Upload
+  Upload, Popconfirm
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable, PreFile} from 'components'
 import styles from './index.less'
@@ -690,7 +690,7 @@ class PeopleInfo extends Component {
     },
     {
       title: '操作',
-      width: 110,
+      width: 160,
       //fixed: 'right',
       render: (val, record) => {
         const user = this.props.app.user
@@ -706,6 +706,14 @@ class PeopleInfo extends Component {
             <Divider type="vertical"/>
             {getButtons(button, pageButtons[2]) ?
               <a onClick={() => this.handleCheckDetail(true, record)}>查看</a> : null}
+            {getButtons(button, pageButtons[4]) ?
+              <Fragment>
+                <Divider type="vertical"/>
+                <Popconfirm title="确定删除?" onConfirm={() => this.handleDelete(record.id)} okText="是" cancelText="否">
+                  <a>删除</a>
+                </Popconfirm>
+              </Fragment>
+              : null}
           </Fragment>
         )
       }
@@ -988,7 +996,7 @@ class PeopleInfo extends Component {
                 bordered
                 data={data}
                 rowKey={'id'}
-                scroll={{x: 2915, y: global._scollY}}
+                scroll={{x: 2965, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
@@ -1044,6 +1052,21 @@ class PeopleInfo extends Component {
       });
     });
   }
+
+  handleDelete = (id) => {
+    this.props.dispatch({
+      type: 'peopleManage/del',
+      payload: {id},
+      token: this.props.app.user.token
+    }).then(res => {
+      if (res) {
+        if (res) {
+          this.searchList(false, this.exportParams.page, this.exportParams.pageSize)
+        }
+      }
+    })
+  }
+
 }
 
 PeopleInfo.propTypes = {}

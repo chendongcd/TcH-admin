@@ -12,7 +12,7 @@ import {
   Button,
   DatePicker,
   Modal,
-  Divider,
+  Divider, Popconfirm,
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
@@ -295,7 +295,7 @@ class Resume extends Component {
     },
     {
       title: '操作',
-      width:200,
+      width:250,
       //fixed:'right',
       render: (val, record) => {
         if (record.ids === '合计:') {
@@ -317,6 +317,14 @@ class Resume extends Component {
               <Divider type="vertical"/>
               <a onClick={() => this.handleReviewModal(true, record)}>项目部评价</a>
             </Fragment> : null}
+            {getButtons(button, pageButtons[5]) ?
+              <Fragment>
+                <Divider type="vertical"/>
+                <Popconfirm title="确定删除?" onConfirm={() => this.handleDelete(record.id)} okText="是" cancelText="否">
+                  <a>删除</a>
+                </Popconfirm>
+              </Fragment>
+              : null}
           </Fragment>
         )
       }
@@ -582,7 +590,7 @@ class Resume extends Component {
                 filterMultiple={false}
                 rowKey={'ids'}
                 data={data}
-                scroll={{x: 2200,y: global._scollY}}
+                scroll={{x: 2250,y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
@@ -659,6 +667,20 @@ class Resume extends Component {
       });
     });
   }
+  handleDelete = (id) => {
+    this.props.dispatch({
+      type: 'sub_resume/del',
+      payload: {id},
+      token: this.props.app.user.token
+    }).then(res => {
+      if (res) {
+        if (res) {
+          this.searchList(false, this.exportParams.page, this.exportParams.pageSize)
+        }
+      }
+    })
+  }
+
 }
 
 Resume.propTypes = {}

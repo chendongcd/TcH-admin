@@ -252,14 +252,6 @@ class Daily extends Component {
               <Fragment>
                 <a onClick={() => this.handleCheckDetail(true, record)}>查看</a>
               </Fragment> : null}
-            {getButtons(button, pageButtons[2]) ?
-              <Fragment>
-                <Divider type="vertical"/>
-                <Popconfirm title="确定删除?" onConfirm={() => this.handleDelete(record.id)} okText="是" cancelText="否">
-                  <a>删除</a>
-                </Popconfirm>
-              </Fragment>
-              : null}
           </Fragment>
         )
       }
@@ -388,7 +380,7 @@ class Daily extends Component {
                 bordered
                 data={data}
                 rowKey={'projectName'}
-                scroll={{x: 1480, y: global._scollY}}
+                scroll={{x: 1430, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
@@ -427,21 +419,6 @@ class Daily extends Component {
       });
     });
   }
-
-  handleDelete = (id) => {
-    this.props.dispatch({
-      type: 'expenseDaily/del',
-      payload: {id},
-      token: this.props.app.user.token
-    }).then(res => {
-      if (res) {
-        if (res) {
-          this.searchList(false, this.exportParams.page, this.exportParams.pageSize)
-        }
-      }
-    })
-  }
-
 }
 
 Daily.propTypes = {}

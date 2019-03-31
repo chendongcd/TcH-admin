@@ -1,4 +1,4 @@
-import {addSubQua, querySubQuaList, updateSubQua} from '../../../services/sub/qualification'
+import {addSubQua, querySubQuaList, updateSubQua,del} from '../../../services/sub/qualification'
 import {queryProPerList} from "../../../services/system/sys_project";
 import {message} from "antd";
 import * as routerRedux from "react-router-redux";
@@ -65,6 +65,19 @@ export default {
       }
       return false
     },
+    * del({payload, token}, {call, put}) {
+      const response = yield call(del, payload, token);
+      if (response.code == '200') {
+        message.success('删除成功');
+        return true
+      }
+      if (global.checkToken(response)) {
+        yield put({type: 'app/logout'})
+        return false
+      }
+      return false
+    },
+
     * getResume({payload}, {call, put}) {
       yield put(routerRedux.push('/sub/resume',payload));
     },
