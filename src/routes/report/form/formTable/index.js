@@ -7,7 +7,7 @@ import {
   Form,
   Input,
   Button,
-  Modal
+  Modal, Divider, Popconfirm
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
@@ -170,7 +170,7 @@ class ReportFormTable extends Component {
     },
     {
       title: '操作',
-      width: 120,
+      width: 170,
      // fixed: 'right',
       render: (val, record) => {
         if (record.id == '合计:') {
@@ -187,6 +187,14 @@ class ReportFormTable extends Component {
               <Fragment>
                 <a onClick={() => this.handleCheckDetail(true, record)}>查看</a>
               </Fragment> : null}
+            {getButtons(button, pageButtons[2]) ?
+              <Fragment>
+                <Divider type="vertical"/>
+                <Popconfirm title="确定删除?" onConfirm={() => this.handleDelete(record.id)} okText="是" cancelText="否">
+                  <a>删除</a>
+                </Popconfirm>
+              </Fragment>
+              : null}
           </Fragment>
         )
       }
@@ -357,7 +365,7 @@ class ReportFormTable extends Component {
                 bordered
                 data={data}
                 rowKey={'projectName'}
-                scroll={{x:1070, y: global._scollY}}
+                scroll={{x:1120, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
@@ -408,6 +416,22 @@ class ReportFormTable extends Component {
       });
     });
   }
+
+  handleDelete = (id) => {
+    this.props.dispatch({
+      type: 'reportFormTable/del',
+      payload: {id},
+      token: this.props.app.user.token
+    }).then(res => {
+      if (res) {
+        if (res) {
+          this.searchList(false, this.exportParams.page, this.exportParams.pageSize)
+        }
+      }
+    })
+  }
+
+
 }
 
 ReportFormTable.propTypes = {}

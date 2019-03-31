@@ -14,18 +14,19 @@ import {
   DatePicker,
   Modal,
   Upload,
-  Divider
+  Divider,
+  Popconfirm
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable, PreFile, ExportModal} from 'components'
 import styles from './index.less'
-import {getButtons, cleanObject, QiNiuOss, ImageUrl,getPage,fixNumber} from 'utils'
+import {getButtons, cleanObject, QiNiuOss, ImageUrl, getPage, fixNumber} from 'utils'
 import {METER_EXPORT} from 'common/urls'
 import {createURL} from 'services/app'
 
 const FormItem = Form.Item;
 const {Option} = Select;
 
-const pageButtons =  getPage('41').buttons.map(a => a.permission)
+const pageButtons = getPage('41').buttons.map(a => a.permission)
 const info_css = {
   color: '#fa541c'
 }
@@ -78,8 +79,8 @@ class CreateForm extends Component {
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      if(updateModalVisible&&(typeof fieldsValue.meteringNum)==='string'&&fieldsValue.meteringNum.includes('第')){
-        fieldsValue.meteringNum = fieldsValue.meteringNum.slice(1,-1)
+      if (updateModalVisible && (typeof fieldsValue.meteringNum) === 'string' && fieldsValue.meteringNum.includes('第')) {
+        fieldsValue.meteringNum = fieldsValue.meteringNum.slice(1, -1)
       }
       console.log(fieldsValue.meteringNum)
       fieldsValue.meteringTime = fieldsValue.meteringTime.format('YYYY-MM-DD')
@@ -318,7 +319,8 @@ class CreateForm extends Component {
             </Col>
           </Row>
         </div>
-        <Modal width={'100%'} style={{width: '100%', height: '100%',top:0}} bodyStyle={{width: '100%', height: 900,paddingTop:50}}
+        <Modal width={'100%'} style={{width: '100%', height: '100%', top: 0}}
+               bodyStyle={{width: '100%', height: 900, paddingTop: 50}}
                visible={previewVisible} footer={null} onCancel={this.handleCancel}>
           <iframe width={'100%'} height={'100%'} frameBorder={0} src={previewImage}/>
         </Modal>
@@ -390,7 +392,7 @@ class MeterUp extends Component {
   columns = [
     {
       title: '序号',
-     // fixed: 'left',
+      // fixed: 'left',
       width: 100,
       dataIndex: 'ids',
     },
@@ -402,7 +404,7 @@ class MeterUp extends Component {
     },
     {
       title: '计量期数',
-    //  fixed: 'left',
+      //  fixed: 'left',
       width: 110,
       dataIndex: 'meteringNum',
       render: (val) => {
@@ -411,7 +413,7 @@ class MeterUp extends Component {
     },
     {
       title: '计量日期',
-     // fixed: 'left',
+      // fixed: 'left',
       width: 110,
       dataIndex: 'meteringTime',
       render(val) {
@@ -476,7 +478,7 @@ class MeterUp extends Component {
           key: 'payProportion',
           width: 110,
           render(val) {
-            return <span>{Number.isInteger(val * 100)?(val*100):(val*100).toFixed(2)}</span>;
+            return <span>{Number.isInteger(val * 100) ? (val * 100) : (val * 100).toFixed(2)}</span>;
           }
         }]
     },
@@ -500,18 +502,18 @@ class MeterUp extends Component {
       width: 130,
       dataIndex: 'productionValue',
       render(val) {
-        return <span>{fixNumber(val,100)+'%'}</span>;
+        return <span>{fixNumber(val, 100) + '%'}</span>;
       }
     },
     {
       title: '备注',
-      width:130,
+      width: 130,
       dataIndex: 'remark'
     },
     {
       title: '操作',
       //fixed: 'right',
-      width: 200,
+      width: 250,
       render: (val, record) => {
         if (record.ids === '合计:') {
           return null
@@ -525,11 +527,17 @@ class MeterUp extends Component {
         let href = annex.url + '?attname=' + annex.fileName
         return (
           <Fragment>
-              {getButtons(button, pageButtons[1]) ?
-                <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a> : null}
-              <Divider type="vertical"/>
-              {getButtons(button, pageButtons[2]) ?
-                <a onClick={() => this.handleCheckDetail(true, record)}>查看</a> : null}
+            {getButtons(button, pageButtons[1]) ?
+              <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a> : null}
+            <Divider type="vertical"/>
+            {getButtons(button, pageButtons[2]) ?
+              <a onClick={() => this.handleCheckDetail(true, record)}>查看</a> : null}
+            <Divider type="vertical"/>
+            {getButtons(button, pageButtons[4]) ?
+              <Popconfirm title="确定删除?" onConfirm={() => this.handleDelete(record.id)} okText="是" cancelText="否">
+                <a>删除</a>
+              </Popconfirm>
+              : null}
             <Fragment>
               <Divider type="vertical"/>
               <a href={href} download="附件">下载附件</a>
@@ -649,7 +657,7 @@ class MeterUp extends Component {
       }).then(res => {
         if (res) {
           this.handleUpdateModalVisible()
-          this.searchList(false,this.exportParams.page,this.exportParams.pageSize)
+          this.searchList(false, this.exportParams.page, this.exportParams.pageSize)
           cleanState()
         }
       })
@@ -679,7 +687,7 @@ class MeterUp extends Component {
             <FormItem label="项目名称">
               {getFieldDecorator('projectName', {
                 initialValue: null
-              })(<Input />)}
+              })(<Input/>)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
@@ -695,12 +703,12 @@ class MeterUp extends Component {
             <FormItem label="拨付率">
               {getFieldDecorator('minPayProportion', {
                 initialValue: null
-              })(<Input  addonAfter={'%'}/>)}
+              })(<Input addonAfter={'%'}/>)}
             </FormItem>
             <FormItem style={{marginLeft: 15 + 'px'}} label="至">
               {getFieldDecorator('maxPayProportion', {
                 initialValue: null
-              })(<Input  addonAfter={'%'}/>)}
+              })(<Input addonAfter={'%'}/>)}
             </FormItem>
           </Col>
         </Row>
@@ -804,7 +812,7 @@ class MeterUp extends Component {
                 bordered
                 data={data}
                 rowKey={'ids'}
-                scroll={{x: 2420, y: global._scollY}}
+                scroll={{x: 2470, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
@@ -861,6 +869,21 @@ class MeterUp extends Component {
         token: this.props.app.user.token
       });
     });
+  }
+
+  handleDelete = (id) => {
+    this.props.dispatch({
+      type: 'meterUp/del',
+      payload: {id},
+      token: this.props.app.user.token
+    }).then(res=>{
+      if(res){
+        if (res) {
+          this.searchList(false, this.exportParams.page, this.exportParams.pageSize)
+        }
+      }
+    })
+
   }
 }
 

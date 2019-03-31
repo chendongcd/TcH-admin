@@ -1,4 +1,4 @@
-import {addDown, queryDownList, updateDown,querySum} from "../../../services/downToBack/meterDown";
+import {addDown, queryDownList, updateDown,querySum,del} from "../../../services/downToBack/meterDown";
 import {queryProPerList} from "../../../services/system/sys_project";
 import {queryTeamLists,queryAmount,querySubList} from "../../../services/downToBack/teamAccount"
 import {message} from 'antd';
@@ -147,6 +147,18 @@ export default {
       const response = yield call(queryAmount, payload, token);
       if (response.code == '200') {
         return response.entity
+      }
+      if (global.checkToken(response)) {
+        yield put({type: 'app/logout'})
+        return false
+      }
+      return false
+    },
+    * del({payload, token}, {call, put}) {
+      const response = yield call(del, payload, token);
+      if (response.code == '200') {
+        message.success('删除成功');
+        return true
       }
       if (global.checkToken(response)) {
         yield put({type: 'app/logout'})

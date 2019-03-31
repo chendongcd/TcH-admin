@@ -11,7 +11,7 @@ import {
   Select,
   Button,
   DatePicker,
-  Modal, Divider, Badge,
+  Modal, Divider, Badge, Popconfirm,
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable, CustomPicker} from 'components'
 import styles from './index.less'
@@ -908,7 +908,7 @@ class Response extends Component {
     {
       title: '操作',
       // fixed:'right',
-      width: 120,
+      width: 170,
       render: (val, record) => {
         if (record.ids === '合计:') {
           return null
@@ -925,6 +925,14 @@ class Response extends Component {
             <Divider type="vertical"/>
             {getButtons(button, pageButtons[2]) ?
               <a onClick={() => this.handleCheckDetail(true, record)}>查看</a> : null}
+            {getButtons(button, pageButtons[3]) ?
+              <Fragment>
+                <Divider type="vertical"/>
+                <Popconfirm title="确定删除?" onConfirm={() => this.handleDelete(record.id)} okText="是" cancelText="否">
+                  <a>删除</a>
+                </Popconfirm>
+              </Fragment>
+              : null}
           </Fragment>
         )
       }
@@ -1168,7 +1176,7 @@ class Response extends Component {
                 bordered
                 data={data}
                 rowKey={'ids'}
-                scroll={{x: 4560, y: global._scollY}}
+                scroll={{x: 4610, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
@@ -1222,6 +1230,21 @@ class Response extends Component {
       });
     });
   }
+
+  handleDelete = (id) => {
+    this.props.dispatch({
+      type: 'response/del',
+      payload: {id},
+      token: this.props.app.user.token
+    }).then(res => {
+      if (res) {
+        if (res) {
+          this.searchList(false, this.exportParams.page, this.exportParams.pageSize)
+        }
+      }
+    })
+  }
+
 
 }
 

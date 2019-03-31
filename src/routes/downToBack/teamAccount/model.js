@@ -1,6 +1,7 @@
-import {queryTeamList, addTeam, updateCompany, updateTeam,queryContractCodes,querySum} from '../../../services/downToBack/teamAccount'
+import {queryTeamList, addTeam, updateCompany, updateTeam,queryContractCodes,querySum,del} from '../../../services/downToBack/teamAccount'
 import {queryProPerList} from "../../../services/system/sys_project";
 import {querySubList} from "../../../services/sub/resume";
+import {message} from "antd";
 
 export default {
   namespace: 'teamAccount',
@@ -145,6 +146,18 @@ export default {
         yield put({type: 'app/logout'})
         return false
       }
+    },
+    * del({payload, token}, {call, put}) {
+      const response = yield call(del, payload, token);
+      if (response.code == '200') {
+        message.success('删除成功');
+        return true
+      }
+      if (global.checkToken(response)) {
+        yield put({type: 'app/logout'})
+        return false
+      }
+      return false
     },
   },
 

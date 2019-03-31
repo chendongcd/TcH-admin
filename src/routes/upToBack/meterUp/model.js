@@ -1,4 +1,4 @@
-import {updateUp, addUp, queryUpDetail, queryUpList, querySum} from '../../../services/upToBack/meterUp';
+import {updateUp, addUp, queryUpDetail, queryUpList, querySum,del} from '../../../services/upToBack/meterUp';
 import {queryProPerList} from "../../../services/system/sys_project";
 import {message} from "antd";
 
@@ -84,6 +84,18 @@ export default {
       const response = yield call(addUp, payload, token);
       if (response.code == '200') {
         message.success('新增成功');
+        return true
+      }
+      if (global.checkToken(response)) {
+        yield put({type: 'app/logout'})
+        return false
+      }
+      return false
+    },
+    * del({payload, token}, {call, put}) {
+      const response = yield call(del, payload, token);
+      if (response.code == '200') {
+        message.success('删除成功');
         return true
       }
       if (global.checkToken(response)) {

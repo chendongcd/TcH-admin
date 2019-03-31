@@ -14,7 +14,7 @@ import {
   DatePicker,
   Modal,
   Upload,
-  Divider,
+  Divider, Popconfirm,
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable, ExportModal, PreFile} from 'components'
 import styles from './index.less'
@@ -854,7 +854,7 @@ class TeamAccount extends Component {
     {
       title: '操作',
       ket: '03',
-      width: 200,
+      width: 250,
       //fixed: 'right',
       render: (val, record) => {
         if (record.ids === '合计:') {
@@ -875,6 +875,14 @@ class TeamAccount extends Component {
                 <a onClick={() => this.handleCheckDetail(true, record)}>查看</a></Fragment> : null}
             {getButtons(button, pageButtons[3]) ?
               <Fragment> <Divider type="vertical"/><a onClick={() => this.handleComModalVisible(true, record)}>公司编辑</a> </Fragment> : null}
+            {getButtons(button, pageButtons[5]) ?
+              <Fragment>
+                <Divider type="vertical"/>
+                <Popconfirm title="确定删除?" onConfirm={() => this.handleDelete(record.id)} okText="是" cancelText="否">
+                  <a>删除</a>
+                </Popconfirm>
+              </Fragment>
+              : null}
           </Fragment>
         )
       }
@@ -1169,7 +1177,7 @@ class TeamAccount extends Component {
                 bordered
                 data={data}
                 rowKey={'ids'}
-                scroll={{x: 3270, y: global._scollY}}
+                scroll={{x: 3320, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
@@ -1240,6 +1248,21 @@ class TeamAccount extends Component {
       )
     }
   }
+
+  handleDelete = (id) => {
+    this.props.dispatch({
+      type: 'teamAccount/del',
+      payload: {id},
+      token: this.props.app.user.token
+    }).then(res => {
+      if (res) {
+        if (res) {
+          this.searchList(false, this.exportParams.page, this.exportParams.pageSize)
+        }
+      }
+    })
+  }
+
 }
 
 TeamAccount.propTypes = {}

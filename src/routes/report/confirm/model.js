@@ -1,5 +1,5 @@
 import {queryProPerList} from "../../../services/system/sys_project";
-import {queryConfirm,queryConfirmLast,addConfirm,updateConfirm,querySum} from '../../../services/report/confirm/index'
+import {queryConfirm,queryConfirmLast,addConfirm,updateConfirm,querySum,del} from '../../../services/report/confirm/index'
 import {message} from "antd";
 export default {
   namespace: 'confirmation',
@@ -125,6 +125,18 @@ export default {
         yield put({type:'app/logout'})
         return false
       }
+    },
+    * del({payload, token}, {call, put}) {
+      const response = yield call(del, payload, token);
+      if (response.code == '200') {
+        message.success('删除成功');
+        return true
+      }
+      if (global.checkToken(response)) {
+        yield put({type: 'app/logout'})
+        return false
+      }
+      return false
     },
   },
 
