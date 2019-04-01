@@ -809,17 +809,17 @@ class Qualification extends Component {
   ];
 
   checkPeriod = (record) => {
-    let status1 = _setColor(moment(record.businessLicenseValidityPeriod).fromNow())
-    let status2 = _setColor(moment(record.qualificationValidityPeriod).fromNow())
-    let status3 = _setColor(moment(record.safetyValidityPeriod).fromNow())
-    let status = [status1, status2, status3]
-    if (status.includes('error')) {
-      return 'error'
-    }
-    if (status.includes('warning')) {
-      return 'warning'
-    }
-    return 'success'
+    //let status1 = _setColor(moment(record.businessLicenseValidityPeriod).fromNow())
+    //let status2 = _setColor(moment(record.qualificationValidityPeriod).fromNow())
+    const status3 = _setColor(moment(record.safetyValidityPeriod).fromNow())
+   // let status = [status1, status2, status3]
+   //  if (status.includes('error')) {
+   //    return 'error'
+   //  }
+   //  if (status.includes('warning')) {
+   //    return 'warning'
+   //  }
+    return status3
   }
 
   componentDidMount() {

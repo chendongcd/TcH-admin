@@ -821,7 +821,7 @@ class TeamAccount extends Component {
             dataIndex: 'approvalTime',
             width:130,
             render(val) {
-              return <span>{val ? moment(val).format('YYYY-MM-DD') : ''}</span>;
+              return <span>{val ? moment(val).format('YYYY/MM/DD') : ''}</span>;
             },
           },
             {
