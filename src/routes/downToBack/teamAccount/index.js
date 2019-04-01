@@ -674,7 +674,7 @@ class TeamAccount extends Component {
           width:150,
           dataIndex: 'contractTime',
           render(val) {
-            return <span>{val ? moment(val).format('YYYY-MM-DD') : ''}</span>;
+            return <span>{val ? moment(val).format('YYYY/MM/DD') : ''}</span>;
           },
         },
         {
