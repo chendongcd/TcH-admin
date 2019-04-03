@@ -75,12 +75,13 @@ class CreateForm extends Component {
           fieldsValue[prop] = fieldsValue[prop].format('YYYY-MM-DD')
         }
       }
-      fieldsValue.annexUrl = `{"url":"${this.state.fileList[0].url}","fileName":"${this.state.fileList[0].name}"}`
-      if (selectedValues.subcontractorId) {
+      if (selectedValues.subcontractorId&&!fieldsValue.subcontractorId) {
         fieldsValue.subcontractorId = selectedValues.subcontractorId
+      }
+      if(selectedValues.laborAccountId&&!fieldsValue.laborAccountId){
         fieldsValue.laborAccountId = selectedValues.laborAccountId
       }
-      // form.resetFields();
+      fieldsValue.annexUrl = `{"url":"${this.state.fileList[0].url}","fileName":"${this.state.fileList[0].name}"}`
       handleAdd(fieldsValue, updateModalVisible, selectedValues, this.cleanState);
     });
   };
@@ -1005,11 +1006,11 @@ class MeterDown extends Component {
     )
   }
 
-  getAmount = (paload, callback) => {
+  getAmount = (payload, callback) => {
     this.props.dispatch(
       {
         type: 'meterDown/queryAmount',
-        payload: paload,
+        payload: payload,
         token: this.props.app.user.token
       }
     ).then(res => {
