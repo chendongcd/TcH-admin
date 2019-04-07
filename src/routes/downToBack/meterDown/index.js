@@ -75,10 +75,10 @@ class CreateForm extends Component {
           fieldsValue[prop] = fieldsValue[prop].format('YYYY-MM-DD')
         }
       }
-      if (selectedValues.subcontractorId&&!fieldsValue.subcontractorId) {
+      if (selectedValues.subcontractorId && Number.isNaN(Number(fieldsValue.subcontractorId))) {
         fieldsValue.subcontractorId = selectedValues.subcontractorId
       }
-      if(selectedValues.laborAccountId&&!fieldsValue.laborAccountId){
+      if (selectedValues.laborAccountId && Number.isNaN(Number(fieldsValue.laborAccountId))) {
         fieldsValue.laborAccountId = selectedValues.laborAccountId
       }
       fieldsValue.annexUrl = `{"url":"${this.state.fileList[0].url}","fileName":"${this.state.fileList[0].name}"}`
