@@ -12,11 +12,12 @@ import {
   Button,
   DatePicker,
   Modal,
-  Divider, Popconfirm,
+  Divider,
+  Popconfirm,
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'
-import {getButtons, cleanObject,getPage} from "utils";
+import {getButtons, cleanObject, getPage} from "utils";
 
 import {SUB_RES_EXPORT} from 'common/urls'
 import {createURL} from 'services/app'
@@ -28,7 +29,7 @@ const testValue = ''
 const pageButtons = getPage('52').buttons.map(a => a.permission)
 
 const CreateForm = Form.create()(props => {
-  const {modalVisible, form,loading, handleAdd, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail, subNames, teamList, proNames} = props;
+  const {modalVisible, form, loading, handleAdd, handleModalVisible, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail, subNames, teamList, proNames} = props;
 
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
@@ -49,7 +50,7 @@ const CreateForm = Form.create()(props => {
       visible={modalVisible}
       width={1200}
       maskClosable={false}
-      okButtonProps={{loading:loading}}
+      okButtonProps={{loading: loading}}
       onOk={() => checkDetail ? handleCheckDetail() : okHandle()}
       onCancel={() => checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()}
     >
@@ -69,7 +70,7 @@ const CreateForm = Form.create()(props => {
               </Select>)}
             </FormItem>
           </Col>
-         {/* <Col md={12} sm={24}>
+          {/* <Col md={12} sm={24}>
             <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="合同签订人">
               {form.getFieldDecorator('contractPerson', {
                 rules: [{required: true, message: '请输入合同签订人'}],
@@ -130,9 +131,7 @@ const CreateForm = Form.create()(props => {
             <FormItem labelCol={{span: 8}} wrapperCol={{span: 15}} label="施工规模">
               {form.getFieldDecorator('constructionScale', {
                 initialValue: selectedValues.constructionScale ? selectedValues.constructionScale : testValue
-              })(<Select className={styles.customSelect} disabled={checkDetail} placeholder="请选择"
-                         style={{width: '100%'}}>
-              </Select>)}
+              })(<Input disabled={checkDetail} placeholder='请输入施工规模'/>)}
             </FormItem>
           </Col>
         </Row>
@@ -142,7 +141,7 @@ const CreateForm = Form.create()(props => {
 });
 
 const CreateReview = Form.create()(props => {
-  const {modalVisible, form,loading, handleReview, handleReviewModal, selectedValues} = props;
+  const {modalVisible, form, loading, handleReview, handleReviewModal, selectedValues} = props;
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -156,7 +155,7 @@ const CreateReview = Form.create()(props => {
       bodyStyle={{padding: 0 + 'px'}}
       visible={modalVisible}
       width={992}
-      okButtonProps={{loading:loading}}
+      okButtonProps={{loading: loading}}
       maskClosable={false}
       onOk={okHandle}
       onCancel={() => handleReviewModal()}
@@ -205,7 +204,7 @@ class Resume extends Component {
       reviewType: false,
       selectedValues: {},
       checkDetail: false,
-      locationPath:''
+      locationPath: ''
     }
     this.exportParams = {
       page: 1,
@@ -215,36 +214,36 @@ class Resume extends Component {
 
   columns = [
     {
-      title:'序号',
-      dataIndex:'ids',
-      width:100,
+      title: '序号',
+      dataIndex: 'ids',
+      width: 100,
       //fixed:'left'
     },
     {
       title: '分包商备案编码',
       dataIndex: 'subcontractorCode',
-      width:150,
+      width: 150,
       //fixed:'left'
     },
     {
       title: '分包商全称',
       dataIndex: 'subcontractorName',
-      width:180,
+      width: 180,
       //fixed:'left'
     },
     {
       title: '队伍名称',
-      width:150,
+      width: 150,
       dataIndex: 'teamName',
     },
     {
       title: '施工规模',
-      width:110,
+      width: 110,
       dataIndex: 'constructionScale'
     },
     {
       title: '开始日期',
-      width:130,
+      width: 130,
       dataIndex: 'startTime',
       render(val) {
         return <span>{moment(val).format('YYYY/MM/DD')}</span>;
@@ -252,50 +251,50 @@ class Resume extends Component {
     },
     {
       title: '结束日期',
-      width:130,
+      width: 130,
       dataIndex: 'endTime',
       render(val) {
-        return <span>{val?moment(val).format('YYYY/MM/DD'):''}</span>;
+        return <span>{val ? moment(val).format('YYYY/MM/DD') : ''}</span>;
       },
     },
     {
       title: '该时间段所属项目部',
-      width:200,
+      width: 200,
       dataIndex: 'projectName'
     },
     {
       title: '合同签订人',
-      width:110,
+      width: 110,
       dataIndex: 'contractPerson',
     },
     {
       title: '合同签订人联系方式',
-      width:150,
+      width: 150,
       dataIndex: 'phone'
     },
     {
       title: '合同金额',
-      width:130,
+      width: 130,
       dataIndex: 'contractAmount',
     },
     {
       title: '结算金额',
-      width:130,
+      width: 130,
       dataIndex: 'settlementAmount',
     },
     {
       title: '项目部评价',
-      width:150,
+      width: 150,
       dataIndex: 'projectEvaluation',
     },
     {
       title: '文字评价',
-      width:180,
+      width: 180,
       dataIndex: 'projectDescription',
     },
     {
       title: '操作',
-      width:250,
+      width: 250,
       //fixed:'right',
       render: (val, record) => {
         if (record.ids === '合计:') {
@@ -333,15 +332,15 @@ class Resume extends Component {
 
   componentDidMount() {
     const {
-      app: {location,user},
+      app: {location, user},
       dispatch
     } = this.props;
     if (user.token) {
       this.getSubNames()
       this.getTeamNames()
       this.getProNames()
-      if(location.state&&location.state.subcontractorName){
-        this.setState({locationPath:location.state.subcontractorName})
+      if (location.state && location.state.subcontractorName) {
+        this.setState({locationPath: location.state.subcontractorName})
         let payload = {
           page: 1,
           pageSize: 10,
@@ -352,14 +351,14 @@ class Resume extends Component {
           payload: payload,
           token: this.props.app.user.token
         });
-      }else {
+      } else {
         this.getList()
       }
     }
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    this.searchList(null,pagination.current, pagination.pageSize)
+    this.searchList(null, pagination.current, pagination.pageSize)
   };
 
   handleFormReset = () => {
@@ -367,7 +366,7 @@ class Resume extends Component {
     form.resetFields();
     this.setState({
       formValues: {},
-      locationPath:''
+      locationPath: ''
     });
     this.getList()
   };
@@ -450,7 +449,7 @@ class Resume extends Component {
       }).then(res => {
         if (res) {
           this.handleUpdateModalVisible()
-          this.searchList(false,this.exportParams.page,this.exportParams.pageSize)
+          this.searchList(false, this.exportParams.page, this.exportParams.pageSize)
         }
       })
     } else {
@@ -497,9 +496,9 @@ class Resume extends Component {
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={8} sm={24}>
             <FormItem label="分包商全称">
-              {getFieldDecorator('subcontractorName',{
-                initialValue: locationPath ?locationPath : '',
-              })(<Input />)}
+              {getFieldDecorator('subcontractorName', {
+                initialValue: locationPath ? locationPath : '',
+              })(<Input/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
@@ -515,11 +514,7 @@ class Resume extends Component {
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="施工规模">
-              {getFieldDecorator('constructionScale')(<Select placeholder="请选择施工规模" style={{width: '100%'}}>
-                <Option value="0">优秀</Option>
-                <Option value="1">合格</Option>
-                <Option value="1">不合格</Option>
-              </Select>)}
+              {getFieldDecorator('constructionScale')(<Input/>)}
             </FormItem>
           </Col>
         </Row>
@@ -590,15 +585,17 @@ class Resume extends Component {
                 filterMultiple={false}
                 rowKey={'ids'}
                 data={data}
-                scroll={{x: 2250,y: global._scollY}}
+                scroll={{x: 2250, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
               />
             </div>
           </Card>
-          <CreateForm loading={loading.effects[`sub_resume/${updateModalVisible?'update':'add'}`]} {...parentMethods} {...parentState}/>
-          <CreateReview loading={loading.effects[`sub_resume/update`]} {...parentMethods} selectedValues={selectedValues} modalVisible={reviewType}/>
+          <CreateForm
+            loading={loading.effects[`sub_resume/${updateModalVisible ? 'update' : 'add'}`]} {...parentMethods} {...parentState}/>
+          <CreateReview loading={loading.effects[`sub_resume/update`]} {...parentMethods}
+                        selectedValues={selectedValues} modalVisible={reviewType}/>
         </PageHeaderWrapper>
       </Page>
     )
@@ -648,8 +645,8 @@ class Resume extends Component {
     });
   }
 
-  searchList = (e,page = 1, pageSize = 10) => {
-    e&&e.preventDefault?e.preventDefault():null
+  searchList = (e, page = 1, pageSize = 10) => {
+    e && e.preventDefault ? e.preventDefault() : null
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
       let payload = {
@@ -667,6 +664,7 @@ class Resume extends Component {
       });
     });
   }
+
   handleDelete = (id) => {
     this.props.dispatch({
       type: 'sub_resume/del',
@@ -685,4 +683,4 @@ class Resume extends Component {
 
 Resume.propTypes = {}
 
-export default connect(({app,  loading, sub_resume}) => ({app, loading, sub_resume}))(Resume)
+export default connect(({app, loading, sub_resume}) => ({app, loading, sub_resume}))(Resume)

@@ -17,9 +17,9 @@ import {
   Divider,
   message, Popconfirm
 } from 'antd';
-import {Page, PageHeaderWrapper, StandardTable, PreFile,ExportModal} from 'components'
+import {Page, PageHeaderWrapper, StandardTable, PreFile, ExportModal} from 'components'
 import styles from './index.less'
-import {QiNiuOss, ImageUrl, cleanObject, getButtons,getPage,fixNumber} from 'utils'
+import {QiNiuOss, ImageUrl, cleanObject, getButtons, getPage, fixNumber} from 'utils'
 import {EVAL_EXPORT} from 'common/urls'
 import {createURL} from 'services/app'
 
@@ -34,11 +34,12 @@ const info_css = {
 }
 const pageButtons = getPage('81').buttons.map(a => a.permission)
 const plainOptions = [
-  { label: '项目信息', value: '1' },
-  { label: '经管部评估', value: '2' },
-  { label: '会审情况', value: '3' },
-  { label: '责任状签订', value: '4' },
+  {label: '项目信息', value: '1'},
+  {label: '经管部评估', value: '2'},
+  {label: '会审情况', value: '3'},
+  {label: '责任状签订', value: '4'},
 ]
+
 @Form.create()
 class CreateForm extends Component {
 
@@ -60,8 +61,8 @@ class CreateForm extends Component {
   }
 
   componentDidUpdate(preProp, preState) {
-    if (preProp.selectedValues.isResponsibility==undefined&&(this.props.selectedValues.isResponsibility||this.props.selectedValues.isResponsibility==0)) {
-      this.setState({isSignRes:this.props.selectedValues.isResponsibility})
+    if (preProp.selectedValues.isResponsibility == undefined && (this.props.selectedValues.isResponsibility || this.props.selectedValues.isResponsibility == 0)) {
+      this.setState({isSignRes: this.props.selectedValues.isResponsibility})
     }
     if (!preProp.selectedValues.jointHearingAnnex && this.props.selectedValues.jointHearingAnnex && this.state.jointHearingAnnex.length == 0) {
       let pdf = JSON.parse(this.props.selectedValues.jointHearingAnnex)
@@ -101,41 +102,47 @@ class CreateForm extends Component {
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      const {jointHearingAnnex,responsibilityAnnex,evaluationAnnex} = this.state
+      const {jointHearingAnnex, responsibilityAnnex, evaluationAnnex} = this.state
       for (let prop in fieldsValue) {
         if (fieldsValue[prop] instanceof moment) {
           fieldsValue[prop] = fieldsValue[prop].format('YYYY-MM-DD')
         }
       }
-      if(jointHearingAnnex.length>0) {
+      if (jointHearingAnnex.length > 0) {
         fieldsValue.jointHearingAnnex = `{"url":"${jointHearingAnnex[0].url}","fileName":"${this.state.jointHearingAnnex[0].name}"}`
       }
-      if(responsibilityAnnex.length>0) {
+      if (responsibilityAnnex.length > 0) {
         fieldsValue.responsibilityAnnex = `{"url":"${responsibilityAnnex[0].url}","fileName":"${this.state.responsibilityAnnex[0].name}"}`
       }
-      if(evaluationAnnex.length>0) {
+      if (evaluationAnnex.length > 0) {
         fieldsValue.evaluationAnnex = `{"url":"${evaluationAnnex[0].url}","fileName":"${this.state.evaluationAnnex[0].name}"}`
       }
 
-      handleAdd(fieldsValue, updateModalVisible, selectedValues,this.cleanState);
+      handleAdd(fieldsValue, updateModalVisible, selectedValues, this.cleanState);
     });
   };
 
-  cleanState=()=>{
+  cleanState = () => {
     this.selectProject = {}
-    this.setState({isSignRes:'-1',previewImage:'',responsibilityAnnex:[],jointHearingAnnex:[],evaluationAnnex:[]})
+    this.setState({
+      isSignRes: '-1',
+      previewImage: '',
+      responsibilityAnnex: [],
+      jointHearingAnnex: [],
+      evaluationAnnex: []
+    })
   }
 
   onChange = (value, option) => {
     this.selectProject = option.props.item
-    if(!this.selectProject.contractEndTime){
+    if (!this.selectProject.contractEndTime) {
       return message.error('请先完善该项目工程信息卡');
     }
     this.props.form.setFieldsValue({
       engineeringType: this.selectProject.projectType,
       engineeringStatus: this.selectProject.engineeringStatus,
-      contractEndTime:moment(this.selectProject.contractEndTime).format('YYYY-MM-DD'),
-      contractStartTime:moment(this.selectProject.contractStartTime).format('YYYY-MM-DD'),
+      contractEndTime: moment(this.selectProject.contractEndTime).format('YYYY-MM-DD'),
+      contractStartTime: moment(this.selectProject.contractStartTime).format('YYYY-MM-DD'),
       duration: this.selectProject.distanceTime
     });
   }
@@ -154,12 +161,12 @@ class CreateForm extends Component {
   }
 
   _onSelect = (param) => {
-    this.setState({isSignRes:param})
+    this.setState({isSignRes: param})
   }
 
   render() {
-    const {modalVisible, loading,proNames, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
-    let {previewVisible, evaluationAnnex, previewImage, responsibilityAnnex, resProgress, evaProgress, jointHearingAnnex, joinProgress,isSignRes} = this.state
+    const {modalVisible, loading, proNames, form, handleModalVisible, normFile, handleUpdateModalVisible, updateModalVisible, handleCheckDetail, selectedValues, checkDetail} = this.props;
+    let {previewVisible, evaluationAnnex, previewImage, responsibilityAnnex, resProgress, evaProgress, jointHearingAnnex, joinProgress, isSignRes} = this.state
     return (
       <Modal
         destroyOnClose
@@ -167,9 +174,9 @@ class CreateForm extends Component {
         bodyStyle={{padding: 0 + 'px'}}
         visible={modalVisible}
         width={1100}
-        okButtonProps={{loading:loading}}
+        okButtonProps={{loading: loading}}
         maskClosable={false}
-        onOk={()=>checkDetail ? handleCheckDetail():this.okHandle()}
+        onOk={() => checkDetail ? handleCheckDetail() : this.okHandle()}
         onCancel={() => {
           this.cleanState()
           checkDetail ? handleCheckDetail() : updateModalVisible ? handleUpdateModalVisible() : handleModalVisible()
@@ -195,7 +202,7 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="工程类别">
                 {form.getFieldDecorator('engineeringType', {
-                  rules: [{required: true,message:'请先选择项目'}],
+                  rules: [{required: true, message: '请先选择项目'}],
                   initialValue: selectedValues.engineeringType ? selectedValues.engineeringType : '',
                 })(<Input disabled={true} placeholder="自动带出"/>)}
               </FormItem>
@@ -205,8 +212,8 @@ class CreateForm extends Component {
             <Col md={12} sm={24}>
               <FormItem labelCol={{span: 5}} wrapperCol={{span: 15}} label="工程状态">
                 {form.getFieldDecorator('engineeringStatus', {
-                  rules: [{required: true,message:'请先选择项目'}],
-                  initialValue: (selectedValues.engineeringStatus||selectedValues.engineeringStatus==0) ? status[selectedValues.engineeringStatus].name : ''
+                  rules: [{required: true, message: '请先选择项目'}],
+                  initialValue: (selectedValues.engineeringStatus || selectedValues.engineeringStatus == 0) ? status[selectedValues.engineeringStatus].name : ''
                 })((<Select className={styles.customSelect} disabled={true} placeholder="自动带出"
                             style={{width: '100%'}}>
                   {status.map((item, index) => {
@@ -287,7 +294,7 @@ class CreateForm extends Component {
             <Col md={8} sm={24}>
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="合同开工日期">
                 {form.getFieldDecorator('contractStartTime', {
-                  rules: [{required: false,message:'请先完善该项目工程信息卡'}],
+                  rules: [{required: false, message: '请先完善该项目工程信息卡'}],
                   initialValue: selectedValues.contractStartTime ? moment(selectedValues.contractStartTime).format('YYYY-MM-DD') : ''
                 })(<Input disabled={true} placeholder='自动带出'/>)}
               </FormItem>
@@ -295,16 +302,16 @@ class CreateForm extends Component {
             <Col md={8} sm={24}>
               <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="合同竣工日期">
                 {form.getFieldDecorator('contractEndTime', {
-                  rules: [{required: false,message:'请先完善该项目工程信息卡'}],
+                  rules: [{required: false, message: '请先完善该项目工程信息卡'}],
                   initialValue: selectedValues.contractEndTime ? moment(selectedValues.contractEndTime).format('YYYY-MM-DD') : ''
                 })(<Input disabled={true} placeholder='自动带出'/>)}
               </FormItem>
             </Col>
             <Col md={8} sm={24}>
-              <FormItem labelCol={{span:9}} wrapperCol={{span: 15}} label="工期(月)">
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="工期(月)">
                 {form.getFieldDecorator('duration', {
-                  rules: [{required: false,message:'请先完善该项目工程信息卡'}],
-                  initialValue: selectedValues.duration||selectedValues.duration==0 ? selectedValues.duration : ''
+                  rules: [{required: false, message: '请先完善该项目工程信息卡'}],
+                  initialValue: selectedValues.duration || selectedValues.duration == 0 ? selectedValues.duration : ''
                 })(<Input disabled={true} placeholder='自动带出'/>)}
               </FormItem>
             </Col>
@@ -330,7 +337,7 @@ class CreateForm extends Component {
                   rules: [{required: false, message: '请输入评估效益点(%)'}],
                   initialValue: selectedValues.evaluationBenefit ? selectedValues.evaluationBenefit : testValue
 
-                })(<Input disabled={checkDetail} style={{marginTop:4}} placeholder='请输入(保留小数点后两位)' addonAfter={'%'}/>)}
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder='请输入(保留小数点后两位)' addonAfter={'%'}/>)}
               </FormItem>
             </Col>
           </Row>
@@ -341,11 +348,11 @@ class CreateForm extends Component {
                   rules: [{required: false, message: '请输入含分包差及经营费(%)'}],
                   initialValue: selectedValues.evaluationCost ? selectedValues.evaluationCost : testValue
 
-                })(<Input disabled={checkDetail} style={{marginTop:4}} placeholder='请输入(保留小数点后两位)' addonAfter={'%'}/>)}
+                })(<Input disabled={checkDetail} style={{marginTop: 4}} placeholder='请输入(保留小数点后两位)' addonAfter={'%'}/>)}
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem  labelCol={{span: 9}} wrapperCol={{span: 14}} label="评估编号">
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 14}} label="评估编号">
                 {form.getFieldDecorator('evaluationCode', {
                   rules: [{required: false, message: '请输入评估编号'}],
                   initialValue: selectedValues.evaluationCode ? selectedValues.evaluationCode : testValue
@@ -369,7 +376,7 @@ class CreateForm extends Component {
                     // fileList={fileList}
                                   listType="text"
                                   name="files"
-                                  disabled={jointHearingAnnex.length > 0||checkDetail}
+                                  disabled={jointHearingAnnex.length > 0 || checkDetail}
                                   onSuccess={(e) => this.onSuccess(e, 0)}
                                   handleManualRemove={(e) => this.remove(e, 0)}
                                   onError={this.onError}
@@ -437,7 +444,7 @@ class CreateForm extends Component {
                     // fileList={fileList}
                                   listType="text"
                                   name="files"
-                                  disabled={jointHearingAnnex.length > 0||checkDetail}
+                                  disabled={jointHearingAnnex.length > 0 || checkDetail}
                                   onSuccess={(e) => this.onSuccess(e, 1)}
                                   handleManualRemove={(e) => this.remove(e, 1)}
                                   onError={this.onError}
@@ -462,20 +469,20 @@ class CreateForm extends Component {
         <div className={styles.modalContent}>
           <Row>
             <Col md={12} sm={24}>
-            <FormItem labelCol={{span: 9}} wrapperCol={{span: 8}} label="责任状是否签订">
-              {form.getFieldDecorator('isResponsibility', {
-                rules: [{required: false, message: '请选择责任状是否签订'}],
-                initialValue: selectedValues.isResponsibility=='0'||!selectedValues.isResponsibility ? '0' : '1'
-              })(<Select onSelect={this._onSelect} className={styles.customSelect} disabled={checkDetail}
-                         placeholder="请选择"
-                         style={{width: '100%'}}>
-                <Option value="1">是</Option>
-                <Option value="0">否</Option>
-              </Select>)}
-            </FormItem>
-          </Col>
+              <FormItem labelCol={{span: 9}} wrapperCol={{span: 8}} label="责任状是否签订">
+                {form.getFieldDecorator('isResponsibility', {
+                  rules: [{required: false, message: '请选择责任状是否签订'}],
+                  initialValue: selectedValues.isResponsibility == '0' || !selectedValues.isResponsibility ? '0' : '1'
+                })(<Select onSelect={this._onSelect} className={styles.customSelect} disabled={checkDetail}
+                           placeholder="请选择"
+                           style={{width: '100%'}}>
+                  <Option value="1">是</Option>
+                  <Option value="0">否</Option>
+                </Select>)}
+              </FormItem>
+            </Col>
           </Row>
-          {isSignRes=='1'? <Fragment>
+          {isSignRes == '1' ? <Fragment>
             <Row gutter={8}>
               <Col md={12} sm={24}>
                 <FormItem labelCol={{span: 9}} wrapperCol={{span: 15}} label="效益点">
@@ -530,7 +537,7 @@ class CreateForm extends Component {
                       // fileList={fileList}
                                     listType="picture"
                                     name="files"
-                                    disabled={responsibilityAnnex.length > 0||checkDetail}
+                                    disabled={responsibilityAnnex.length > 0 || checkDetail}
                                     onSuccess={(e) => this.onSuccess(e, 2)}
                                     handleManualRemove={(e) => this.remove(e, 2)}
                                     onError={this.onError}
@@ -542,15 +549,17 @@ class CreateForm extends Component {
                       <p className="ant-upload-text">点击或拖动附件进入</p>
                     </Upload.Dragger>
                   )}
-                  <PreFile disabled={checkDetail} index={2} onClose={this.remove} onPreview={this.handlePreview} progress={resProgress}
+                  <PreFile disabled={checkDetail} index={2} onClose={this.remove} onPreview={this.handlePreview}
+                           progress={resProgress}
                            file={responsibilityAnnex[0]}/>
                   <span style={info_css}>备注：请以一份PDF格式文件上传</span>
                 </FormItem>
               </Col>
             </Row>
-          </Fragment>:null}
+          </Fragment> : null}
         </div>
-        <Modal width={'100%'} style={{width: '100%', height: '100%',top:0}} bodyStyle={{width: '100%', height: 900,paddingTop:50}}
+        <Modal width={'100%'} style={{width: '100%', height: '100%', top: 0}}
+               bodyStyle={{width: '100%', height: 900, paddingTop: 50}}
                visible={previewVisible} footer={null} onCancel={this.handleCancel}>
           <iframe width={'100%'} height={'100%'} frameBorder={0} src={previewImage}/>
         </Modal>
@@ -632,7 +641,7 @@ class CreateForm extends Component {
       if (res.status == 'done') {
         this.props.form.setFieldsValue({responsibilityAnnex: []});
       } else {
-        if(this.upload[2]&&this.upload[2].unsubscribe) {
+        if (this.upload[2] && this.upload[2].unsubscribe) {
           this.upload[2].unsubscribe()
         }
       }
@@ -642,7 +651,7 @@ class CreateForm extends Component {
       if (res.status == 'done') {
         this.props.form.setFieldsValue({jointHearingAnnex: []});
       } else {
-        if(this.upload[1]&&this.upload[1].unsubscribe) {
+        if (this.upload[1] && this.upload[1].unsubscribe) {
           this.upload[1].unsubscribe()
         }
       }
@@ -652,7 +661,7 @@ class CreateForm extends Component {
       if (res.status == 'done') {
         this.props.form.setFieldsValue({evaluationAnnex: []});
       } else {
-        if(this.upload[0]&&this.upload[0].unsubscribe) {
+        if (this.upload[0] && this.upload[0].unsubscribe) {
           this.upload[0].unsubscribe()
         }
       }
@@ -674,7 +683,7 @@ class ProEvaluate extends Component {
       pageLoading: false,
       selectedValues: {},
       checkDetail: false,
-      exportModalVisible:false
+      exportModalVisible: false
     }
     this.exportParams = {
       page: 1,
@@ -686,32 +695,32 @@ class ProEvaluate extends Component {
     {
       title: '序号',
       dataIndex: 'ids',
-      width:100,
-    //  fixed: 'left'
+      width: 100,
+      //  fixed: 'left'
     },
     {
       title: '项目名称',
-      width:150,
-     // fixed: 'left',
+      width: 150,
+      // fixed: 'left',
       dataIndex: 'projectName'
     },
     {
       title: '工程类别',
-      width:100,
+      width: 100,
       dataIndex: 'engineeringType',
     },
     {
       title: '工程状态',
       dataIndex: 'engineeringStatus',
-      width:100,
-      render(val){
+      width: 100,
+      render(val) {
         return <span>{status[val].name}</span>
       }
     },
     {
       title: '评估状态',
       dataIndex: 'evaluationStatus',
-      width:100
+      width: 100
     },
     {
       title: '合同额',
@@ -719,11 +728,11 @@ class ProEvaluate extends Component {
         title: '中标',
         key: 'winningBid',
         dataIndex: 'winningBid',
-        width:130,
+        width: 130,
       }, {
         title: '有效收入',
         key: 'effectiveIncome',
-        width:130,
+        width: 130,
         dataIndex: 'effectiveIncome',
       },]
     },
@@ -733,14 +742,14 @@ class ProEvaluate extends Component {
         title: '是否签订',
         key: 'isSign',
         dataIndex: 'isSign',
-        width:100,
+        width: 100,
       }, {
         title: '签订日期',
         dataIndex: 'signTime',
         key: 'signTime',
-        width:130,
+        width: 130,
         render(val) {
-          return <span>{val?moment(val).format('YYYY/MM/DD'):''}</span>;
+          return <span>{val ? moment(val).format('YYYY/MM/DD') : ''}</span>;
         },
       },]
     },
@@ -750,7 +759,7 @@ class ProEvaluate extends Component {
         title: '合同开工时间',
         key: 'contractStartTime',
         dataIndex: 'contractStartTime',
-        width:130,
+        width: 130,
         render(val) {
           return <span>{moment(val).format('YYYY/MM/DD')}</span>;
         },
@@ -758,7 +767,7 @@ class ProEvaluate extends Component {
         title: '合同竣工时间',
         key: 'contractEndTime',
         dataIndex: 'contractEndTime',
-        width:130,
+        width: 130,
         render(val) {
           return <span>{moment(val).format('YYYY/MM/DD')}</span>;
         },
@@ -766,7 +775,7 @@ class ProEvaluate extends Component {
         title: '工期(月)',
         key: 'duration',
         dataIndex: 'duration',
-        width:100,
+        width: 100,
       }]
     },
     {
@@ -774,39 +783,39 @@ class ProEvaluate extends Component {
       children: [{
         title: '评估时间',
         key: 'evaluationTime',
-        width:130,
+        width: 130,
         dataIndex: 'evaluationTime',
         render(val) {
-          return <span>{val?moment(val).format('YYYY/MM/DD'):''}</span>;
+          return <span>{val ? moment(val).format('YYYY/MM/DD') : ''}</span>;
         },
       }, {
         title: '评估效益点(%)',
         key: 'evaluationBenefit',
         dataIndex: 'evaluationBenefit',
-        width:120,
-        render:(val)=>{
-          return <span>{val?(fixNumber(val,100)+'%'):''}</span>
+        width: 120,
+        render: (val) => {
+          return <span>{val ? (fixNumber(val) + '%') : ''}</span>
         }
       }, {
         title: '含分包差及经营费(%)',
         key: 'evaluationCost',
         dataIndex: 'evaluationCost',
-        width:150,
-        render:(val)=>{
-          return <span>{val?(fixNumber(val,100)+'%'):''}</span>
+        width: 150,
+        render: (val) => {
+          return <span>{val ? (fixNumber(val, 100) + '%') : ''}</span>
         }
       }, {
         title: '评估编号',
         key: 'evaluationCode',
         dataIndex: 'evaluationCode',
-        width:110,
+        width: 110,
       }, {
         title: '附件',
         key: 'evaluationAnnex',
         dataIndex: 'evaluationAnnex',
-        width:100,
+        width: 100,
         render(val) {
-          if(!val){
+          if (!val) {
             return null
           }
           let href = ''
@@ -822,79 +831,82 @@ class ProEvaluate extends Component {
         title: '效益点',
         key: 'jointHearingBenefit',
         dataIndex: 'jointHearingBenefit',
-        width:100,
+        width: 100,
+        render: (val) => {
+          return <span>{val ? (fixNumber(val) + '%') : ''}</span>
+        }
       }, {
         title: '含分包差及经营费(%)',
         key: 'jointHearingCost',
         dataIndex: 'jointHearingCost',
-        width:150,
-        render:(val)=>{
-          return <span>{val?(fixNumber(val,100)+'%'):''}</span>
+        width: 150,
+        render: (val) => {
+          return <span>{val ? (fixNumber(val, 100) + '%') : ''}</span>
         }
       }, {
         title: '上会时间',
         key: 'jointHearingTime',
         dataIndex: 'jointHearingTime',
         render(val) {
-          return <span>{val?moment(val).format('YYYY/MM/DD'):''}</span>;
+          return <span>{val ? moment(val).format('YYYY/MM/DD') : ''}</span>;
         },
-        width:130,
+        width: 130,
       }, {
         title: '附件',
         key: 'jointHearingAnnex',
         dataIndex: 'jointHearingAnnex',
         render(val) {
-          if(!val){
+          if (!val) {
             return null
           }
           let href = ''
-            let annex = JSON.parse(val)
-            href = annex.url + '?attname=' + annex.fileName
+          let annex = JSON.parse(val)
+          href = annex.url + '?attname=' + annex.fileName
           return <a href={href}>下载</a>;
         },
-        width:100,
+        width: 100,
       }]
     },
     {
       title: '责任状签订',
       children: [{
         title: '责任状是否签订',
-        dataIndex:'isResponsibility',
+        dataIndex: 'isResponsibility',
         key: 'isResponsibility',
-        width:120,
-        render(val,record){
-          return<span>{val.length>0?(val==1?'是':'否'):''}</span>
+        width: 120,
+        render(val, record) {
+          return <span>{val === 1 ? '是' : (val === 0 ? '否' : '')}</span>
         }
-      },{
+      }, {
         title: '效益点',
         key: 'responsibilityBenefiy',
-        width:100,
+        width: 100,
         dataIndex: 'responsibilityBenefiy'
       }, {
         title: '签订时间',
         key: 'responsibilityTime',
-        width:130,
+        width: 130,
         dataIndex: 'responsibilityTime',
         render(val) {
-          return <span>{val?moment(val).format('YYYY/MM/DD'):''}</span>;
+          return <span>{val ? moment(val).format('YYYY/MM/DD') : ''}</span>;
         },
       }, {
         title: '项目经理',
         key: 'responsibilityPeople',
-        width:100,
+        width: 100,
         dataIndex: 'responsibilityPeople',
       }, {
         title: '项目书记',
         key: 'responsibilitySecretary',
-        width:100,
+        width: 100,
         dataIndex: 'responsibilitySecretary',
       }, {
         title: '附件',
         key: 'responsibilityAnnex',
-        width:100,
+        width: 100,
         dataIndex: 'responsibilityAnnex',
         render(val) {
-          if(!val){
+          if (!val) {
             return null
           }
           let href = ''
@@ -907,7 +919,7 @@ class ProEvaluate extends Component {
     {
       title: '备注',
       dataIndex: 'remark',
-      width:180,
+      width: 180,
     },
     {
       title: '操作',
@@ -951,7 +963,7 @@ class ProEvaluate extends Component {
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    this.searchList(null,pagination.current)
+    this.searchList(null, pagination.current)
   };
 
   handleFormReset = () => {
@@ -999,7 +1011,7 @@ class ProEvaluate extends Component {
     });
   };
 
-  handleExportModalVisible = (flag=false) =>{
+  handleExportModalVisible = (flag = false) => {
     this.setState({
       exportModalVisible: !!flag,
     });
@@ -1021,7 +1033,7 @@ class ProEvaluate extends Component {
     });
   };
 
-  handleAdd = (fields, updateModalVisible, selectedValues,cleanState) => {
+  handleAdd = (fields, updateModalVisible, selectedValues, cleanState) => {
     // const {dispatch} = this.props;
     // dispatch({
     //   type: 'rule/add',
@@ -1056,7 +1068,7 @@ class ProEvaluate extends Component {
       responsibilityPeople: fields.responsibilityPeople,
       responsibilitySecretary: fields.responsibilitySecretary,
       responsibilityAnnex: fields.responsibilityAnnex,
-      isResponsibility:fields.isResponsibility
+      isResponsibility: fields.isResponsibility
     }
     cleanObject(payload)
     if (updateModalVisible) {
@@ -1067,7 +1079,7 @@ class ProEvaluate extends Component {
       }).then(res => {
         if (res) {
           this.handleUpdateModalVisible()
-          this.searchList(false,this.exportParams.page,this.exportParams.pageSize)
+          this.searchList(false, this.exportParams.page, this.exportParams.pageSize)
           cleanState()
         }
       })
@@ -1170,7 +1182,7 @@ class ProEvaluate extends Component {
       loading,
       app: {user}
     } = this.props;
-    const {selectedRows, modalVisible,exportModalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail} = this.state;
+    const {selectedRows, modalVisible, exportModalVisible, updateModalVisible, pageLoading, selectedValues, checkDetail} = this.state;
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
@@ -1184,14 +1196,19 @@ class ProEvaluate extends Component {
       selectedValues: selectedValues,
       checkDetail: checkDetail,
       proNames: proNames,
-      loading:loading.effects[`proEvaluate/${updateModalVisible?'update':'add'}`]
+      loading: loading.effects[`proEvaluate/${updateModalVisible ? 'update' : 'add'}`]
     }
-    const exportUrl = createURL(EVAL_EXPORT, {...this.exportParams, ...{token: user.token,exportType:'projectEvalutionExportType'}})
-    const exportProps={
-      exportModalVisible:exportModalVisible,
-      handleExportModalVisible:this.handleExportModalVisible,
-      exportUrl:exportUrl,
-      plainOptions:plainOptions
+    const exportUrl = createURL(EVAL_EXPORT, {
+      ...this.exportParams, ...{
+        token: user.token,
+        exportType: 'projectEvalutionExportType'
+      }
+    })
+    const exportProps = {
+      exportModalVisible: exportModalVisible,
+      handleExportModalVisible: this.handleExportModalVisible,
+      exportUrl: exportUrl,
+      plainOptions: plainOptions
     }
 
     return (
@@ -1216,7 +1233,7 @@ class ProEvaluate extends Component {
                 bordered
                 data={data}
                 rowKey={'ids'}
-                scroll={{x: 3480,y: global._scollY}}
+                scroll={{x: 3480, y: global._scollY}}
                 columns={this.columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
@@ -1250,18 +1267,18 @@ class ProEvaluate extends Component {
     });
   }
 
-  searchList = (e,page = 1, pageSize = 10) => {
-    e&&e.preventDefault?e.preventDefault():null
+  searchList = (e, page = 1, pageSize = 10) => {
+    e && e.preventDefault ? e.preventDefault() : null
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
       let payload = {
         page: page,
         pageSize: pageSize,
         projectName: fieldsValue.projectName,
-        engineeringStatus:fieldsValue.engineeringStatus,
-        evaluationStatus:fieldsValue.evaluationStatus,
-        isSign:fieldsValue.isSign,
-        isResponsibility:fieldsValue.isResponsibility
+        engineeringStatus: fieldsValue.engineeringStatus,
+        evaluationStatus: fieldsValue.evaluationStatus,
+        isSign: fieldsValue.isSign,
+        isResponsibility: fieldsValue.isResponsibility
       }
       cleanObject(payload)
       this.exportParams = payload
