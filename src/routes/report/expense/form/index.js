@@ -341,6 +341,12 @@ class CreateForm extends Component {
                 })(<Input disabled={checkDetail} style={{marginTop: 4}} addonAfter="元"/>)}
               </FormItem>
             </Col>
+            <Col md={12} sm={24}>
+                <span style={{color: '#fa541c'}}>
+                  备注: 合同内计量为扣款后合同内工程量计量,不包含合同外费用(计日工、机械台班等)若有罚款、奖励请在"其他"
+                  填报框里面填报。
+                </span>
+            </Col>
           </Row>
         </div>
         <Row align={'middle'} gutter={0} className={styles.titleView}>

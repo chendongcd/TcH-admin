@@ -122,62 +122,64 @@ class CreateForm extends Component {
             </Col>
           </Row>
         </div>
-        <Row align={'middle'} gutter={0} className={styles.titleView}>
-          <div className={styles.title}>年初余额</div>
-        </Row>
-        <div className={styles.modalContent}>
-          <Row gutter={8}>
-            <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 11}} wrapperCol={{span: 10}} label="上年末开累完成产值" addonAfter={'万元'}>
-                {form.getFieldDecorator('balanceCompleteValue', {
-                  rules: [{required: true, message: '请输入上年末开累完成产值'}],
-                  initialValue: global._checkNum(selectedValues.balanceCompleteValue),
-                })(<Input disabled={true} style={{marginTop: 4}} addonAfter="万元"/>)}
-              </FormItem>
-            </Col>
-            <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 11}} wrapperCol={{span: 10}} label="上年末开累验工计价" addonAfter={'万元'}>
-                {form.getFieldDecorator('balanceInspectionValue', {
-                  rules: [{required: true, message: '请输入上年末开累验工计价'}],
-                  initialValue: global._checkNum(selectedValues.balanceInspectionValue),
-                })(<Input disabled={true} style={{marginTop: 4}} addonAfter="万元"/>)}
-              </FormItem>
-            </Col>
+        {checkDetail?<Fragment>
+          <Row align={'middle'} gutter={0} className={styles.titleView}>
+            <div className={styles.title}>年初余额</div>
           </Row>
-        </div>
-        <Row align={'middle'} gutter={0} className={styles.titleView}>
-          <div className={styles.title}>上年末完工未计价</div>
-        </Row>
-        <div className={styles.modalContent}>
-          <Row gutter={8}>
-            <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 11}} wrapperCol={{span: 10}} label="合同内应计未计" addonAfter={'万元'}>
-                {form.getFieldDecorator('balanceShould', {
-                  rules: [{required: true, message: '请输入合同内应计未计'}],
-                  initialValue: global._checkNum(selectedValues.balanceShould),
-                })(<Input disabled={true} style={{marginTop: 4}} addonAfter="万元"/>)}
-              </FormItem>
-            </Col>
-            <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 11}} wrapperCol={{span: 10}} label="变更索赔预计额" addonAfter={'万元'}>
-                {form.getFieldDecorator('balanceChange', {
-                  rules: [{required: true, message: '请输入变更索赔预计额'}],
-                  initialValue: global._checkNum(selectedValues.balanceChange),
-                })(<Input disabled={true} style={{marginTop: 4}} addonAfter="万元"/>)}
-              </FormItem>
-            </Col>
+          <div className={styles.modalContent}>
+            <Row gutter={8}>
+              <Col md={12} sm={24}>
+                <FormItem labelCol={{span: 11}} wrapperCol={{span: 10}} label="上年末开累完成产值" addonAfter={'万元'}>
+                  {form.getFieldDecorator('balanceCompleteValue', {
+                    rules: [{required: true, message: '请输入上年末开累完成产值'}],
+                    initialValue: global._checkNum(selectedValues.balanceCompleteValue),
+                  })(<Input disabled={true} style={{marginTop: 4}} addonAfter="万元"/>)}
+                </FormItem>
+              </Col>
+              <Col md={12} sm={24}>
+                <FormItem labelCol={{span: 11}} wrapperCol={{span: 10}} label="上年末开累验工计价" addonAfter={'万元'}>
+                  {form.getFieldDecorator('balanceInspectionValue', {
+                    rules: [{required: true, message: '请输入上年末开累验工计价'}],
+                    initialValue: global._checkNum(selectedValues.balanceInspectionValue),
+                  })(<Input disabled={true} style={{marginTop: 4}} addonAfter="万元"/>)}
+                </FormItem>
+              </Col>
+            </Row>
+          </div>
+          <Row align={'middle'} gutter={0} className={styles.titleView}>
+            <div className={styles.title}>上年末完工未计价</div>
           </Row>
-          <Row gutter={8}>
-            <Col md={12} sm={24}>
-              <FormItem labelCol={{span: 11}} wrapperCol={{span: 10}} label="小计" addonAfter={'万元'}>
-                {form.getFieldDecorator('sumBalance', {
-                  rules: [{required: true, message: '请输入小计'}],
-                  initialValue: global._checkNum(selectedValues.sumBalance),
-                })(<Input disabled={true} style={{marginTop: 4}} addonAfter="万元"/>)}
-              </FormItem>
-            </Col>
-          </Row>
-        </div>
+          <div className={styles.modalContent}>
+            <Row gutter={8}>
+              <Col md={12} sm={24}>
+                <FormItem labelCol={{span: 11}} wrapperCol={{span: 10}} label="合同内应计未计" addonAfter={'万元'}>
+                  {form.getFieldDecorator('balanceShould', {
+                    rules: [{required: true, message: '请输入合同内应计未计'}],
+                    initialValue: global._checkNum(selectedValues.balanceShould),
+                  })(<Input disabled={true} style={{marginTop: 4}} addonAfter="万元"/>)}
+                </FormItem>
+              </Col>
+              <Col md={12} sm={24}>
+                <FormItem labelCol={{span: 11}} wrapperCol={{span: 10}} label="变更索赔预计额" addonAfter={'万元'}>
+                  {form.getFieldDecorator('balanceChange', {
+                    rules: [{required: true, message: '请输入变更索赔预计额'}],
+                    initialValue: global._checkNum(selectedValues.balanceChange),
+                  })(<Input disabled={true} style={{marginTop: 4}} addonAfter="万元"/>)}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={8}>
+              <Col md={12} sm={24}>
+                <FormItem labelCol={{span: 11}} wrapperCol={{span: 10}} label="小计" addonAfter={'万元'}>
+                  {form.getFieldDecorator('sumBalance', {
+                    rules: [{required: true, message: '请输入小计'}],
+                    initialValue: global._checkNum(selectedValues.sumBalance),
+                  })(<Input disabled={true} style={{marginTop: 4}} addonAfter="万元"/>)}
+                </FormItem>
+              </Col>
+            </Row>
+          </div>
+        </Fragment>:null}
         <Row align={'middle'} gutter={0} className={styles.titleView}>
           <div className={styles.title}>截至本期清收</div>
         </Row>
