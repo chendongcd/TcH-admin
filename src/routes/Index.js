@@ -11,6 +11,7 @@ import Style from './Index.less'
 import {withRouter} from 'dva/router'
 import MenuContext from "../components/Layout/MenuContext";
 import PageHeader from "../components/PageHeader";
+
 const {Content, Footer, Sider} = Layout
 const {Header, styles} = MyLayout
 
@@ -23,14 +24,14 @@ class IndexPage extends Component {
   componentDidMount() {
     let {app, history} = this.props
     if (!app.user.token) {
-        history.push('/login')
+      history.push('/login')
     }
 
   }
 
   render() {
     const {children, app, dispatch} = this.props
-    const {menu, siderFold, location, darkTheme, navOpenKeys, loading, isNavbar, user, prefix,contentWidth} = app
+    const {menu, siderFold, location, darkTheme, navOpenKeys, loading, isNavbar, user, prefix, contentWidth} = app
     const siderProps = {
       menu,
       location,
@@ -65,13 +66,16 @@ class IndexPage extends Component {
         dispatch({type: 'app/handleNavOpenKeys', payload: {navOpenKeys: openKeys}})
       },
     }
-    const {iconFontJS, iconFontCSS, ico,name} = config
+    const {iconFontJS, iconFontCSS, ico, name} = config
+    console.log(process.env.NODE_ENV === 'production')
     return (
       <div>
         <Loader fullScreen spinning={loading}/>
         <Helmet>
           <title>{name}</title>
           <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+         {/* {process.env.NODE_ENV === 'production' ?
+            <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"/> : null}*/}
           <link rel="shortcut icon" href={ico}/>
           {iconFontJS && <script src={iconFontJS}/>}
           {iconFontCSS && <link rel="stylesheet" href={iconFontCSS}/>}
@@ -102,9 +106,12 @@ class IndexPage extends Component {
                   />
                 )}
               </MenuContext.Consumer>
-              <Content style={{minHeight: '100vh-100',position:'relative',padding:'12px'}}>
+              <Content style={{minHeight: '100vh-100', position: 'relative', padding: '12px'}}>
                 {children[0]}
-                {app.locationPathname==='/home'||app.locationPathname==='/404'?null: <div className={Style.loadingPage}><div className={Style.innerLoading} /></div>}
+                {app.locationPathname === '/home' || app.locationPathname === '/404' ? null :
+                  <div className={Style.loadingPage}>
+                    <div className={Style.innerLoading}/>
+                  </div>}
               </Content>
               <Footer>
                 {config.footerText}
@@ -113,7 +120,7 @@ class IndexPage extends Component {
           </Layout>
           :
           <div>
-            {children.filter((r,index) =>index!=0)}</div>}
+            {children.filter((r, index) => index != 0)}</div>}
       </div>
     );
   }

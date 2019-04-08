@@ -8,6 +8,6 @@ module.exports = {
   iconFontCSS: `${path}/iconfont.css`,
   iconFontJS: `${path}/iconfont.js`,
   apiPrefix: '/api/v1',
-  apiDev:'http://47.105.127.126:8082/crcc',//http://47.105.127.126:8081/crcc //http://192.168.31.108:8081/crcc
+  apiDev:process.env.NODE_ENV==='production'?'http://47.105.127.126:8082/crcc':'http://47.105.127.126:8082/crcc',//http://47.105.127.126:8081/crcc //http://192.168.31.108:8081/crcc
   CORS: [],
 }
