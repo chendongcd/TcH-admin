@@ -845,7 +845,14 @@ class MeterDown extends Component {
               {getFieldDecorator('maxUnderRate')(<Input addonAfter={'%'}/>)}
             </FormItem>
           </Col>
-          <Col md={12} sm={24}>
+          <Col md={6} sm={24}>
+            <FormItem label="队伍名称">
+              {getFieldDecorator('teamName')(
+                <Input/>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={6} sm={24}>
             <div style={{overflow: 'hidden'}}>
               <div style={{float: 'right', marginBottom: 24}}>
                 <Button type="primary" htmlType="submit">
@@ -974,7 +981,8 @@ class MeterDown extends Component {
         valuationType: fieldsValue.valuationType,
         valuationTime: fieldsValue.valuationTime ? fieldsValue.valuationTime.format('YYYY-MM-DD') : null,
         minUnderRate: fieldsValue.minUnderRate / 100,
-        maxUnderRate: fieldsValue.maxUnderRate / 100
+        maxUnderRate: fieldsValue.maxUnderRate / 100,
+        teamName: fieldsValue.teamName
       }
       cleanObject(payload)
       this.exportParams = payload

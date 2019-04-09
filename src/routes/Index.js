@@ -67,7 +67,6 @@ class IndexPage extends Component {
       },
     }
     const {iconFontJS, iconFontCSS, ico, name} = config
-    console.log(process.env.NODE_ENV === 'production')
     return (
       <div>
         <Loader fullScreen spinning={loading}/>

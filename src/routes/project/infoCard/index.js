@@ -1173,7 +1173,7 @@ class InfoCard extends Component {
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="总工">
-              {getFieldDecorator('engineer', {
+              {getFieldDecorator('chiefEngineer', {
                 initialValue: null
               })(<Input placeholder="请输入"/>)}
             </FormItem>
@@ -1357,7 +1357,7 @@ class InfoCard extends Component {
         projectName: fieldsValue.projectName,
         projectManager: fieldsValue.manager,
         projectSecretary: fieldsValue.secretary,
-        projectEngineer: fieldsValue.engineer,
+        chiefEngineer: fieldsValue.chiefEngineer,
         status: fieldsValue.status
       }
       cleanObject(payload)

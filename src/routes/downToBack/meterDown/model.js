@@ -46,7 +46,6 @@ export default {
       const response = yield call(querySum, payload, token);
       if (response.code == '200') {
         const data = yield (select(_ => _.meterDown.data))
-        console.log(response.entity)
         let sum = {
           ids: '合计:',
           valuationPrice: response.entity.sumValuationPrice,

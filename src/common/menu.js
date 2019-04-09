@@ -352,7 +352,6 @@ export const menuData = [
       {name:'编辑',permission:'PERMISSIONS_REPORT_LIABILITY_UPDATE'},
       {name:'查看',permission:'PERMISSIONS_REPORT_LIABILITY_LOOK'},
       {name:'删除',permission:'PERMISSIONS_REPORT_LIABILITY_DELETE'},
-
       /* {name:'导出',permission:'PERMISSIONS_REPORT_CONFIRMATION_EXPORT'},*/
     ]
   },

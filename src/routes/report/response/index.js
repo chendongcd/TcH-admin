@@ -1165,10 +1165,6 @@ class Response extends Component {
                   <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                     新增
                   </Button> : null}
-                {user.token && getButtons(user.permissionsMap.button, pageButtons[3]) ?
-                  <Button href={exportUrl} icon="export" type="primary">
-                    导出
-                  </Button> : null}
               </div>
               <StandardTable
                 selectedRows={selectedRows}
