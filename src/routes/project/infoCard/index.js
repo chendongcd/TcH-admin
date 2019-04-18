@@ -47,27 +47,28 @@ class MyTag extends React.Component {
     };
   }
 
-  handleChange = (checked, index,type) => {
-    this.props.handleToDate(checked, index,type)
+  handleChange = (checked, index, type) => {
+    this.props.handleToDate(checked, index, type)
     this.setState({checked: checked ? 1 : 2});
   }
 
   render() {
-    const {getFieldDecorator, index, item, checkDetail, _setTime, handleEndDate, toDate,fName,type} = this.props
+    const {getFieldDecorator, index, item, checkDetail, _setTime, handleEndDate, toDate, fName, type} = this.props
     const {checked} = this.state
     return (
       <Fragment>
         <Col className={styles.colPeople} md={4} sm={24}>
           <FormItem labelCol={{span: 4}} wrapperCol={{span: 20}} label="至">
             {(toDate && checked === -1) || (checked !== -1 && checked === 1) ?
-              <Tag style={{marginLeft: 10}} closable={!checkDetail} onClose={() => this.handleChange(false, index,type)}
+              <Tag style={{marginLeft: 10}} closable={!checkDetail}
+                   onClose={() => this.handleChange(false, index, type)}
                    color="#108ee9">至今</Tag>
               :
               getFieldDecorator(`${fName}[${index}]`, {
                 initialValue: item && item.time && item.time !== ',' ? _setTime(item.time, 1) : null
               })(<DatePicker disabled={checkDetail}
-                             renderExtraFooter={() => <a onClick={() => this.handleChange(true, index,type)}>至今</a>}
-                             onChange={(e, dateString) => handleEndDate(index, dateString,type)}
+                             renderExtraFooter={() => <a onClick={() => this.handleChange(true, index, type)}>至今</a>}
+                             onChange={(e, dateString) => handleEndDate(index, dateString, type)}
                              style={{width: '100%'}}/>)}
           </FormItem>
         </Col>
@@ -222,18 +223,18 @@ class CreateForm extends Component {
     return param + ',' + end
   }
 
-  handleEndDate = (index, dateString,type) => {
-    if(type===0) {
+  handleEndDate = (index, dateString, type) => {
+    if (type === 0) {
       this.manager[index].time = this.handleRange(this.props.form.getFieldValue(`MtimeS[${index}]`)
         ?
         moment(this.props.form.getFieldValue(`MtimeS${index}]`)).format('YYYY-MM-DD') : null, dateString)
     }
-    if(type===1){
+    if (type === 1) {
       this.secretary[index].time = this.handleRange(this.props.form.getFieldValue(`Stime[${index}]`)
         ?
         moment(this.props.form.getFieldValue(`Stime${index}]`)).format('YYYY-MM-DD') : null, dateString)
     }
-    if(type===2){
+    if (type === 2) {
       this.engineer[index].time = this.handleRange(this.props.form.getFieldValue(`Etime[${index}]`)
         ?
         moment(this.props.form.getFieldValue(`Etime${index}]`)).format('YYYY-MM-DD') : null, dateString)
@@ -241,8 +242,8 @@ class CreateForm extends Component {
   }
 
   //处理至今
-  handleToDate = (checked, index,type) => {
-    let target = type===0?this.manager:type===1?this.secretary:this.engineer
+  handleToDate = (checked, index, type) => {
+    let target = type === 0 ? this.manager : type === 1 ? this.secretary : this.engineer
     target[index].toDate = checked
     let t = target[index].time
     if (checked) {
@@ -268,8 +269,8 @@ class CreateForm extends Component {
           handleToDate: this.handleToDate,
           _setTime: this._setTime,
           handleEndDate: this.handleEndDate,
-          fName:'MtimeE',
-          type:0,
+          fName: 'MtimeE',
+          type: 0,
           toDate: key.time && key.time !== ',' && key.time.length > 0 ? (key.time.split(',')[1] === toDate) : false
         }
         return (<Row key={`manager${index}`} gutter={8}>
@@ -337,8 +338,8 @@ class CreateForm extends Component {
           handleToDate: this.handleToDate,
           _setTime: this._setTime,
           handleEndDate: this.handleEndDate,
-          fName:'StimeE',
-          type:1,
+          fName: 'StimeE',
+          type: 1,
           toDate: key.time && key.time !== ',' && key.time.length > 0 ? (key.time.split(',')[1] === toDate) : false
         }
         return (<Row key={`secretary${index}`} gutter={8}>
@@ -404,8 +405,8 @@ class CreateForm extends Component {
           handleToDate: this.handleToDate,
           _setTime: this._setTime,
           handleEndDate: this.handleEndDate,
-          fName:'EtimeE',
-          type:2,
+          fName: 'EtimeE',
+          type: 2,
           toDate: key.time && key.time !== ',' && key.time.length > 0 ? (key.time.split(',')[1] === toDate) : false
         }
         return (<Row key={`engineer${index}`} gutter={8}>
@@ -468,7 +469,7 @@ class CreateForm extends Component {
       fieldsValue.manager = this.handleRanges(this.manager)
       fieldsValue.secretary = this.handleRanges(this.secretary)
       fieldsValue.engineer = this.handleRanges(this.engineer)
-    //  return
+      //  return
       handleAdd(fieldsValue, updateModalVisible, selectedValues);
     });
   };
@@ -852,6 +853,8 @@ class CreateForm extends Component {
       } else {
         form.setFieldsValue({'realContractDay': res})
       }
+    } else {
+      form.setFieldsValue({'realContractDay': ''})
     }
   }
 }
