@@ -487,7 +487,8 @@ class User extends Component {
   getList = (page = 1, pageSize = 10) => {
     this.props.dispatch({
       type: 'sys_user/queryUserList',
-      payload: {page: page, pageSize: pageSize}
+      payload: {page: page, pageSize: pageSize},
+      token: this.props.app.user.token
     })
   }
 
@@ -507,7 +508,8 @@ class User extends Component {
       this.exportParams = payload
       this.props.dispatch({
         type: 'sys_user/queryUserList',
-        payload: payload
+        payload: payload,
+        token: this.props.app.user.token
       });
     });
   }

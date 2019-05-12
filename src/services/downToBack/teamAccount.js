@@ -70,3 +70,9 @@ export async function del(params,token) {
     body: params
   },token);
 }
+export async function querySumList(params,token) {
+  return request(`${apiDev}/inspection/list_count_labor/v1.1`,{
+    method: 'GET',
+    body: params
+  },token);
+}

@@ -14,8 +14,8 @@ export default {
     roleNames:[]
   },
   effects: {
-    *queryUserList({ payload }, { call, put }) {
-      const response = yield call(queryUserList, payload);
+    *queryUserList({ payload ,token}, { call, put }) {
+      const response = yield call(queryUserList, payload,token);
       if(response.code=='200'){
         yield put({
           type: 'save',

@@ -5,7 +5,6 @@ import zhCN from 'antd/lib/locale-provider/zh_CN';
 import App from './routes/Index'
 import dynamic from 'dva/dynamic';
 import Project from './routes/system/project/index'
-
 const Routers = function ({history, app}) {
   const Login = dynamic({
     app,
@@ -42,6 +41,11 @@ const Routers = function ({history, app}) {
     models: () => [import('./routes/upToBack/meterUp/model')],
     component: () => import(/* webpackChunkName: "Meter" */'./routes/upToBack/meterUp/index'),
   })
+  const Up_Summary = dynamic({
+    app,
+    models: () => [import('./routes/upToBack/upSummary/model')],
+    component: () => import(/* webpackChunkName: "UpSummary" */'./routes/upToBack/upSummary/index'),
+  })
   const Sub_Qualification = dynamic({
     app,
     models: () => [import('./routes/sub/qualification/model')],
@@ -56,6 +60,16 @@ const Routers = function ({history, app}) {
     app,
     models: () => [import('./routes/downToBack/meterDown/model')],
     component: () => import(/* webpackChunkName: "MeterDown" */'./routes/downToBack/meterDown/index')
+  })
+  const Down_SumMeterDown = dynamic({
+    app,
+    models: () => [import('./routes/downToBack/meterSum/model')],
+    component: () => import(/* webpackChunkName: "MeterDown" */'./routes/downToBack/meterSum/index')
+  })
+  const Down_SumTeamAccount = dynamic({
+    app,
+    models: () => [import('./routes/downToBack/teamSum/model')],
+    component: () => import(/* webpackChunkName: "TeamAccount" */'./routes/downToBack/teamSum/index')
   })
   const Down_TeamAccount = dynamic({
     app,
@@ -136,9 +150,12 @@ const Routers = function ({history, app}) {
             <Route path="/system/user"  component={Sys_User}/>
             <Route path="/project/infoCard"  component={Pro_InfoCard}/>
             <Route path="/up/meterUp"  component={Up_MeterUp}/>
+            <Route path="/up/summary"  component={Up_Summary}/>
             <Route path="/sub/qualification"  component={Sub_Qualification}/>
             <Route path="/sub/resume"  component={Sub_Resume}/>
             <Route path="/down/inspect"  component={Down_MeterDown}/>
+            <Route path="/down/sumInspect"  component={Down_SumMeterDown}/>
+            <Route path="/down/sumAccount"  component={Down_SumTeamAccount}/>
             <Route path="/down/account"  component={Down_TeamAccount}/>
             <Route path="/people/info"  component={People_Info}/>
             <Route path="/evaluation/evaluate"  component={Evaluate_Pro}/>

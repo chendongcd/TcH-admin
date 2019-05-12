@@ -22,7 +22,7 @@ import {getButtons, cleanObject, QiNiuOss, ImageUrl, getPage, fixNumber} from 'u
 import {DOWN_EXPORT} from 'common/urls'
 import {createURL} from 'services/app'
 
-const pageButtons = getPage('62').buttons.map(a => a.permission)
+const pageButtons = getPage('63').buttons.map(a => a.permission)
 const FormItem = Form.Item;
 const {Option} = Select;
 const info_css = {

@@ -136,7 +136,7 @@ export function uuid(name){
   });
 }
 
-export const ImageUrl = process.env.NODE_ENV==='production'?'http://crcc23-3-jg.com/':'http://crcc23-3-jg.com/'//http://www.crcc23-3-jg.com/
+export const ImageUrl = process.env.NODE_ENV==='production'?'https://crcc23-3-jg.com/':'https://crcc23-3-jg.com/'//http://www.crcc23-3-jg.com/
 
 export async function QiNiuOss(params) {
   return new Promise(function (resolve, reject) {
@@ -200,4 +200,22 @@ export function fixNumber(val,rate=1,points=2) {
     return ''
   }
   return Number.isInteger(val * rate)?(val*rate):(val*rate).toFixed(points)
+}
+
+export function getTableWidth(array) {
+  const _arr = (arr) => array.map(a=>{
+    if(a.width) {
+     return a.width
+    }else if(a.children){
+      return _arr(a.children)
+    }
+    return 0
+  })
+  const reducer = (accumulator, currentValue) => {
+    return accumulator + currentValue;
+  }
+
+  let ss = _arr(array)
+  console.log(ss)
+
 }

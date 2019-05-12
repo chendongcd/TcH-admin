@@ -36,8 +36,8 @@ export default {
       }
       return false
     },
-    * queryProList({payload}, {call, put}) {
-      const response = yield call(queryProList, payload);
+    * queryProList({payload,token}, {call, put}) {
+      const response = yield call(queryProList, payload,token);
       if (response.code == '200') {
         yield put({
           type: 'save',

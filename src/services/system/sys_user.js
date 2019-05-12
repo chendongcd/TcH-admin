@@ -2,11 +2,11 @@ import {request,config} from 'utils';
 
 const {apiDev} = config
 const api = `${apiDev}/user`
-export async function queryUserList(params) {
+export async function queryUserList(params,token) {
   return request(`${api}/list/v1.1`,{
     method: 'GET',
     body: params
-  });
+  },token);
 }
 export async function addUser(params,token) {
   return request(`${api}/add/v1.1`,{

@@ -8,7 +8,7 @@ import {
   Form,
   Input,
   Button,
-  Modal, Divider, Popconfirm
+  Modal,
 } from 'antd';
 import {Page, PageHeaderWrapper, StandardTable} from 'components'
 import styles from './index.less'

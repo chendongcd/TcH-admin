@@ -512,7 +512,8 @@ class Permission extends Component {
       this.exportParams = payload
       this.props.dispatch({
         type: 'sys_per/query',
-        payload: payload
+        payload: payload,
+        token: this.props.app.user.token
       });
 
     });

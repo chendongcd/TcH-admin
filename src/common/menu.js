@@ -92,7 +92,7 @@ export const menuData = [
     id: '41',
     bpid: '4',
     mpid: '4',
-    name: '对上计量台账',
+    name: '对上计量台账填报表',
     route: '/up/meterUp',
     permission:'PERMISSIONS_UP_MANAGER_ACCOUNT',
     buttons:[
@@ -101,6 +101,17 @@ export const menuData = [
       {name:'查看',permission:'PERMISSIONS_UP_MANAGER_ACCOUNT_LOOK'},
       {name:'导出',permission:'PERMISSIONS_UP_MANAGER_ACCOUNT_EXPORT'},
       {name:'删除',permission:'PERMISSIONS_UP_MANAGER_ACCOUNT_DELETE'},
+    ]
+  },
+  {
+    id: '42',
+    bpid: '4',
+    mpid: '4',
+    name: '对上计量台账汇总表',
+    route: '/up/summary',
+    permission:'PERMISSIONS_UP_MANAGER_ACCOUNT_TOTAL',
+    buttons:[
+      {name:'导出',permission:'PERMISSIONS_UP_MANAGER_ACCOUNT_TOTAL_EXPORT'},
     ]
   },
   {
@@ -157,7 +168,7 @@ export const menuData = [
     id: '61',
     bpid: '6',
     mpid: '6',
-    name: '所属队伍台账',
+    name: '所属队伍台账填报表',
     route: '/down/account',
     permission:'PERMISSIONS_DOWN_MANAGER_TEAM',
     buttons:[
@@ -173,7 +184,18 @@ export const menuData = [
     id: '62',
     bpid: '6',
     mpid: '6',
-    name: '对下验工计价台账',
+    name: '所属队伍台账汇总表',
+    route: '/down/sumAccount',
+    permission:'PERMISSIONS_DOWN_MANAGER_CHECK_LABOR',
+    buttons:[
+      {name:'导出',permission:'PPERMISSIONS_DOWN_MANAGER_CHECK_LABOR_EXPORT'},
+    ]
+  },
+  {
+    id: '63',
+    bpid: '6',
+    mpid: '6',
+    name: '对下验工计价台账填报表',
     route: '/down/inspect',
     permission:'PERMISSIONS_DOWN_MANAGER_CHECK',
     buttons:[
@@ -182,6 +204,17 @@ export const menuData = [
       {name:'查看',permission:'PERMISSIONS_DOWN_MANAGER_CHECK_LOOK'},
       {name:'导出',permission:'PERMISSIONS_DOWN_MANAGER_CHECK_EXPORT'},
       {name:'删除',permission:'PERMISSIONS_DOWN_MANAGER_CHECK_DELETE'},
+    ]
+  },
+  {
+    id: '64',
+    bpid: '6',
+    mpid: '6',
+    name: '对下验工计价台账汇总表',
+    route: '/down/sumInspect',
+    permission:'PERMISSIONS_DOWN_MANAGER_CHECK_PROJECT',
+    buttons:[
+      {name:'导出',permission:'PERMISSIONS_DOWN_MANAGER_CHECK_PROJECT_EXPORT'},
     ]
   },
   {

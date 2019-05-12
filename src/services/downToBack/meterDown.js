@@ -38,5 +38,11 @@ export async function del(params,token) {
     body: params
   },token);
 }
+export async function querySumList(params,token) {
+  return request(`${api}/list_count_project/v1.1`,{
+    method: 'GET',
+    body: params
+  },token);
+}
 
 

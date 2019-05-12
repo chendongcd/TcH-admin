@@ -5,8 +5,6 @@ import createLoading from 'dva-loading';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 import global from 'common/global'
-
-
 global()
 moment.locale('zh-cn');
 
