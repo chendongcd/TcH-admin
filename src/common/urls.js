@@ -16,10 +16,10 @@ export const SUB_QUA_EXPORT = '/subcontractor/export/v1.1'
 export const SUB_RES_EXPORT = '/subcontractor_resume/export/v1.1'
 
 export const TEAM_EXPORT = '/team/export/v1.1'
-export const TEAM_SUM_EXPORT = '/team/list_count_labor_export/v1.1'
+export const TEAM_SUM_EXPORT = '/inspection/list_count_labor_export/v1.1'
 
-export const DOWN_SUM_EXPORT = '/inspection/export/v1.1'
-export const DOWN_EXPORT = '/inspection/list_count_project_export/v1.1'
+export const DOWN_EXPORT = '/inspection/export/v1.1'
+export const DOWN_SUM_EXPORT = '/inspection/list_count_project_export/v1.1'
 
 export const PEOPLE_EXPORT = '/people/export/v1.1'
 

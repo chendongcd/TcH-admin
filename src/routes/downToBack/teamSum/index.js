@@ -16,7 +16,7 @@ import {getButtons, cleanObject, getPage,fixNumber} from 'utils'
 import {TEAM_SUM_EXPORT} from 'common/urls'
 import {createURL} from 'services/app'
 
-const pageButtons = getPage('62').buttons.map(a => a.permission)
+const pageButtons = getPage('63').buttons.map(a => a.permission)
 const FormItem = Form.Item;
 const plainOptions = [{label: '劳务队伍统计', value: '0'},
   {label: '备案情况', value: '1'},
@@ -283,8 +283,7 @@ class Index extends Component {
 
     const exportUrl = createURL(TEAM_SUM_EXPORT, {
       ...this.exportParams, ...{
-        token: user.token,
-        exportType: 'teamExportType'
+        token: user.token
       }
     })
     const exportProps = {
@@ -302,7 +301,7 @@ class Index extends Component {
               <div className={styles.tableListForm}>{this.renderForm()}</div>
               <div className={styles.tableListOperator}>
                 {user.token && getButtons(user.permissionsMap.button, pageButtons[0]) ?
-                  <Button htmlType={exportUrl} icon="export" type="primary">
+                  <Button href={exportUrl} icon="export" type="primary">
                     导出
                   </Button> : null}
               </div>

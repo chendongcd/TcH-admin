@@ -168,7 +168,7 @@ export const menuData = [
     id: '61',
     bpid: '6',
     mpid: '6',
-    name: '所属队伍台账填报表',
+    name: '所属队伍台账',
     route: '/down/account',
     permission:'PERMISSIONS_DOWN_MANAGER_TEAM',
     buttons:[
@@ -184,18 +184,7 @@ export const menuData = [
     id: '62',
     bpid: '6',
     mpid: '6',
-    name: '所属队伍台账汇总表',
-    route: '/down/sumAccount',
-    permission:'PERMISSIONS_DOWN_MANAGER_CHECK_LABOR',
-    buttons:[
-      {name:'导出',permission:'PPERMISSIONS_DOWN_MANAGER_CHECK_LABOR_EXPORT'},
-    ]
-  },
-  {
-    id: '63',
-    bpid: '6',
-    mpid: '6',
-    name: '对下验工计价台账填报表',
+    name: '对下验工计价台账',
     route: '/down/inspect',
     permission:'PERMISSIONS_DOWN_MANAGER_CHECK',
     buttons:[
@@ -207,10 +196,21 @@ export const menuData = [
     ]
   },
   {
+    id: '63',
+    bpid: '6',
+    mpid: '6',
+    name: '项目所属队伍汇总表',
+    route: '/down/sumAccount',
+    permission:'PERMISSIONS_DOWN_MANAGER_CHECK_LABOR',
+    buttons:[
+      {name:'导出',permission:'PERMISSIONS_DOWN_MANAGER_CHECK_LABOR_EXPORT'},
+    ]
+  },
+  {
     id: '64',
     bpid: '6',
     mpid: '6',
-    name: '对下验工计价台账汇总表',
+    name: '项目汇总表',
     route: '/down/sumInspect',
     permission:'PERMISSIONS_DOWN_MANAGER_CHECK_PROJECT',
     buttons:[
