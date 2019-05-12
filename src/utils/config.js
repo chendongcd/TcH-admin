@@ -8,6 +8,6 @@ module.exports = {
   iconFontCSS: `${path}/iconfont.css`,
   iconFontJS: `${path}/iconfont.js`,
   apiPrefix: '/api/v1',
-  apiDev:process.env.NODE_ENV==='production'?'http://47.105.127.126:8081/crcc':'http://47.105.127.126:8081/crcc',//http://47.105.127.126:8081/crcc //http://192.168.31.108:8081/crcc
+  apiDev:'https://www.crcc23-3-jg.com:8080/crcc',//http://47.105.127.126:8081/crcc //http://192.168.31.108:8081/crcc https://www.crcc23-3-jg.com:8080/crcc'
   CORS: [],
 }

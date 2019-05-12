@@ -136,7 +136,7 @@ export function uuid(name){
   });
 }
 
-export const ImageUrl = process.env.NODE_ENV==='production'?'http://crcc23-3-jg.com/':'http://crcc23-3-jg.com/'//http://www.crcc23-3-jg.com/
+export const ImageUrl = process.env.NODE_ENV==='production'?'https://crcc23-3-jg.com/':'https://crcc23-3-jg.com/'//http://www.crcc23-3-jg.com/
 
 export async function QiNiuOss(params) {
   return new Promise(function (resolve, reject) {
