@@ -584,7 +584,10 @@ class PeopleInfo extends Component {
     {
       title: '人员编码',
       width: 100,
-      dataIndex: 'id',
+      dataIndex: 'ids',
+      render:(val,record)=>{
+        return <span>{val}</span>
+      }
      // fixed: 'left'
     },
     {

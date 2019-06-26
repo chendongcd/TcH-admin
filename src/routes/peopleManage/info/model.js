@@ -52,6 +52,7 @@ export default {
     },
     * del({payload, token}, {call, put}) {
       const response = yield call(del, payload, token);
+     // response.list = global.calcuIndex(response)
       if (response.code == '200') {
         message.success('删除成功');
         return true
