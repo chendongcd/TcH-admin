@@ -66,7 +66,7 @@ class CreateForm extends Component {
     let res = form.getFieldsValue(['projectId', 'subcontractorId', 'laborAccountId'])
     let selects = this.state.selects
     if (type === 0) {
-      form.setFieldsValue({'projectType': item.projectType, 'contractNumber': item.contractNumber})
+      form.setFieldsValue({'projectType': item.projectType})
       if (selects.projectId != value) {
         if (selects.projectId) {
           form.setFieldsValue({'subcontractorId': '', 'laborAccountId': '', 'contractPerson': ''})
@@ -87,7 +87,9 @@ class CreateForm extends Component {
       }
       return
     } else {
+      console.log(item)
       form.setFieldsValue({'contractPerson': item.contractPerson})
+      form.setFieldsValue({'contractNumber': item.contractCode})
       res.laborAccountId = value.props.name
     }
     this.setState({selects: res})
@@ -921,7 +923,6 @@ class ExpenseForm extends Component {
       ...this.exportParams, ...{
         token: user.token}
     })
-
 
     return (
       <Page inner={true} loading={pageLoading}>
